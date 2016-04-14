@@ -1,0 +1,59 @@
+Thu Apr 14 17:54:58 2016    result.out
+
+         9687097 function calls (8963246 primitive calls) in 13.193 seconds
+
+   Ordered by: cumulative time, function name
+   List reduced from 102 to 51 due to restriction <0.5>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001   13.194   13.194 <string>:1(<module>)
+        1    0.000    0.000   13.192   13.192 <ipython-input-2-5b4059d93cfc>:19(expe)
+        1    0.047    0.047   13.192   13.192 MHU_MJPs.py:118(MHusampler)
+       99    0.008    0.000   12.738    0.129 MHU_MJPs.py:89(MHu_sampler_one)
+      198    1.219    0.006    9.015    0.046 MHU_MJPs.py:37(FF)
+      198    6.314    0.032    7.200    0.036 gibbs_MJPs.py:37(get_likelihood)
+       99    0.382    0.004    2.725    0.028 MHU_MJPs.py:61(BS)
+725340/1489    1.006    0.000    2.258    0.002 copy.py:145(deepcopy)
+     1492    0.322    0.000    2.229    0.001 copy.py:226(_deepcopy_list)
+    73196    0.185    0.000    2.091    0.000 path_class.py:17(sample_from_Multi)
+    73196    1.334    0.000    1.842    0.000 {method 'choice' of 'mtrand.RandomState' objects}
+       99    0.019    0.000    0.581    0.006 path_class.py:234(delete_virtual)
+      200    0.001    0.000    0.565    0.003 copy.py:283(_deepcopy_inst)
+      200    0.002    0.000    0.561    0.003 copy.py:253(_deepcopy_dict)
+  1239323    0.509    0.000    0.509    0.000 {range}
+    73196    0.228    0.000    0.508    0.000 fromnumeric.py:2259(prod)
+   672723    0.356    0.000    0.471    0.000 copy.py:267(_keep_alive)
+      100    0.069    0.001    0.326    0.003 gibbs_MJPs.py:7(sampleUI)
+    73196    0.038    0.000    0.280    0.000 _methods.py:34(_prod)
+    73790    0.245    0.000    0.245    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+  1947089    0.169    0.000    0.169    0.000 {method 'append' of 'list' objects}
+  1398063    0.153    0.000    0.153    0.000 {method 'get' of 'dict' objects}
+  1401444    0.115    0.000    0.115    0.000 {id}
+   115033    0.078    0.000    0.078    0.000 {method '__deepcopy__' of 'numpy.generic' objects}
+    57618    0.058    0.000    0.076    0.000 path_class.py:24(trans_Likelihood)
+   219885    0.060    0.000    0.060    0.000 {sum}
+      198    0.002    0.000    0.057    0.000 MHU_MJPs.py:24(prior)
+   555201    0.056    0.000    0.056    0.000 copy.py:198(_deepcopy_atomic)
+      396    0.014    0.000    0.055    0.000 _distn_infrastructure.py:1568(pdf)
+   514511    0.044    0.000    0.044    0.000 {len}
+      594    0.007    0.000    0.030    0.000 _distn_infrastructure.py:570(argsreduce)
+   115630    0.024    0.000    0.024    0.000 {getattr}
+   115630    0.024    0.000    0.024    0.000 {issubclass}
+      198    0.005    0.000    0.021    0.000 _distn_infrastructure.py:2799(pmf)
+     1584    0.003    0.000    0.015    0.000 function_base.py:1400(extract)
+      397    0.003    0.000    0.012    0.000 numeric.py:2125(identity)
+        1    0.001    0.001    0.011    0.011 path_class.py:175(generate_newpath)
+    57816    0.010    0.000    0.010    0.000 {math.exp}
+    73818    0.010    0.000    0.010    0.000 {method 'exponential' of 'mtrand.RandomState' objects}
+     9306    0.009    0.000    0.009    0.000 {numpy.core.multiarray.array}
+     6534    0.003    0.000    0.009    0.000 numeric.py:394(asarray)
+      594    0.003    0.000    0.008    0.000 shape_base.py:8(atleast_1d)
+    57816    0.007    0.000    0.007    0.000 {math.sqrt}
+     3168    0.002    0.000    0.007    0.000 fromnumeric.py:1291(ravel)
+      594    0.001    0.000    0.006    0.000 fromnumeric.py:1772(any)
+      397    0.004    0.000    0.005    0.000 twodim_base.py:190(eye)
+     1188    0.002    0.000    0.005    0.000 {map}
+      594    0.001    0.000    0.004    0.000 {method 'any' of 'numpy.ndarray' objects}
+      100    0.001    0.000    0.004    0.000 MHU_MJPs.py:12(constructor_immi)
+      397    0.001    0.000    0.004    0.000 pydev_import_hook.py:16(do_import)
+      594    0.003    0.000    0.004    0.000 _distn_infrastructure.py:820(_argcheck)
