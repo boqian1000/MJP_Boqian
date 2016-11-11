@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.10.3)  23 OCT 2016 17:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.10.3)  11 NOV 2016 11:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -489,6 +489,21 @@ LaTeX Warning: Label `sec:verify' multiply defined.
 
 LaTeX Warning: Label `fig:TSS' multiply defined.
 
+
+LaTeX Warning: Label `fig:dist_alpha' multiply defined.
+
+
+LaTeX Warning: Label `fig:dist_beta' multiply defined.
+
+
+LaTeX Warning: Label `fig:ESS_Q_3' multiply defined.
+
+
+LaTeX Warning: Label `fig:ESS_Q_5' multiply defined.
+
+
+LaTeX Warning: Label `fig:ESS_Q_10' multiply defined.
+
 )
 \openout1 = `jcgs-template.aux'.
 
@@ -713,18 +728,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 245--247
 
  []
 
-[7] <figs/expplot.png, id=66, 821.81314pt x 550.62857pt>
-File: figs/expplot.png Graphic file (type png)
+[7] <figs/exp_model.png, id=66, 1253.14777pt x 813.2129pt>
+File: figs/exp_model.png Graphic file (type png)
 
-<use figs/expplot.png>
-Package pdftex.def Info: figs/expplot.png used on input line 289.
-(pdftex.def)             Requested size: 156.9958pt x 105.18344pt.
+<use figs/exp_model.png>
+Package pdftex.def Info: figs/exp_model.png used on input line 289.
+(pdftex.def)             Requested size: 156.9958pt x 101.87471pt.
 
 Underfull \hbox (badness 10000) in paragraph at lines 294--296
 
  []
 
-[8 <./figs/expplot.png>]
+[8 <./figs/exp_model.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 299--302
 
  []
@@ -735,62 +750,62 @@ Underfull \hbox (badness 10000) in paragraph at lines 315--318
  []
 
 [10]
-Underfull \hbox (badness 10000) in paragraph at lines 319--320
+Underfull \hbox (badness 10000) in paragraph at lines 319--321
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 321--322
+Underfull \hbox (badness 10000) in paragraph at lines 322--323
 
  []
 
 <figs/exp_3_alpha.pdf, id=77, 614.295pt x 794.97pt>
 File: figs/exp_3_alpha.pdf Graphic file (type pdf)
  <use figs/exp_3_alpha.pdf>
-Package pdftex.def Info: figs/exp_3_alpha.pdf used on input line 330.
+Package pdftex.def Info: figs/exp_3_alpha.pdf used on input line 331.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/exp_3_beta.pdf, id=78, 614.295pt x 794.97pt>
 File: figs/exp_3_beta.pdf Graphic file (type pdf)
  <use figs/exp_3_beta.pdf>
-Package pdftex.def Info: figs/exp_3_beta.pdf used on input line 334.
+Package pdftex.def Info: figs/exp_3_beta.pdf used on input line 335.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/h_alpha.pdf, id=79, 614.295pt x 794.97pt>
 File: figs/h_alpha.pdf Graphic file (type pdf)
  <use figs/h_alpha.pdf>
-Package pdftex.def Info: figs/h_alpha.pdf used on input line 345.
+Package pdftex.def Info: figs/h_alpha.pdf used on input line 346.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/h_beta.pdf, id=80, 614.295pt x 794.97pt>
 File: figs/h_beta.pdf Graphic file (type pdf)
  <use figs/h_beta.pdf>
-Package pdftex.def Info: figs/h_beta.pdf used on input line 349.
+Package pdftex.def Info: figs/h_beta.pdf used on input line 350.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
  [11]
 <figs/exp_5_alpha.pdf, id=84, 614.295pt x 794.97pt>
 File: figs/exp_5_alpha.pdf Graphic file (type pdf)
  <use figs/exp_5_alpha.pdf>
-Package pdftex.def Info: figs/exp_5_alpha.pdf used on input line 360.
+Package pdftex.def Info: figs/exp_5_alpha.pdf used on input line 361.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/exp_5_beta.pdf, id=85, 614.295pt x 794.97pt>
 File: figs/exp_5_beta.pdf Graphic file (type pdf)
  <use figs/exp_5_beta.pdf>
-Package pdftex.def Info: figs/exp_5_beta.pdf used on input line 365.
+Package pdftex.def Info: figs/exp_5_beta.pdf used on input line 366.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/exp_10_alpha.pdf, id=86, 614.295pt x 794.97pt>
 File: figs/exp_10_alpha.pdf Graphic file (type pdf)
 
 <use figs/exp_10_alpha.pdf>
-Package pdftex.def Info: figs/exp_10_alpha.pdf used on input line 377.
+Package pdftex.def Info: figs/exp_10_alpha.pdf used on input line 378.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/exp_10_beta.pdf, id=87, 614.295pt x 794.97pt>
 File: figs/exp_10_beta.pdf Graphic file (type pdf)
  <use figs/exp_10_beta.pdf>
-Package pdftex.def Info: figs/exp_10_beta.pdf used on input line 381.
+Package pdftex.def Info: figs/exp_10_beta.pdf used on input line 382.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/exp3_k2_path_transition.pdf, id=88, 614.295pt x 794.97pt>
@@ -798,21 +813,21 @@ File: figs/exp3_k2_path_transition.pdf Graphic file (type pdf)
 
 <use figs/exp3_k2_path_transition.pdf>
 Package pdftex.def Info: figs/exp3_k2_path_transition.pdf used on input line 39
-4.
+5.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/ESS_vs_t_alpha.pdf, id=89, 614.295pt x 794.97pt>
 File: figs/ESS_vs_t_alpha.pdf Graphic file (type pdf)
 
 <use figs/ESS_vs_t_alpha.pdf>
-Package pdftex.def Info: figs/ESS_vs_t_alpha.pdf used on input line 403.
+Package pdftex.def Info: figs/ESS_vs_t_alpha.pdf used on input line 404.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/ESS_vs_t_beta.pdf, id=90, 614.295pt x 794.97pt>
 File: figs/ESS_vs_t_beta.pdf Graphic file (type pdf)
 
 <use figs/ESS_vs_t_beta.pdf>
-Package pdftex.def Info: figs/ESS_vs_t_beta.pdf used on input line 407.
+Package pdftex.def Info: figs/ESS_vs_t_beta.pdf used on input line 408.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/ESS_vs_t_alpha_fixobservation.pdf, id=91, 614.295pt x 794.97pt>
@@ -820,7 +835,7 @@ File: figs/ESS_vs_t_alpha_fixobservation.pdf Graphic file (type pdf)
 
 <use figs/ESS_vs_t_alpha_fixobservation.pdf>
 Package pdftex.def Info: figs/ESS_vs_t_alpha_fixobservation.pdf used on input l
-ine 418.
+ine 419.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/ESS_vs_t_beta_fixobservation.pdf, id=92, 614.295pt x 794.97pt>
@@ -828,39 +843,39 @@ File: figs/ESS_vs_t_beta_fixobservation.pdf Graphic file (type pdf)
 
 <use figs/ESS_vs_t_beta_fixobservation.pdf>
 Package pdftex.def Info: figs/ESS_vs_t_beta_fixobservation.pdf used on input li
-ne 422.
+ne 423.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/acc_rate_exp_d3.pdf, id=93, 614.295pt x 794.97pt>
 File: figs/acc_rate_exp_d3.pdf Graphic file (type pdf)
 
 <use figs/acc_rate_exp_d3.pdf>
-Package pdftex.def Info: figs/acc_rate_exp_d3.pdf used on input line 432.
+Package pdftex.def Info: figs/acc_rate_exp_d3.pdf used on input line 433.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
-<figs/qplot2.png, id=94, 1629.15031pt x 384.41489pt>
-File: figs/qplot2.png Graphic file (type png)
- <use figs/qplot2.png>
-Package pdftex.def Info: figs/qplot2.png used on input line 444.
-(pdftex.def)             Requested size: 299.04604pt x 70.5584pt.
+<figs/queue_model.png, id=94, 1894.45631pt x 559.91708pt>
+File: figs/queue_model.png Graphic file (type png)
 
-[12 <./figs/exp_3_alpha.pdf> <./figs/exp_3_beta.pdf> <./figs/h_alpha.pdf> <./fi
-gs/h_beta.pdf>] [13 <./figs/exp_5_alpha.pdf> <./figs/exp_5_beta.pdf> <./figs/ex
-p_10_alpha.pdf> <./figs/exp_10_beta.pdf>] [14 <./figs/exp3_k2_path_transition.p
-df> <./figs/ESS_vs_t_alpha.pdf> <./figs/ESS_vs_t_beta.pdf>] [15 <./figs/ESS_vs_
-t_alpha_fixobservation.pdf> <./figs/ESS_vs_t_beta_fixobservation.pdf> <./figs/a
-cc_rate_exp_d3.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 453--456
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 457--460
+<use figs/queue_model.png>
+Package pdftex.def Info: figs/queue_model.png used on input line 445.
+(pdftex.def)             Requested size: 299.04604pt x 88.38391pt.
+ [12 <./figs/exp_3_alpha.pdf> <./figs/exp_3_beta.pdf> <./figs/h_alpha.pdf> <./f
+igs/h_beta.pdf>] [13 <./figs/exp_5_alpha.pdf> <./figs/exp_5_beta.pdf> <./figs/e
+xp_10_alpha.pdf> <./figs/exp_10_beta.pdf>] [14 <./figs/exp3_k2_path_transition.
+pdf> <./figs/ESS_vs_t_alpha.pdf> <./figs/ESS_vs_t_beta.pdf>] [15 <./figs/ESS_vs
+_t_alpha_fixobservation.pdf> <./figs/ESS_vs_t_beta_fixobservation.pdf> <./figs/
+acc_rate_exp_d3.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 454--457
 
  []
 
-[16 <./figs/qplot2.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 461--463
+
+Underfull \hbox (badness 10000) in paragraph at lines 458--461
+
+ []
+
+[16 <./figs/queue_model.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 462--464
 
  []
 
@@ -868,88 +883,171 @@ Underfull \hbox (badness 10000) in paragraph at lines 461--463
 File: figs/q_3_alpha.pdf Graphic file (type pdf)
 
 <use figs/q_3_alpha.pdf>
-Package pdftex.def Info: figs/q_3_alpha.pdf used on input line 478.
+Package pdftex.def Info: figs/q_3_alpha.pdf used on input line 479.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
  <figs/q_3_beta.pdf, id=202, 614.295pt x 794.97pt>
 File: figs/q_3_beta.pdf Graphic file (type pdf)
 
 <use figs/q_3_beta.pdf>
-Package pdftex.def Info: figs/q_3_beta.pdf used on input line 482.
+Package pdftex.def Info: figs/q_3_beta.pdf used on input line 483.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
  <figs/q_5_alpha.pdf, id=203, 614.295pt x 794.97pt>
 File: figs/q_5_alpha.pdf Graphic file (type pdf)
 
 <use figs/q_5_alpha.pdf>
-Package pdftex.def Info: figs/q_5_alpha.pdf used on input line 492.
+Package pdftex.def Info: figs/q_5_alpha.pdf used on input line 493.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
  <figs/q_5_beta.pdf, id=204, 614.295pt x 794.97pt>
 File: figs/q_5_beta.pdf Graphic file (type pdf)
 
 <use figs/q_5_beta.pdf>
-Package pdftex.def Info: figs/q_5_beta.pdf used on input line 496.
+Package pdftex.def Info: figs/q_5_beta.pdf used on input line 497.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
  <figs/q_10_alpha.pdf, id=205, 614.295pt x 794.97pt>
 File: figs/q_10_alpha.pdf Graphic file (type pdf)
 
 <use figs/q_10_alpha.pdf>
-Package pdftex.def Info: figs/q_10_alpha.pdf used on input line 507.
+Package pdftex.def Info: figs/q_10_alpha.pdf used on input line 508.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
  <figs/q_10_beta.pdf, id=206, 614.295pt x 794.97pt>
 File: figs/q_10_beta.pdf Graphic file (type pdf)
 
 <use figs/q_10_beta.pdf>
-Package pdftex.def Info: figs/q_10_beta.pdf used on input line 511.
+Package pdftex.def Info: figs/q_10_beta.pdf used on input line 512.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
 <figs/q3_k2_path_transition.pdf, id=207, 614.295pt x 794.97pt>
 File: figs/q3_k2_path_transition.pdf Graphic file (type pdf)
 
 <use figs/q3_k2_path_transition.pdf>
-Package pdftex.def Info: figs/q3_k2_path_transition.pdf used on input line 521.
+Package pdftex.def Info: figs/q3_k2_path_transition.pdf used on input line 522.
 
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
-<figs/jcplot.png, id=208, 888.16026pt x 760.73685pt>
-File: figs/jcplot.png Graphic file (type png)
- <use figs/jcplot.png>
-Package pdftex.def Info: figs/jcplot.png used on input line 533.
-(pdftex.def)             Requested size: 156.9958pt x 134.46585pt.
+<figs/dist_alpha.pdf, id=208, 614.295pt x 794.97pt>
+File: figs/dist_alpha.pdf Graphic file (type pdf)
+ <use figs/dist_alpha.pdf>
+Package pdftex.def Info: figs/dist_alpha.pdf used on input line 532.
+(pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
-[18 <./figs/q_3_alpha.pdf> <./figs/q_3_beta.pdf>] [19 <./figs/q_5_alpha.pdf> <.
-/figs/q_5_beta.pdf> <./figs/q_10_alpha.pdf> <./figs/q_10_beta.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 538--539
+<figs/dist_beta.pdf, id=209, 614.295pt x 794.97pt>
+File: figs/dist_beta.pdf Graphic file (type pdf)
+ <use figs/dist_beta.pdf>
+Package pdftex.def Info: figs/dist_beta.pdf used on input line 538.
+(pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
+
+<figs/hist_alpha.pdf, id=210, 614.295pt x 794.97pt>
+File: figs/hist_alpha.pdf Graphic file (type pdf)
+ <use figs/hist_alpha.pdf>
+Package pdftex.def Info: figs/hist_alpha.pdf used on input line 548.
+(pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
+
+<figs/hist_beta.pdf, id=211, 614.295pt x 794.97pt>
+File: figs/hist_beta.pdf Graphic file (type pdf)
+ <use figs/hist_beta.pdf>
+Package pdftex.def Info: figs/hist_beta.pdf used on input line 554.
+(pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
+
+<figs/jc_model.png, id=212, 1253.14777pt x 813.2129pt>
+File: figs/jc_model.png Graphic file (type png)
+ <use figs/jc_model.png>
+Package pdftex.def Info: figs/jc_model.png used on input line 567.
+(pdftex.def)             Requested size: 156.9958pt x 101.87471pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--573
+
+ []
+
+[18 <./figs/q_3_alpha.pdf> <./figs/q_3_beta.pdf> <./figs/jc_model.png>]
+[19 <./figs/q_5_alpha.pdf> <./figs/q_5_beta.pdf> <./figs/q_10_alpha.pdf> <./fig
+s/q_10_beta.pdf>] [20 <./figs/q3_k2_path_transition.pdf> <./figs/dist_alpha.pdf
+> <./figs/dist_beta.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 573--575
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 539--541
+Underfull \hbox (badness 10000) in paragraph at lines 577--579
 
  []
 
-[20 <./figs/q3_k2_path_transition.pdf> <./figs/jcplot.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 543--545
-
- []
-
-<figs/jc.pdf, id=262, 614.295pt x 794.97pt>
+[21 <./figs/hist_alpha.pdf> <./figs/hist_beta.pdf>]
+<figs/jc.pdf, id=303, 614.295pt x 794.97pt>
 File: figs/jc.pdf Graphic file (type pdf)
  <use figs/jc.pdf>
-Package pdftex.def Info: figs/jc.pdf used on input line 551.
+Package pdftex.def Info: figs/jc.pdf used on input line 585.
+(pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
+ [22 <./figs/jc.pdf>]
+
+LaTeX Warning: Command \l invalid in math mode on input line 599.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 601--604
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 605--608
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 609--611
+
+ []
+
+[23] <figs/pc_3_alpha.pdf, id=316, 614.295pt x 794.97pt>
+File: figs/pc_3_alpha.pdf Graphic file (type pdf)
+
+<use figs/pc_3_alpha.pdf>
+Package pdftex.def Info: figs/pc_3_alpha.pdf used on input line 627.
+(pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
+ <figs/pc_3_beta.pdf, id=317, 614.295pt x 794.97pt>
+File: figs/pc_3_beta.pdf Graphic file (type pdf)
+
+<use figs/pc_3_beta.pdf>
+Package pdftex.def Info: figs/pc_3_beta.pdf used on input line 631.
+(pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
+ [24]
+<figs/pc_5_alpha.pdf, id=321, 614.295pt x 794.97pt>
+File: figs/pc_5_alpha.pdf Graphic file (type pdf)
+ <use figs/pc_5_alpha.pdf>
+Package pdftex.def Info: figs/pc_5_alpha.pdf used on input line 641.
 (pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
 
-(./jcgs-template.bbl [21]) [22 <./figs/jc.pdf>] (./jcgs-template.aux)
+<figs/pc_5_beta.pdf, id=322, 614.295pt x 794.97pt>
+File: figs/pc_5_beta.pdf Graphic file (type pdf)
+ <use figs/pc_5_beta.pdf>
+Package pdftex.def Info: figs/pc_5_beta.pdf used on input line 645.
+(pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
+
+<figs/pc_10_alpha.pdf, id=323, 614.295pt x 794.97pt>
+File: figs/pc_10_alpha.pdf Graphic file (type pdf)
+
+<use figs/pc_10_alpha.pdf>
+Package pdftex.def Info: figs/pc_10_alpha.pdf used on input line 656.
+(pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
+ <figs/pc_10_beta.pdf, id=324, 614.295pt x 794.97pt>
+File: figs/pc_10_beta.pdf Graphic file (type pdf)
+
+<use figs/pc_10_beta.pdf>
+Package pdftex.def Info: figs/pc_10_beta.pdf used on input line 660.
+(pdftex.def)             Requested size: 156.9958pt x 203.16956pt.
+ (./jcgs-template.bbl [25 <./figs/pc_3_alpha.pdf> <./figs/pc_3_beta.pdf>] [26 <
+./figs/pc_5_alpha.pdf> <./figs/pc_5_beta.pdf> <./figs/pc_10_alpha.pdf> <./figs/
+pc_10_beta.pdf>]) [27] (./jcgs-template.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 3769 strings out of 493087
- 49989 string characters out of 6134817
- 112280 words of memory out of 5000000
- 7141 multiletter control sequences out of 15000+600000
+ 3821 strings out of 493087
+ 51140 string characters out of 6134817
+ 112305 words of memory out of 5000000
+ 7183 multiletter control sequences out of 15000+600000
  19945 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,10n,24p,1529b,484s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,10n,24p,1856b,484s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
@@ -965,10 +1063,10 @@ xlive/2015/texmf-dist/fonts/type1/public/mathabx-type1/matha6.pfb></usr/local/t
 exlive/2015/texmf-dist/fonts/type1/public/mathabx-type1/matha8.pfb></usr/local/
 texlive/2015/texmf-dist/fonts/type1/public/mathabx-type1/mathx10.pfb></usr/loca
 l/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on jcgs-template.pdf (22 pages, 906257 bytes).
+Output written on jcgs-template.pdf (27 pages, 969974 bytes).
 PDF statistics:
- 324 PDF objects out of 1000 (max. 8388607)
- 206 compressed objects within 3 object streams
+ 420 PDF objects out of 1000 (max. 8388607)
+ 277 compressed objects within 3 object streams
  0 named destinations out of 1000 (max. 500000)
- 191 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 241 words of extra memory for PDF output out of 10000 (max. 10000000)
 
