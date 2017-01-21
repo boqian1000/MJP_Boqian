@@ -17,6 +17,7 @@
 \addtolength{\textheight}{1.3in}%
 \addtolength{\topmargin}{-.8in}%
 
+\input{mymacros.tex}
 
 \begin{document}
 
@@ -58,15 +59,31 @@
 
 \bigskip
 \begin{abstract}
-Abstrct.
+Markov jump processes (MJPs) are continuous-time stochastic processes that 
+find wide application in a variety of fields.  Inference for MJPs typically proceeds via Markov chain Monte Carlo, 
+the state-of-the-art being a recent auxiliary variable Gibbs sampler proposed
+in~\cite{RaoTeh13}. This algorithm was designed for the situation where
+the MJP parameters are known, and Bayesian inference over the unknown
+parameter is typically carried out by incorporating it into a larger Gibbs 
+sampler. In many situations, the MJP trajectory and parameters can exhibit
+strong coupling, and this strategy of alternately sampling parameters given
+path, and then path given parameters can result in poor mixing. In this 
+work, we propose a simple, elegant and novel algorithm to address this 
+problem. Our scheme shows how standard Metropolis-Hastings (MH) approaches
+relevant to discrete-time hidden Markov models (HMMs) can be extended
+to the continuous-time MJP. Our proposed solution also ties up some of the
+loose ends in~\cite{RaoTeh13}, and provides a complete and clean recipe 
+for Bayesian inference in jump
+processes. In our experiments, we demonstrate superior performance over 
+Gibbs sampling, as well as other approaches
+like particle Markov chain Monte Carlo~\cite{Andrieu10}.
 \end{abstract}
 \noindent%
 {\it Keywords:}  Markov jump process, MCMC, Metropolis Hasting sampler, Bayesian inference
 
 \spacingset{1.45}
-\section{Introduction}
-\label{sec:intro}
-In this paper, we tackled the problem of sampling MJP parameters from the posteriors, efficiently, using Metropolis Hasting algorithm.
+\input{intro.tex}
+\input{unif.tex}
 \section{Metropolis Hasting for Bayesian Inference using FFBS  within the Gibbs Sampling On MJPs}~
 \setlength{\unitlength}{0.8cm}
   \begin{figure}[H]
@@ -104,28 +121,28 @@ In this paper, we tackled the problem of sampling MJP parameters from the poster
 
   \end{figure}
 
-\begin{algorithm}[H]
-   \caption{MH In Gibbs sampling for MJPs }
-   \label{alg:MH In Gibbs}
-\begin{algorithmic}
-   \STATE {\bfseries Input:} A set of partial and noisy observations $y_{[t_0, t_{N+1})}$, Initial distribution over states $\pi_0$,  Metropolis Hasting proposal $q(. | \theta)$.\\
-   The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$.\\  
-      \STATE {\bfseries Output:} A new MJP trajectorie $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, A series of MJP parameters $\tilde{\theta}$.
-	\STATE 0: Let $\Omega = h(\theta)$, with $\Omega > max_s{|A_s|}$ using some deterministic function $h$.
-	\STATE 1: Sample virtual jumps $U\subset[t_{start}, t_{end}]$ from a Non homogeneous Poisson process with piecewise-constant rate$$R(t) = (\Omega + A_{S(t)}).$$\\Define $W = T \cup U$.
-	\STATE 2: Propose $\theta^* \sim q(.| \theta)$.\\
-		Accept $\theta^*$ as $\tilde{\theta}$ with probability $\alpha$.
-		\begin{align*}
-		\alpha &=  1 \wedge \frac{P(W,\theta^*| y)}{P(W, \theta| y)} \frac{q(\theta|\theta^*)}{q(\theta^*|\theta)}\\
-		&=  1 \wedge \frac{P(y| W,\theta^*) P(W | \theta^*)p(\theta^*)}{P(y|W, \theta)P(W | \theta)p(\theta)} \frac{q(\theta|\theta^*)}{q(\theta^*|\theta)}.
-		\end{align*}
-	\STATE 3: Sample a path $\tilde{V}$, from a discret-time Markov chain with $|W| + 1$ steps, using FFBS algorithm. The transition matrix of the Markov chain is $B = (I + \frac{A}{\Omega})$ while the initial distribution over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
-	$$ L_i(s) = P(Y_{[w_i, w_{i + 1})} | S(t) = s \; for\; t \in [w_i, w_{i + 1})) = \prod_{j: t_j \in [w_i, w_{i + 1})}p(y_{t_j} | S(t_j) = s).$$\\
-%(i.e. $V(i) \sim P(V |  \theta(i), W(i - 1), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\
-	\STATE 4: Let $\tilde{T}$ be the set of times in $W$ when the Markov chain changes state. Define $\tilde{S}$ as the corresponding set of state values. Return $(\tilde{S}, \tilde{T}, \tilde{\theta})$.\\
-\end{algorithmic}
-\end{algorithm}
-\label{sec:meth}
+% \begin{algorithm}[H]
+%    \caption{MH In Gibbs sampling for MJPs }
+%    \label{alg:MH In Gibbs}
+% \begin{algorithmic}
+%    \STATE {\bfseries Input:} A set of partial and noisy observations $y_{[t_0, t_{N+1})}$, Initial distribution over states $\pi_0$,  Metropolis Hasting proposal $q(. | \theta)$.\\
+%    The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$.\\  
+%       \STATE {\bfseries Output:} A new MJP trajectorie $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, A series of MJP parameters $\tilde{\theta}$.
+%     \STATE 0: Let $\Omega = h(\theta)$, with $\Omega > max_s{|A_s|}$ using some deterministic function $h$.
+%     \STATE 1: Sample virtual jumps $U\subset[t_{start}, t_{end}]$ from a Non homogeneous Poisson process with piecewise-constant rate$$R(t) = (\Omega + A_{S(t)}).$$\\Define $W = T \cup U$.
+%     \STATE 2: Propose $\theta^* \sim q(.| \theta)$.\\
+%         Accept $\theta^*$ as $\tilde{\theta}$ with probability $\alpha$.
+%         \begin{align*}
+%         \alpha &=  1 \wedge \frac{P(W,\theta^*| y)}{P(W, \theta| y)} \frac{q(\theta|\theta^*)}{q(\theta^*|\theta)}\\
+%         &=  1 \wedge \frac{P(y| W,\theta^*) P(W | \theta^*)p(\theta^*)}{P(y|W, \theta)P(W | \theta)p(\theta)} \frac{q(\theta|\theta^*)}{q(\theta^*|\theta)}.
+%         \end{align*}
+%     \STATE 3: Sample a path $\tilde{V}$, from a discret-time Markov chain with $|W| + 1$ steps, using FFBS algorithm. The transition matrix of the Markov chain is $B = (I + \frac{A}{\Omega})$ while the initial distribution over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
+%     $$ L_i(s) = P(Y_{[w_i, w_{i + 1})} | S(t) = s \; for\; t \in [w_i, w_{i + 1})) = \prod_{j: t_j \in [w_i, w_{i + 1})}p(y_{t_j} | S(t_j) = s).$$\\
+% %(i.e. $V(i) \sim P(V |  \theta(i), W(i - 1), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\
+%     \STATE 4: Let $\tilde{T}$ be the set of times in $W$ when the Markov chain changes state. Define $\tilde{S}$ as the corresponding set of state values. Return $(\tilde{S}, \tilde{T}, \tilde{\theta})$.\\
+% \end{algorithmic}
+% \end{algorithm}
+% \label{sec:meth}
 
 \section{Improved Metropolis Hasting for Bayesian Inference using FFBS  within the Gibbs Sampling On MJPs}~
 \setlength{\unitlength}{0.8cm}
@@ -170,27 +187,27 @@ In this paper, we tackled the problem of sampling MJP parameters from the poster
 
   \end{figure}
 
-\begin{algorithm}[H]
-   \caption{MH In Gibbs sampling for MJPs }
-   \label{alg:MH In Gibbs}
-\begin{algorithmic}
-   \STATE {\bfseries Input:} A set of partial and noisy observations $y_{[t_0, t_{N+1})}$, Initial distribution over states $\pi_0$,  Metropolis Hasting proposal $q(. | \theta)$.\\
-   The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $(\theta)$.\\  
-      \STATE {\bfseries Output:} A new MJP trajectorie $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, A series of MJP parameters $\tilde{\theta}$.
-	  \STATE 0:  Sample $\theta^* \sim q(.| \theta)$. And let $\Omega = h(\theta) + h(\theta^*)$, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
-	\STATE 1: Sample virtual jumps $U\subset[t_{start}, t_{end}]$ from a Non homogeneous Poisson process with piecewise-constant rate$$R(t) = (\Omega + A_{S(t)}(\theta)).$$\\Define $W = T \cup U$.
-	\STATE 2: Propose $(\theta^*, \theta)$ and accept $\theta^*$ as $\tilde{\theta}$ with probability $\alpha$.
-		\begin{align*}
-		\alpha &=  1 \wedge \frac{P(W,(\theta^*, \theta)| y)}{P(W, (\theta, \theta^*)| y)}\\
-		&=  1 \wedge \frac{P(y| W,\theta^*, \theta) P(W | (\theta^*, \theta))p((\theta^*, \theta))}{P(y| W,(\theta, \theta^*)) P(W | (\theta, \theta^*))p((\theta, \theta^*))}\\
-				&=  1 \wedge \frac{P(y| W,\theta^*, \theta)p((\theta^*, \theta))}{P(y| W,(\theta, \theta^*))p((\theta, \theta^*))}.
-		\end{align*}
-	\STATE 3: Sample a path $\tilde{V}$, from a discret-time Markov chain with $|W| + 1$ steps, using FFBS algorithm. The transition matrix of the Markov chain is $B = (I + \frac{A(\tilde{\theta})}{\Omega})$ while the initial distribution over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
-	$$ L_i(s) = P(Y_{[w_i, w_{i + 1})} | S(t) = s \; for\; t \in [w_i, w_{i + 1})) = \prod_{j: t_j \in [w_i, w_{i + 1})}p(y_{t_j} | S(t_j) = s).$$\\
-%(i.e. $V(i) \sim P(V |  \theta(i), W(i - 1), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\
-	\STATE 4: Let $\tilde{T}$ be the set of times in $W$ when the Markov chain changes state. Define $\tilde{S}$ as the corresponding set of state values. Return $(\tilde{S}, \tilde{T}, \tilde{\theta})$.\\
-\end{algorithmic}
-\end{algorithm}
+% \begin{algorithm}[H]
+%    \caption{MH In Gibbs sampling for MJPs }
+%    \label{alg:MH In Gibbs}
+% \begin{algorithmic}
+%    \STATE {\bfseries Input:} A set of partial and noisy observations $y_{[t_0, t_{N+1})}$, Initial distribution over states $\pi_0$,  Metropolis Hasting proposal $q(. | \theta)$.\\
+%    The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $(\theta)$.\\  
+%       \STATE {\bfseries Output:} A new MJP trajectorie $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, A series of MJP parameters $\tilde{\theta}$.
+%       \STATE 0:  Sample $\theta^* \sim q(.| \theta)$. And let $\Omega = h(\theta) + h(\theta^*)$, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
+%     \STATE 1: Sample virtual jumps $U\subset[t_{start}, t_{end}]$ from a Non homogeneous Poisson process with piecewise-constant rate$$R(t) = (\Omega + A_{S(t)}(\theta)).$$\\Define $W = T \cup U$.
+%     \STATE 2: Propose $(\theta^*, \theta)$ and accept $\theta^*$ as $\tilde{\theta}$ with probability $\alpha$.
+%         \begin{align*}
+%         \alpha &=  1 \wedge \frac{P(W,(\theta^*, \theta)| y)}{P(W, (\theta, \theta^*)| y)}\\
+%         &=  1 \wedge \frac{P(y| W,\theta^*, \theta) P(W | (\theta^*, \theta))p((\theta^*, \theta))}{P(y| W,(\theta, \theta^*)) P(W | (\theta, \theta^*))p((\theta, \theta^*))}\\
+%                 &=  1 \wedge \frac{P(y| W,\theta^*, \theta)p((\theta^*, \theta))}{P(y| W,(\theta, \theta^*))p((\theta, \theta^*))}.
+%         \end{align*}
+%     \STATE 3: Sample a path $\tilde{V}$, from a discret-time Markov chain with $|W| + 1$ steps, using FFBS algorithm. The transition matrix of the Markov chain is $B = (I + \frac{A(\tilde{\theta})}{\Omega})$ while the initial distribution over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
+%     $$ L_i(s) = P(Y_{[w_i, w_{i + 1})} | S(t) = s \; for\; t \in [w_i, w_{i + 1})) = \prod_{j: t_j \in [w_i, w_{i + 1})}p(y_{t_j} | S(t_j) = s).$$\\
+% %(i.e. $V(i) \sim P(V |  \theta(i), W(i - 1), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\
+%     \STATE 4: Let $\tilde{T}$ be the set of times in $W$ when the Markov chain changes state. Define $\tilde{S}$ as the corresponding set of state values. Return $(\tilde{S}, \tilde{T}, \tilde{\theta})$.\\
+% \end{algorithmic}
+% \end{algorithm}
 
 \section{Verifications of Algorithm 1}
 \label{sec:verify}
@@ -236,7 +253,7 @@ So the stationary distribution of $\kappa_3 \circ \kappa_2 \circ \kappa_1$ is $P
 %\end{proof}
 
 \section{Verifications of Algorithm 2}
-\label{sec:verify}
+\label{sec:verify2}
 Proof:
 Our state is $(W, S, T, \theta, \theta^*)$. 
 \begin{align*}
@@ -262,26 +279,26 @@ The Step 3 + Step 4 satisfy the detailed balance condition. The reason is as fol
 Therefore the stationary distribution of this MCMC sampler is $P(W, S, T, (\theta, \theta^*) | y)$. Thus the stationary distribution of $(S, T, \theta)$ is the corresponding marginal distribution $P(S, T, \theta | y)$.  
 
 \section{Generic Exponential Model}~
-\begin{algorithm}[!ht]
-   \caption{Generic Gibbs sampling for MJPs for Gamma priors}
-   \label{alg:Generic Gibbs}
-\begin{algorithmic}
-   \STATE {\bfseries Input:} observations $y_{[t_0, t_{k+1})}$
-   \STATE Initialize, $i = 0$
-   \\ (a) Set $\alpha(0), \beta(0)$ arbitrarily and set current trajectory $[S,T](0)$ arbitrarily.\\
-	(b) Uniformize $[S,T](0)$, to get virtual jumps $U$.
-   \REPEAT
-   \FOR{$i=1$ {\bfseries to} $N$}
-	\STATE (a) Sample $U(i) \sim P( U | \beta(i - 1), \alpha(i - 1), S(i - 1), T(i - 1), y)$.\\	
-	\STATE (b) Use FFBS algorithm to  sample states given all the jump times(both true jumps and virtual jumps).
-(i.e. $V(i) \sim P(V |  \beta(i - 1), \alpha(i - 1), W(i ), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\
-	\STATE (c) Propose $\beta^* \sim q(.| \beta(i -1))$.\\
-	  Set $\beta(i) = \beta^*$, with probability $P_{acc} = 1 \wedge \frac{P(\beta^* |S(i), T(i))}{P(\beta(i - 1) |S(i), T(i))} \frac{q(\beta(i - 1)|\beta^*)}{q(\beta^*|\beta(i - 1))}$;\\Otherwise set $\beta(i) = \beta(i-1)$.\\	  
-	\STATE (d) Sample $\alpha(i) \sim P(. | \beta(i), S(i), T(i), y)$.\\ It is a $Gamma(\mu + N, \lambda + \sum_{0}^NF_{S_i}(\beta)(t_{i + 1} - t_i))$ distribution actually.\\
-   \ENDFOR
-   \UNTIL{$ i = N$ }
-\end{algorithmic}
-\end{algorithm}
+% \begin{algorithm}[!ht]
+%    \caption{Generic Gibbs sampling for MJPs for Gamma priors}
+%    \label{alg:Generic Gibbs}
+% \begin{algorithmic}
+%    \STATE {\bfseries Input:} observations $y_{[t_0, t_{k+1})}$
+%    \STATE Initialize, $i = 0$
+%    \\ (a) Set $\alpha(0), \beta(0)$ arbitrarily and set current trajectory $[S,T](0)$ arbitrarily.\\
+%     (b) Uniformize $[S,T](0)$, to get virtual jumps $U$.
+%    \REPEAT
+%    \FOR{$i=1$ {\bfseries to} $N$}
+%     \STATE (a) Sample $U(i) \sim P( U | \beta(i - 1), \alpha(i - 1), S(i - 1), T(i - 1), y)$.\\	
+%     \STATE (b) Use FFBS algorithm to  sample states given all the jump times(both true jumps and virtual jumps).
+% (i.e. $V(i) \sim P(V |  \beta(i - 1), \alpha(i - 1), W(i ), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\
+%     \STATE (c) Propose $\beta^* \sim q(.| \beta(i -1))$.\\
+%       Set $\beta(i) = \beta^*$, with probability $P_{acc} = 1 \wedge \frac{P(\beta^* |S(i), T(i))}{P(\beta(i - 1) |S(i), T(i))} \frac{q(\beta(i - 1)|\beta^*)}{q(\beta^*|\beta(i - 1))}$;\\Otherwise set $\beta(i) = \beta(i-1)$.\\	  
+%     \STATE (d) Sample $\alpha(i) \sim P(. | \beta(i), S(i), T(i), y)$.\\ It is a $Gamma(\mu + N, \lambda + \sum_{0}^NF_{S_i}(\beta)(t_{i + 1} - t_i))$ distribution actually.\\
+%    \ENDFOR
+%    \UNTIL{$ i = N$ }
+% \end{algorithmic}
+% \end{algorithm}
   \begin{figure}[H]
   \centering
   \begin{minipage}[!hp]{0.45\linewidth}
@@ -422,7 +439,7 @@ Figure 8 plots ESS plots the overall  acceptance rate against the log variance o
   \centering
     \includegraphics [width=0.70\textwidth, angle=0]{figs/ESS_vs_t_beta_fixobservation.pdf}
     \vspace{-0 in}
-     \label{fig:TSS}
+     \label{fig:TSS2}
   \end{minipage}
     \caption{Time Interval vs. ESS / sec (Number of observations is fixed)}
   \end{figure}
@@ -547,13 +564,13 @@ In the following, we evaluate a Python implementation of our algorithms compared
   \centering
     \includegraphics [width=0.70\textwidth, angle=0]{figs/hist_alpha.pdf}
     \vspace{-0 in}
-     \label{fig:dist_alpha}
+     \label{fig:dist_alpha1}
   \end{minipage}
   \begin{minipage}[!hp]{0.45\linewidth}
   \centering
     \includegraphics [width=0.70\textwidth, angle=0]{figs/hist_beta.pdf}
     \vspace{-0 in}
-     \label{fig:dist_beta}
+     \label{fig:hist_beta}
   \end{minipage}
     \caption{test}
   \end{figure}
