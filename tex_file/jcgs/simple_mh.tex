@@ -1,0 +1,65 @@
+\section{Metropolis Hasting for Bayesian Inference using FFBS  within the Gibbs Sampling On MJPs}~
+
+\setlength{\unitlength}{0.8cm}
+  \begin{figure}[H]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/plotn0.pdf}
+      \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/plotn1.pdf}
+    \vspace{-0 in}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/plotn2.pdf}
+    \vspace{-0 in}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/plotn3.pdf}
+    \vspace{-0 in}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/plotn4.pdf}
+    \vspace{-0 in}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/plotn5.pdf}
+    \vspace{-0 in}
+  \end{minipage}
+    \caption{MH algorithm}
+
+  \end{figure}
+
+\begin{algorithm}[H]
+   \caption{MH In Gibbs sampling for MJPs }
+   \label{alg:MH In Gibbs}
+\begin{algorithmic}
+  \State 
+  \begin{tabular}{l l}
+   \textbf{Input:  } & \text{A set of partial and noisy observations $y_{[t_0, t_{N+1})}$}, \\
+                      & \text{Initial distribution over states $\pi_0$,  Metropolis Hasting proposal $q(. | \theta)$}.\\
+                      & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$}.\\ 
+ \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, A series of MJP parameters $\tilde{\theta}$}.
+   \end{tabular}
+   \hrule \\
+    \State 1: Let $\Omega = h(\theta)$, with $\Omega > \max_s{|A_s|}$ using some deterministic function $h$.
+    \State 2: Sample virtual jumps $U\subset[t_{start}, t_{end}]$ from a Non homogeneous Poisson process with piecewise-constant rate$$R(t) = (\Omega + A_{S(t)}).$$\\Define $W = T \cup U$.
+    \State 3: Propose $\theta^* \sim q(.| \theta)$.\\
+        Accept $\theta^*$ as $\tilde{\theta}$ with probability $\alpha$.
+        \begin{align*}
+        \alpha &=  1 \wedge \frac{P(W,\theta^*| y)}{P(W, \theta| y)} \frac{q(\theta|\theta^*)}{q(\theta^*|\theta)}\\
+        &=  1 \wedge \frac{P(y| W,\theta^*) P(W | \theta^*)p(\theta^*)}{P(y|W, \theta)P(W | \theta)p(\theta)} \frac{q(\theta|\theta^*)}{q(\theta^*|\theta)}.
+        \end{align*}
+    \State 4: Sample a path $\tilde{V}$, from a discret-time Markov chain with $|W| + 1$ steps, using FFBS algorithm. The transition matrix of the Markov chain is $B = (I + \frac{A}{\Omega})$ while the initial distribution over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
+    $$ L_i(s) = P(Y_{[w_i, w_{i + 1})} | S(t) = s \; for\; t \in [w_i, w_{i + 1})) = \prod_{j: t_j \in [w_i, w_{i + 1})}p(y_{t_j} | S(t_j) = s).$$\\
+%(i.e. $V(i) \sim P(V |  \theta(i), W(i - 1), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\
+    \State 5: Let $\tilde{T}$ be the set of times in $W$ when the Markov chain changes state. Define $\tilde{S}$ as the corresponding set of state values. Return $(\tilde{S}, \tilde{T}, \tilde{\theta})$.\\
+\end{algorithmic}
+\end{algorithm}
+\label{sec:meth}
