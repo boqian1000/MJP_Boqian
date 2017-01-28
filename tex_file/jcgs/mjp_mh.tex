@@ -64,17 +64,18 @@ the state-of-the-art being a recent auxiliary variable Gibbs sampler proposed
 in~\cite{RaoTeh13}. This algorithm was designed for the situation where
 the MJP parameters are known, and Bayesian inference over the unknown
 parameter is typically carried out by incorporating it into a larger Gibbs 
-sampler. In many situations, the MJP trajectory and parameters can exhibit
-strong coupling, and this strategy of alternately sampling parameters given
-path, and then path given parameters can result in poor mixing. In this 
+sampler. %In many situations, the MJP trajectory and parameters can exhibit
+%strong coupling, and 
+This strategy of alternately sampling parameters given path, and 
+then path given parameters can result in poor mixing. In this 
 work, we propose a simple, elegant and novel algorithm to address this 
-problem. Our scheme shows how standard Metropolis-Hastings (MH) approaches
-relevant to discrete-time hidden Markov models (HMMs) can be extended
-to the continuous-time MJP. Our proposed solution also ties up some of the
-loose ends in~\cite{RaoTeh13}, and provides a complete and clean recipe 
-for Bayesian inference in jump
-processes. In our experiments, we demonstrate superior performance over 
-Gibbs sampling, as well as other approaches
+problem. Our scheme shows how standard Metropolis-Hastings (MH) 
+approaches relevant to discrete-time hidden Markov models (HMMs) 
+can be extended to the continuous-time situation. Our proposed 
+solution also ties up some of the loose ends in~\cite{RaoTeh13}, 
+and provides a complete and clean recipe for Bayesian inference in 
+jump processes. In our experiments, we demonstrate superior 
+performance over Gibbs sampling, as well as other approaches
 like particle Markov chain Monte Carlo~\cite{Andrieu10}.
 \end{abstract}
 \noindent%
