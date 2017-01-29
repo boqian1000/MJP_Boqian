@@ -6,52 +6,52 @@ population genetics, mathematical finance, artificial intelligence and
 social-network analysis. MJPs have been used to model phenomena such 
 as the state of a chemical reaction~\cite{gillespie97}, the state of a queuing 
 network~\cite{Breuer2003}, segmentations of a strand of 
-DNA~\cite{FearnSher2006}, the state of 
-users logging their activity on social media~\cite{pan2016markov} among many others.
+DNA~\cite{FearnSher2006}, the state of users logging their activity 
+on social media~\cite{pan2016markov} among many others.
 
-Their temporal evolution in continuous-time nature results
-in realistic, mechanistic, and interpretable models, often amenable to 
-mathematical analysis.  These same dynamics however raise computational
+MJPs model temporal evolution in continuous-time, resulting in 
+realistic, mechanistic, and interpretable models, often amenable to 
+mathematical analysis. These same dynamics however raise computational
 challenges in statistical applications, where given partal and noisy 
-measurements,
-one has to make inferences over  the latent MJP trajectory as well
-as any system parameters. Carrying out inferences over the 
-latent MJP trajectory, and any system parameters, is complicated by two
-facts: one cannot {\em a priori} bound the number of transitions, and 
-state-transition times are continuous-valued. Inference for these models 
-typically proceeds via Markov chain Monte Carlo, the state-of-the-art 
-being a recent auxiliary variable Gibbs sampler proposed 
-in~\cite{RaoTeh13}.  This algorithm was designed to sample MJP paths 
-when the MJP parameters 
-are known, and parameter inference is typically carried out by 
+measurements, one has to make inferences over the latent MJP 
+trajectory as well as any system parameters. Carrying out such
+inferences is complicated by two facts: one cannot {\em a priori} 
+bound the number of transitions, and state-transition times themselves
+are continuous-valued. This is in contrast to the situation with
+the discrete-time hidden Markov model, and trajectory inference for 
+MJPs typically proceeds via Markov chain Monte Carlo. The 
+state-of-the-art is a recent auxiliary variable Gibbs sampler proposed 
+in~\cite{RaoTeh13},  designed to sample paths when the MJP parameters
+are known. Parameter inference is typically carried out by 
 incorporating it into a larger Gibbs sampler. 
 
-In many situations, the MJP trajectory and parameters can exhibit strong 
-coupling, so that the Gibbs described earlier can mix poorly.  
+In many situations, the MJP trajectory and parameters can exhibit 
+strong coupling, so that the Gibbs described earlier can mix poorly.  
 In this work, we propose a Metropolis-Hastings framework to address
-this issue. Our proposed solution is simple, elegant and ties
-up some of the loose ends in the algorithm from~\cite{RaoTeh13}.
-In our experiments, we demonstrate superior performance over Gibbs
-sampling, as well as other approaches like particle Markov chain Monte 
-Carlo~\cite{Andrieu10}.
+this issue. Our proposed solution is simple and elegant, additionally,
+it ties up some of the loose ends in the algorithm 
+from~\cite{RaoTeh13}.  In our experiments, we demonstrate superior 
+performance over Gibbs sampling, as well as other approaches like 
+particle Markov chain Monte Carlo~\cite{Andrieu10}.
 
 \section{Markov jump processes}
 Formally, an MJP is a right-continuous piecewise-constant stochastic
 process $S(t)$ taking values in a countable, and usually finite state
 space $\cS$ (see Figure~\ref{fig:mjp}). For simplicity, we will assume 
-$N$-states, with $\cS = \{1,\ldots,n\}$. Then, an MJP is 
+$N$-states, with $\cS = \{1,\ldots,N\}$. Then, an MJP is 
 parameterized by two quantities, a probability vector $\pi$ and a 
-rate-matrix $A$. The former, an $n$-component vector, gives the 
-distribution over states at the 
-initial time (which without loss of generality, we assume is 0), while 
-the latter is an $n \times n$-matrix governing the dynamics of the system.
-An off-diagonal element $A_{ij}$, for some $i \neq j$ gives the rate at 
-which the system transitions from state $i$ to $j$. The rows of $A$ sum
-to $0$, so that the diagonal element $A_i \equiv A_{ii} = -\sum_{j \neq i} A_{ij}$, 
+rate-matrix $A$. The former, an $N$-component vector, gives the 
+distribution over states at the initial time (which without loss of 
+generality, we assume is $0$), while the latter is an 
+$N \times N$-matrix governing the dynamics of the system.  An 
+off-diagonal element $A_{ij}$, for some $i \neq j$ gives the rate at 
+which the system transitions from state $i$ to $j$. The rows of $A$ 
+sum to $0$, so that the diagonal element $-A_i \equiv -A_{ii} = \sum_{j \neq i} A_{ij}$, 
 and its absolute value gives
 the total rate at which the system leaves state $i$ for any other state.
-To simulate an MJP trajectory, one first samples an initial state $S(0)$ 
-from the distribution $\pi$, after which we repeat the following two steps:
+To simulate an MJP trajectory, one follows Gillespie's algorithm: 
+first sample an initial state $S(0)$ from the distribution $\pi$, and
+then repeat the following two steps:
 \begin{itemize}
   \item Sample a wait-time $t_i$ from an exponential with rate $A_i$, where
     $i$ is the current state. The MJP remains in state $i$ for time $t_i$.
@@ -60,10 +60,10 @@ from the distribution $\pi$, after which we repeat the following two steps:
 \end{itemize}
 
 \subsection{Structured rate matrices}
-In the general case, the rate matrix $A$ has $n(n-1)$ free parameters,
+In the general case, the rate matrix $A$ has $N(N-1)$ free parameters,
 corresponding to transition rates between every pair of distinct states. 
 In typical applications, and especially when large state-spaces
-are involved, this $n \times n$ matrix is determined by a much smaller
+are involved, this $N \times N$ matrix is determined by a much smaller
 set of parameters. We will write these as $\theta$, and the rate 
 matrix $A$ is a deterministic function of these parameters: 
 $A \equiv A(\theta)$. The parameters $\theta$ are often much more 
@@ -72,22 +72,31 @@ physical, biological or environmental parameters of interest.
 Below we give three examples:
 \begin{description}
   \item[The immigration-death process] This is a simple MJP governed
-    by two parameters: an arrival rate $\alpha$ and a `death'-rate
+    by two parameters: an arrival rate $\alpha$ and a death-rate
     $\beta$. The state space $\cS$ represents the size of a 
-    population or the number of jobs in a queue, and can be finite or
+    population or the capacity of a queue, and can be finite or
     countably infinite. New individuals
     enter the system according to a rate-$\alpha$ Poisson process,
-    so that the off-diagonal elements $A_{i,i+}$ all equal to $\alpha$.
-    On the other hand, each individual dies at a rate $\beta$, so
-    that the system moves from state $i$ to $i-1$ with rate $i\beta$.
+    so that the off-diagonal elements $A_{i,i+1}$ all equal to $\alpha$.
+    On the other hand, each individual dies (or each job completes) 
+    at a rate $\beta$, so that the system moves from state $i$ to 
+    $i-1$ with rate $i\beta$.
     All other transitions have rate $0$, so that $\theta = (\alpha,\beta)$,
-    and $(\theta)$ is a tri-diagonal matrix.
+    and $A(\theta)$ is a tri-diagonal matrix.
   \item[Birth-death processes] This is a simple variant of the
-    immigration where the system moves from state $i$ to $i+1$ with
-    rate $i\alpha$, so that the population grows at a rate proportional
-    to the population size. Once again, $\theta=(\alpha,\beta)$.
-  \item[Jules-Cantor model] This is popular model in genetics used to 
-    characterize the transition rates between amino-acids at a locus
-    over evolutionary time. In this model, transitions are categorized
-    into two types: synonymous transitions that encode
+    immigration-death process where the system moves from state $i$ 
+    to $i+1$ with rate $i\alpha$, so that the population grows at a 
+    rate proportional to the population size. Once again, 
+    $\theta=(\alpha,\beta)$.
+  \item[Codon substitution models] Such models are used in genetics,
+    to characterize transition rates between codons at a locus on
+    a DNA or RNA molecule over evolutionary time. In the simplest case,
+    transitions are categorized into two types: synonymous transitions
+    that continue to encode the same amino acid, and nonsynonymous 
+    transitions that encode different amino acids. 
+    These two transitions types have their own rates, and noting that 
+    there are $61$ amino acids, we have a $61\times 61$ transition
+    matrix determined by 2 parameters. More refined models~\cite[e.g.][]{goldman1994codon} introduce
+    additional parameters, however, the number of parameters is still
+    significantly smaller than the genral case.
 \end{description}
