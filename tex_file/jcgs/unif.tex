@@ -133,37 +133,38 @@ additional computational burden.
 \end{itemize}
 
 \subsection{A marginal sampler for MJP parameters} 
-Naively calculating this marginal probability for the continuous-time
-case is not straightforward, as there is no finite set of candidate
-times to make a pass over. One approach makes a sequential forward
-pass through all observations instead, using the matrix-exponential
+Constructing such a marginal sampler over the MJP parameters by
+integrating out the hidden trajectory is less straightforward:
+the set of transition times is unbounded, with individual elements
+unconstrained over the observation interval $[0,T]$.
+%Naively calculating this marginal probability for the continuous-time
+%case is not straightforward, as there is no finite set of candidate
+%times to make a pass over. 
+One approach~\cite{FearnSher2006} is to instead make a sequential 
+forward pass through all observations, using the matrix-exponential
 operator to marginalize out the infinite number of possible 
-continuous-time trajectories
-linking these two times. However, as demonstrated in~\cite{RaoTeh13},
-this approach has a number of drawbacks: it scales cubically, rather 
-than quadratically with the number of states, it cannot exploit
-structure like sparsity in the transition matrix, and can depend in
-not trivial ways on the exact nature of the observation process.
+continuous-time trajectories linking two successive times. However, as
+demonstrated in~\cite{RaoTeh13}, this approach has a number of 
+drawbacks: it scales cubically, rather than quadratically with the 
+number of states, it cannot exploit structure like sparsity in the 
+transition matrix, and can depend in not trivial ways on the exact 
+nature of the observation process.
+
 %and involves expensive computations that scale with the number of
 %observations rather than the actual dynamics of the system of interest.
 
-A second approach is particle MCMC~\cite{Andrieu10} uses particle 
-filtering to obtain an unbiased estimate of the marginal probability 
-$p(X|\theta)$, which is then used in the Metropolis-Hastings 
-acceptance probability. While the resulting MCMC sampler is 
-unbiased~\cite{Andrieu09}, the resulting scheme resulting scheme
-does not exploit the structure of the MJP, and we show that it
-can sometimes be quite inefficient.
+A second approach is particle MCMC~\cite{Andrieu10}. Here, one uses 
+particle filtering to obtain an unbiased estimate of the marginal 
+probability $p(X|\theta)$; this is then plugged into the 
+Metropolis-Hastings acceptance probability. While the resulting MCMC 
+sampler targets the correct posterior distribution~\cite{Andrieu09}, 
+the resulting scheme resulting scheme does not exploit the structure 
+of the MJP, and we show that it can be quite inefficient.
 
 In~\cite{RaoTeh13, RaoTeh12}, the authors demonstrate the benefits of
-the thinning-based approach over matrix exponential and
-particle-MCMC approaches.
-In this paper, we develop similar approaches for parameter inference.
+the thinning-based approach over matrix exponential and particle-MCMC
+approaches for trajectory inference. In the next section, we describe
+a naive first attempt at extending this approach to parameter inference.
+We describe why this approach is not adequate, and describe our
+final algorithm in the next section. 
 
-The the key idea of the dependent-thinning approach of~\cite{RaoTeh13} is
-to alternate a discrete-time HMM sampling step with a step that
-samples a new random grid. This naturally suggests incorporating
-the MH update step outlined earlier in a similar algorithm that also
-updates parameters. As we will show, this approach does not quite
-work, despite marginalizing out the MJP state the dependence of the
-random grid on the MJP parameters can still slow down mixing.

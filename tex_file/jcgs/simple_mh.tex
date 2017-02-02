@@ -32,7 +32,13 @@
     \includegraphics [width=0.70\textwidth, angle=0]{figs/plotn5.pdf}
     \vspace{-0 in}
   \end{minipage}
-    \caption{MH algorithm}
+  \caption{\Naive\ MH-algorithm. Step 0 to 2: sample thinned events
+  and discard state information to get a random grid. Step 3: 
+propose a new parameter $\theta'$, and accept or reject by making
+a forward pass on the grid. Steps 4 to 5: make a backward pass using
+the accepted parameter and discard self-transitions to produce a new
+trajectory.}
+   \label{fig:naive_mh}
 
   \end{figure}
 
@@ -63,3 +69,41 @@
 \end{algorithmic}
 \end{algorithm}
 \label{sec:meth}
+
+The key idea of the dependent-thinning approach of~\cite{RaoTeh13} is
+to introduce the set of thinned candidate transition times. These,
+along with the extant transition times, form a random grid,
+conditioned on which sampling a new trajectory reduces to a 
+standard discrete-time HMM sampling step. This suggests incorporating
+the MH-step outlined earlier to update the parameters $\theta$
+with the trajectory integrated out, but now conditioned on the random
+grid. Figure~\ref{fig:naive_mh} outlines this idea.
+An iteration begins with a current parameter $\theta$ and a current
+trajectory $S(t)$. As with~\cite{RaoTeh12}, we first sample
+a new set of thinned events from a Poisson process with rate
+$B_{S(t)}-A_{S(t)}$. This, along with the transition times of
+$S(t)$ form a new random grid. Now, we propose a new parameter 
+$\theta'$ from some proposal distribution $q(\theta'|\theta)$,
+and make a forward pass over the grid, to calculate the marginal
+probabilities $p(X|W,\theta$ and $p(X|W,\theta')$. These can be
+used to calculate the MH-acceptance probability, and after accepting
+or rejecting $\theta'$, a new parameter can be sampled by making
+a backward pass through $W$.
+
+It is important to note however that the parameter $\theta$
+determines not just the MJP trajectory $S(t)$, and with $S(t)$ 
+marginalized out, the observations $X$. The random grid $W$ itself
+is distributed differently for different values of $\theta$. For
+the simple uniformization approach of~\cite{RaoTeh13}, $W$ is
+distributed as a homogeneous Poisson process with rate $\Omega = 
+2 \max A(\theta)$, while under the more general scheme of~\cite{RaoTeh12},
+it follows a state-dependent generative scheme who probability can
+never-the-less be calculated easily during the forward pass.
+Thus, the MH MH-acceptance probability is given by $\min(1,
+  \frac{p(\theta,X,W}{p(\theta',X,W)}$. Thus the acceptance probability
+involves two terms: how compatible the new parameter $\theta'$ is
+with the observations, and how compatible it is with the random
+grid $W$. The first effect is inevitable, however in our experiments,
+we found the second also has a significate effect of the MH-acceptance
+probability. In the next section, we describe a way around this
+issue. 

@@ -1,5 +1,5 @@
 
-\section{Improved Metropolis Hasting for Bayesian Inference using FFBS  within the Gibbs Sampling On MJPs}~
+\section{Improved Metropolis-Hasting for Bayesian Inference using FFBS  within the Gibbs Sampling On MJPs}~
 \setlength{\unitlength}{0.8cm}
   \begin{figure}[H]
   \centering
@@ -22,11 +22,11 @@
     \includegraphics [width=0.70\textwidth, angle=0]{figs/plot3.pdf}
     \vspace{-0 in}
   \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/plot4.pdf}
-    \vspace{-0 in}
-  \end{minipage}
+% \begin{minipage}[hp]{0.45\linewidth}
+% \centering
+%   \includegraphics [width=0.70\textwidth, angle=0]{figs/plot4.pdf}
+%   \vspace{-0 in}
+% \end{minipage}
   \begin{minipage}[hp]{0.45\linewidth}
   \centering
     \includegraphics [width=0.70\textwidth, angle=0]{figs/plot5.pdf}
@@ -46,7 +46,15 @@
    \caption{MH In Gibbs sampling for MJPs }
    \label{alg:MH In Gibbs}
 \begin{algorithmic}
-   \State {\bfseries Input:} A set of partial and noisy observations $y_{[t_0, t_{N+1})}$, Initial distribution over states $\pi_0$,  Metropolis Hasting proposal $q(. | \theta)$.\\
+  \State
+  \begin{tabular}{l l}
+   \textbf{Input:  } & \text{A set of partial and noisy observations $y_{[t_0, t_{N+1})}$}, \\
+                      & \text{Initial distribution over states $\pi_0$,  Metropolis Hasting proposal $q(. | \theta)$}.\\
+                      & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$}.\\ 
+   \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, A series of MJP parameters $\tilde{\theta}$}.
+   \end{tabular}
+   \State {\bfseries Input:} A set of observations $y_{[t_0, t_{N+1})}$, 
+   Initial distribution over states $\pi_0$,  Metropolis Hasting proposal $q(. | \theta)$.\\
    The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $(\theta)$.\\  
       \State {\bfseries Output:} A new MJP trajectorie $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, A series of MJP parameters $\tilde{\theta}$.
       \State 0:  Sample $\theta^* \sim q(.| \theta)$. And let $\Omega = h(\theta) + h(\theta^*)$, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
@@ -65,12 +73,13 @@
 \end{algorithm}
 
 To address the limitations of the previous algorithm, we describe
-a more efficient scheme. This forms the main contribution of this paper.
-
-Let the current state of the Markov chain be $S(t), \theta$. For some
-distribution $q(\theta^*|\theta)$, generate a new parameter
-$\theta^*$. Treat this as an auxiliary variable, so that the augmented
-space now is the triplet $(S(t), \theta^*,\theta)$. Now, we discard
+a more efficient scheme.
+%This forms the main contribution of this paper.
+As before, the MCMC iteration begins with the pair $S(t), \theta$. 
+Now, instead of first simulating the thinned events $U$, we generate 
+a new parameter $\theta^*$ from some distribution $q(\theta^*|\theta)$.
+Treat this as an auxiliary variable, so that the augmented
+space now is the triple $(S(t), \theta^*,\theta)$. Now, we discard
 state information, keeping on the skeleton of transition times.
 We now pretend generative process involved a uniformization scheme
 where the bounding rate is given by $\Omega(\theta) + \Omega(\theta^*)$.
