@@ -6,6 +6,7 @@
 \usepackage{amsmath}
 \usepackage{float}
 \usepackage{amsthm}
+\usepackage{xcolor}
 \usepackage{amssymb,mathabx}
 \usepackage{algorithm, algpseudocode}
 \usepackage[utf8]{inputenc}
@@ -35,7 +36,7 @@
 
 \if0\blind
 {
-  \title{\bf Efficient MCMC Sampling Finite-State Markov Jump Processes and Bayesian Inference}
+  \title{\bf Efficient MCMC for Markov jump processes parameters}
   \author{  
    %  Vinayak Rao\thanks{
     %The authors gratefully acknowledge}\hspace{.2cm}\\
@@ -66,8 +67,8 @@ Markov jump processes (MJPs) are continuous-time stochastic processes that
 find wide application in a variety of fields.  Inference for MJPs typically proceeds via Markov chain Monte Carlo, 
 the state-of-the-art being a recent auxiliary variable Gibbs sampler proposed
 in~\cite{RaoTeh13}. This algorithm was designed for the situation where
-the MJP parameters are known, and Bayesian inference over the unknown
-parameter is typically carried out by incorporating it into a larger Gibbs 
+the MJP parameters are known, and Bayesian inference over unknown parameters
+is typically carried out by incorporating this into a larger Gibbs 
 sampler. %In many situations, the MJP trajectory and parameters can exhibit
 %strong coupling, and 
 This strategy of alternately sampling parameters given path, and 
@@ -77,89 +78,21 @@ problem. Our scheme brings Metropolis-Hastings (MH) approaches
 for discrete-time hidden Markov models (HMMs) to the continuous-time
 setting. Our proposed solution also ties up some of the loose ends 
 in~\cite{RaoTeh13}, and provides a complete and clean recipe for 
-Bayesian inference in jump processes. In our experiments, we 
+parameter and path inference in MJPs. In our experiments, we 
 demonstrate superior performance over Gibbs sampling, as well as 
 other approaches like particle Markov chain Monte 
 Carlo~\cite{Andrieu10}.
 \end{abstract}
 \noindent%
-{\it Keywords:}  Markov jump process, MCMC, Metropolis Hasting sampler, Bayesian inference
+{\it Keywords:}  Markov jump process, MCMC, Metropolis-Hasting, Bayesian inference
 
 \spacingset{1.45}
 \input{intro.tex}
 \input{unif.tex}
 \input{simple_mh.tex}
 \input{main_alg.tex}
+\input{verif_alg2.tex}
 
-
-\section{Verifications of Algorithm 1}
-\label{sec:verify}
-Proof of Algorithm 1:\\
-\noindent Assume: $S = [S_0,S_1, ...,S_N] \;, T = [T_0, T_1,...,T_N, T_{N+1}(T_{end})]$, and y as observations.\\
-In JMLR-2013 Fast MCMC Sampling for MJP and Extensions, the FFBS frame contains $\alpha_t$ as follows.\\
-Since after uniformization, the virtual jumps are added.  Then the state process of the trajectory with virtual jumps is just a discrete time markov jump process. The key point is that we need to have $W$ be conditioned, to get the marginal probability $P(y_{[T_0, T_{N + 1})} | \theta, W)$ from FFBS algorithm. \\
-\begin{align*}
-\alpha^\theta_t(s) = P(S_t = s\;, y_{[T_0, T_t)}, U, T).\\
-P(y_{[T_0, T_{N + 1})} | \theta, W) = \sum_{s = 0}^{N-1} \alpha^\theta_N(s) \cdot P(y_{[T_N, T_{N+1})} | S_N = s).\\
-P(\theta, W| y) \propto P(\theta, W, y) = P(y| W, \theta) P(W | \theta) P(\theta).
-\end{align*}
-$P(y|W, \theta)$ is the marginal probability we get after Forward Filtering Algorithm and the $P(W | \theta)$ is the probability density for the $poisson(\Omega)$, because of the uniformization procedure.
-Let denote the kernel for (a), (b) and (c) as  $\kappa_1(\theta^*| \theta, W, T, S, y)$ , $\kappa_2(S^*, T^*|S, T, W, \theta^*, y)$ and $\kappa_3(W^*| S^*, T^*, \theta^*, y)$.\\
-For Step (a) $\kappa_1(\theta^*| \theta, W, T, S)$:\\
- \begin{align*} 
-P((W, T, S, \theta) \rightarrow (W, T, S, \theta^*)) P(\theta, W | y) &=  P(\theta^*, W | y)q(\theta | \theta^*)
- \wedge P(\theta, W|y) q(\theta^*| \theta) \\&= P((W, T, S,\theta^*) \rightarrow (W, T, S,\theta)) P(\theta^*, W | y).\\
-\end{align*}
-Thus, $  \int ab \kappa_1(\theta^*| \theta) P(\theta, W|y) d\theta = P(\theta^*, W |y). $\\
-So the stationary distribution of $\kappa_1$ is $P(\theta, W | y)$.\\
-Step (b) $\kappa_2(S^*, T^*|S, T, W, \theta^*, y)$: \\ 
-Step(b) is the same as Fast MJPs Gibbs sampling scheme.   \\
-\begin{align*}
-((S, T, \theta, W) \rightarrow (S^*, T^*,\theta, W)|  y) = P(V^* | W, \theta, y) = P(V^* | W, \theta, y) / P(W, \theta, y) \end{align*}
-\begin{align*}
-P((S, T) \rightarrow (S^*, T^*)| W, \theta, y) P(S, T| W, \theta, y) &= P(V^* | W, \theta, y)P(V | W, \theta, y) \\&= P((S^*, T^*) \rightarrow (S, T)| W, \theta, y) P(S^*, T^*| W, \theta, y)
-\end{align*}
-\\So the stationary distribution of $\kappa_2(S^*, T^*| S,T,  W, y)$ is $P(S, T | W, \theta, y).$
-Now, let's consider $\kappa_2 \circ \kappa_1(S^*, T^*, \theta^* | S, T, \theta, y, W)$.\\
-\begin{align*}
-((S, T, \theta, W) \rightarrow (S^*, T^*, \theta^*, W)|  y) = P((W, T, S, \theta) \rightarrow (W, T, S, \theta^*)) P((S, T, \theta^*.W) \rightarrow (S^*, T^*, \theta^*, W)| y) .
-\end{align*}
-The stationary distribution of $\kappa_1(S^*, T^*, U^*|S, T, U)$ is $P(S,T,U| \theta, y).$ And the stationary distribution of $\kappa_2(U^*| U)$ is $P(U| S, T, \theta, y).$ \\
-\begin{align*}
-&P((S, T, \theta, W) \rightarrow (S^*, T^*, \theta^*, W)|  y) P(S,T,\theta | W, y) \\&= P((W, T, S, \theta) \rightarrow (W, T, S, \theta^*))\cdot P(\theta|W,y) \cdot P((S, T, \theta^*.W) \rightarrow (S^*, T^*, \theta^*, W)| y) P(S, T | \theta , W, y) \\&=P((W, T, S, \theta^*) \rightarrow (W, T, S, \theta))\cdot P(\theta^*|W,y) \cdot P((S^*, T^*, \theta^*.W) \rightarrow (S, T, \theta^*, W)| y) P(S^*, T^* | \theta , W, y) \\&=P((S^*, T^*, \theta^*, W) \rightarrow (S, T, \theta, W)|  y) P(S,T,\theta | W, y).
-\end{align*}
-So the stationary distribution of $\kappa_2 \circ \kappa_1$ is $P(S, T,\theta| W,y).$\\
-Obviously, $\kappa_3(W^*| W, S^*, T^*, \theta^*, y)$ has $P(W| S^*, T^*, \theta^*,y)$ as stationary distribution.\\
-Therefore, $\int \kappa_3(W^*| W, S^*, T^*, \theta^*, y) P(W,S^*, T^*, \theta^*|y ) dW= P(W^*,S^*, T^*, \theta^*|y )$.\\
-Thus, $\int \kappa_3 \cdot (\int \kappa_2 \circ \kappa_1\cdot P(W,S, T, \theta | y) d\theta dS dT)dW = \int \kappa_3 P(W,S^*, T^*, \theta^*|y )dW = P(W^*,S^*, T^*, \theta^*|y )$.\\
-So the stationary distribution of $\kappa_3 \circ \kappa_2 \circ \kappa_1$ is $P(W^*,S^*, T^*, \theta^*|y )$.
-%\end{proof}
-
-\section{Verifications of Algorithm 2}
-\label{sec:verify2}
-Proof:
-Our state is $(W, S, T, \theta, \theta^*)$. 
-\begin{align*}
- p(y, W, S, T, \theta, \theta^*) &= p(\theta) q(\theta^* | \theta) P(S,T| \theta, \theta^*) P(W| S, T, \theta, \theta^*)P(y | S, T, \theta, \theta^*)\\
- &=p(\theta) q(\theta^* | \theta) P(S,T| \theta) P(W| S, T, \theta, \theta^*)P(y | S, T).
-\end{align*}
-The marginal distribution of $(y, S, T, \theta, \theta^*)$ and $(y, S, T, \theta)$ as follows.\\
-\begin{align*}
- p(y, S, T, \theta, \theta^*) &= p(\theta) q(\theta^* | \theta) P(S,T| \theta, \theta^*)P(y | S, T, \theta, \theta^*)\\
- &=P(y, S, T, \theta) q(\theta^* | \theta).
-\end{align*}
-\begin{align*}
- p(y, S, T, \theta) &= p(\theta)P(S,T| \theta)P(y | S, T, \theta).
-\end{align*}
-So the conditional distribution over $\theta^*$ given $(y, S, T, \theta)$ is $q(\theta^* | \theta)$. And the conditional distribution over W given $(y, S, T, \theta, \theta^*)$  is $P(W | S, T, \theta, \theta^*)$, which is actually the distribution of Non Homogeneous Poisson Process with piecewise constant rate $h(\theta) + h(\theta^*) - A_{S(t)}(\theta)$.\\
-Thus the Step 1 + Step 2 is actually equivalent to sampling from the conditional distribution $P(\theta^* , W| S, T, \theta, y)$.\\
-The Step 3 + Step 4 satisfy the detailed balance condition. The reason is as follows.
-\begin{align*}
-&P((W, S, T, (\theta, \theta^*)) \rightarrow (W, S^*, T^*, (\theta^*, \theta))) P(S,T, (\theta, \theta^*) | W, y)\\
-&= (1 \wedge \frac{P((\theta^*,\theta) | W, y)}{P((\theta,\theta^*) | W, y)})P(S^*, T^* | W, (\theta^*, \theta), y)P(S, T | W, (\theta, \theta^*), y)P((\theta, \theta^*) | W, y)\\
-&= P((W, S^*, T^*, (\theta^*, \theta)) \rightarrow (W, S, T, (\theta, \theta^*))) P(S^*,T^*, (\theta^*, \theta) | W, y)
-\end{align*} 
-Therefore the stationary distribution of this MCMC sampler is $P(W, S, T, (\theta, \theta^*) | y)$. Thus the stationary distribution of $(S, T, \theta)$ is the corresponding marginal distribution $P(S, T, \theta | y)$.  
 
 \section{Generic Exponential Model}~
 \begin{algorithm}[!ht]

@@ -1,13 +1,13 @@
 \section{Introduction}
 \label{sec:intro}
 Markov jump processes (MJPs) are continuous-time stochastic processes that
-have found wide application in fields like computational chemistry, 
-population genetics, mathematical finance, artificial intelligence and
-social-network analysis. MJPs have been used to model phenomena such 
-as the state of a chemical reaction~\cite{gillespie97}, the state of a queuing 
-network~\cite{Breuer2003}, segmentations of a strand of 
-DNA~\cite{FearnSher2006}, the state of users logging their activity 
-on social media~\cite{pan2016markov} among many others.
+have found wide application in fields like computational chemistry~\cite{gillespie97}, 
+population genetics~\cite{FearnSher2006}, mathematical finance~\cite{Elliott06}, 
+queuing theory~\cite{Breuer2003}, artificial intelligence~\cite{XuShe10} and
+social-network analysis~\cite{pan2016markov}. The references included above have
+used MJPs to model phenomena such as the state of a chemical reaction, the state 
+of a queuing network, segmentations of a strand of DNA, the state of users 
+logging their activity on social media among others.
 
 MJPs model temporal evolution in continuous-time, resulting in 
 realistic, mechanistic, and interpretable models, often amenable to 
@@ -15,10 +15,10 @@ mathematical analysis. These same dynamics however raise computational
 challenges in statistical applications, where given partal and noisy 
 measurements, one has to make inferences over the latent MJP 
 trajectory as well as any system parameters. Carrying out such
-inferences is complicated by two facts: one cannot {\em a priori} 
+inference is complicated by two facts: one cannot {\em a priori} 
 bound the number of transitions, and state-transition times themselves
 are continuous-valued. This is in contrast to the situation with
-the discrete-time hidden Markov model, and trajectory inference for 
+discrete-time hidden Markov models, and trajectory inference for 
 MJPs typically proceeds via Markov chain Monte Carlo. The 
 state-of-the-art is a recent auxiliary variable Gibbs sampler proposed 
 in~\cite{RaoTeh13},  designed to sample paths when the MJP parameters
@@ -26,7 +26,8 @@ are known. Parameter inference is typically carried out by
 incorporating it into a larger Gibbs sampler. 
 
 In many situations, the MJP trajectory and parameters can exhibit 
-strong coupling, so that the Gibbs described earlier can mix poorly.  
+strong coupling, so that a Gibbs that alternately samples path given
+parameters, and then parameters given path can mix poorly.  
 In this work, we propose a Metropolis-Hastings framework to address
 this issue. Our proposed solution is simple and elegant, additionally,
 it ties up some of the loose ends in the algorithm 
@@ -37,17 +38,19 @@ particle Markov chain Monte Carlo~\cite{Andrieu10}.
 \section{Markov jump processes}
 Formally, an MJP is a right-continuous piecewise-constant stochastic
 process $S(t)$ taking values in a countable, and usually finite state
-space $\cS$ (see Figure~\ref{fig:mjp}). For simplicity, we will assume 
-$N$-states, with $\cS = \{1,\ldots,N\}$. Then, an MJP is 
-parameterized by two quantities, a probability vector $\pi$ and a 
+space $\cS$ (see Figure~\ref{fig:naive_mh}, top-left).
+\vinayak{Change figures so that transitions are not so regular}
+For simplicity, we will assume $N$-states, with $\cS = \{1,\ldots,N\}$. Then, 
+an MJP is parameterized by two quantities, a probability vector $\pi$ and a 
 rate-matrix $A$. The former, an $N$-component vector, gives the 
 distribution over states at the initial time (which without loss of 
 generality, we assume is $0$), while the latter is an 
 $N \times N$-matrix governing the dynamics of the system.  An 
 off-diagonal element $A_{ij}$, for some $i \neq j$ gives the rate at 
-which the system transitions from state $i$ to $j$. The rows of $A$ 
-sum to $0$, so that the diagonal element $-A_i \equiv -A_{ii} = \sum_{j \neq i} A_{ij}$, 
-and its absolute value gives
+which the system transitions from state $i$ to $j$. We write the 
+$i$th diagonal element as $-A_{ii}$ (or $-A_i$ for short), with
+$-A_i \equiv -A_{ii} = -\sum_{j \neq i} A_{ij}$, 
+so that the rows of $A$ sum to $0$.  Its absolute value $A_i$ thus gives
 the total rate at which the system leaves state $i$ for any other state.
 To simulate an MJP trajectory, one follows Gillespie's algorithm: 
 first sample an initial state $S(0)$ from the distribution $\pi$, and
@@ -56,7 +59,7 @@ then repeat the following two steps:
   \item Sample a wait-time $t_i$ from an exponential with rate $A_i$, where
     $i$ is the current state. The MJP remains in state $i$ for time $t_i$.
   \item At the end of this time, jump to a new state $j \neq i$ with 
-    probability proportional to $A_{ij}$.
+    probability equal to $A_{ij}/A_i$.
 \end{itemize}
 
 \subsection{Structured rate matrices}
@@ -89,7 +92,7 @@ Below we give three examples:
     rate proportional to the population size. Once again, 
     $\theta=(\alpha,\beta)$.
   \item[Codon substitution models] Such models are used in genetics,
-    to characterize transition rates between codons at a locus on
+    to characterize transition-rates between codons at a locus on
     a DNA or RNA molecule over evolutionary time. In the simplest case,
     transitions are categorized into two types: synonymous transitions
     that continue to encode the same amino acid, and nonsynonymous 
@@ -98,5 +101,5 @@ Below we give three examples:
     there are $61$ amino acids, we have a $61\times 61$ transition
     matrix determined by 2 parameters. More refined models~\cite[e.g.][]{goldman1994codon} introduce
     additional parameters, however, the number of parameters is still
-    significantly smaller than the genral case.
+    significantly smaller than the general case.
 \end{description}

@@ -1,0 +1,42 @@
+\section{Verifications of Algorithm 1}
+\label{sec:verify}
+Proof of Algorithm 1:\\
+\noindent Assume: $S = [S_0,S_1, ...,S_N] \;, T = [T_0, T_1,...,T_N, T_{N+1}(T_{end})]$, and y as observations.\\
+In JMLR-2013 Fast MCMC Sampling for MJP and Extensions, the FFBS frame contains $\alpha_t$ as follows.\\
+Since after uniformization, the virtual jumps are added.  Then the state process of the trajectory with virtual jumps is just a discrete time markov jump process. The key point is that we need to have $W$ be conditioned, to get the marginal probability $P(y_{[T_0, T_{N + 1})} | \theta, W)$ from FFBS algorithm. \\
+\begin{align*}
+\alpha^\theta_t(s) = P(S_t = s\;, y_{[T_0, T_t)}, U, T).\\
+P(y_{[T_0, T_{N + 1})} | \theta, W) = \sum_{s = 0}^{N-1} \alpha^\theta_N(s) \cdot P(y_{[T_N, T_{N+1})} | S_N = s).\\
+P(\theta, W| y) \propto P(\theta, W, y) = P(y| W, \theta) P(W | \theta) P(\theta).
+\end{align*}
+$P(y|W, \theta)$ is the marginal probability we get after Forward Filtering Algorithm and the $P(W | \theta)$ is the probability density for the $poisson(\Omega)$, because of the uniformization procedure.
+Let denote the kernel for (a), (b) and (c) as  $\kappa_1(\theta^*| \theta, W, T, S, y)$ , $\kappa_2(S^*, T^*|S, T, W, \theta^*, y)$ and $\kappa_3(W^*| S^*, T^*, \theta^*, y)$.\\
+For Step (a) $\kappa_1(\theta^*| \theta, W, T, S)$:\\
+ \begin{align*} 
+P((W, T, S, \theta) \rightarrow (W, T, S, \theta^*)) P(\theta, W | y) &=  P(\theta^*, W | y)q(\theta | \theta^*)
+ \wedge P(\theta, W|y) q(\theta^*| \theta) \\&= P((W, T, S,\theta^*) \rightarrow (W, T, S,\theta)) P(\theta^*, W | y).\\
+\end{align*}
+Thus, $  \int ab \kappa_1(\theta^*| \theta) P(\theta, W|y) d\theta = P(\theta^*, W |y). $\\
+So the stationary distribution of $\kappa_1$ is $P(\theta, W | y)$.\\
+Step (b) $\kappa_2(S^*, T^*|S, T, W, \theta^*, y)$: \\ 
+Step(b) is the same as Fast MJPs Gibbs sampling scheme.   \\
+\begin{align*}
+((S, T, \theta, W) \rightarrow (S^*, T^*,\theta, W)|  y) = P(V^* | W, \theta, y) = P(V^* | W, \theta, y) / P(W, \theta, y) \end{align*}
+\begin{align*}
+P((S, T) \rightarrow (S^*, T^*)| W, \theta, y) P(S, T| W, \theta, y) &= P(V^* | W, \theta, y)P(V | W, \theta, y) \\&= P((S^*, T^*) \rightarrow (S, T)| W, \theta, y) P(S^*, T^*| W, \theta, y)
+\end{align*}
+\\So the stationary distribution of $\kappa_2(S^*, T^*| S,T,  W, y)$ is $P(S, T | W, \theta, y).$
+Now, let's consider $\kappa_2 \circ \kappa_1(S^*, T^*, \theta^* | S, T, \theta, y, W)$.\\
+\begin{align*}
+((S, T, \theta, W) \rightarrow (S^*, T^*, \theta^*, W)|  y) = P((W, T, S, \theta) \rightarrow (W, T, S, \theta^*)) P((S, T, \theta^*.W) \rightarrow (S^*, T^*, \theta^*, W)| y) .
+\end{align*}
+The stationary distribution of $\kappa_1(S^*, T^*, U^*|S, T, U)$ is $P(S,T,U| \theta, y).$ And the stationary distribution of $\kappa_2(U^*| U)$ is $P(U| S, T, \theta, y).$ \\
+\begin{align*}
+&P((S, T, \theta, W) \rightarrow (S^*, T^*, \theta^*, W)|  y) P(S,T,\theta | W, y) \\&= P((W, T, S, \theta) \rightarrow (W, T, S, \theta^*))\cdot P(\theta|W,y) \cdot P((S, T, \theta^*.W) \rightarrow (S^*, T^*, \theta^*, W)| y) P(S, T | \theta , W, y) \\&=P((W, T, S, \theta^*) \rightarrow (W, T, S, \theta))\cdot P(\theta^*|W,y) \cdot P((S^*, T^*, \theta^*.W) \rightarrow (S, T, \theta^*, W)| y) P(S^*, T^* | \theta , W, y) \\&=P((S^*, T^*, \theta^*, W) \rightarrow (S, T, \theta, W)|  y) P(S,T,\theta | W, y).
+\end{align*}
+So the stationary distribution of $\kappa_2 \circ \kappa_1$ is $P(S, T,\theta| W,y).$\\
+Obviously, $\kappa_3(W^*| W, S^*, T^*, \theta^*, y)$ has $P(W| S^*, T^*, \theta^*,y)$ as stationary distribution.\\
+Therefore, $\int \kappa_3(W^*| W, S^*, T^*, \theta^*, y) P(W,S^*, T^*, \theta^*|y ) dW= P(W^*,S^*, T^*, \theta^*|y )$.\\
+Thus, $\int \kappa_3 \cdot (\int \kappa_2 \circ \kappa_1\cdot P(W,S, T, \theta | y) d\theta dS dT)dW = \int \kappa_3 P(W,S^*, T^*, \theta^*|y )dW = P(W^*,S^*, T^*, \theta^*|y )$.\\
+So the stationary distribution of $\kappa_3 \circ \kappa_2 \circ \kappa_1$ is $P(W^*,S^*, T^*, \theta^*|y )$.
+%\end{proof}

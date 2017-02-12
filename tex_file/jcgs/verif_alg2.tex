@@ -1,0 +1,57 @@
+%\subsection{Correctness of the proposed algorithm }
+%\label{sec:verify2}
+\begin{proposition}
+  The sampler described in Algorithm~\ref{alg:MH_improved} has the posterior
+  distribution $p(\theta,S(t)|X)$ as its stationary distribution.
+\end{proposition}
+\begin{proof}
+  Suppose that at the start of the algorithm, we have a pair $(\theta,S(t))$ from
+  the posterior distribution $p(\theta,S(t)|X)$. Introducing $\theta^*$
+  from $q(\theta^*|\theta)$ results in a triplet whose marginal over the first
+  two variables is still $p(\theta,S(t)|X)$.
+
+  Sampling $U$ from a Poisson process with rate $\Omega(\theta) +
+  \Omega(\theta^*) - A_{S(t)}(\theta)$, and discarding all state 
+  information transforms the MCMC state-space to a random grid $W = T \cup U$,
+  and a pair of parameters $\theta$ and $\theta^*$. The probability of this
+  triplet is proportional to $p(\theta)q(\theta^*|\theta)p(W|\theta,\theta^*)
+  p(X|W,\theta,\theta^*)$.
+First, however, we will propose swapping $\theta$ and $\theta^*$. Since this
+is a deterministic proposal, the MH-acceptance probability is given by
+$$\alpha = \frac{p(\theta^*)q(\theta|\theta^*)p(W|\theta^*,\theta)
+p(X|W,\theta^*,\theta)}{p(\theta)q(\theta^*|\theta)p(W|\theta,\theta^*)
+p(X|W,\theta,\theta^*)}$$
+The term $p(W|\theta,\theta^*)$ is just a Poisson process with rate $\Omega(\theta)+
+\Omega(\theta^*)$, so that $p(W|\theta,\theta^*) = p(W|\theta,\theta^*)$. The
+two terms $p(X|W,\theta,\theta^*)$ and $p(X|W,\theta^*,\theta)$ are obtained
+from at the end of a forward pass of $W$ using discrete-time transition matrices
+$B(\theta,\theta^*)$ and $B(\theta^*,\theta)$. Thus, calling the parameters 
+after the accept step $(\tilde{\theta}, \tilde{\theta}^*)$, we have that
+$(\tilde{\theta}, \tilde{\theta}^*,W)$ has the same distribution as
+$(\theta, \theta^*,W)$.
+  Finally, following~\cite{RaoTeh13},
+  we can resample a new trajectory by running a discrete-time FFBS algorithm
+  for a Markov chain with transition matrix $\left(I + \frac{A(\tilde{\theta})}
+  {\Omega(\tilde{\theta}) + \Omega(\tilde{\theta}^*)}\right)$.
+% \begin{align*}
+%  p(y, W, S, T, \theta, \theta^*) &= p(\theta) q(\theta^* | \theta) P(S,T| \theta, \theta^*) P(W| S, T, \theta, \theta^*)P(y | S, T, \theta, \theta^*)\\
+%  &=p(\theta) q(\theta^* | \theta) P(S,T| \theta) P(W| S, T, \theta, \theta^*)P(y | S, T).
+% \end{align*}
+% The marginal distribution of $(y, S, T, \theta, \theta^*)$ and $(y, S, T, \theta)$ as follows.\\
+% \begin{align*}
+%  p(y, S, T, \theta, \theta^*) &= p(\theta) q(\theta^* | \theta) P(S,T| \theta, \theta^*)P(y | S, T, \theta, \theta^*)\\
+%  &=P(y, S, T, \theta) q(\theta^* | \theta).
+% \end{align*}
+% \begin{align*}
+%  p(y, S, T, \theta) &= p(\theta)P(S,T| \theta)P(y | S, T, \theta).
+% \end{align*}
+% So the conditional distribution over $\theta^*$ given $(y, S, T, \theta)$ is $q(\theta^* | \theta)$. And the conditional distribution over W given $(y, S, T, \theta, \theta^*)$  is $P(W | S, T, \theta, \theta^*)$, which is actually the distribution of Non Homogeneous Poisson Process with piecewise constant rate $h(\theta) + h(\theta^*) - A_{S(t)}(\theta)$.\\
+% Thus the Step 1 + Step 2 is actually equivalent to sampling from the conditional distribution $P(\theta^* , W| S, T, \theta, y)$.\\
+% The Step 3 + Step 4 satisfy the detailed balance condition. The reason is as follows.
+% \begin{align*}
+% &P((W, S, T, (\theta, \theta^*)) \rightarrow (W, S^*, T^*, (\theta^*, \theta))) P(S,T, (\theta, \theta^*) | W, y)\\
+% &= (1 \wedge \frac{P((\theta^*,\theta) | W, y)}{P((\theta,\theta^*) | W, y)})P(S^*, T^* | W, (\theta^*, \theta), y)P(S, T | W, (\theta, \theta^*), y)P((\theta, \theta^*) | W, y)\\
+% &= P((W, S^*, T^*, (\theta^*, \theta)) \rightarrow (W, S, T, (\theta, \theta^*))) P(S^*,T^*, (\theta^*, \theta) | W, y)
+% \end{align*} 
+% Therefore the stationary distribution of this MCMC sampler is $P(W, S, T, (\theta, \theta^*) | y)$. Thus the stationary distribution of $(S, T, \theta)$ is the corresponding marginal distribution $P(S, T, \theta | y)$.  
+\end{proof}
