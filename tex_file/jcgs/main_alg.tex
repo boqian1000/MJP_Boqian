@@ -102,7 +102,7 @@ $$ \text{acc} =
       %, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
     \State Sample virtual jumps $U\subset[t_{start}, t_{end}]$ from a nonhomogeneous Poisson process with 
     piecewise-constant rate $R(t) = (\Omega_{S(t)} - A_{S(t)}(\theta))$. 
-    Define $W = T \cup U$ and discard all MJP state information.
+    Define $W = T \bigcup U$ and discard all MJP state information.
     \State The current MCMC state-space is $W,\theta,\theta^*$. Propose swapping
     $\theta$ and $\theta^*$, so that the new state-space is 
     $(W, \theta^*, \theta)$. The acceptance probability is given by
