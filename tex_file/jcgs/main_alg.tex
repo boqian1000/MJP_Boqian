@@ -1,7 +1,6 @@
 
 \section{An improved Metropolis-Hasting algorithm}
 
-In this section, we propose a novel algorithm to address the previous limitations.
 Our main idea is to symmetrize the probability of $W$ under the old and new 
 $\theta$, so that the term
 $p(W|\theta)$ disappears from the acceptance probability. This will result
@@ -9,25 +8,29 @@ in a simpler, and significantly more efficient MCMC scheme.
 %This forms the main contribution of this paper.
 
 As before, the MCMC iteration begins with the pair $(S(t), \theta)$. 
-Instead of first simulating the thinned events $U$, we generate a new parameter 
+Instead of simulating the thinned events $U$, we first generate a new parameter 
 $\theta^*$ from some distribution $q(\theta^*|\theta)$. Treat this as an 
 auxiliary variable, so that the augmented space now is the triple 
 $(S(t), \theta,\theta^*)$. We now pretend generative process involved a 
 uniformization scheme
 where the bounding rate is given by $\Omega(\theta) + \Omega(\theta^*)$.
-We thus sample the set of thinned events from a piecewise-constant
+We thus sample the set of thinned events $U$ from a piecewise-constant
 Poisson process with intenstity $\Omega(\theta) + \Omega(\theta^*) - 
-A_{S(t)}$. We now discard all MJP state information, so that the MCMC
-state space consists of the set of candidate transition times, the current
+A_{S(t)}$. The result is that $W$, the union of these events with the actual
+trajectory transition times $T$, is a realization of homogeneous Poisson
+process with rate $\Omega(\theta) + \Omega(\theta^*)$. We now discard all MJP 
+state information, so that the MCMC state space consists of $W$, the current
 MJP parameter $\theta$, and the auxiliary parameter $\theta^*$.
-Finally, we propose swapping $\theta$ with $\theta^*$. Observe that the
-skeleton of Poisson events $T \cup U$ has the same probability both
+Finally, we propose swapping $\theta$ with $\theta^*$. Observe from
+symmetry that the Poisson skeleton $W$ has the same probability both
 before and after this proposal, so that unlike the previous scheme,
-the term does not affect the acceptance proposal. Instead, this
-probability depends only on the probability of the observations
-under both set of parameters, %as we can use the forward-backward algorithm
+the ratio $p(W|\theta^*)/p(\Omega|\theta)$ does not appear in the acceptance 
+proposal. This simplifies computation, and will significantly improve mixing.
+The acceptance probability 
+%depends only on the probability of the observations
+%under both set of parameters, %as we can use the forward-backward algorithm
 %to calculate this. Our acceptance probability 
-and is given by
+is given by
 $$ \text{acc} = 
   \min\left(1, \frac{p(X,\theta^*)q(\theta|\theta^*)}
    {p(X,\theta)q(\theta^*|\theta)}\right) = 
@@ -37,7 +40,8 @@ $$ \text{acc} =
    The terms $p(X|\theta^*)$ and  $p(X|\theta)$ can be calculated by 
    running a forward pass of the forward-backward algorithm. Having
    accepted or rejected the proposal, a new trajectory is sampled by
-   completing the backward pass. We sketch out our algorithm in 
+   completing the backward pass, after which the thinned events are
+   discarded. We sketch out our algorithm in 
    figure~\ref{fig:MH_improved} and algorithm~\ref{alg:MH_improved}.
 \setlength{\unitlength}{0.8cm}
   \begin{figure}[H]

@@ -1,55 +1,45 @@
 \section{\Naive\ parameter inference via Metropolis-Hastings}
 
 The key idea of the dependent-thinning approach of~\cite{RaoTeh13} is
-to introduce a set of thinned candidate transition times $U$. These, along 
-with the extant transition times $T$, form a random grid, and conditioning on
-this grid, sampling a new trajectory reduces to a standard discrete-time 
+to introduce a set of thinned candidate transition times $U$ from
+a rate-$(\Omega-A_{S(t)})$ Poisson process. These, along 
+with the extant transition times $T$, form a random grid $W$, conditioning on
+which sampling a new trajectory reduces to a standard discrete-time 
 HMM sampling step. This suggests conditioning on the random grid to update
-the MJP parameters as well, following the discrete-time MH-algorithm we 
-outlined earlier. 
+the MJP parameters according to the discrete-time MH-scheme from
+algorithm~\ref{alg:disc_time_mh}.
 %The resulting scheme updates $\theta$ conditioned on the random 
-%grid, but with the trajectory integrated out; 
-We sketch it out the resulting scheme in Figure~\ref{fig:naive_mh}.
-An iteration begins with a current parameter $\theta$ and a current
-trajectory $S(t)$. As with~\cite{RaoTeh12}, we first sample
-a new set of thinned events $U$ from a Poisson process with rate
-$\Omega_{S(t)}-A_{S(t)}$. This, along with the transition times $T$ of
-$S(t)$ form a new random grid. Now, we propose a new parameter 
-$\theta^*$ from some proposal distribution $q(\theta^*|\theta)$,
-and make a forward pass over the grid, to calculate the marginal
-probabilities $p(X|W,\theta)$ and $p(X|W,\theta^*)$. These can be
-used to calculate the MH-acceptance probability as before, and after accepting 
-or rejecting $\theta^*$, a new trajectory can be sampled by making a backward 
-pass through $T \cup U$. Finally, we discard all
-self-transitions.
+%grid, but with the trajectory integrated out 
+In particular, we propose a new parameter $\theta^*$ from a proposal 
+distribution $q(\theta^*|\theta)$, and making a forward pass over $W$, calculate
+the marginal probabilities $p(X|W,\theta)$ and $p(X|W,\theta^*)$. These can be
+used to calculate the MH-acceptance probability $\min\left(1,
+\frac{p(X|W,\theta^*)p(W|\theta^*)p(\theta^*)q(\theta|\theta^*)}
+     {p(X|W,\theta)p(W|\theta)p(\theta)q(\theta^*|\theta)}\right)$. 
+After accepting or rejecting $\theta^*$, the new $\theta$ can be used in
+a backward pass that samples a new trajectory. We then discard all 
+self-transitions and repeat; figure~\ref{fig:naive_mh} sketches out the resulting
+scheme.
 
-The resulting scheme updates $\theta$ conditioned on the random 
-grid $T \cup U$, but with the trajectory integrated out, and one would expect it 
-to mix more rapidly that Gibbs sampling. 
-It is important to note however that the parameter $\theta$ also
+The resulting scheme updates $\theta$ with the MJP trajectory integrated out, 
+and one would expect it to mix more rapidly that Gibbs sampling. 
+It is important to note however that $\theta$ is updated conditioned on
+$W$, and that
 %determines not just the MJP trajectory $S(t)$.
 %, and with $S(t)$ 
 %marginalized out, the observations $X$. 
-determines the distribution of the random grid.
-Under the simple uniformization approach
-of~\cite{RaoTeh13}, 
-$T\cup U$ follows a homogeneous Poisson process with rate $\Omega = 
-2 \max A(\theta)$, while under the scheme from~\cite{RaoTeh12},
-this is a product of state-dependent exponential intervals.
+the distribution of $W$ depends on $\theta$. These are the $p(W|\theta)$ terms
+in the acceptance probability; under uniformization, $W$ follows a homogeneous
+Poisson process with rate $\Omega(\theta) = 2 \max A(\theta)$. 
 %who probability can
 %calculated easily during the forward pass.
-With states marginalized out, the MH-acceptance probability is given by $\min(1,
-\frac{p(X|W,\theta^*)p(W|\theta^*)p(\theta^*)q(\theta|\theta^*)}
-     {p(X|W,\theta)p(W|\theta)p(\theta)q(\theta^*|\theta)})$. 
-The dependence of $X$ and $\theta$ is inevitable, however in our experiments,
-we found the second also has a significant effect acceptance
-probability. For instance, under the uniformization scheme (where
-$\Omega = 2 \max A_s$ and $W \sim \text{PoissonProc}(\Omega)$),
-any proposal that doubles $\max A_s$ (and this $\Omega$) has almost no
-chance of being accepted.
-In the next section, we describe a way around this
-issue.
-
+The fact that the MH-acceptance probability involves a $p(X|\theta)$ term
+is inevitable, however in our experiments, we found that the $p(W|\theta)$
+terms have a significant effect acceptance probability. 
+Any proposal that halves $\max A_s$ (and thus $\Omega$) will halve the
+mean and variance of the distribution of the number of events in $W$, 
+resulting in an extremely low acceptance probability.
+In the next section, we describe a way around this issue.
 \setlength{\unitlength}{0.8cm}
   \begin{figure}[H]
   \centering

@@ -7,7 +7,7 @@ queuing theory~\cite{Breuer2003}, artificial intelligence~\cite{XuShe10} and
 social-network analysis~\cite{pan2016markov}. The references included above have
 used MJPs to model phenomena such as the state of a chemical reaction, the state 
 of a queuing network, segmentations of a strand of DNA, the state of users 
-logging their activity on social media among others.
+logging their activity on social media, among others.
 
 MJPs model temporal evolution in continuous-time, resulting in 
 realistic, mechanistic, and interpretable models, often amenable to 
@@ -16,7 +16,7 @@ challenges in statistical applications, where given partal and noisy
 measurements, one has to make inferences over the latent MJP 
 trajectory as well as any system parameters. Carrying out such
 inference is complicated by two facts: one cannot {\em a priori} 
-bound the number of transitions, and state-transition times themselves
+bound the number of state transitions, and state-transition times themselves
 are continuous-valued. This is in contrast to the situation with
 discrete-time hidden Markov models, and trajectory inference for 
 MJPs typically proceeds via Markov chain Monte Carlo. The 
@@ -49,18 +49,23 @@ $N \times N$-matrix governing the dynamics of the system.  An
 off-diagonal element $A_{ij}$, for some $i \neq j$ gives the rate at 
 which the system transitions from state $i$ to $j$. We write the 
 $i$th diagonal element as $-A_{ii}$ (or $-A_i$ for short), with
-$-A_i \equiv -A_{ii} = -\sum_{j \neq i} A_{ij}$, 
-so that the rows of $A$ sum to $0$.  Its absolute value $A_i$ thus gives
-the total rate at which the system leaves state $i$ for any other state.
-To simulate an MJP trajectory, one follows Gillespie's algorithm: 
-first sample an initial state $S(0)$ from the distribution $\pi$, and
-then repeat the following two steps:
+$A_i \equiv A_{ii} = \sum_{j \neq i} A_{ij}$, 
+so that the rows of $A$ sum to $0$.  $A_i$ is the absolute value of the diagonal,
+and gives the total rate at which the system leaves state $i$ for any other state.
+To simulate an MJP trajectory over an interval $[0,\cT]$, one follows 
+Gillespie's algorithm~\cite{gillespie97}: 
+first sample an initial state $s_0$ from the distribution $\pi$, and
+then defining $t_0 = t_{curr} = k = 0$, repeat the following two steps while
+$t_{curr} < \cT$:
 \begin{itemize}
-  \item Sample a wait-time $t_i$ from an exponential with rate $A_i$, where
-    $i$ is the current state. The MJP remains in state $i$ for time $t_i$.
-  \item At the end of this time, jump to a new state $j \neq i$ with 
-    probability equal to $A_{ij}/A_i$.
+  \item Sample a wait-time $\Delta t_k$ from an exponential with rate $A_{s_k}$. 
+    Set $t_{k+1} = t_{curr} = t_{k} + \Delta t_k$.
+    The MJP remains in state $s_k$ until time $t_{k+1}$.
+  \item At the end of this time, jump to a new state $s_{k+1} \neq s_k$ with 
+    probability equal to $A_{s_ks_{k+1}}/A_{s_k}$. Set $k=k+1$.
 \end{itemize}
+The set of times of $T=(t_0, \cdots, t_{|T|})$ and states 
+$S=(s_0, \cdots, s_{|T|})$ together define the MJP trajectory $S(t)$.
 
 \subsection{Structured rate matrices}
 In the general case, the rate matrix $A$ has $N(N-1)$ free parameters,
@@ -77,13 +82,12 @@ Below we give three examples:
   \item[The immigration-death process] This is a simple MJP governed
     by two parameters: an arrival rate $\alpha$ and a death-rate
     $\beta$. The state space $\cS$ represents the size of a 
-    population or the capacity of a queue, and can be finite or
-    countably infinite. New individuals
+    population or the capacity of a queue. New individuals
     enter the system according to a rate-$\alpha$ Poisson process,
     so that the off-diagonal elements $A_{i,i+1}$ all equal to $\alpha$.
     On the other hand, each individual dies (or each job completes) 
     at a rate $\beta$, so that the system moves from state $i$ to 
-    $i-1$ with rate $i\beta$.
+    $i-1$ with rate $A_{i,i-1}=i\beta$.
     All other transitions have rate $0$, so that $\theta = (\alpha,\beta)$,
     and $A(\theta)$ is a tri-diagonal matrix.
   \item[Birth-death processes] This is a simple variant of the
@@ -95,7 +99,7 @@ Below we give three examples:
     to characterize transition-rates between codons at a locus on
     a DNA or RNA molecule over evolutionary time. In the simplest case,
     transitions are categorized into two types: synonymous transitions
-    that continue to encode the same amino acid, and nonsynonymous 
+    that encode the same amino acid, and nonsynonymous 
     transitions that encode different amino acids. 
     These two transitions types have their own rates, and noting that 
     there are $61$ amino acids, we have a $61\times 61$ transition
