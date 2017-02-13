@@ -1,0 +1,403 @@
+
+\section{Generic Exponential Model}~
+\begin{algorithm}[!ht]
+   \caption{Generic Gibbs sampling for MJPs for Gamma priors}
+   \label{alg:Generic Gibbs}
+\begin{algorithmic}
+   \State {\bfseries Input:} observations $y_{[t_0, t_{k+1})}$
+   \State Initialize, $i = 0$
+   \\ (a) Set $\alpha(0), \beta(0)$ arbitrarily and set current trajectory $[S,T](0)$ arbitrarily.\\
+    (b) Uniformize $[S,T](0)$, to get virtual jumps $U$.
+   \Repeat
+   \For{$i=1$ {\bfseries to} $N$}
+    \State (a) Sample $U(i) \sim P( U | \beta(i - 1), \alpha(i - 1), S(i - 1), T(i - 1), y)$.\\	
+    \State (b) Use FFBS algorithm to  sample states given all the jump times(both true jumps and virtual jumps).
+(i.e. $V(i) \sim P(V |  \beta(i - 1), \alpha(i - 1), W(i ), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\
+    \State (c) Propose $\beta^* \sim q(.| \beta(i -1))$.\\
+      Set $\beta(i) = \beta^*$, with probability $P_{acc} = 1 \wedge \frac{P(\beta^* |S(i), T(i))}{P(\beta(i - 1) |S(i), T(i))} \frac{q(\beta(i - 1)|\beta^*)}{q(\beta^*|\beta(i - 1))}$;\\Otherwise set $\beta(i) = \beta(i-1)$.\\	  
+    \State (d) Sample $\alpha(i) \sim P(. | \beta(i), S(i), T(i), y)$.\\ It is a $Gamma(\mu + N, \lambda + \sum_{0}^NF_{S_i}(\beta)(t_{i + 1} - t_i))$ distribution actually.\\
+    \EndFor
+    \Until{$ i = N$ }
+ \end{algorithmic}
+ \end{algorithm}
+  \begin{figure}[H]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/exp_model.pdf}
+      \end{minipage}
+    \caption{exp model}
+  \end{figure}
+
+\noindent Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, t_{N+1}(t_{end})]$, and y as observations.\\
+We consider a specific structure of rate matrix $A$. $A_{ij} = \alpha f_{ij}(\beta), \; i \neq j$. $A_{ii} = -\sum_{j \neq i} A_{ij}$. $0 \leq f_{ij} \leq 1$. Denote $F_i(\beta) = \sum_{j \neq i} f_{ij}(\beta)$.\\
+\begin{align*}
+P(s_0, S, T | \alpha, \beta) &= \pi_0(s_0)\prod_{i = 1}^N A_{S_{i - 1}S_i} \exp(- \int_{t_{start}}^{t_{end}} |A_{S(t)}| dt)\\
+&= \pi_0(s_0) \alpha^N \prod_{i = 1}^N f_{S_{i - 1}S_i} \exp(-\alpha  \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))\\
+\end{align*}
+We can assume the prior distributions of $\alpha, \beta$ are $p_1(\alpha)$ and $p_2(\beta)$.\\
+Then the posterior distribution of parameters $\alpha, \beta$ will be as follows.\\
+\begin{align*}
+P(\alpha, \beta | s_0, S, T ) \propto \alpha^N \prod_{i = 1}^N f_{S_{i - 1}S_i} \exp(-\alpha  \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i)) p_1(\alpha)p_2(\beta)\\
+\end{align*}
+If we assume the priors of $\alpha$, $\beta$ are $Gamma(\mu, \lambda)$, $Gamma(\omega, \theta)$, then the posterior will have a simper form as follows. 
+\begin{align*}
+P(\alpha, \beta | s_0, S, T ) = C \alpha^{\mu + N - 1}\exp(-\alpha (\lambda + \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))) \prod_{i = 1}^N f_{S_{i - 1}S_i}  \beta ^{\omega - 1} \exp(-\theta \beta)\\
+\end{align*}
+We notice that given $\beta,\; S,\; T$, $\alpha$ is distributed as a $Gamma$ distribution.\\
+$\alpha | \beta, S, T, y  = \alpha | \beta, S, T \sim Gamma(\mu + N, \lambda + \sum_{0}^NF_{S_i}(\beta)(t_{i + 1} - t_i))$.\\
+There is no conjugate distribution to sample $\beta \sim P(\beta| s_0, S, T)$. We will have to use Metropolis Hasting within Gibbs to sample $\beta$. The target distribution is the following one.
+$$ P(\beta | S, T) = C \frac{\prod_{i = 1}^N f_{S_{i -1}S_i}(\beta)\beta^{\omega - 1} \exp(-\theta \beta)}{(\lambda + \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))^{\mu + N}}.$$
+Such doubling might slow the mixing of the Markov chain. We can apply our Metropolis Hasting algorithm on this model.
+\subsection{Experiments}
+In the following, we evaluate a Python implementation of our algorithms compared to other exact samplers which include Gibbs sampler and Particle MCMC sampler. We consider one special case when $f_{ij}(\beta) = \exp(-\beta / (i + j))$. We consider three different dimensions which are 3, 5, and 10 and three different k which are 1.5, 2, and 3. We generated random parameters $\alpha$, $\beta$ from prior distributions ($Gamma(3,2), Gamma(5, 2)$), and used these parameters to construct the transition matrix A. Then we generate an MJP trajectory with a uniform initial distribution over states and the transition matrix A. The state of this MJP trajectory was observed via a Normal distribution with mean equal to the value of state and variance 1, and the proposal kernel is a lognormal distribution with location parameter $\log(\theta_{old})$ and scale parameter$\sigma$. Posterior samples given the observations were produced by a Python implementation of our algorithm. 100 MCMC runs were performed, each run consisting of 10000 iterations except for Particle MCMC algorithm. For Particle MCMC, each run consists 3000 iterations while the number of particles can be 5, 10 or 20. We also explored the gradient information of the target distribution to apply Hamiltonian Monte Carlo with different step sizes and different numbers of leapfrog jumps. For HMC,  each run consists 20000 iterations while the numbers of leapfrog jumps can be 1, 3, 5, or 10, and the leapfrog stepsize can be  0.02, 0.05 and 0.1. For each run, the acceptance rates as well as the time spent was calculated, and effective sample sizes (ESSs) of MCMC sampling parameters) were calculated using R-CODA (Plummer et al., 2006). The overall ESS per unit time of a run is defined to be the mean ESS per unit time across all these ESSs per unit time.\\
+Figure 1, 2 and 3 plot the overall  ESS per unit time against the variance of the proposal kernel per run, for different methods and different scaling parameters k($k = 1.5, 2, 3$) and different dimensions($p = 3, 5, 10$), where the  $\Omega = k \max(\Omega_{old}, \Omega_{new})$ when $k < 2$, or $\Omega = k (\Omega_{old} + \Omega_{new})$ when $k \leq 2$. We see that the improved MH algorithm is more efficient in these cases with respect to the overall ESS per unit time. We also see that increase the scaling parameter will decrease the efficiency of the improved MH algorithm respect to overall ESS per unit time, when $k > 2$. If we set $\Omega = 1.5 \max(\Omega_{old}, \Omega_{new})$, the performance of the improved MH will not be as good as the case we set $\Omega = 2(\Omega_{old} + \Omega_{new})$ when the proposal log variance is large.\\
+Figure 4 shows the initial burn-in of a sampler with this setting for different initializations. The vertical axis shows the number of state transitions in the MJP trajectory of each iteration. This quantity quickly reaches its equilibrium value within a few iterations.\\
+
+Figure 5 plots ESS per unit time a
+Figure 6 plots ESS per unit time as observation interval and the number of observations both increase when the dimension is $3$ and the scaling parameter k is $2$. Gibbs sampler decreases faster than Metropolis Hasting Method, due to the doubling of MJP paths and the parameters. \\
+
+Figure 7 plots ESS per unit time as observation interval increases with number of observations fixed, when the dimension is $3$ and the scaling parameter k is $2$.Gibbs sampler decreases faster than Metropolis Hasting Method, due to the doubling of MJP paths and the parameters. In addition Gibbs sampler decreases even more faster than previous case when the number of observations is not fixed. \\
+
+Figure 8 plots ESS plots the overall  acceptance rate against the log variance of the proposal kernel per run for dimension $3$. 
+
+
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/exp_3_alpha.pdf}
+      \end{minipage}
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/exp_3_beta.pdf}
+    \vspace{-0 in}
+%    \caption{ESS/sec for exp model (beta, dim 3)}
+     \label{fig:ESS_EXP_D3}
+  \end{minipage}
+    \caption{ESS/sec for exp model (dim 3). The left is for $\alpha$, and the right is for $\beta$.}
+  \end{figure}
+  \begin{figure}[H]
+  \centering
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/h_alpha.pdf}
+      \end{minipage}
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/h_beta.pdf}
+      \end{minipage}
+
+    \caption{HMC for dim 3}
+  \end{figure}
+
+
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/exp_5_alpha.pdf}
+%    \caption{ESS/sec for exp model (alpha, dim 5)}
+      \end{minipage}
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/exp_5_beta.pdf}
+    \vspace{-0 in}
+%    \caption{ESS/sec for exp model (beta, dim 5)}
+     \label{fig:ESS_EXP_D5}
+  \end{minipage}
+    \caption{ESS/sec for exp model (dim 5)}
+  \end{figure}
+
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/exp_10_alpha.pdf}
+      \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/exp_10_beta.pdf}
+    \vspace{-0 in}
+     \label{fig:ESS_EXP_D10}
+  \end{minipage}
+    \caption{ESS/sec for exp model (dim 10)}
+  \end{figure}
+  
+  
+  
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/exp3_k2_path_transition.pdf}
+    \caption{Trace plot of the number of MJP transitions for different initializatoins for exponential model.}
+      \end{minipage}
+  \end{figure}
+
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/ESS_vs_t_alpha.pdf}
+      \end{minipage}
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/ESS_vs_t_beta.pdf}
+    \vspace{-0 in}
+     \label{fig:TSS}
+  \end{minipage}
+    \caption{Time Interval vs. ESS / sec}
+  \end{figure}
+
+  \begin{figure}%[b]  
+  \centering
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/ESS_vs_t_alpha_fixobservation.pdf}
+    \end{minipage}
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/ESS_vs_t_beta_fixobservation.pdf}
+    \vspace{-0 in}
+     \label{fig:TSS2}
+  \end{minipage}
+    \caption{Time Interval vs. ESS / sec (Number of observations is fixed)}
+  \end{figure}
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/acc_rate_exp_d3.pdf}
+    \caption{Acceptance rate for exp model (dim 3)}
+      \end{minipage}
+  \end{figure}
+
+
+\section{Immigration models with capacity}~
+An $M/M/N/N$ queue is a stochastic process whose state space is the set $\{0, 1, 2, 3, ..., N - 1\}$ where the value corresponds to the number of customers in the system, including any currently in service. Arrivals occur at rate $\alpha$ according to a Poisson process and move the process from state $i$ to $i+1$. Service times have an exponential distribution with parameter $\beta$ in the $M/M/N/N$ queue. There are $N$ servers, which serve from the front of the queue. If there are less than $N$ jobs, some of the servers will be idle. Only $N$ customers can queue at any one time. Any further arrivals to the queue are considered "lost". 
+  \begin{figure}[H]
+  \centering
+  \begin{minipage}[!hp]{0.6\linewidth}%0.45
+  \centering
+    \includegraphics [width=1\textwidth, angle=0]{figs/queue_model.pdf}%0.70
+      \end{minipage}
+    \caption{exp model}
+  \end{figure}
+
+\noindent Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, t_{N+1}(t_{end})]$, and y as observations.\\
+Now, let's consider a immigration model as follows. State space is $\{0, 1, 2, ..., N - 1\}$, representing the total population. The transition matrix is defined as follows. 
+$$A_i =: A_{i,i} = -(\alpha + i\beta), \; \; i =0,1,...,N$$ $$A_{i, i+1} = \alpha, \; \; i =0,1,...,N-1,$$ $$A_{i, i-1}  = \beta, \; \;  i =1,...,N.$$
+We already know the conditional density(given $\alpha,\; \beta$) of a MJP trajectory $(s_0, S, T)$ in time interval $[t_{start}, t_{end}]$, with $S=(s_1, s_2,..., s_k)$, $T=(t_1, t_2,..., t_k)$. 
+$$f(s_0,S,T| \alpha, \beta) = \prod_{i=0}^{k-1} A_{s_i, s_{i+1}} \exp(\sum_{i=0}^{k} A_{s_i}(t_{i+1} - t_{i})), $$
+where $t_0 = t_{start}$, $t_{k+1} = t_{end}.$\\
+Let's denote some notations here.\\
+$$U(s_0, S, T):= \sum_{i=0}^{k-1} \mathbb{I}_{\{s_{i+1} - s_i = 1\}}.$$
+$$D(s_0, S, T):= \sum_{i=0}^{k-1} \mathbb{I}_{\{s_{i+1} - s_i = -1\}}.$$
+Call them U and D for short.
+Let's denote the total time when the trajectory state stays at state i as $\tau_i$, i.e. $\tau_i = \sum_{j=0}^{k} (t_{j+1} -t_j)\mathbb{I}_{\{s_j = i\}}$, then $\sum_{i=0}^k (t_{i+1} - t_i)s_i = \sum_{i=0}^N \tau_ii.$\\
+
+$$f(s_0,S,T| \alpha, \beta) = \exp(-\alpha(t_{end} - t_{start}- \tau_N) )\alpha^U \cdot  \exp((-(\sum_{i=0}^k (t_{i+1} - t_i)s_i)\beta) \prod_{i=1}^N i^{\sum_{j=0}^{k-1}\mathbb{I}_{s_{j+1} = i -1 \;,  s_j = i} }   \beta^D$$\\
+If we assume the prior of $\alpha$, and $\beta$ are $Gamma(\mu,\lambda)$, $Gamma(\omega, \theta)$, which are independent with each other. \\
+$$p(\alpha) = \frac{\lambda^\mu}{\Gamma(\mu)}\alpha^{\mu -1}e^{-\lambda \alpha}. $$
+$$p(\beta) = \frac{\theta^\omega}{\Gamma(\omega)}\beta^{\omega -1}e^{-\theta \beta}. $$
+Then we can get the posterior distribution $$f(\alpha, \beta | s_0,S,T)$$ as follows.
+$$ f(\alpha, \beta | s_0,S,T) \propto \exp(-(\lambda + t_{end} - t_{start}- \tau_N)\alpha) \alpha^{\mu + U -1} \cdot \exp(-(\sum_{i=0}^k (t_{i+1} - t_i)s_i + \theta)\beta) \beta^{\omega+ D -1}.$$
+It means that the posterior distributions of $\alpha$, $\beta$ are still independent. \\
+$\alpha | s_0,S,T$ is following $Gamma(\mu+ U,\lambda + t_{end} - t_{start}- \tau_N)$\\
+$\beta | s_0,S,T$ is following $Gamma(\omega+ D,\theta + \sum_{i=0}^k (t_{i+1} - t_i)s_i)$, which is equivalent to $Gamma(\omega+ D,\theta +\sum_{i=0}^N \tau_ii)$\\
+Such immigration models have perfectly conjugate posterior distributions when we assign $\gamma$ priors to $\alpha$ and $\beta$. We apply our Metropolis Hasting algorithms on such models to compare the performance with the performance of Gibbs Sampling algorithm.
+\subsection{Experiments}
+In the following, we evaluate a Python implementation of our algorithms compared to other exact samplers which include Gibbs sampler and Particle MCMC sampler. We consider three different dimensions which are 3, 5, and 10 and three different k which are 1.5, 2, and 3. We generated random parameters $\alpha$, $\beta$ from prior distributions ($Gamma(3,2), Gamma(5, 2)$), and used this to construct the transition matrix A. Then we generate an MJP trajectory with a uniform initial distribution over states. The state of this MJP trajectory was observed via a Normal distribution with mean equal to the value of state and variance 1, and posterior samples given the observations were produced by a Python implementation of our algorithm. 100 MCMC runs were performed, each run consisting of 10000(Varies among different dimensions) iterations. For each run, the number of transitions as well as the time spent was calculated, and effective sample sizes (ESSs) of these statistics (the number of independent samples with the same `information' as the correlated MCMC samples) were calculated using R-CODA (Plummer et al., 2006). The overall ESS of a run is defined to be the mean ESS across all these ESSs.
+
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/q_3_alpha.pdf}
+      \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/q_3_beta.pdf}
+    \vspace{-0 in}
+     \label{fig:ESS_Q_3}
+  \end{minipage}
+    \caption{ESS/sec for Immigration model (dim 3)}
+  \end{figure}
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/q_5_alpha.pdf}
+      \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/q_5_beta.pdf}
+    \vspace{-0 in}
+     \label{fig:ESS_Q_5}
+  \end{minipage}
+    \caption{ESS/sec for Immigration model (dim 5)}
+  \end{figure}
+
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/q_10_alpha.pdf}
+      \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/q_10_beta.pdf}
+    \vspace{-0 in}
+     \label{fig:ESS_Q_10}
+  \end{minipage}
+    \caption{ESS/sec for Immigration model (dim 10)}
+  \end{figure}
+
+\begin{figure}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/q3_k2_path_transition.pdf}
+    \vspace{-0 in}
+    \caption{Trace plot of the number of MJP transitions for different initializatoins for immigration model.}
+     \label{fig:ESS_EXP_TRANSITION}
+  \end{minipage}
+\end{figure}
+
+  \begin{figure}%[b]
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/dist_alpha.pdf}
+    \vspace{-0 in}
+     \label{fig:dist_alpha}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/dist_beta.pdf}
+    \vspace{-0 in}
+     \label{fig:dist_beta}
+  \end{minipage}
+    \caption{density}
+  \end{figure}
+
+  \begin{figure}%[b]
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/hist_alpha.pdf}
+    \vspace{-0 in}
+     \label{fig:dist_alpha1}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/hist_beta.pdf}
+    \vspace{-0 in}
+     \label{fig:hist_beta}
+  \end{minipage}
+    \caption{test}
+  \end{figure}
+  
+
+\section{DNA evolution JC69 model }~
+  \begin{figure}[H]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/jc_model.pdf}
+      \end{minipage}
+    \caption{exp model}
+  \end{figure}
+
+JC69 is the simplest substitution model. There are several assumptions. It assumes equal base frequencies and equal mutation rates. The only parameter of this model is $\alpha$. The overall substitution rate is therefore $3\alpha$. The state space is $\{1, 2, 3, 4\}$, representing $\{A, T, C, G\}$.\noindent Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, t_{N+1}(t_{end})]$, and y as observations.\\
+$$A_i =: A_{i,i} = -3\alpha, \; \; i =0,1,...,N$$ $$A_{i, j} = \alpha, \; \; i \neq j.$$
+If we assume the prior of $\alpha$ is $Gamma(\mu,\lambda)$\\
+$$p(\alpha) = \frac{\lambda^\mu}{\Gamma(\mu)}\alpha^{\mu -1}e^{-\lambda \alpha} $$.
+Then we can get the posterior distribution $$f(\alpha | s_0,S,T)$$ as follows.
+$$ f(\alpha| s_0,S,T) \propto \exp(-(\lambda + 3(t_{end} - t_{start}))\alpha) \alpha^{\mu + N -1} .$$
+$\alpha | s_0,S,T$ is following $Gamma(\mu+ N,\lambda + 3(t_{end} - t_{start}))$\\
+\section{Experiments}
+In the following, we evaluate a Python implementation of our algorithms compared to other exact samplers which include Gibbs sampler and Particle MCMC sampler. We consider three different dimensions which are 3, 5, and 10 and three different k which are 1.5, 2, and 3. We generated random parameters $\alpha$, $\beta$ from prior distributions ($Gamma(3,2), Gamma(5, 2)$), and used this to construct the transition matrix A. Then we generate an MJP trajectory with a uniform initial distribution over states. The state of this MJP trajectory was observed via a Normal distribution with mean equal to the value of state and variance 1, and posterior samples given the observations were produced by a Python implementation of our algorithm. 100 MCMC runs were performed, each run consisting of 10000(Varies among different dimensions) iterations. For each run, the number of transitions as well as the time spent was calculated, and effective sample sizes (ESSs) of these statistics (the number of independent samples with the same `information' as the correlated MCMC samples) were calculated using R-CODA (Plummer et al., 2006). The overall ESS of a run is defined to be the mean ESS across all these ESSs.
+
+  \begin{figure}%[b]
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/jc.pdf}
+    \vspace{-0 in}
+    \caption{ESS/sec for JC69 Model }
+     \label{fig:ESS_JC}
+  \end{minipage}
+  \end{figure}
+
+
+
+\section{Immigration models with capacity with piece wise constant rate}~
+We consider the Queuing model, with piece wise constant transition rate. 
+\noindent Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, t_{N+1}(t_{end})]$, and y as observations.\\
+Now, let's consider a immigration model as follows. State space is $\{0, 1, 2, ..., N - 1\}$, representing the total population. The transition matrix is defined as follows. 
+$$A_i(t) =: A_{i,i}(t) = -(\alpha + i\beta)w(t), \; \; i =0,1,...,N$$ $$A_{i, i+1}(t) = \alpha w(t), \; \; i =0,1,...,N-1,$$ $$A_{i, i-1}(t)  = \beta w(t), \; \;  i =1,...,N.$$
+$w(t)$ is a piece wise constant function. $w(t) = w_i, \; t \in [\l_i, l_{i + 1}), i = 1,2,3,..., K.$\\
+We already know the conditional density(given $\alpha,\; \beta$) of a MJP trajectory $(s_0, S, T)$ in time interval $[t_{start}, t_{end}]$, with $S=(s_1, s_2,..., s_k)$, $T=(t_1, t_2,..., t_k)$. 
+$$f(s_0,S,T| \alpha, \beta) = \prod_{i=0}^{k-1} A_{s_i, s_{i+1}}(t_i) \exp(\sum_{i=0}^{k} A_{s_i}(t_i)(t_{i+1} - t_{i})), $$
+where $t_0 = t_{start}$, $t_{k+1} = t_{end}.$\\
+Let's denote some notations here.\\
+$$U(s_0, S, T):= \sum_{i=0}^{k-1} \mathbb{I}_{\{s_{i+1} - s_i = 1\}}.$$
+$$D(s_0, S, T):= \sum_{i=0}^{k-1} \mathbb{I}_{\{s_{i+1} - s_i = -1\}}.$$
+Call them U and D for short.
+Let's denote the total time when the trajectory state stays at state i as $\tau_i$, i.e. $\tau_i = \sum_{j=0}^{k} (t_{j+1} -t_j)\mathbb{I}_{\{s_j = i\}}$, then $\sum_{i=0}^k (t_{i+1} - t_i)s_i = \sum_{i=0}^N \tau_ii.$\\
+
+$$f(s_0,S,T| \alpha, \beta) \propto \exp(\sum_{r = 0}^{K}-w_r\alpha(l_{r + 1} - l_{r}- \tau_N^r) )\alpha^U \cdot  \exp(-\int_{t_s}^{t_{e}}(S(t)w(t)\beta)  \beta^D$$\\
+If we assume the prior of $\alpha$, and $\beta$ are $Gamma(\mu,\lambda)$, $Gamma(\omega, \theta)$, which are independent with each other. \\
+$$p(\alpha) = \frac{\lambda^\mu}{\Gamma(\mu)}\alpha^{\mu -1}e^{-\lambda \alpha}. $$
+$$p(\beta) = \frac{\theta^\omega}{\Gamma(\omega)}\beta^{\omega -1}e^{-\theta \beta}. $$
+Then we can get the posterior distribution $$f(\alpha, \beta | s_0,S,T)$$ as follows.
+$$ f(\alpha, \beta | s_0,S,T) \propto \exp(-(\lambda +\sum_{r = 0}^{K}w_r\alpha(l_{r + 1} - l_{r}- \tau_N^r))\alpha) \alpha^{\mu + U -1} \cdot \exp(-(\int_{t_{s}}^{t_{e}}(S(t)w(t) + \theta)\beta) \beta^{\omega+ D -1}.$$
+It means that the posterior distributions of $\alpha$, $\beta$ are still independent. \\
+$\alpha | s_0,S,T$ is following $Gamma(\mu+ U,\lambda +\sum_{r = 0}^{K}w_r\alpha(l_{r + 1} - l_{r}- \tau_N^r)  )$\\
+$\beta | s_0,S,T$ is following $Gamma(\omega+ D,\int_{t_s}^{t_{e}}(S(t)w(t) + \theta)$.\\
+Such immigration models have perfectly conjugate posterior distributions when we assign $\gamma$ priors to $\alpha$ and $\beta$. We apply our Metropolis Hasting algorithms on such models to compare the performance with the performance of Gibbs Sampling algorithm.
+
+\subsection{Experiments}
+In the following, we evaluate a Python implementation of our algorithms compared to the Gibbs sampler. We consider three different dimensions which are 3, 5, and 10 and three different k which are 1.5, 2, and 3. We generated random parameters $\alpha$, $\beta$ from prior distributions ($Gamma(3,2), Gamma(5, 2)$). We set $w$ as $(1, 2, 3, 4)$ and $l$ as $(0, 5, 10, 15, 20)$   We used this to construct the transition matrix A. Then we generate an MJP trajectory with a uniform initial distribution over states. The state of this MJP trajectory was observed via a Normal distribution with mean equal to the value of state and variance 1, and posterior samples given the observations were produced by a Python implementation of our algorithm. 100 MCMC runs were performed, each run consisting of 5000(Varies among different dimensions) iterations. For each run, the number of transitions as well as the time spent was calculated, and effective sample sizes (ESSs) of these statistics (the number of independent samples with the same `information' as the correlated MCMC samples) were calculated using R-CODA (Plummer et al., 2006). The overall ESS of a run is defined to be the mean ESS across all these ESSs.
+
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/pc_3_alpha.pdf}
+      \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/pc_3_beta.pdf}
+    \vspace{-0 in}
+     \label{fig:ESS_Q_3}
+  \end{minipage}
+    \caption{ESS/sec for NH Immigration model (dim 3)}
+  \end{figure}
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/pc_5_alpha.pdf}
+      \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/pc_5_beta.pdf}
+    \vspace{-0 in}
+     \label{fig:ESS_Q_5}
+  \end{minipage}
+    \caption{ESS/sec for NH Immigration model (dim 5)}
+  \end{figure}
+
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/pc_10_alpha.pdf}
+      \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/pc_10_beta.pdf}
+    \vspace{-0 in}
+     \label{fig:ESS_Q_10}
+  \end{minipage}
+    \caption{ESS/sec for NH Immigration model (dim 10)}
+  \end{figure}
