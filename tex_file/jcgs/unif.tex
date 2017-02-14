@@ -40,7 +40,7 @@ with rate $\Omega$. Call these times $W$, these along with $0$ define a
 random grid on $[0,\cT]$.
 Define $B = \left(I +\frac{1}{\Omega}A\right)$; observe that this is a
 stochastic matric (with positive elements, and rows adding up to $1$).
-Assign state-values to the elements in $0 \cup W$ according to a discrete-time 
+Assign state-values to the elements in $0 \bigcup W$ according to a discrete-time 
 Markov chain with initial distribution $\pi$, and transition matrix $B$;
 call these state $V$. Thus $v_0 \sim \pi$, while $p(v_{k+1}=j|v_k=i) = B_{ij}$.
 Note that $\Omega > \max_i A_i$ results in more
@@ -72,7 +72,7 @@ candidate times $U$}: %\cite{RaoTeh12} show that
 These are distributed as an inhomogeneous Poisson process with intensity 
 $\Omega-A_{S(t)}$. Since the intensity is piecewise-constant, sampling from this 
 is straightforward.
-\State \textbf{Given the thinned and actual transition times $W = (T \cup U)$
+\State \textbf{Given the thinned and actual transition times $W = (T \bigcup U)$
 from the last iteration (but discarding all state information), 
 sample a new trajectory}:
     Conditioned on the skeleton $W$, the set of candidate jump
@@ -184,7 +184,7 @@ Markov chain}
 Constructing such a marginal sampler over the MJP parameters by
 integrating out the hidden trajectory is less straightforward:
 the set of transition times is unbounded, with individual elements
-unconstrained over the observation interval $[0,T]$.
+unconstrained over the observation interval $[0,\cT]$.
 %Naively calculating this marginal probability for the continuous-time
 %case is not straightforward, as there is no finite set of candidate
 %times to make a pass over. 
