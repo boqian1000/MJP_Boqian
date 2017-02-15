@@ -1,13 +1,16 @@
 
 \section{Experiments}~
-In the following, we evaluate Python implementation of our algorithms, as well as other baselines like simple Gibbs sampling, 
-and particle MCMC sampling. For each experiment, $100$ independent MCMC runs were performed, each run consisting of $10000$ iterations.
-Since particle MCMC was more computationally intensive, each run consisted of $3000$ iterations, with the number of particles being 5, 10 or 20. 
-We also considered exploiting gradient information of the target distribution to apply Hamiltonian Monte Carlo (HMC) with different step sizes and different 
-numbers of leapfrog jumps. For HMC, the number of leapfrog steps took values in $1, 3, 5$ or $10$, and the leapfrog stepsize took values in $0.02, 0.05$ and $0.1$. 
-For each run that involved a MH accept step, we calculated the acceptance rate.
-We also calculated the effective sample sizes (ESSs) of the posterior samples of the MJP parameters (using the R package \texttt{rcoda}~\cite{Rcoda2006}).
-Dividing this by the runtime of a simulation gives the ESS per unit time, a fair measure of comparison for different Monte Carlo samplers.
+In the following, we compare Python implementations of our algorithms with baselines like simple Gibbs sampling, 
+and particle MCMC sampling. For each experiment, we carried out $100$ independent MCMC runs, each consisting of $10000$ iterations.
+We found particle MCMC to be more computationally intensive, and limited each run to $3000$ iterations, the number of particles being $5, 10$ or $20$. 
+We also considered exploiting gradient information of the target distribution to apply Hamiltonian Monte Carlo (HMC)~\cite{Neal2010}. In particular, the forward pass of
+FFBS also allows us to calculate the gradient of the log-probability with respect to the MJP parameters. We can exploit this information to explore parameter
+space more efficiently than a random-walk algorithm. We run HMC with the number of leapfrog steps taking values in $1, 3, 5$ or $10$, and the leapfrog stepsize in 
+$0.02, 0.05$ and $0.1$. 
+
+For each run of each MCMC algorithm, we calculated the effective sample size (ESS) of the posterior samples of the MJP parameters using the R 
+package \texttt{rcoda}~\cite{Rcoda2006}. This estimates the number of independent samples returned by the MCMC algorithm; dividing this by the runtime of a 
+simulation gives the ESS per unit time. We used this as a measure to compare different Monte Carlo samplers.
 
 % \begin{algorithm}[!ht]
 %    \caption{Generic Gibbs sampling for MJPs for Gamma priors}
@@ -48,25 +51,27 @@ Dividing this by the runtime of a simulation gives the ESS per unit time, a fair
 % &= \pi_0(s_0) \alpha^N \prod_{i = 1}^N f_{S_{i - 1}S_i} \exp(-\alpha  \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))\\
 % \end{align*} 
 \noindent We consider a simple MJP with two parameters $\alpha$ and $\beta$. Transitions between states $i$ and $j$ have rate $\alpha \exp(-\beta/(i+j))$.
-We consider three different dimensions $3, 5$ and $10$ and three different k's ($1.5, 2$ and $3$)\vinayak{What is k?}. 
-Figure~\ref{fig:exp_model} shows the situation with $3$ states.  We can assume the prior distributions of $\alpha, \beta$ are $p_1(\alpha)$ and $p_2(\beta)$.\\
-We placed Gamma$(3,2)$, and Gamma$(5, 2)$ priors on the parameters $\alpha$, $\beta$, and in our experiments, constructed a transition matrix $A$ using random
-parameters drawn from the prior distributions. Given $A$, we generated an MJP trajectory (with a uniform initial distribution over initial states),
-The state of this MJP trajectory was observed via a normal distribution with mean equal to the value of state and variance equal to $1$.
+We consider three different dimensions $3, 5$ and $10$, and three different k's ($1.5, 2$ and $3$)\vinayak{What is k?}. 
+Figure~\ref{fig:exp_model} shows the situation with $3$ states.  
+We placed Gamma$(\alpha_0,\alpha_1)$, and Gamma$(\beta_0, \beta_1)$ priors on the parameters $\alpha$, $\beta$, with $(\alpha_0,\alpha_1,\beta_0,\beta_1)$ taking
+values $(3,2,5,2)$ respectively. In our experiments, we used random parameters drawn from these prior distributions to construct a transition matrix $A$,
+and placing a uniform distribution over states at time $0$, we sampled an MJP trajectory,
+the state of which trajectory was observed via a normal distribution with mean equal to the value of state and variance equal to $1$.
+\vinayak{Number of observations?}
 For our Metropolis-Hastings proposal, we used a lognormal distribution with location parameter $\log(\theta_{old})$ and scale parameter $\sigma$. Here
 $\theta_{old}$ is the current parameter, while $\sigma$ is a user-specified tuning parameter.
-%\begin{align*}
-%P(\alpha, \beta | s_0, S, T ) \propto \alpha^N \prod_{i = 1}^N f_{S_{i - 1}S_i} \exp(-\alpha  \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i)) p_1(\alpha)p_2(\beta)\\
-%\end{align*}
-%If we assume the priors of $\alpha$, $\beta$ are $Gamma(\mu, \lambda)$, $Gamma(\omega, \theta)$, then the posterior will have a simper form as follows. 
-\begin{align*}
-P(\alpha, \beta | s_0, S, T ) = C \alpha^{\mu + N - 1}\exp(-\alpha (\lambda + \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))) \prod_{i = 1}^N f_{S_{i - 1}S_i}  \beta ^{\omega - 1} \exp(-\theta \beta)\\
-\end{align*}
-We notice that given $\beta,\; S,\; T$, $\alpha$ is distributed as a $Gamma$ distribution.\\
-$\alpha | \beta, S, T, y  = \alpha | \beta, S, T \sim Gamma(\mu + N, \lambda + \sum_{0}^NF_{S_i}(\beta)(t_{i + 1} - t_i))$.\\
-There is no conjugate distribution to sample $\beta \sim P(\beta| s_0, S, T)$. We will have to use Metropolis Hasting within Gibbs to sample $\beta$. The target distribution is the following one.
-$$ P(\beta | S, T) = C \frac{\prod_{i = 1}^N f_{S_{i -1}S_i}(\beta)\beta^{\omega - 1} \exp(-\theta \beta)}{(\lambda + \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))^{\mu + N}}.$$
-Such doubling might slow the mixing of the Markov chain. We can apply our Metropolis Hasting algorithm on this model.
+% %\begin{align*}
+% %P(\alpha, \beta | s_0, S, T ) \propto \alpha^N \prod_{i = 1}^N f_{S_{i - 1}S_i} \exp(-\alpha  \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i)) p_1(\alpha)p_2(\beta)\\
+% %\end{align*}
+% %If we assume the priors of $\alpha$, $\beta$ are $Gamma(\mu, \lambda)$, $Gamma(\omega, \theta)$, then the posterior will have a simper form as follows. 
+% \begin{align*}
+% P(\alpha, \beta | s_0, S, T ) = C \alpha^{\mu + N - 1}\exp(-\alpha (\lambda + \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))) \prod_{i = 1}^N f_{S_{i - 1}S_i}  \beta ^{\omega - 1} \exp(-\theta \beta)\\
+% \end{align*}
+% We notice that given $\beta,\; S,\; T$, $\alpha$ is distributed as a $Gamma$ distribution.\\
+% $\alpha | \beta, S, T, y  = \alpha | \beta, S, T \sim Gamma(\mu + N, \lambda + \sum_{0}^NF_{S_i}(\beta)(t_{i + 1} - t_i))$.\\
+% There is no conjugate distribution to sample $\beta \sim P(\beta| s_0, S, T)$. We will have to use Metropolis Hasting within Gibbs to sample $\beta$. The target distribution is the following one.
+% $$ P(\beta | S, T) = C \frac{\prod_{i = 1}^N f_{S_{i -1}S_i}(\beta)\beta^{\omega - 1} \exp(-\theta \beta)}{(\lambda + \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))^{\mu + N}}.$$
+% Such doubling might slow the mixing of the Markov chain. We can apply our Metropolis Hasting algorithm on this model.
 \subsection{Experiments}
 Figure 1, 2 and 3 plot the overall  ESS per unit time against the variance of the proposal kernel per run, for different methods and different scaling parameters k($k = 1.5, 2, 3$) and different dimensions($p = 3, 5, 10$), where the  $\Omega = k \max(\Omega_{old}, \Omega_{new})$ when $k < 2$, or $\Omega = k (\Omega_{old} + \Omega_{new})$ when $k \leq 2$. We see that the improved MH algorithm is more efficient in these cases with respect to the overall ESS per unit time. We also see that increase the scaling parameter will decrease the efficiency of the improved MH algorithm respect to overall ESS per unit time, when $k > 2$. If we set $\Omega = 1.5 \max(\Omega_{old}, \Omega_{new})$, the performance of the improved MH will not be as good as the case we set $\Omega = 2(\Omega_{old} + \Omega_{new})$ when the proposal log variance is large.\\
 Figure 4 shows the initial burn-in of a sampler with this setting for different initializations. The vertical axis shows the number of state transitions in the MJP trajectory of each iteration. This quantity quickly reaches its equilibrium value within a few iterations.\\
@@ -192,7 +197,11 @@ Figure 8 plots ESS plots the overall  acceptance rate against the log variance o
 
 
 \section{Immigration models with capacity}~
-An $M/M/N/N$ queue is a stochastic process whose state space is the set $\{0, 1, 2, 3, ..., N - 1\}$ where the value corresponds to the number of customers in the system, including any currently in service. Arrivals occur at rate $\alpha$ according to a Poisson process and move the process from state $i$ to $i+1$. Service times have an exponential distribution with parameter $\beta$ in the $M/M/N/N$ queue. There are $N$ servers, which serve from the front of the queue. If there are less than $N$ jobs, some of the servers will be idle. Only $N$ customers can queue at any one time. Any further arrivals to the queue are considered "lost". 
+For our next experiment, we consider an $M/M/N/N$ queue. This is a stochastic process whose state space is the set $\{0, 1, 2, 3, ..., N - 1\}$ with elements
+corresponds to the number of customers/jobs in the system. Arrivals occur at rate $\alpha$ according to a Poisson process and move the process from state $i$ to $i+1$. 
+Service times have an exponential distribution with parameter $\beta$ in the $M/M/N/N$ queue. There are $N$ servers, which serve from the front of the queue. 
+If there are less than $N$ jobs, some of the servers will be idle. Only $N$ customers can queue at any one time. Any further arrivals to the queue are considered 
+''lost''. 
   \begin{figure}[H]
   \centering
   \begin{minipage}[!hp]{0.6\linewidth}%0.45
