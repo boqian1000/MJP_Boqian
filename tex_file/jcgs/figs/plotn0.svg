@@ -24,16 +24,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="569.28568"
+     inkscape:cx="154.99997"
      inkscape:cy="-16.428571"
      inkscape:document-units="px"
-     inkscape:current-layer="g4779"
+     inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1276"
      inkscape:window-height="755"
-     inkscape:window-x="4"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
+     inkscape:window-x="31"
+     inkscape:window-y="6"
+     inkscape:window-maximized="0"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
@@ -105,37 +105,32 @@
      inkscape:label="Layer 1">
     <path
        inkscape:connector-curvature="0"
-       id="path4136"
-       d="m -1000,58.07649 202.85714,0 0,-97.142857 202.85715,0 0,97.142857 197.14285,0 0,100 148.57143,0"
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <path
-       inkscape:connector-curvature="0"
        id="path4138"
        d="m -1022.8571,206.64792 874.28567,0"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)" />
     <circle
        r="11.428572"
        cy="-39.066368"
-       cx="-796"
+       cx="-798.92853"
        id="path4494"
        style="opacity:0.98000004;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <circle
        r="11.4285"
-       cy="57.219418"
-       cx="-1002.0001"
+       cy="55.433678"
+       cx="-1001.9286"
        id="path4496"
        style="opacity:0.98000004;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <circle
        r="11.4285"
-       cy="154.64801"
-       cx="-397.71429"
+       cy="147.43369"
+       cx="-398.92856"
        id="path4498"
        style="opacity:0.98000004;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <ellipse
        ry="11.4285"
        rx="11.428499"
-       cy="55.219425"
-       cx="-595.14288"
+       cy="55.433678"
+       cx="-683.92859"
        id="path4500"
        style="opacity:0.98000004;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <ellipse
@@ -229,5 +224,10 @@
                style="fill:#000000;stroke-width:0" /></g>        </g>
       </g>
     </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5.0000003;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m -1002.8571,53.07644 202.85714,0 0,-94.28571 114.28572,0 0,94.28571 285.71428,0 0,91.42858 154.28572,0"
+       id="path4179"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>
