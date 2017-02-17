@@ -1,16 +1,23 @@
 
 \section{Experiments}~
 In the following, we compare Python implementations of our algorithms with baselines like simple Gibbs sampling, 
-and particle MCMC sampling. For each experiment, we carried out $100$ independent MCMC runs, each consisting of $10000$ iterations.
-We found particle MCMC to be more computationally intensive, and limited each run to $3000$ iterations, the number of particles being $5, 10$ or $20$. 
-We also considered exploiting gradient information of the target distribution to apply Hamiltonian Monte Carlo (HMC)~\cite{Neal2010}. In particular, the forward pass of
-FFBS also allows us to calculate the gradient of the log-probability with respect to the MJP parameters. We can exploit this information to explore parameter
+and particle MCMC sampling. Unless specified, our results were
+obtained from $100$ independent MCMC runs, each consisting of $10000$ iterations.
+We found particle MCMC to be more computationally intensive, and limited each 
+run to $3000$ iterations, the number of particles being $5, 10$ and $20$. 
+We also considered exploiting gradient information of the target distribution to 
+apply Hamiltonian Monte Carlo (HMC)~\cite{Neal2010}. In particular, the forward 
+pass of FFBS allows us to also calculate the gradient of the log-probability with
+respect to the MJP parameters. We can exploit this information to explore parameter
 space more efficiently than a random-walk algorithm. We run HMC with the number of leapfrog steps taking values in $1, 3, 5$ or $10$, and the leapfrog stepsize in 
 $0.02, 0.05$ and $0.1$. 
 
 For each run of each MCMC algorithm, we calculated the effective sample size (ESS) of the posterior samples of the MJP parameters using the R 
-package \texttt{rcoda}~\cite{Rcoda2006}. This estimates the number of independent samples returned by the MCMC algorithm; dividing this by the runtime of a 
+package \texttt{rcoda}~\cite{Rcoda2006}. This estimates the number of independent samples returned by the MCMC algorithm,
+and dividing this by the runtime of a 
 simulation gives the ESS per unit time. We used this as a measure to compare different Monte Carlo samplers.
+
+ and three different k's, $1.5, 2$ and $3$ \vinayak{What is k?}. 
 
 % \begin{algorithm}[!ht]
 %    \caption{Generic Gibbs sampling for MJPs for Gamma priors}
@@ -50,16 +57,17 @@ simulation gives the ESS per unit time. We used this as a measure to compare dif
 % P(s_0, S, T | \alpha, \beta) &= \pi_0(s_0)\prod_{i = 1}^N A_{S_{i - 1}S_i} \exp(- \int_{t_{start}}^{t_{end}} |A_{S(t)}| dt)\\
 % &= \pi_0(s_0) \alpha^N \prod_{i = 1}^N f_{S_{i - 1}S_i} \exp(-\alpha  \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))\\
 % \end{align*} 
-\noindent We consider a simple MJP with two parameters $\alpha$ and $\beta$. Transitions between states $i$ and $j$ have rate $\alpha \exp(-\beta/(i+j))$.
-We consider three different dimensions $3, 5$ and $10$, and three different k's ($1.5, 2$ and $3$)\vinayak{What is k?}. 
+\noindent First consider a simple MJP with two parameters $\alpha$ and $\beta$, transitions between states $i$ and $j$ having rate $\alpha \exp(-\beta/(i+j))$.
+We consider three settings for number of states, $3, 5$ and $10$.
 Figure~\ref{fig:exp_model} shows the situation with $3$ states.  
 We placed Gamma$(\alpha_0,\alpha_1)$, and Gamma$(\beta_0, \beta_1)$ priors on the parameters $\alpha$, $\beta$, with $(\alpha_0,\alpha_1,\beta_0,\beta_1)$ taking
 values $(3,2,5,2)$ respectively. In our experiments, we used random parameters drawn from these prior distributions to construct a transition matrix $A$,
-and placing a uniform distribution over states at time $0$, we sampled an MJP trajectory,
-the state of which trajectory was observed via a normal distribution with mean equal to the value of state and variance equal to $1$.
+and placing a uniform distribution over states at time $0$, sampled an MJP trajectory.
+Our observation process was a Gaussian distribution with mean equal to the current state and variance equal to $1$.
 \vinayak{Number of observations?}
-For our Metropolis-Hastings proposal, we used a lognormal distribution with location parameter $\log(\theta_{old})$ and scale parameter $\sigma$. Here
-$\theta_{old}$ is the current parameter, while $\sigma$ is a user-specified tuning parameter.
+
+\vinayak{We studied our MH sampler, for three setting of $k$}.  For our proposal distribution, we used a lognormal distribution centered at the current
+parameter value, and with a user-specified tuning parameter.
 % %\begin{align*}
 % %P(\alpha, \beta | s_0, S, T ) \propto \alpha^N \prod_{i = 1}^N f_{S_{i - 1}S_i} \exp(-\alpha  \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i)) p_1(\alpha)p_2(\beta)\\
 % %\end{align*}
@@ -72,8 +80,25 @@ $\theta_{old}$ is the current parameter, while $\sigma$ is a user-specified tuni
 % There is no conjugate distribution to sample $\beta \sim P(\beta| s_0, S, T)$. We will have to use Metropolis Hasting within Gibbs to sample $\beta$. The target distribution is the following one.
 % $$ P(\beta | S, T) = C \frac{\prod_{i = 1}^N f_{S_{i -1}S_i}(\beta)\beta^{\omega - 1} \exp(-\theta \beta)}{(\lambda + \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))^{\mu + N}}.$$
 % Such doubling might slow the mixing of the Markov chain. We can apply our Metropolis Hasting algorithm on this model.
-\subsection{Experiments}
-Figure 1, 2 and 3 plot the overall  ESS per unit time against the variance of the proposal kernel per run, for different methods and different scaling parameters k($k = 1.5, 2, 3$) and different dimensions($p = 3, 5, 10$), where the  $\Omega = k \max(\Omega_{old}, \Omega_{new})$ when $k < 2$, or $\Omega = k (\Omega_{old} + \Omega_{new})$ when $k \leq 2$. We see that the improved MH algorithm is more efficient in these cases with respect to the overall ESS per unit time. We also see that increase the scaling parameter will decrease the efficiency of the improved MH algorithm respect to overall ESS per unit time, when $k > 2$. If we set $\Omega = 1.5 \max(\Omega_{old}, \Omega_{new})$, the performance of the improved MH will not be as good as the case we set $\Omega = 2(\Omega_{old} + \Omega_{new})$ when the proposal log variance is large.\\
+
+\noindent \textbf{Results:}
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.90\textwidth, angle=0]{figs/exp_3_alpha.pdf}
+      \end{minipage}
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.90\textwidth, angle=0]{figs/exp_3_beta.pdf}
+    \vspace{-0 in}
+%    \caption{ESS/sec for exp model (beta, dim 3)}
+  \end{minipage}
+    \caption{ESS/sec for exp model (dim 3). The left is for $\alpha$, and the right is for $\beta$.}
+     \label{fig:ESS_EXP_D3}
+  \end{figure}
+  In Figure~\ref{fig:ESS_EXP_D3}, we plot the ESS per unit time for the parameters $\alpha$ (left) and $\beta$ (right) as we change the variance of the
+  proposal kernel per run, for different methods and different scaling parameters k($k = 1.5, 2, 3$) and different dimensions($p = 3, 5, 10$), where the  $\Omega = k \max(\Omega_{old}, \Omega_{new})$ when $k < 2$, or $\Omega = k (\Omega_{old} + \Omega_{new})$ when $k \leq 2$. We see that the improved MH algorithm is more efficient in these cases with respect to the overall ESS per unit time. We also see that increase the scaling parameter will decrease the efficiency of the improved MH algorithm respect to overall ESS per unit time, when $k > 2$. If we set $\Omega = 1.5 \max(\Omega_{old}, \Omega_{new})$, the performance of the improved MH will not be as good as the case we set $\Omega = 2(\Omega_{old} + \Omega_{new})$ when the proposal log variance is large.\\
 Figure 4 shows the initial burn-in of a sampler with this setting for different initializations. The vertical axis shows the number of state transitions in the MJP trajectory of each iteration. This quantity quickly reaches its equilibrium value within a few iterations.\\
 
 Figure 5 plots ESS per unit time a
@@ -84,21 +109,6 @@ Figure 7 plots ESS per unit time as observation interval increases with number o
 Figure 8 plots ESS plots the overall  acceptance rate against the log variance of the proposal kernel per run for dimension $3$. 
 
 
-  \begin{figure}%[b]
-  \centering
-  \begin{minipage}[!hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/exp_3_alpha.pdf}
-      \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/exp_3_beta.pdf}
-    \vspace{-0 in}
-%    \caption{ESS/sec for exp model (beta, dim 3)}
-     \label{fig:ESS_EXP_D3}
-  \end{minipage}
-    \caption{ESS/sec for exp model (dim 3). The left is for $\alpha$, and the right is for $\beta$.}
-  \end{figure}
   \begin{figure}[H]
   \centering
   \begin{minipage}[hp]{0.45\linewidth}
