@@ -25,16 +25,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="97.857116"
+     inkscape:cx="-116.4286"
      inkscape:cy="-101.53324"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1276"
      inkscape:window-height="755"
-     inkscape:window-x="4"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
+     inkscape:window-x="250"
+     inkscape:window-y="182"
+     inkscape:window-maximized="0"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
@@ -117,7 +117,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -133,27 +133,27 @@
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)" />
     <circle
        r="11.428572"
-       cy="148.93364"
-       cx="-896.85712"
+       cy="148.43361"
+       cx="-923.92853"
        id="path4494"
        style="opacity:0.98000004;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <circle
        r="11.4285"
-       cy="57.219418"
-       cx="-1002.0001"
+       cy="57.433678"
+       cx="-1001.9286"
        id="path4496"
        style="opacity:0.98000004;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <circle
        r="11.4285"
-       cy="148.93372"
-       cx="-488.28574"
+       cy="148.43369"
+       cx="-488.92856"
        id="path4498"
        style="opacity:0.98000004;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <ellipse
        ry="11.4285"
        rx="11.428499"
-       cy="49.505135"
-       cx="-694.28571"
+       cy="55.433678"
+       cx="-728.92859"
        id="path4500"
        style="opacity:0.98000004;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <ellipse
@@ -301,26 +301,26 @@
            style="fill:#000000;stroke-width:0" /></g>    </g>
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5.00000048;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m -1005.7142,57.93359 105.71424,0 0,91.42857 202.85715,0 0,-100 205.71428,0 0,97.14286 220,0"
+       d="m -1002.8571,55.07644 80,0 0,91.42858 191.42857,0 0,-91.42858 240,0 0,91.42858 242.85714,0"
        id="path4202"
        inkscape:connector-curvature="0" />
     <circle
        style="opacity:0.98000004;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4204"
-       cx="-794.28558"
-       cy="148.21968"
+       cx="-798.92859"
+       cy="148.43369"
        r="11.428501" />
     <circle
        style="opacity:0.98000004;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4206"
-       cx="-591.42859"
-       cy="45.933651"
+       cx="-683.92859"
+       cy="55.433678"
        r="11.428501" />
     <circle
        style="opacity:0.98000004;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4208"
-       cx="-365.71457"
-       cy="147.93365"
+       cx="-398.92856"
+       cy="148.43369"
        r="11.428501" />
   </g>
 </svg>
