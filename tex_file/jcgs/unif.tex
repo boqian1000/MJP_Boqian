@@ -1,6 +1,6 @@
 
 \section{Bayesian inference for MJPs}
-In realistic situations, one only observes the MJP trajectory at
+In practical situations, one observes the MJP trajectory at
 a finite set of times, and typically, these observations themselves
 are noisy. There are then two challenges than the practitioner faces:
 \begin{itemize}
@@ -12,9 +12,9 @@ are noisy. There are then two challenges than the practitioner faces:
 \subsection{Trajectory inference for MJPs}
 This problem was addressed in~\cite{RaoTeh13}, and extended to a broader 
 class of MJPs (as well as other jump processes like semi-Markov processes
-) in~\cite{RaoTeh12}. Both these schemes are centered on alternate
-approaches to Gillespie's algorithm for sampling MJP trajectories, where we
-introduce auxiliary {\em thinned} candidate jump times. 
+) in~\cite{RaoTeh12}. Both these schemes centere on alternate
+approaches to Gillespie's algorithm, where we introduce auxiliary {\em thinned} 
+candidate jump times to sample an MJP trajectory. 
 We focus on the simpler and more widely used scheme from~\cite{RaoTeh13}, 
 which is based on a classical idea called {\em uniformization}~\cite{Jen1953}. 
 %while in~\cite{RaoTeh12}, this was extended to a more general dependent thinning approach. 
@@ -36,22 +36,23 @@ Now, introduce an additional parameter $\Omega \ge \max_i A_i$;
 Instead of sequentially sampling a wait-time, and then a new state as
 in Gillespie's algorithm, we instead first sample a set of candidate
 transition-times over the interval $[0,\cT]$ from a homogeneous Poisson process 
-with rate $\Omega$. Call these times $W$, these along with $0$ define a
+with rate $\Omega$. Call these times $W$; these along with $0$ define a
 random grid on $[0,\cT]$.
 Define $B = \left(I +\frac{1}{\Omega}A\right)$; observe that this is a
 stochastic matric (with positive elements, and rows adding up to $1$).
 Assign state-values to the elements in $0 \bigcup W$ according to a discrete-time 
 Markov chain with initial distribution $\pi$, and transition matrix $B$;
-call these state $V$. Thus $v_0 \sim \pi$, while $p(v_{k+1}=j|v_k=i) = B_{ij}$.
+call these state $V$. Thus $v_0 \sim \pi$, while $p(v_{k+1}=j|v_k=i) = B_{ij}$
+for $k \in \{0,\cdots,|W|-1\}$.
 Note that $\Omega > \max_i A_i$ results in more
 candidate-times than actual MJP transitions; at the same time the transition
 matrix $B$ allows self-transitions (unlike A). These two effects cancel
-each other out, so that trajectories sampled this way
+each other out, and trajectories sampled this way for any $\Omega > \max_i A_i$
 %These self-transitions correct for the extra candidate transition times
 %produced by the higher rate $\Omega_i$, and~\cite{RaoTeh12} show that
 %trajectories sampled this way 
 have the same distribution as trajectories
-sampled according to Gillespie's algorithm~\cite{Jen1953,RaoTeh13}.
+sampled by Gillespie's algorithm~\cite{Jen1953,RaoTeh13}.
 
 Introducing the thinned variables allowed~\cite{RaoTeh13} to develop
 a novel and efficient MCMC sampler. We outline it below.
@@ -70,10 +71,10 @@ a novel and efficient MCMC sampler. We outline it below.
 \State \textbf{Given the MJP trajectory $(S,T)$, sample a new set of thinned 
 candidate times $U$}: %\cite{RaoTeh12} show that 
 These are distributed as an inhomogeneous Poisson process with intensity 
-$\Omega-A_{S(t)}$. Since the intensity is piecewise-constant, sampling from this 
+$\Omega-A_{S(t)}$. Since the intensity is piecewise-constant, simulating this 
 is straightforward.
 \State \textbf{Given the thinned and actual transition times $W = (T \bigcup U)$
-from the last iteration (but discarding all state information), 
+from the previous iteration (after discarding state information $S$), 
 sample a new trajectory}:
     Conditioned on the skeleton $W$, the set of candidate jump
     times is fixed, and trajectory inference reduces to inference for
@@ -92,7 +93,8 @@ sample a new trajectory}:
     %and a term $\Omega_i\exp(-\Omega_i\Delta t)$,
     %the probability that the next candidate time occurs after a wait
     %$\Delta t$ under state $i$.
-    At the end of the forward pass, we have accounted for all observation.
+    At the end of the forward pass, we have a distribution over states at the
+    end time that accounts for all observation.
     The algorithm then makes a backward pass through the times in $W$, 
     sequentially sampling the state at any time given the state at the 
     following time, and a distribution over states calculated during the
@@ -131,7 +133,7 @@ conditional distribution, otherwise, one has to use a Markov kernel like
 Metropolis-Hastings or Hamiltonian Monte Carlo to update $\theta$ from the
 conditional $p(\theta_{new}|X,S(t),\theta_{curr})$. 
 
-Such a Gibbs sampling approach comes with a well known limitation:
+Such a Gibbs sampling approach comes with a well-known limitation:
 because of coupling between path and parameters, it can explore parameter 
 and path space very sluggishly. In Figure~\ref{fig:conf1} \vinayak{Fix this}
 we show
@@ -147,7 +149,7 @@ sparse and only mildly informative about the parameters.
 For the discrete-time case, this problem of parameter-trajectory
 coupling can be circumvented by marginalizing out the MJP trajectory 
 and directly sampling from the posterior over parameters $p(\theta|X)$.
-In its simplest form, this approach involves Metropolis-Hastings
+In its simplest form, this approach involves a Metropolis-Hastings
 scheme that proposes a new parameter $\theta$ from some proposal distribution 
 $q(\theta_{new}|\theta_{old})$, accepting or rejecting according to the usual
 Metropolis-Hastings probability. The latter step requires calculating the 
@@ -169,14 +171,15 @@ Markov chain}
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
-  \State Propose a new parameter $\theta^*$ from some proposal distribution
-    $q(\theta^*|\theta)$
+  \State Propose a new parameter $\theta^*$ from the proposal distribution
+    $q(\theta^*|\theta)$.
   \State Run the forward pass of the forward-backward algorithm to 
-    obtain the marginal likelihood of the observations, $p(X|\theta^*)$
-  \State Accept the proposed $\theta^*$ according to the MH probability 
+    obtain the marginal likelihood of the observations, $p(X|\theta^*)$.
+  \State Accept the proposed $\theta^*$ according to the MH probability, 
     $\min(1,\frac{p(X,\theta^*)q(\theta|\theta^*)}{p(X,\theta)q(\theta^*|\theta)})$.
   \State If desired, a new trajectory sample can be obtained by
-    completing the backward pass of the forward-backward algorithm.
+    completing the backward pass of the forward-backward algorithm for the chosen
+    parameter.
 \end{algorithmic}
 \end{algorithm}
 
@@ -197,9 +200,9 @@ drawbacks: it scales cubically, rather than quadratically with the
 number of states, it cannot exploit structure like sparsity in the 
 transition matrix, and can depend in not trivial ways on the exact 
 nature of the observation process.
-
-%and involves expensive computations that scale with the number of
-%observations rather than the actual dynamics of the system of interest.
+Additionally, the number of expensive matrix exponential calculations scales
+with the number of observations rather than the number of transitions the
+system makes.
 
 A second approach is particle MCMC~\cite{Andrieu10}. Here, one uses 
 particle filtering to obtain an unbiased estimate of the marginal 

@@ -11,9 +11,9 @@ As before, the MCMC iteration begins with the pair $(S(t), \theta)$.
 Instead of simulating the thinned events $U$, we first generate a new parameter 
 $\theta^*$ from some distribution $q(\theta^*|\theta)$. Treat this as an 
 auxiliary variable, so that the augmented space now is the triple 
-$(S(t), \theta,\theta^*)$. We now pretend generative process involved a 
-uniformization scheme
-where the bounding rate is given by $\Omega(\theta) + \Omega(\theta^*)$.
+$(S(t), \theta,\theta^*)$. We now pretend $S(t)$ was sampled by a 
+uniformization scheme where the bounding rate is given by 
+$(\Omega(\theta) + \Omega(\theta^*))$ instead of just $\Omega(\theta)$.
 We thus sample the set of thinned events $U$ from a piecewise-constant
 Poisson process with intenstity $\Omega(\theta) + \Omega(\theta^*) - 
 A_{S(t)}$. The result is that $W$, the union of these events with the actual
@@ -21,11 +21,12 @@ trajectory transition times $T$, is a realization of homogeneous Poisson
 process with rate $\Omega(\theta) + \Omega(\theta^*)$. We now discard all MJP 
 state information, so that the MCMC state space consists of $W$, the current
 MJP parameter $\theta$, and the auxiliary parameter $\theta^*$.
-Finally, we propose swapping $\theta$ with $\theta^*$. Observe from
+Finally, we make an MH proposal that swaps $\theta$ with $\theta^*$. 
+Observe from
 symmetry that the Poisson skeleton $W$ has the same probability both
 before and after this proposal, so that unlike the previous scheme,
-the ratio $p(W|\theta^*)/p(\Omega|\theta)$ does not appear in the acceptance 
-proposal. This simplifies computation, and will significantly improve mixing.
+the ratio $p(W|\theta^*)/p(W|\theta)$ does not appear in the acceptance 
+ratio. This simplifies computation, and significantly improves mixing.
 The acceptance probability 
 %depends only on the probability of the observations
 %under both set of parameters, %as we can use the forward-backward algorithm
@@ -35,8 +36,8 @@ $$ \text{acc} =
   \min\left(1, \frac{p(X,\theta^*)q(\theta|\theta^*)}
    {p(X,\theta)q(\theta^*|\theta)}\right) = 
   \min\left(1, \frac{p(X|\theta^*)p(\theta^*)q(\theta|\theta^*)}
-   {p(X|\theta)p(\theta)q(\theta^*|\theta)}\right)
-   $$.
+   {p(X|\theta)p(\theta)q(\theta^*|\theta)}\right).
+   $$
    The terms $p(X|\theta^*)$ and  $p(X|\theta)$ can be calculated by 
    running a forward pass of the forward-backward algorithm. Having
    accepted or rejected the proposal, a new trajectory is sampled by
@@ -80,19 +81,25 @@ $$ \text{acc} =
     \includegraphics [width=0.70\textwidth, angle=0]{figs/plot6.pdf}
     \vspace{-0 in}
   \end{minipage}
-    \caption{Improved MH-algorithm}
+    \caption{Steps 0-3: Starting with a trajectory and parameter $\theta$,
+      simulate an auxiliary parameter $\theta'$, and then the thinned events
+      $U$ from a rate $\Omega(\theta) + \Omega(\theta') - A_{S(t)}$ Poisson
+      process. Step 4: Propose swapping $\theta$ and $\theta'$. Step 5:
+      Run a forward pass to accept or reject this proposal, and use the accepted
+    parameter to simulate a new trajectory. Step 6: Discard the thinned events.} 
    \label{fig:MH_improved}
 
   \end{figure}
 
 \begin{algorithm}[H]
-   \caption{MH In Gibbs sampling for MJPs }
+   \caption{MH for parameter inference for MJPs }
    \label{alg:MH_improved}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{A set of partial and noisy observations $X$}, \\
                       & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$}.\\ 
                      & \text{A  Metropolis-Hasting proposal $q(. | \theta)$}.\\
-   \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, New MJP parameters $\tilde{\theta}$}.\\
+   \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, 
+                            new MJP parameters $\tilde{\theta}$}.\\
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
@@ -128,3 +135,30 @@ $$ \text{acc} =
     \State Let $\tilde{T}$ be the set of times in $W$ when the Markov chain changes state. Define $\tilde{S}$ as the corresponding set of state values. Return $(\tilde{S}, \tilde{T}, \tilde{\theta})$.
 \end{algorithmic}
 \end{algorithm}
+
+\subsection{Comments}
+
+The uniformization scheme of~\cite{RaoTeh13} works for any Poisson rate 
+$\Omega > \max_i A_i$, this ensures that the conditional probability
+of sampling one or more thinned events $U$ is positive for
+every trajectory $S(t)$ (recall 
+$U \sim \text{PoissonProc}(\Omega-A_{S(t)})$). Their empirical results suggest 
+setting $\Omega = 2 \max_i A_i$.
+
+Implicit in our new scheme is a uniformizing Poisson process with rate
+$\Omega(\theta,\theta') \equiv \Omega(\theta) + \Omega(\theta')$. For our 
+scheme to be valid, $\Omega(\theta,\theta')$ must be greater than both
+$\max_i A_i(\theta)$ and $\max_i A_i(\theta')$. The smallest and simplest such
+choice is $\Omega(\theta,\theta') = \max A_i(\theta) + \max A_i(\theta')$.
+For a fixed $\theta$, this reduces to $\Omega = 2\max A_i$, providing
+an intuitive motivation for the approach in~\cite{RaoTeh13}.
+Larger alternatives include 
+$\Omega(\theta,\theta') = \kappa(\max A_i(\theta) + \max A_i(\theta'))$
+for $\kappa > 1$.  These result in more thinned events, and therefore more 
+computation, with the benefit of faster MCMC mixing. We study the effect of 
+$\kappa$ in our experiments.
+
+It is also possible to have non-additive settings for $\Omega(\theta,\theta')$.
+A simple option is to set it equal to 
+$\kappa \max( \max_i A_i(\theta), \max A_i(\theta')$ for some choice of $\kappa
+> 1$. We investigate this option as well.

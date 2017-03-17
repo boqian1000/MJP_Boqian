@@ -4,26 +4,27 @@ Markov jump processes (MJPs) are continuous-time stochastic processes that
 have found wide application in fields like computational chemistry~\cite{gillespie97}, 
 population genetics~\cite{FearnSher2006}, mathematical finance~\cite{Elliott06}, 
 queuing theory~\cite{Breuer2003}, artificial intelligence~\cite{XuShe10} and
-social-network analysis~\cite{pan2016markov}. The references included above have
-used MJPs to model phenomena such as the state of a chemical reaction, the state 
+social-network analysis~\cite{pan2016markov}. %The references above have
+MJPs have been used to model phenomena such as the state of a chemical reaction, the state 
 of a queuing network, segmentations of a strand of DNA, the state of users 
-logging their activity on social media, among others.
+logging their activity on social media, among many others.
 
 MJPs model temporal evolution in continuous-time, resulting in 
 realistic, mechanistic, and interpretable models, often amenable to 
 mathematical analysis. These same dynamics however raise computational
-challenges in statistical applications, where given partal and noisy 
+challenges in statistical applications, where given partial and noisy 
 measurements, one has to make inferences over the latent MJP 
-trajectory as well as any system parameters. Carrying out such
+trajectory as well as any system parameters. Such
 inference is complicated by two facts: one cannot {\em a priori} 
-bound the number of state transitions, and state-transition times themselves
+bound the number of state transitions, and the state-transition times themselves
 are continuous-valued. This is in contrast to the situation with
-discrete-time hidden Markov models, and trajectory inference for 
+{\em discrete-time} hidden Markov models, and trajectory inference for 
 MJPs typically proceeds via Markov chain Monte Carlo. The 
 state-of-the-art is a recent auxiliary variable Gibbs sampler proposed 
 in~\cite{RaoTeh13},  designed to sample paths when the MJP parameters
 are known. Parameter inference is typically carried out by 
-incorporating it into a larger Gibbs sampler. 
+incorporating this into an outer Gibbs sampler the updates simulates
+parameters given the currently sampled trajectory. 
 
 In many situations, the MJP trajectory and parameters can exhibit 
 strong coupling, so that a Gibbs that alternately samples path given
@@ -47,15 +48,15 @@ distribution over states at the initial time (which without loss of
 generality, we assume is $0$), while the latter is an 
 $N \times N$-matrix governing the dynamics of the system.  An 
 off-diagonal element $A_{ij}$, for some $i \neq j$ gives the rate at 
-which the system transitions from state $i$ to $j$. We write the 
-$i$th diagonal element as $-A_{ii}$ (or $-A_i$ for short), with
-$A_i \equiv A_{ii} = \sum_{j \neq i} A_{ij}$, 
-so that the rows of $A$ sum to $0$.  $A_i$ is the absolute value of the diagonal,
+which the system transitions from state $i$ to $j$. We write $A_i$ for the 
+negative of the $i$th diagonal element $A_{ii}$. For an MJP,
+$A_i = -A_{ii} = \sum_{j \neq i} A_{ij}$, so that the rows of $A$ sum to $0$.  
+$A_i$ is the absolute value of the diagonal,
 and gives the total rate at which the system leaves state $i$ for any other state.
 To simulate an MJP trajectory over an interval $[0,\cT]$, one follows 
 Gillespie's algorithm~\cite{gillespie97}: 
 first sample an initial state $s_0$ from the distribution $\pi$, and
-then defining $t_0 = t_{curr} = k = 0$, repeat the following two steps while
+then defining $t_0 = t_{curr} = 0$ and $k = 0$, repeat the following two steps while
 $t_{curr} < \cT$:
 \begin{itemize}
   \item Sample a wait-time $\Delta t_k$ from an exponential with rate $A_{s_k}$. 
@@ -69,12 +70,12 @@ $S=(s_0, \cdots, s_{|T| - })$ together define the MJP trajectory $S(t)$.
 
 \subsection{Structured rate matrices}
 In the general case, the rate matrix $A$ has $N(N-1)$ free parameters,
-corresponding to transition rates between every pair of distinct states. 
-In typical applications, and especially when large state-spaces
+corresponding to transition rates between every distinct pair of states. 
+In typical applications, especially when large state-spaces
 are involved, this $N \times N$ matrix is determined by a much smaller
-set of parameters. We will write these as $\theta$, and the rate 
-matrix $A$ is a deterministic function of these parameters: 
-$A \equiv A(\theta)$. The parameters $\theta$ are often much more 
+set of parameters. We will write these as $\theta$, so that 
+$A$ is a deterministic function of these parameters: 
+$A \equiv A(\theta)$. The parameters $\theta$ are often more 
 interpretable than the elements of $A$, corresponding directly to
 physical, biological or environmental parameters of interest. 
 Below we give three examples:

@@ -10,8 +10,9 @@ the MJP parameters according to the discrete-time MH-scheme from
 algorithm~\ref{alg:disc_time_mh}.
 %The resulting scheme updates $\theta$ conditioned on the random 
 %grid, but with the trajectory integrated out 
-In particular, we propose a new parameter $\theta^*$ from a proposal 
-distribution $q(\theta^*|\theta)$, and making a forward pass over $W$, calculate
+In particular, we propose a new parameter $\theta^*$ from $q(\theta^*|\theta)$, 
+now conditioning on the set of times $W$.
+We then make a forward pass over $W$, and calculate
 the marginal probabilities $p(X|W,\theta)$ and $p(X|W,\theta^*)$. These can be
 used to calculate the MH-acceptance probability $\min\left(1,
 \frac{p(X|W,\theta^*)p(W|\theta^*)p(\theta^*)q(\theta|\theta^*)}
