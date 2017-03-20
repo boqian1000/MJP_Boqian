@@ -63,3 +63,29 @@ the posterior.
 % Therefore the stationary distribution of this MCMC sampler is $P(W, S, T, (\theta, \theta^*) | y)$. Thus the stationary distribution of $(S, T, \theta)$ is the corresponding marginal distribution $P(S, T, \theta | y)$.  
 \end{proof}
 
+\subsection{Comments}
+
+The uniformization scheme of~\cite{RaoTeh13} works for any underlying Poisson
+process whose rate $\Omega$ is greater than $\max_i A_i$. The strict inequality
+ensures that the conditional probability of sampling one or more thinned events 
+$U$ is positive for every trajectory $S(t)$ (recall 
+$U \sim \text{PoissonProc}(\Omega-A_{S(t)})$). Empirical results from~\cite{RaoTeh13}
+suggest setting $\Omega = 2 \max_i A_i$.
+
+Implicit in our new scheme is a uniformizing Poisson process with rate
+$\Omega(\theta,\theta') = \Omega(\theta) + \Omega(\theta')$. For our 
+scheme to be valid, $\Omega(\theta,\theta')$ must be greater than both
+$\max_i A_i(\theta)$ and $\max_i A_i(\theta')$. The smallest and simplest such
+choice is $\Omega(\theta,\theta') = \max A_i(\theta) + \max A_i(\theta')$.
+For a fixed $\theta$, this reduces to $\Omega = 2\max A_i$, providing
+an intuitive motivation for the approach in~\cite{RaoTeh13}.
+Larger alternatives include 
+$\Omega(\theta,\theta') = \kappa(\max A_i(\theta) + \max A_i(\theta'))$
+for $\kappa > 1$.  These result in more thinned events, and therefore more 
+computation, with the benefit of faster MCMC mixing. We study the effect of 
+$\kappa$ in our experiments.
+
+It is also possible to have non-additive settings for $\Omega(\theta,\theta')$.
+A simple option is to set it equal to 
+$\kappa \max( \max_i A_i(\theta), \max A_i(\theta')$ for some choice of $\kappa
+> 1$. We investigate this option as well.

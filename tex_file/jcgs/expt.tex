@@ -1,21 +1,40 @@
 
 \section{Experiments}~
-In the following, we compare Python implementations of our algorithms with baselines like simple Gibbs sampling, 
-and particle MCMC sampling. Unless specified, our results were
+In the following, we compare Python implementations of our algorithms,
+the \naive\ MH algorithm (algorithm~\ref{alg:MH_naive}) and its symmetrized
+improvement (algorithm~\ref{alg:MH_improved}), against 
+baselines like simple Gibbs sampling (algorithm~\ref{alg:MJP_gibbs}),
+and particle MCMC sampling~\cite{Andrieu10}. We look at different variants
+of our algorithms, corresponding to different uniformizing Poisson rates.
+For schemes involving simple uniformization, we set
+ $\Omega(\theta) = \kappa \max_s A_s(\theta) $ with $\kappa$  equal to $1.5, 2$ 
+ and $3$. When the uniformizing rate depends on both the current and proposed 
+ parameter, we consider two settings
+ $\Omega(\theta, \theta^*) = \kappa (\max A(\theta) + \max A(\theta^*))$ 
+ ($\kappa = 1,1.5,$ and $2$), and 
+$\Omega(\theta, \theta^*) = \kappa \max(\max A(\theta), \max A(\theta^*))$
+($\kappa=1.5,2$). 
+Unless specified, our results were
 obtained from $100$ independent MCMC runs, each consisting of $10000$ iterations.
 We found particle MCMC to be more computationally intensive, and limited each 
 run to $3000$ iterations, the number of particles being $5, 10$ and $20$. 
 We also considered exploiting gradient information of the target distribution to 
 apply Hamiltonian Monte Carlo (HMC)~\cite{Neal2010}. In particular, the forward 
 pass of FFBS allows us to also calculate the gradient of the log-probability with
-respect to the MJP parameters. We can exploit this information to explore parameter
-space more efficiently than a random-walk algorithm. We run HMC with the number of leapfrog steps taking values in $1, 3, 5$ or $10$, and the leapfrog stepsize in 
-$0.02, 0.05$ and $0.1$. 
+respect to the MJP parameters. We can exploit this information for more directed
+explorations of parameter space than a random-walk algorithm. Of course, this 
+comes at a higher computational cost. We evaluate HMC with the number of leapfrog
+steps taking values in $1, 3, 5$ or $10$, and the leapfrog stepsize taking values 
+in $0.02, 0.05$ and $0.1$. 
 
-For each run of each MCMC algorithm, we calculated the effective sample size (ESS) of the posterior samples of the MJP parameters using the R 
-package \texttt{rcoda}~\cite{Rcoda2006}. This estimates the number of independent samples returned by the MCMC algorithm,
-and dividing this by the runtime of a 
-simulation gives the ESS per unit time. We used this as a measure to compare different Monte Carlo samplers and three different k's, $1.5, 2$ and $3$. Where $\Omega(\theta) = k \max A(\theta) $ for Naive MH sampler and Gibbs Sampler. For Exchange MH sampler, when $k = 1.5$,  $\Omega(\theta, \theta^*) = k \max(\max A(\theta), \max A(\theta^*))$. For $k=$ $2$ or $3$, $\Omega(\theta, \theta^*) = \frac{k}{2} (\max A(\theta) + \max A(\theta^*))$  \vinayak{What is k?}. 
+For each run of each MCMC algorithm, we calculated the effective sample size 
+(ESS) of the posterior samples of the MJP parameters using the R package 
+\texttt{rcoda}~\cite{Rcoda2006}. This estimates the number of independent 
+samples returned by the MCMC algorithm, and dividing this by the runtime of a 
+simulation gives the ESS per unit time. We used this as a measure to compare 
+different MCMC samplers, and different parameter settings of each algorithm.
+
+
 
 % \begin{algorithm}[!ht]
 %    \caption{Generic Gibbs sampling for MJPs for Gamma priors}
@@ -38,7 +57,7 @@ simulation gives the ESS per unit time. We used this as a measure to compare dif
 %  \end{algorithmic}
 %  \end{algorithm}
 
-\subsection{An MJP with exponentially decaying rates}
+\subsection{A simple synthetic MJP}
   \begin{figure}[H]
   \centering
   \begin{minipage}[!hp]{0.45\linewidth}
@@ -55,17 +74,21 @@ simulation gives the ESS per unit time. We used this as a measure to compare dif
 % P(s_0, S, T | \alpha, \beta) &= \pi_0(s_0)\prod_{i = 1}^N A_{S_{i - 1}S_i} \exp(- \int_{t_{start}}^{t_{end}} |A_{S(t)}| dt)\\
 % &= \pi_0(s_0) \alpha^N \prod_{i = 1}^N f_{S_{i - 1}S_i} \exp(-\alpha  \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))\\
 % \end{align*} 
-\noindent First consider a simple MJP with two parameters $\alpha$ and $\beta$, transitions between states $i$ and $j$ having rate $\alpha \exp(-\beta/(i+j))$.
-We consider three settings for number of states, $3, 5$ and $10$.
-Figure~\ref{fig:exp_model} shows the situation with $3$ states.  
-We placed Gamma$(\alpha_0,\alpha_1)$, and Gamma$(\beta_0, \beta_1)$ priors on the parameters $\alpha$, $\beta$, with $(\alpha_0,\alpha_1,\beta_0,\beta_1)$ taking
+\noindent Consider an MJP with two parameters $\alpha$ and $\beta$, 
+transitions between states $i$ and $j$ having rate $\alpha \exp(-\beta/(i+j))$.
+We consider three settings: $3$ states (figure~\ref{fig:exp_model}),
+as well as $ 5$ and $10$ states.
+
+We placed Gamma$(\alpha_0,\alpha_1)$, and Gamma$(\beta_0, \beta_1)$ priors on the parameters $\alpha$, $\beta$, with $(\alpha_0,\alpha_1,\beta_0,\beta_1)$ having
 values $(3,2,5,2)$ respectively. In our experiments, we used random parameters drawn from these prior distributions to construct a transition matrix $A$,
 and placing a uniform distribution over states at time $0$, sampled an MJP trajectory.
-Our observation process was a Gaussian distribution with mean equal to the current state and variance equal to $1$. There are $19$ observations uniformly observed between the time interval $[0, 20]$.
-\vinayak{Number of observations?}
-
-\vinayak{We studied our MH sampler, for three setting of $k$}.  For our proposal distribution, we used a lognormal distribution centered at the current
-parameter value, and with a user-specified tuning parameter.
+We observed this trajectory via a set of measurements located at integer 
+values on the time interval $[0, 20]$. Each measurement was Gaussian 
+distributed with mean equal to the state at that time, and variance equal to $1$.
+%A total of $19$ observations were made,
+The MH proposal distribution was a lognormal distribution centered at the 
+current parameter value, whose variance was a user-specified tuning parameter.
+%\vinayak{We studied our MH sampler, for three setting of $k$}.  
 % %\begin{align*}
 % %P(\alpha, \beta | s_0, S, T ) \propto \alpha^N \prod_{i = 1}^N f_{S_{i - 1}S_i} \exp(-\alpha  \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i)) p_1(\alpha)p_2(\beta)\\
 % %\end{align*}
@@ -94,38 +117,79 @@ parameter value, and with a user-specified tuning parameter.
     \caption{ESS/sec for exp model (dim 3). The left is for $\alpha$, and the right is for $\beta$.}
      \label{fig:ESS_EXP_D3}
   \end{figure}
-  In Figure~\ref{fig:ESS_EXP_D3}, Figure~\ref{fig:ESS_EXP_D5}, Figure~\ref{fig:ESS_EXP_D10} we plot the ESS per unit time for the parameters $\alpha$ (left) and $\beta$ (right) as we change the variance of the
-  proposal kernel per run, for different methods and different scaling parameters k($k = 1.5, 2, 3$) and different dimensions($p = 3, 5, 10$), where   $k = 1.5$,  $\Omega(\theta, \theta^*) = k \max(\max A(\theta), \max A(\theta^*))$. For particle MCMC, The number of particles can be $5, 10 , 20$. Blue lines are for Gibbs sampler. Red lines are for improved MH. Orange lines are for naive MH. Black lines are for particle MCMC. Lines with dots correspond to $k = 1.5$. Lines with triangle correspond to $k = 2$. Lines with squares correspond to $k = 3$.  The black dot dash lines correspond to $N  = 5$. The dash black lines correspond to $N  = 10$. The solid black lines correspond to $N  = 20$. $N$ is the number of particles. For $k=$ $2$ or $3$, $\Omega(\theta, \theta^*) = \frac{k}{2} (\max A(\theta) + \max A(\theta^*))$. We see that the improved MH algorithm is more efficient i	n these cases with respect to the overall ESS per unit time. We also see that increase the scaling parameter will decrease the efficiency of the improved MH algorithm respect to overall ESS per unit time, when $k > 2$. If we set $\Omega = 1.5 \max(\Omega_{old}, \Omega_{new})$, the performance of the improved MH will not be as good as the case we set $\Omega = 2(\Omega_{old} + \Omega_{new})$ when the proposal log variance is large.\\
+  In figure~\ref{fig:ESS_EXP_D3}, figure~\ref{fig:ESS_EXP_D5}, and figure~\ref{fig:ESS_EXP_D10} we plot the ESS per unit time for the parameters $\alpha$ (left) and $\beta$ (right) as we change the variance of the
+  proposal kernel, for different methods and different scaling parameters.
+  %($\kappa =
+%1.5, 2, 3$) and dimensions($p = 3, 5, 10$).
+%, where   $k = 1.5$,  $\Omega(\theta, \theta^*) = k \max(\max A(\theta), \max A(\theta^*))$. 
+%For particle MCMC, the number of particles can be $5, 10 , 20$. 
+  Blue lines are the Gibbs sampler, orange lines are simple MH, red lines 
+are the symmetrized MH and black lines are particle MCMC. 
+(\vinayak{Do we have these (dots,triangles, squares?)}
+Lines with dots correspond to $k = 1.5$. 
+Lines with triangle correspond to $k = 2$. 
+Lines with squares correspond to $k = 3$.  )
+The black dot dash lines correspond to $N  = 5$. 
+The dash black lines correspond to $N  = 10$. 
+The solid black lines correspond to $N  = 20$. $N$ is the number of particles. 
+For $k=$ $2$ or $3$, $\Omega(\theta, \theta^*) = 
+\frac{k}{2} (\max A(\theta) + \max A(\theta^*))$. 
+We see that the improved MH algorithm is more efficient in these cases with 
+respect to the overall ESS per unit time. We also see that increase the scaling 
+parameter will decrease the efficiency of the improved MH algorithm respect to 
+overall ESS per unit time, when $k > 2$. 
+If we set $\Omega = 1.5 \max(\Omega_{old}, \Omega_{new})$, the performance of 
+the improved MH will not be as good as the case we set 
+$\Omega = 2(\Omega_{old} + \Omega_{new})$ when the proposal log variance is 
+large.\\
 
-In Figure~\ref{fig:HMC_DIM_3}, we plot the ESS per unit time as we change the number of leapfrog jumps in Hamiltonian MCMC for dimension $3$. We consider three different step size for leapfrog step($s = 0.02, 0.05, 0.1$). We 
-use the same data for our previous experiment for the case when dimension $3$. We set the $m_1 = m_2 = 1.0$. Because using FFBS to explore the gradient needs a lot of computation, it does not work so well.\\
+In Figure~\ref{fig:HMC_DIM_3}, we plot the ESS per unit time as we change the 
+number of leapfrog jumps in Hamiltonian MCMC for dimension $3$. We consider 
+three different step size for leapfrog step($s = 0.02, 0.05, 0.1$). We 
+use the same data for our previous experiment for the case when dimension $3$. 
+We set the $m_1 = m_2 = 1.0$. Because using FFBS to explore the gradient needs 
+a lot of computation, it does not work so well.\\
 
-Figure~\ref{fig:Transition_exp} shows the initial burn-in of our improved MH sampler with this setting for different initializations. The vertical axis shows the number of state transitions in the MJP trajectory of each iteration. This quantity quickly reaches its equilibrium value within a few iterations.\\
+Figure~\ref{fig:Transition_exp} shows the initial burn-in of our improved MH 
+sampler with this setting for different initializations. The vertical axis 
+shows the number of state transitions in the MJP trajectory of each iteration. 
+This quantity quickly reaches its equilibrium value within a few iterations.\\
 
 
-In Figure~\ref{fig:TSS}, we plot the ESS per unit time as observation interval and the number of observations both increase when the dimension is $3$ and the scaling parameter k is $2$.We generate different observations on different time intervals. Our observation process was a Gaussian distribution with mean equal to the current state and variance equal to $1$. There are $\cT - 1$ observations uniformly observed between the time interval $(0, \cT)$. $\cT$ can be $10, 20, 50, 100$. We compare the performances of Gibbs sampler and MH sampler with different proposal log variance. Variance can be $0.5, 0.6, 0.7$. The blue line correspond to $0.5$ log variance. The red line correspond to $0.6$ log variance. The orange line correspond to $0.7$ log variance.The black line correspond to Gibbs samper. Gibbs sampler decreases faster than Metropolis Hasting Method, due to the doubling of MJP paths and the parameters. \\
+In Figure~\ref{fig:TSS}, we plot the ESS per unit time as observation interval 
+and the number of observations both increase when the dimension is $3$ and the 
+scaling parameter k is $2$.We generate different observations on different time 
+intervals. Our observation process was a Gaussian distribution with mean equal 
+to the current state and variance equal to $1$. There are $\cT - 1$ observations
+uniformly observed between the time interval $(0, \cT)$. $\cT$ can be $10, 20, 
+50, 100$. We compare the performances of Gibbs sampler and MH sampler with 
+different proposal log variance. Variance can be $0.5, 0.6, 0.7$. The blue line 
+correspond to $0.5$ log variance. The red line correspond to $0.6$ log variance.
+The orange line correspond to $0.7$ log variance.The black line correspond to 
+Gibbs samper. Gibbs sampler decreases faster than Metropolis Hasting Method, 
+due to the doubling of MJP paths and the parameters. \\
 
-In Figure~\ref{fig:TSS_fix}, we plot ESS per unit time as observation interval increases. We generate different observations on different time intervals. Our observation process was a Gaussian distribution with mean equal to the current state and variance equal to $1$. There are $19$ observations uniformly observed between the time interval $(0, \cT)$. $\cT$ can be $10, 20, 50, 100$. The dimension is $3$ and the scaling parameter $k$ is $2$. We compare the performances of Gibbs sampler and MH sampler with different proposal log variance. Variance can be $0.5, 0.6, 0.7$. The blue line correspond to $0.5$ log variance. The red line correspond to $0.6$ log variance. The orange line correspond to $0.7$ log variance.The black line correspond to Gibbs samper.  Variance can be $0.5, 0.6, 0.7$. Gibbs sampler decreases faster than Metropolis Hasting Method, due to the doubling of MJP paths and the parameters. In addition Gibbs sampler decreases even more faster than previous case when the number of observations is not fixed. \\
+In Figure~\ref{fig:TSS_fix}, we plot ESS per unit time as observation interval 
+increases. We generate different observations on different time intervals. 
+Our observation process was a Gaussian distribution with mean equal to the 
+current state and variance equal to $1$. There are $19$ observations uniformly 
+observed between the time interval $(0, \cT)$. $\cT$ can be $10, 20, 50, 100$. 
+The dimension is $3$ and the scaling parameter $k$ is $2$. We compare the 
+performances of Gibbs sampler and MH sampler with different proposal log 
+variance. Variance can be $0.5, 0.6, 0.7$. The blue line correspond to $0.5$ 
+log variance. The red line correspond to $0.6$ log variance. The orange line 
+correspond to $0.7$ log variance.The black line correspond to Gibbs samper.  
+Variance can be $0.5, 0.6, 0.7$. Gibbs sampler decreases faster than Metropolis 
+Hasting Method, due to the doubling of MJP paths and the parameters. In 
+addition Gibbs sampler decreases even more faster than previous case when the 
+number of observations is not fixed. \\
 
 
 
 
-Figure~\ref{fig:acc_exp} plots ESS plots the overall  acceptance rate against the log variance of the proposal kernel per run for dimension $3$. 
+Figure~\ref{fig:acc_exp} plots ESS plots the overall  acceptance rate against 
+the log variance of the proposal kernel per run for dimension $3$. 
 
-  \begin{figure}%[b]
-  \centering
-  \begin{minipage}[!hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/exp_5_alpha.pdf}
-      \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/exp_5_beta.pdf}
-    \vspace{-0 in}
-  \end{minipage}
-    \caption{ESS/sec for exp model (dim 5). The left is for $\alpha$, and the right is for $\beta$.}
-     \label{fig:ESS_EXP_D5}
-  \end{figure}
 
   \begin{figure}%[b]
   \centering
@@ -156,15 +220,6 @@ Figure~\ref{fig:acc_exp} plots ESS plots the overall  acceptance rate against th
     \label{fig:HMC_DIM_3}
   \end{figure}
   
-  \begin{figure}%[b]
-  \centering
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/exp3_k2_path_transition.pdf}
-      \end{minipage}
-    \caption{Trace plot of the number of MJP transitions for different initializatoins.}
-	\label{fig:Transition_exp}
-  \end{figure}
 
   \begin{figure}%[b]
   \centering
@@ -198,17 +253,6 @@ Figure~\ref{fig:acc_exp} plots ESS plots the overall  acceptance rate against th
   \end{figure}
 
 
-
-
-  \begin{figure}%[b]
-  \centering
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/acc_rate_exp_d3.pdf}
-      \end{minipage}
-    \caption{Acceptance rate for exp model (dim 3)}
-	\label{fig:acc_exp}
-  \end{figure}
 
 
 \section{Immigration models with capacity}~
@@ -280,21 +324,6 @@ Figure~\ref{fig:hist} shows posterior distributions for $P(\theta | X)$(red), $P
 
   \begin{figure}%[b]
   \centering
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/q_5_alpha.pdf}
-      \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/q_5_beta.pdf}
-    \vspace{-0 in}
-      \label{fig:ESS_Q_D5}
-  \end{minipage}
-    \caption{ESS/sec for Immigration model (dim 5).The left is for $\alpha$, and the right is for $\beta$.}
-  \end{figure}
-
-  \begin{figure}%[b]
-  \centering
   \begin{minipage}[!hp]{0.45\linewidth}
   \centering
     \includegraphics [width=0.90\textwidth, angle=0]{figs/q_10_alpha.pdf}
@@ -308,30 +337,21 @@ Figure~\ref{fig:hist} shows posterior distributions for $P(\theta | X)$(red), $P
     \caption{ESS/sec for Immigration model (dim 10).The left is for $\alpha$, and the right is for $\beta$.}
   \end{figure}
 
-\begin{figure}
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/q3_k2_path_transition.pdf}
-    \vspace{-0 in}
-    \caption{Trace plot of the number of MJP transitions for different initializatoins for immigration model.}
-     \label{fig:ESS_Q_TRANSITION}
-  \end{minipage}
-\end{figure}
 
-  \begin{figure}%[b]
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/dist_alpha.pdf}
-    \vspace{-0 in}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/dist_beta.pdf}
-    \vspace{-0 in}
-  \end{minipage}
-    \caption{density.The left is for $\alpha$, and the right is for $\beta$.}
-     \label{fig:dist}
-  \end{figure}
+% \begin{figure}%[b]
+% \begin{minipage}[hp]{0.45\linewidth}
+% \centering
+%   \includegraphics [width=0.90\textwidth, angle=0]{figs/dist_alpha.pdf}
+%   \vspace{-0 in}
+% \end{minipage}
+% \begin{minipage}[!hp]{0.45\linewidth}
+% \centering
+%   \includegraphics [width=0.90\textwidth, angle=0]{figs/dist_beta.pdf}
+%   \vspace{-0 in}
+% \end{minipage}
+%   \caption{density.The left is for $\alpha$, and the right is for $\beta$.}
+%    \label{fig:dist}
+% \end{figure}
 
   \begin{figure}%[b]
   \begin{minipage}[hp]{0.45\linewidth}
@@ -439,20 +459,6 @@ In the following, we evaluate a Python implementation of our algorithms compared
      \label{fig:ESS_pc_3}
   \end{minipage}
     \caption{ESS/sec for NH Immigration model (dim 3)}
-  \end{figure}
-  \begin{figure}%[b]
-  \centering
-  \begin{minipage}[!hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/pc_5_alpha.pdf}
-      \end{minipage}
-  \begin{minipage}[!hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/pc_5_beta.pdf}
-    \vspace{-0 in}
-     \label{fig:ESS_pc_5}
-  \end{minipage}
-    \caption{ESS/sec for NH Immigration model (dim 5)}
   \end{figure}
 
   \begin{figure}%[b]

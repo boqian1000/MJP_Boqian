@@ -116,13 +116,24 @@ resulting posterior distribution $p(\theta|X)$ is approximated
 with samples drawn by Gibbs sampling. In particular, for an arbitrary 
 initialization of the parameters and the trajectory, one repeats the
 following two steps:
-\begin{itemize}
-  \item Sample a trajectory from the conditional 
-    $p(S_{new}(t)|X,S_{curr}(t),\theta_{curr})$ following 
-    algorithm~\ref{alg:Unif_gibbs}.
-  \item Sample a new $\theta$ from the conditional 
+\begin{algorithm}[H]
+  \caption{Gibbs sampling for parameter inference for MJPs}
+   \label{alg:MJP_gibbs}
+  \begin{tabular}{l l}
+   \textbf{Input:  } & \text{A set of partial and noisy observations $X$}, \\
+                      & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$}.\\ 
+   \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, 
+                            new MJP parameters $\tilde{\theta}$}.\\
+   \hline
+   \end{tabular}
+   \begin{algorithmic}[1]
+  \State  Sample a trajectory from the conditional 
+  $p(S_{new}(t)|X,S_{curr}(t),\theta_{curr})$ following 
+  algorithm~\ref{alg:Unif_gibbs}.
+  \State Sample a new $\theta$ from the conditional 
     $p(\theta_{new}|X,S_{new}(t))$.
-\end{itemize}
+   \end{algorithmic}
+\end{algorithm}
 The last distribution depends on a set of sufficient statistics of the 
 MJP trajectory: how
 much time is spent in each state, and the number of transitions
