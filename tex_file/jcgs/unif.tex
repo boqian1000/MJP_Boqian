@@ -143,10 +143,26 @@ In special circumstances, $\theta$ can be directly sampled from its
 conditional distribution, otherwise, one has to use a Markov kernel like
 Metropolis-Hastings or Hamiltonian Monte Carlo to update $\theta$ from the
 conditional $p(\theta_{new}|X,S(t),\theta_{curr})$. 
+  \begin{figure}%[b]
+  \begin{minipage}[hp]{0.4\linewidth}
+  \centering
+    \includegraphics [width=0.90\textwidth, angle=0]{figs/hist_alpha.pdf}
+    \vspace{-0 in}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.4\linewidth}
+  \centering
+    \includegraphics [width=0.90\textwidth, angle=0]{figs/hist_beta.pdf}
+    \vspace{-0 in}
+  \end{minipage}
+  \caption{Conditional distributions of $\alpha$ (left), and $\beta$ (right).}
+     \label{fig:hist}
+  \end{figure}
+  
 
 Such a Gibbs sampling approach comes with a well-known limitation:
 because of coupling between path and parameters, it can explore parameter 
-and path space very sluggishly. In Figure~\ref{fig:conf1} \vinayak{Fix this}
+and path space very sluggishly. In Figure~\ref{fig:hist} \vinayak{what is
+the third?}
 we show
 both the distribution of a component of $\theta$ conditioned
 only on the observations, and conditioned on both the observations 
