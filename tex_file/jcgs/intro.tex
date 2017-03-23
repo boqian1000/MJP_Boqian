@@ -21,18 +21,19 @@ are continuous-valued. This is in contrast to the situation with
 {\em discrete-time} hidden Markov models, and trajectory inference for 
 MJPs typically proceeds via Markov chain Monte Carlo. The 
 state-of-the-art is a recent auxiliary variable Gibbs sampler proposed 
-in~\cite{RaoTeh13},  designed to sample paths when the MJP parameters
+in~\cite{RaoTeh13}, we will henceforth refer to this as the Rao-Teh algorithm.
+The Rao-Teh algorithm was designed to sample paths when the MJP parameters
 are known. Parameter inference is typically carried out by 
-incorporating this into an outer Gibbs sampler the updates simulates
+incorporating this into an outer Gibbs sampler that simulates
 parameters given the currently sampled trajectory. 
 
 In many situations, the MJP trajectory and parameters can exhibit 
-strong coupling, so that a Gibbs that alternately samples path given
+strong coupling, so that a Gibbs sampler that alternately samples path given
 parameters, and then parameters given path can mix poorly.  
 In this work, we propose a Metropolis-Hastings framework to address
 this issue. Our proposed solution is simple and elegant, additionally,
-it ties up some of the loose ends in the algorithm 
-from~\cite{RaoTeh13}.  In our experiments, we demonstrate superior 
+it ties up some of the loose ends in the Rao-Teh algorithm.
+In our experiments, we demonstrate superior 
 performance over Gibbs sampling, as well as other approaches like 
 particle Markov chain Monte Carlo~\cite{Andrieu10}.
 
@@ -40,7 +41,6 @@ particle Markov chain Monte Carlo~\cite{Andrieu10}.
 Formally, an MJP is a right-continuous piecewise-constant stochastic
 process $S(t)$ taking values in a countable, and usually finite state
 space $\cS$ (see Figure~\ref{fig:naive_mh}, top-left).
-\vinayak{Change figures so that transitions are not so regular}
 For simplicity, we will assume $N$-states, with $\cS = \{1,\ldots,N\}$. Then, 
 an MJP is parameterized by two quantities, a probability vector $\pi$ and a 
 rate-matrix $A$. The former, an $N$-component vector, gives the 
@@ -59,14 +59,14 @@ first sample an initial state $s_0$ from the distribution $\pi$, and
 then defining $t_0 = t_{curr} = 0$ and $k = 0$, repeat the following two steps while
 $t_{curr} < \cT$:
 \begin{itemize}
-  \item Sample a wait-time $\Delta t_k$ from an exponential with rate $A_{s_k}$. 
-    Set $t_{k+1} = t_{curr} = t_{k} + \Delta t_k$.
+  \item Sample a wait-time $\Delta t_k$ from an exponential distribution with rate 
+    $A_{s_k}$.  Set $t_{k+1} = t_{curr} = t_{k} + \Delta t_k$.
     The MJP remains in state $s_k$ until time $t_{k+1}$.
   \item At the end of this time, jump to a new state $s_{k+1} \neq s_k$ with 
     probability equal to $A_{s_ks_{k+1}}/A_{s_k}$. Set $k=k+1$.
 \end{itemize}
-The set of times of $T=(t_0, \cdots, t_{|T| - 1})$ and states 
-$S=(s_0, \cdots, s_{|T| - })$ together define the MJP trajectory $S(t)$.
+The set of times of $T=(t_0, \cdots, t_{|T| })$ and states 
+$S=(s_0, \cdots, s_{|T| })$ together define the MJP trajectory $S(t)$.
 
 \subsection{Structured rate matrices}
 In the general case, the rate matrix $A$ has $N(N-1)$ free parameters,
@@ -78,7 +78,7 @@ $A$ is a deterministic function of these parameters:
 $A \equiv A(\theta)$. The parameters $\theta$ are often more 
 interpretable than the elements of $A$, corresponding directly to
 physical, biological or environmental parameters of interest. 
-Below we give three examples:
+We give three examples below:
 \begin{description}
   \item[The immigration-death process] This is a simple MJP governed
     by two parameters: an arrival rate $\alpha$ and a death-rate
@@ -97,14 +97,15 @@ Below we give three examples:
     rate proportional to the population size. Once again, 
     $\theta=(\alpha,\beta)$.
   \item[Codon substitution models] Such models are used in genetics,
-    to characterize transition-rates between codons at a locus on
+    to characterize transition-rates between nucleotides or codons at a locus on
     a DNA or RNA molecule over evolutionary time. In the simplest case,
-    transitions are categorized into two types: synonymous transitions
-    that encode the same amino acid, and nonsynonymous 
-    transitions that encode different amino acids. 
-    These two transitions types have their own rates, and noting that 
+    all transitions have the same rate~\cite{jukescantor69}, so that the model is 
+    characterized by a single parameter. In other models, transitions are categorized
+    into groups, e.g.\ synonymous transitions that encode the same amino acid, and 
+    nonsynonymous transitions that encode different amino acids. 
+    These transitions types have their own rates, and noting that 
     there are $61$ amino acids, we have a $61\times 61$ transition
-    matrix determined by 2 parameters. More refined models~\cite[e.g.][]{goldman1994codon} introduce
-    additional parameters, however, the number of parameters is still
+    matrix determined by 2 parameters. More refined models~\cite{goldman1994codon} 
+    introduce additional parameters, however the number of parameters is still
     significantly smaller than the general case.
 \end{description}
