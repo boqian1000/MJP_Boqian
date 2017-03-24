@@ -307,45 +307,18 @@ steps included in the supplementary material.
 %    \label{fig:dist}
 % \end{figure}
 
-
-  \subsection{The Jukes and Cantor (JC69) model}~
-  \begin{figure}%[H]
-  \centering
-  \begin{minipage}[!hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/jc_model.pdf}
-    \caption{JC69 model}
-	\label{jc_model}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/jc.pdf}
-    \vspace{-0.6in}
-    \caption{ESS/sec for JC69 Model }
-     \label{fig:ESS_JC}
-  \end{minipage}
-  \end{figure}
-  The Jukes and Cantor (JC69) model is a popular model of DNA nucleotide
-  substitution.  We write its state space as $\{0, 1, 2, 3\}$, representing the 
-  four nucleotides $\{A, T, C, G\}$.  The model has a single parameter $\alpha$, 
-  representing the rate at which the system transitions between any pair of 
-  states. Thus, the rate matrix $A$ is given by 
-  %Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, t_{N+1}(t_{end})]$, and y as observations.\\
-$A_i = -A_{i,i} = 3\alpha, A_{i, j} = \alpha,i \neq j.$
-We place a Gamma$(\alpha_0,\alpha_1)$ prior on the parameter $\alpha$.
-%$$p(\alpha) = \frac{\lambda^\mu}{\Gamma(\mu)}\alpha^{\mu -1}e^{-\lambda \alpha} $$.
-%Then we can get the posterior distribution $$f(\alpha | s_0,S,T)$$ as follows.
-%$$ f(\alpha| s_0,S,T) \propto \exp(-(\lambda + 3(t_{end} - t_{start}))\alpha) \alpha^{\mu + N -1} .$$
-%$\alpha | s_0,S,T$ is following $Gamma(\mu+ N,\lambda + 3(t_{end} - t_{start}))$\\
-
-
-\subsection{Time-inhomogeneous immigration model with capacity}~
-\vinayak{What is the prior over $w(t)$?}
-We consider the Queuing model, with piece wise constant transition rate. 
-\noindent Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, t_{N+1}(t_{end})]$, and y as observations.\\
-Now, let's consider a immigration model as follows. State space is $\{0, 1, 2, ..., N - 1\}$, representing the total population. The transition matrix is defined as follows. 
-% $$A_i(t) =: A_{i,i}(t) = -(\alpha + i\beta)w(t), \; \; i =0,1,...,N$$ $$A_{i, i+1}(t) = \alpha w(t), \; \; i =0,1,...,N-1,$$ $$A_{i, i-1}(t)  = \beta w(t), \; \;  i =1,...,N.$$
-% $w(t)$ is a piece wise constant function. $w(t) = w_i, \; t \in [\l_i, l_{i + 1}), i = 1,2,3,..., K.$\\
+\subsubsection{A time-inhomogeneous immigration model}~
+Here we consider an extension of the previous model, incorporating a known
+time-inhomogeneity. We define the arrival rate as
+ %$$A_i(t) =: A_{i,i}(t) = -(\alpha + i\beta)w(t), \; \; i =0,1,...,N$$ 
+$A_{i, i+1}(t) = \alpha w(t) \ (i =0,1,\cdots,N-1)$, and death rate as
+$A_{i, i-1}(t)  = i\beta w(t) \  (i =1,\cdots,N)$, where $w(t)$ is a known
+piecewise-constant function.
+ $w(t) = w_i, \; t \in [\l_i, l_{i + 1}), i = 1,2,3,..., K$.
+%\noindent Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, 
+%t_{N+1}(t_{end})]$, and y as observations.\\
+%Now, let's consider a immigration model as follows. State space is 
+% $\{0, 1, 2, ..., N - 1\}$, representing the total population. 
 % We already know the conditional density(given $\alpha,\; \beta$) of a MJP trajectory $(s_0, S, T)$ in time interval $[t_{start}, t_{end}]$, with $S=(s_1, s_2,..., s_k)$, $T=(t_1, t_2,..., t_k)$. 
 % $$f(s_0,S,T| \alpha, \beta) = \prod_{i=0}^{k-1} A_{s_i, s_{i+1}}(t_i) \exp(\sum_{i=0}^{k} A_{s_i}(t_i)(t_{i+1} - t_{i})), $$
 % where $t_0 = t_{start}$, $t_{k+1} = t_{end}.$\\
@@ -366,7 +339,7 @@ Now, let's consider a immigration model as follows. State space is $\{0, 1, 2, .
 % $\beta | s_0,S,T$ is following $Gamma(\omega+ D,\int_{t_s}^{t_{e}}(S(t)w(t) + \theta)$.\\
 % Such immigration models have perfectly conjugate posterior distributions when we assign $\gamma$ priors to $\alpha$ and $\beta$. We apply our Metropolis Hasting algorithms on such models to compare the performance with the performance of Gibbs Sampling algorithm.
 
-\subsection{Experiments}
+%\subsection{Experiments}
 
  In Figure~\ref{fig:ESS_pc_3}, Figure~\ref{fig:ESS_pc_5}, Figure~\ref{fig:ESS_pc_10}, we plot the ESS per unit time for the parameters $\alpha$ (left) and $\beta$ (right) as we change the variance of the
   proposal kernel per run, for different methods and different scaling parameters k($k = 1.5, 2, 3$) and different dimensions($p = 3, 5, 10$), where   $k = 1.5$,  $\Omega(\theta, \theta^*) = k \max(\max A(\theta), \max A(\theta^*))$. Blue lines are for Gibbs sampler. Red lines are for improved MH. Orange lines are for naive MH. Black lines are for particle MCMC. Lines with dots correspond to $k = 1.5$. Lines with triangle correspond to $k = 2$. Lines with squares correspond to $k = 3$. For $k=$ $2$ or $3$, $\Omega(\theta, \theta^*) = \frac{k}{2} (\max A(\theta) + \max A(\theta^*))$. We see that the improved MH algorithm is more efficient i	n these cases with respect to the overall ESS per unit time. We also see that increase the scaling parameter will decrease the efficiency of the improved MH algorithm respect to overall ESS per unit time, when $k > 2$. If we set $\Omega = 1.5 \max(\Omega_{old}, \Omega_{new})$, the performance of the improved MH will not be as good as the case we set $\Omega = 2(\Omega_{old} + \Omega_{new})$ when the proposal log variance is large.\\
@@ -400,3 +373,35 @@ Now, let's consider a immigration model as follows. State space is $\{0, 1, 2, .
      \label{fig:ESS_pc_10}
     \caption{ESS/sec for NH Immigration model (dim 10)}
   \end{figure}
+
+
+  \subsection{The Jukes and Cantor (JC69) model}~
+  \begin{figure}%[H]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.90\textwidth, angle=0]{figs/jc_model.pdf}
+    \caption{JC69 model}
+	\label{jc_model}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.70\textwidth, angle=0]{figs/jc.pdf}
+    \vspace{-0.6in}
+    \caption{ESS/sec for JC69 Model }
+     \label{fig:ESS_JC}
+  \end{minipage}
+  \end{figure}
+  The Jukes and Cantor (JC69) model is a popular model of DNA nucleotide
+  substitution.  We write its state space as $\{0, 1, 2, 3\}$, representing the 
+  four nucleotides $\{A, T, C, G\}$.  The model has a single parameter $\alpha$, 
+  representing the rate at which the system transitions between any pair of 
+  states. Thus, the rate matrix $A$ is given by 
+  %Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, t_{N+1}(t_{end})]$, and y as observations.\\
+$A_i = -A_{i,i} = 3\alpha, A_{i, j} = \alpha,i \neq j.$
+We place a Gamma$(\alpha_0,\alpha_1)$ prior on the parameter $\alpha$.
+%$$p(\alpha) = \frac{\lambda^\mu}{\Gamma(\mu)}\alpha^{\mu -1}e^{-\lambda \alpha} $$.
+%Then we can get the posterior distribution $$f(\alpha | s_0,S,T)$$ as follows.
+%$$ f(\alpha| s_0,S,T) \propto \exp(-(\lambda + 3(t_{end} - t_{start}))\alpha) \alpha^{\mu + N -1} .$$
+%$\alpha | s_0,S,T$ is following $Gamma(\mu+ N,\lambda + 3(t_{end} - t_{start}))$\\
+
