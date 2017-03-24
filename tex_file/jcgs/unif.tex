@@ -10,12 +10,13 @@ are noisy. There are then two challenges than the practitioner faces:
 \end{itemize}
 
 \subsection{Trajectory inference for MJPs}
-This problem was addressed in~\cite{RaoTeh13}, and extended to a broader 
-class of MJPs (as well as other jump processes like semi-Markov processes
-) in~\cite{RaoTeh12}. Both these schemes centere on alternate
-approaches to Gillespie's algorithm, where we introduce auxiliary {\em thinned} 
+This problem was addressed in~\cite{RaoTeh13} (we refer to the proposed
+algorithm as the Rao-Teh algorithm), and was extended to a broader class of 
+MJPs (as well as other jump processes like semi-Markov processes) 
+in~\cite{RaoTeh12}. Both these schemes center on alternate approaches to 
+Gillespie's algorithm, where we introduce auxiliary {\em thinned} 
 candidate jump times to sample an MJP trajectory. 
-We focus on the simpler and more widely used scheme from~\cite{RaoTeh13}, 
+We focus on the simpler and more widely used Rao-Teh algorithm,
 which is based on a classical idea called {\em uniformization}~\cite{Jen1953}. 
 %while in~\cite{RaoTeh12}, this was extended to a more general dependent thinning approach. 
 %We outline
@@ -33,16 +34,16 @@ Now, introduce an additional parameter $\Omega \ge \max_i A_i$;
 %until this time, after which it moves to state $j \neq i$ with probability
 %$B_{ij} = A_{ij}/\Omega_i$. The system continues to remain in its current 
 %state with probability $1-A_i/\Omega_i$. 
-Instead of sequentially sampling a wait-time, and then a new state as
+Instead of sequentially sampling a wait-time and then a new state as
 in Gillespie's algorithm, we instead first sample a set of candidate
 transition-times over the interval $[0,\cT]$ from a homogeneous Poisson process 
 with rate $\Omega$. Call these times $W$; these along with $0$ define a
 random grid on $[0,\cT]$.
 Define $B = \left(I +\frac{1}{\Omega}A\right)$; observe that this is a
-stochastic matric (with positive elements, and rows adding up to $1$).
-Assign state-values to the elements in $0 \bigcup W$ according to a discrete-time 
-Markov chain with initial distribution $\pi$, and transition matrix $B$;
-call these state $V$. Thus $v_0 \sim \pi$, while $p(v_{k+1}=j|v_k=i) = B_{ij}$
+stochastic matric with positive elements, and rows adding up to $1$.
+Assign state-values to the elements in $0 \cup W$ according to a discrete-time 
+Markov chain with initial distribution $\pi$, and transition matrix $B$.
+Call these state $V$. Thus $v_0 \sim \pi$, while $p(v_{k+1}=j|v_k=i) = B_{ij}$
 for $k \in \{0,\cdots,|W|-1\}$.
 Note that $\Omega > \max_i A_i$ results in more
 candidate-times than actual MJP transitions; at the same time the transition
@@ -55,14 +56,15 @@ have the same distribution as trajectories
 sampled by Gillespie's algorithm~\cite{Jen1953,RaoTeh13}.
 
 Introducing the thinned variables allowed~\cite{RaoTeh13} to develop
-a novel and efficient MCMC sampler. We outline it below.
+a novel and efficient MCMC sampler. We outline the Rao-Teh algorithm below.
 
 \begin{algorithm}[H]
-  \caption{Auxiliary variable Gibbs sampler for MJP trajectories~\cite{RaoTeh13} }
+  \caption{The Rao-Teh algorithm~\cite{RaoTeh13}: an auxiliary variable sampler for MJP trajectories}
    \label{alg:Unif_gibbs}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{MJP parameters $\theta$; a set of partial and noisy observations $X$}. \\
-                     & \text{A  parameter $\Omega > \max_i A_s$}.\\
+                     & \text{A  parameter $\Omega > \max_i A_s$}, where
+   $A = A(\theta)$ is the MJP rate-matrix.\\
                       & \text{The previous MJP path $S(t) = (S, T)$}.\\ 
    \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$}.\\
    \hline
@@ -73,7 +75,7 @@ candidate times $U$}: %\cite{RaoTeh12} show that
 These are distributed as an inhomogeneous Poisson process with intensity 
 $\Omega-A_{S(t)}$. Since the intensity is piecewise-constant, simulating this 
 is straightforward.
-\State \textbf{Given the thinned and actual transition times $W = (T \bigcup U)$
+\State \textbf{Given the thinned and actual transition times $W = (T \cup U)$
 from the previous iteration (after discarding state information $S$), 
 sample a new trajectory}:
     Conditioned on the skeleton $W$, the set of candidate jump
@@ -102,7 +104,7 @@ sample a new trajectory}:
 \end{algorithmic}
 \end{algorithm}
 
-    ~\cite{RaoTeh12} show that the resulting Markov chain targets
+    ~\cite{RaoTeh13} show that the resulting Markov chain targets
     the desired posterior distribution over trajectories, and is 
     ergodic for any choice of $\Omega$ strictly greater than all the
     $A_i$'s. As mentioned earlier, they suggest setting $\Omega = 2\max_i A_i$.
@@ -144,28 +146,34 @@ conditional distribution, otherwise, one has to use a Markov kernel like
 Metropolis-Hastings or Hamiltonian Monte Carlo to update $\theta$ from the
 conditional $p(\theta_{new}|X,S(t),\theta_{curr})$. 
   \begin{figure}%[b]
-  \begin{minipage}[hp]{0.4\linewidth}
   \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/hist_alpha.pdf}
+  \begin{minipage}[hp]{0.44\linewidth}
+  \centering
+    \includegraphics [width=0.99\textwidth, angle=0]{figs/hist_alpha.pdf}
     \vspace{-0 in}
   \end{minipage}
-  \begin{minipage}[!hp]{0.4\linewidth}
-  \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/hist_beta.pdf}
-    \vspace{-0 in}
-  \end{minipage}
-  \caption{Conditional distributions of $\alpha$ (left), and $\beta$ (right).}
+% \begin{minipage}[!hp]{0.4\linewidth}
+% \centering
+%   \includegraphics [width=0.90\textwidth, angle=0]{figs/hist_beta.pdf}
+%   \vspace{-0 in}
+% \end{minipage}
+  \begin{minipage}[hp]{0.55\linewidth}
+    \vspace{-0.8 in}
+  \caption{Prior distribution of an MJP parameter (the wide red histogram),
+  as well as two conditional distributions. The narrow green histogram is the
+distribution conditioned on both the observations as well as a simulated
+MJP posterior. The wider blue histogram is the distribution of interest: the
+marginal distribution of the paramters conditioned on observations. These
+plots were produced from the experiment in section~\ref{sec:immig}.}
      \label{fig:hist}
+  \end{minipage}
   \end{figure}
-  
-
 Such a Gibbs sampling approach comes with a well-known limitation:
 because of coupling between path and parameters, it can explore parameter 
-and path space very sluggishly. In Figure~\ref{fig:hist} \vinayak{what is
-the third?}
-we show
-both the distribution of a component of $\theta$ conditioned
-only on the observations, and conditioned on both the observations 
+and path space very sluggishly. We illustrate this in figure~\ref{fig:hist},
+which shows the posterior distribution of an MJP parameter in blue
+(this is the distribution of interest, conditioned only on the observations) 
+and conditioned on both the observations 
 as well as a realization of the MJP trajectory: observe how much
 more concentrated the latter is compared to the former. The
 coupling is strengthened as the trajectory grows longer and longer, and
