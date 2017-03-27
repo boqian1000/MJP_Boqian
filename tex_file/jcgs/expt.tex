@@ -433,4 +433,19 @@ symmetrized MH samplers comprehensively outperforms all others.
 %Then we can get the posterior distribution $$f(\alpha | s_0,S,T)$$ as follows.
 %$$ f(\alpha| s_0,S,T) \propto \exp(-(\lambda + 3(t_{end} - t_{start}))\alpha) \alpha^{\mu + N -1} .$$
 %$\alpha | s_0,S,T$ is following $Gamma(\mu+ N,\lambda + 3(t_{end} - t_{start}))$\\
+  \begin{figure}%[H]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.97\textwidth, angle=0]{figs/ESS_vs_t_alpha_JC.pdf}
+    \caption{ESS per unit time with increasing interval for the JC69 model}
+	\label{jc_model_vs_t}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.97\textwidth, angle=0]{figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
+    \caption{ESS per unit time with increasing interval for the JC69 model}
+	\label{jc_model_vs_t}
+  \end{minipage}
+  \end{figure}
 
