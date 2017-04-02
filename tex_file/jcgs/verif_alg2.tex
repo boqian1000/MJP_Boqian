@@ -11,7 +11,7 @@
   two variables is still $p(\theta,S(t)|X)$.
 
   Sampling $U$ from a Poisson process with rate $\Omega(\theta) +
-  \Omega(\theta^*) - A_{S(t)}(\theta)$, results in a random grid $W = T \bigcup U$
+  \Omega(\theta^*) - A_{S(t)}(\theta)$, results in a random grid $W = T \cup U$
   that is distributed according to a rate $\Omega(\theta) + \Omega(\theta^*)$
   Poisson process (Proposition 2 in~\cite{RaoTeh13}). Discarding all state 
   information results in a triplet $(W,\theta,\theta^*)$ with probability
@@ -25,8 +25,8 @@ p(X|W,\theta^*,\theta)}{p(\theta)q(\theta^*|\theta)p(W|\theta,\theta^*)
 p(X|W,\theta,\theta^*)}$$
 The term $p(W|\theta,\theta^*)$ is just a Poisson process with rate $\Omega(\theta)+
 \Omega(\theta^*)$, so that $p(W|\theta,\theta^*) = p(W|\theta,\theta^*)$. The
-two terms $p(X|W,\theta,\theta^*)$ and $p(X|W,\theta^*,\theta)$ are obtained
-at the end of a forward pass over $W$ using discrete-time transition matrices
+terms $p(X|W,\theta,\theta^*)$ and $p(X|W,\theta^*,\theta)$ are obtained
+after a forward pass over $W$ using discrete-time transition matrices
 $B(\theta,\theta^*) = \left(I + \frac{A(\theta)}{\Omega(\theta)+\Omega(\theta^*)}\right)$ 
 and $B(\theta^*,\theta) = \left(I + \frac{A(\theta^*)}{\Omega(\theta)+\Omega(\theta^*)}\right)$. 
 
@@ -63,7 +63,7 @@ the posterior.
 % Therefore the stationary distribution of this MCMC sampler is $P(W, S, T, (\theta, \theta^*) | y)$. Thus the stationary distribution of $(S, T, \theta)$ is the corresponding marginal distribution $P(S, T, \theta | y)$.  
 \end{proof}
 
-\subsection{Comments}
+\subsection{Comments}\label{sec:comments}
 
 The uniformization scheme of~\cite{RaoTeh13} works for any underlying Poisson
 process whose rate $\Omega$ is greater than $\max_i A_i$. The strict inequality

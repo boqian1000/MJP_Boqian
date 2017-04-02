@@ -1,12 +1,12 @@
 \section{\Naive\ parameter inference via Metropolis-Hastings}
 
-The key idea of the dependent-thinning approach of~\cite{RaoTeh13} is
+The key idea of the Rao-Teh algorithm~\cite{RaoTeh13} is
 to introduce a set of thinned candidate transition times $U$ from
 a rate-$(\Omega-A_{S(t)})$ Poisson process. These, along 
 with the extant transition times $T$, form a random grid $W$, conditioning on
 which sampling a new trajectory reduces to a standard discrete-time 
 HMM sampling step. This suggests conditioning on the random grid to update
-the MJP parameters according to the discrete-time MH-scheme from
+the MJP parameters as well, following the discrete-time MH-scheme from
 algorithm~\ref{alg:disc_time_mh}.
 %The resulting scheme updates $\theta$ conditioned on the random 
 %grid, but with the trajectory integrated out 
@@ -19,11 +19,11 @@ used to calculate the MH-acceptance probability $\min\left(1,
      {p(X|W,\theta)p(W|\theta)p(\theta)q(\theta^*|\theta)}\right)$. 
 After accepting or rejecting $\theta^*$, the new $\theta$ can be used in
 a backward pass that samples a new trajectory. We then discard all 
-self-transitions and repeat; figure~\ref{fig:naive_mh} sketches out the resulting
+self-transitions and repeat; figure~\ref{fig:naive_mh} sketches out this 
 scheme.
 
-The resulting scheme updates $\theta$ with the MJP trajectory integrated out, 
-and one would expect it to mix more rapidly that Gibbs sampling. 
+The resulting algorithm updates $\theta$ with the MJP trajectory integrated out, 
+and one would expect it to mix more rapidly than simple Gibbs sampling. 
 It is important to note however that $\theta$ is updated conditioned on
 $W$, and that
 %determines not just the MJP trajectory $S(t)$.
@@ -87,7 +87,7 @@ trajectory.}
    \caption{\Naive\  MH for parameter inference for MJPs }
    \label{alg:MH_naive}
   \begin{tabular}{l l}
-   \textbf{Input:  } & \text{A set of partial and noisy observations $X$}, \\
+   \textbf{Input:  } & \text{A set of partial and noisy observations $X$}. \\
                       & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$}.\\ 
                      & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
    \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, 
@@ -105,8 +105,8 @@ trajectory.}
       \State Propose $\theta^* \sim q(\cdot| \theta)$.
           The acceptance probability is given by 
           \begin{align*}
-          \alpha &=  1 \wedge \frac{P(W,\theta^*| y)}{P(W, \theta| y)} \frac{q(\theta|\theta^*)}{q(\theta^*|\theta)}
-          =  1 \wedge \frac{P(y| W,\theta^*) P(W | \theta^*)p(\theta^*)}{P(y|W, \theta)P(W | \theta)p(\theta)} \frac{q(\theta|\theta^*)}{q(\theta^*|\theta)}.
+          \alpha &=  1 \wedge \frac{p(W,\theta^*| y)}{p(W, \theta| y)} \frac{q(\theta|\theta^*)}{q(\theta^*|\theta)}
+          =  1 \wedge \frac{p(y| W,\theta^*) p(W | \theta^*)p(\theta^*)}{p(y|W, \theta)p(W | \theta)p(\theta)} \frac{q(\theta|\theta^*)}{q(\theta^*|\theta)}.
           \end{align*}
     \State For both $\theta$ and $\theta^*$, make a forward pass through the 
     elements of $W$, sequentially updating the distribution over states at 
@@ -114,11 +114,12 @@ trajectory.}
     For any $\theta$, the Markov transition matrix 
     $B(\theta)$ equals $I + \frac{A(\theta)}{\Omega(\theta)}$ while the initial distribution
       over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
-      $ L_i(s) = P(Y_{[w_i, w_{i + 1})} | S(t) = s , t \in [w_i, w_{i + 1})) = 
+      $ L_i(s) = p(Y_{[w_i, w_{i + 1})} | S(t) = s , t \in [w_i, w_{i + 1})) = 
       \prod_{o: t_o \in [w_i, w_{i + 1})}p(y_{t_o} | s)$.
-    At the end, we have calculated
-    $p(X|W,\theta)$ and $p(X|W,\theta^*)$. Use these to accept or reject the
-    proposed swapping of $\theta$ and $\theta^*$. Write the new state space
+    At the end, we have 
+    $p(X|W,\theta)$ and $p(X|W,\theta^*)$. Use these, and the fact that 
+    $p(W|\theta)$ is Poisson-distributed to accept or reject the
+    proposed $\theta$ and $\theta^*$. Write the new state space
     as $(W,\tilde{\theta},\tilde{\theta}^*)$.
     \State For the new parameter $\tilde{\theta}$, make a backward pass through 
     the elements of

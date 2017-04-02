@@ -1,8 +1,8 @@
 
 \section{Bayesian inference for MJPs}
-In practical situations, one observes the MJP trajectory at
+In practical situations, an MJP trajectory is only observed
 a finite set of times, and typically, these observations themselves
-are noisy. There are then two challenges than the practitioner faces:
+are noisy. There are then two questions than the practitioner faces:
 \begin{itemize}
   \item What is the MJP trajectory underlying the observations?
   \item What are the unknown parameters governing the dynamics of the 
@@ -10,23 +10,23 @@ are noisy. There are then two challenges than the practitioner faces:
 \end{itemize}
 
 \subsection{Trajectory inference for MJPs}
-This problem was addressed in~\cite{RaoTeh13} (we refer to the proposed
-algorithm as the Rao-Teh algorithm), and was extended to a broader class of 
+This problem was addressed in~\cite{RaoTeh13}, and was extended to a broader class of 
 MJPs (as well as other jump processes like semi-Markov processes) 
-in~\cite{RaoTeh12}. Both these schemes center on alternate approaches to 
-Gillespie's algorithm, where we introduce auxiliary {\em thinned} 
-candidate jump times to sample an MJP trajectory. 
-We focus on the simpler and more widely used Rao-Teh algorithm,
-which is based on a classical idea called {\em uniformization}~\cite{Jen1953}. 
+in~\cite{RaoTeh12}. Both schemes center on alternate approaches to 
+Gillespie's algorithm, which introduce auxiliary {\em candidate} jump times 
+that are {\em thinned} while simulating an MJP trajectory. 
+We focus on the simpler, more widely used algorithm from~\cite{RaoTeh13},
+which is based on an idea called {\em uniformization}~\cite{Jen1953}. 
+We refer to this as the Rao-Teh algorithm. % and describe it next.
 %while in~\cite{RaoTeh12}, this was extended to a more general dependent thinning approach. 
 %We outline
 %the latter below: it is more general, and we are not aware of any work
 %before~\cite{RaoTeh12} that describes it.
 
-Recall that the diagonal elements of the rate matrix $A_i$ give the 
+Recall that the diagonal element $A_i$ of the rate matrix give the 
 rate at which the MJP leaves state $i$ for any other state. Importantly,
-the parameters are set up so that self-transitions cannot occur. 
-Now, introduce an additional parameter $\Omega \ge \max_i A_i$;
+parameters are set up so that self-transitions cannot occur. 
+Now introduce an additional parameter $\Omega \ge \max_i A_i$;
 \cite{RaoTeh13} suggest setting $\Omega = 2 \max_i A_i$. 
 %Assuming the system is
 %in state $i$, we sample a {\em candidate} transition-time from an
@@ -35,20 +35,20 @@ Now, introduce an additional parameter $\Omega \ge \max_i A_i$;
 %$B_{ij} = A_{ij}/\Omega_i$. The system continues to remain in its current 
 %state with probability $1-A_i/\Omega_i$. 
 Instead of sequentially sampling a wait-time and then a new state as
-in Gillespie's algorithm, we instead first sample a set of candidate
-transition-times over the interval $[0,\cT]$ from a homogeneous Poisson process 
-with rate $\Omega$. Call these times $W$; these along with $0$ define a
-random grid on $[0,\cT]$.
+in Gillespie's algorithm, we first simulate a set of candidate
+transition-times over the interval $[0,\cT]$. We draw these from a homogeneous 
+Poisson process with rate $\Omega$. Call these times $W$; these along with $0$ 
+define a random grid on $[0,\cT]$.
 Define $B = \left(I +\frac{1}{\Omega}A\right)$; observe that this is a
 stochastic matric with positive elements, and rows adding up to $1$.
 Assign state-values to the elements in $0 \cup W$ according to a discrete-time 
 Markov chain with initial distribution $\pi$, and transition matrix $B$.
-Call these state $V$. Thus $v_0 \sim \pi$, while $p(v_{k+1}=j|v_k=i) = B_{ij}$
+Call these states $V$. Thus $v_0 \sim \pi$, while $p(v_{k+1}=j|v_k=i) = B_{ij}$
 for $k \in \{0,\cdots,|W|-1\}$.
 Note that $\Omega > \max_i A_i$ results in more
 candidate-times than actual MJP transitions; at the same time the transition
 matrix $B$ allows self-transitions (unlike A). These two effects cancel
-each other out, and trajectories sampled this way for any $\Omega > \max_i A_i$
+each other out, and trajectories sampled this way for any $\Omega \ge \max_i A_i$
 %These self-transitions correct for the extra candidate transition times
 %produced by the higher rate $\Omega_i$, and~\cite{RaoTeh12} show that
 %trajectories sampled this way 
@@ -56,14 +56,22 @@ have the same distribution as trajectories
 sampled by Gillespie's algorithm~\cite{Jen1953,RaoTeh13}.
 
 Introducing the thinned variables allowed~\cite{RaoTeh13} to develop
-a novel and efficient MCMC sampler. We outline the Rao-Teh algorithm below.
-
+a novel and efficient MCMC sampler. We outline this in 
+algorithm~\ref{alg:Unif_gibbs}. At a high-level, the algorithm proceeds by 
+alternately sampling a new grid $W$ conditioned on the MJP trajectory $S(t)$, 
+and then a new trajectory $S(t)$ conditioned on the grid $W$. The latter
+step can be carried out using standard techniques from the discrete-time
+HMM literature.
+    ~\cite{RaoTeh13} show that the resulting Markov chain targets
+    the desired posterior distribution over trajectories, and is 
+    ergodic for any choice of $\Omega$ strictly greater than all the
+    $A_i$'s. As mentioned earlier, they suggest setting $\Omega = 2\max_i A_i$.
 \begin{algorithm}[H]
   \caption{The Rao-Teh algorithm~\cite{RaoTeh13}: an auxiliary variable sampler for MJP trajectories}
    \label{alg:Unif_gibbs}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{MJP parameters $\theta$; a set of partial and noisy observations $X$}. \\
-                     & \text{A  parameter $\Omega > \max_i A_s$}, where
+                     & \text{A  parameter $\Omega > \max_i A_i$}, where
    $A = A(\theta)$ is the MJP rate-matrix.\\
                       & \text{The previous MJP path $S(t) = (S, T)$}.\\ 
    \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$}.\\
@@ -73,7 +81,7 @@ a novel and efficient MCMC sampler. We outline the Rao-Teh algorithm below.
 \State \textbf{Given the MJP trajectory $(S,T)$, sample a new set of thinned 
 candidate times $U$}: %\cite{RaoTeh12} show that 
 These are distributed as an inhomogeneous Poisson process with intensity 
-$\Omega-A_{S(t)}$. Since the intensity is piecewise-constant, simulating this 
+$\Omega-A_{S(t)}$. Since the intensity is piecewise-constant, simulating it 
 is straightforward.
 \State \textbf{Given the thinned and actual transition times $W = (T \cup U)$
 from the previous iteration (after discarding state information $S$), 
@@ -103,11 +111,6 @@ sample a new trajectory}:
     forward pass. 
 \end{algorithmic}
 \end{algorithm}
-
-    ~\cite{RaoTeh13} show that the resulting Markov chain targets
-    the desired posterior distribution over trajectories, and is 
-    ergodic for any choice of $\Omega$ strictly greater than all the
-    $A_i$'s. As mentioned earlier, they suggest setting $\Omega = 2\max_i A_i$.
 
 \subsection{Parameter inference for MJPs}
 In practice, the MJP parameters themselves are unknown: often,
@@ -168,13 +171,15 @@ plots were produced from the experiment in section~\ref{sec:immig}.}
      \label{fig:hist}
   \end{minipage}
   \end{figure}
-Such a Gibbs sampling approach comes with a well-known limitation:
-because of coupling between path and parameters, it can explore parameter 
-and path space very sluggishly. We illustrate this in figure~\ref{fig:hist},
+  In any case, the Gibbs sampling approach of algorithm~\ref{alg:MJP_gibbs} 
+  comes with a well-known limitation:
+coupling between path and parameters can result in a very sluggish
+exploration of parameter and path space. We illustrate this in figure~\ref{fig:hist},
 which shows the posterior distribution of an MJP parameter in blue
 (this is the distribution of interest, conditioned only on the observations) 
-and conditioned on both the observations 
-as well as a realization of the MJP trajectory: observe how much
+along with the distribution conditioned on both the observations 
+as well as a realization of the MJP trajectory (in green). We have also
+included the prior distribution in red. Observe how much
 more concentrated the latter is compared to the former. The
 coupling is strengthened as the trajectory grows longer and longer, and
 the Gibbs sampler can mix very poorly for situations with
@@ -191,7 +196,7 @@ Metropolis-Hastings probability. The latter step requires calculating the
 marginal probability of the observations $p(X|\theta)$, integrating out
 the exponential number of possible latent trajectories. Fortunately
 this marginal probability is a by-product of the forward-backward
-algorithm used to same a new trajectory, and so that no 
+algorithm used to same a new trajectory, so that no 
 additional computational burden is involved. The overall algorithm then is:
 
 \begin{algorithm}[H]
@@ -220,7 +225,7 @@ Markov chain}
 
 \subsection{A marginal sampler for MJP parameters} 
 Constructing such a marginal sampler over the MJP parameters by
-integrating out the hidden trajectory is less straightforward:
+integrating out the continuous-time hidden trajectory is less straightforward:
 the set of transition times is unbounded, with individual elements
 unconstrained over the observation interval $[0,\cT]$.
 %Naively calculating this marginal probability for the continuous-time
@@ -231,7 +236,7 @@ forward pass through all {\em observations} $X$, using the matrix-exponential
 operator to marginalize out the infinite number of possible 
 continuous-time trajectories linking two successive times. As
 demonstrated in~\cite{RaoTeh13} however, this approach has a number of 
-drawbacks: it scales cubically, rather than quadratically with the 
+drawbacks: it scales cubically rather than quadratically with the 
 number of states, it cannot exploit structure like sparsity in the 
 transition matrix, and can depend in not trivial ways on the exact 
 nature of the observation process.
@@ -243,7 +248,7 @@ A second approach is particle MCMC~\cite{Andrieu10}. Here, one uses
 particle filtering to obtain an unbiased estimate of the marginal 
 probability $p(X|\theta)$; this is then plugged into the 
 Metropolis-Hastings acceptance probability. While the resulting MCMC 
-sampler targets the correct posterior distribution~\cite{Andrieu09}, 
+sampler targets the correct posterior distribution, %~\cite{Andrieu09}, 
 the resulting scheme resulting scheme does not exploit the structure 
 of the MJP, and we show that it can be quite inefficient.
 

@@ -12,13 +12,15 @@ Instead of simulating the thinned events $U$, we first generate a new parameter
 $\theta^*$ from some distribution $q(\theta^*|\theta)$. Treat this as an 
 auxiliary variable, so that the augmented space now is the triple 
 $(S(t), \theta,\theta^*)$. We now pretend $S(t)$ was sampled by a 
-uniformization scheme where the bounding rate is given by 
-$(\Omega(\theta) + \Omega(\theta^*))$ instead of just $\Omega(\theta)$.
-We thus sample the set of thinned events $U$ from a piecewise-constant
-Poisson process with intenstity $\Omega(\theta) + \Omega(\theta^*) - 
-A_{S(t)}$. The result is that $W$, the union of these events with the actual
+uniformization scheme where the dominating Poisson rate is given by 
+$(\Omega(\theta) + \Omega(\theta^*))$ instead of just $\Omega(\theta)$ 
+(any choice greater than $\max_i A_i$ is valid).
+It now follows that the set of thinned events $U$ is a piecewise-constant
+Poisson process with intensity $\Omega(\theta) + \Omega(\theta^*) - 
+A_{S(t)}$. Following~\cite{RaoTeh13}, the set $W$, the union of these events 
+with the actual
 trajectory transition times $T$, is a realization of homogeneous Poisson
-process with rate $\Omega(\theta) + \Omega(\theta^*)$. We now discard all MJP 
+process with rate $\Omega(\theta) + \Omega(\theta^*)$. Now we discard all MJP 
 state information, so that the MCMC state space consists of $W$, the current
 MJP parameter $\theta$, and the auxiliary parameter $\theta^*$.
 Finally, we make an MH proposal that swaps $\theta$ with $\theta^*$. 
@@ -95,7 +97,7 @@ $$ \text{acc} =
    \caption{Improved MH for parameter inference for MJPs }
    \label{alg:MH_improved}
   \begin{tabular}{l l}
-   \textbf{Input:  } & \text{A set of partial and noisy observations $X$}, \\
+   \textbf{Input:  } & \text{A set of partial and noisy observations $X$}. \\
                       & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$}.\\ 
                      & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
    \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, 

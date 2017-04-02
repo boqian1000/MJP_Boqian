@@ -5,9 +5,9 @@ have found wide application in fields like computational chemistry~\cite{gillesp
 population genetics~\cite{FearnSher2006}, mathematical finance~\cite{Elliott06}, 
 queuing theory~\cite{Breuer2003}, artificial intelligence~\cite{XuShe10} and
 social-network analysis~\cite{pan2016markov}. %The references above have
-MJPs have been used to model phenomena such as the state of a chemical reaction, the state 
-of a queuing network, segmentations of a strand of DNA, the state of users 
-logging their activity on social media, among many others.
+MJPs have been used to model the state of a chemical reaction, the state 
+of a queuing network, segmentation of a strand of DNA, user activity on social 
+media, among many others.
 
 MJPs model temporal evolution in continuous-time, resulting in 
 realistic, mechanistic, and interpretable models, often amenable to 
@@ -24,7 +24,7 @@ state-of-the-art is a recent auxiliary variable Gibbs sampler proposed
 in~\cite{RaoTeh13}, we will henceforth refer to this as the Rao-Teh algorithm.
 The Rao-Teh algorithm was designed to sample paths when the MJP parameters
 are known. Parameter inference is typically carried out by 
-incorporating this into an outer Gibbs sampler that simulates
+incorporating this into an outer Gibbs sampler that also simulates
 parameters given the currently sampled trajectory. 
 
 In many situations, the MJP trajectory and parameters can exhibit 
@@ -37,16 +37,15 @@ In our experiments, we demonstrate superior
 performance over Gibbs sampling, as well as other approaches like 
 particle Markov chain Monte Carlo~\cite{Andrieu10}.
 
-\section{Markov jump processes}
-Formally, an MJP is a right-continuous piecewise-constant stochastic
-process $S(t)$ taking values in a countable, and usually finite state
-space $\cS$ (see Figure~\ref{fig:naive_mh}, top-left).
+\section{Markov jump processes (MJPs)} 
+Formally, a Markov jump process~\cite{Cinlar1975} is a right-continuous 
+piecewise-constant stochastic process $S(t)$ taking values in a countable, and 
+usually finite state space $\cS$ (see Figure~\ref{fig:naive_mh}, top-left).
 For simplicity, we will assume $N$-states, with $\cS = \{1,\ldots,N\}$. Then, 
-an MJP is parameterized by two quantities, a probability vector $\pi$ and a 
-rate-matrix $A$. The former, an $N$-component vector, gives the 
-distribution over states at the initial time (which without loss of 
-generality, we assume is $0$), while the latter is an 
-$N \times N$-matrix governing the dynamics of the system.  An 
+an MJP is parameterized by two quantities, an $N$-component probability vector 
+$\pi$ and a rate-matrix $A$. The former gives the distribution over states at 
+the initial time (which without loss of generality we assume is $0$), while 
+the latter is an $N \times N$-matrix governing the dynamics of the system.  An 
 off-diagonal element $A_{ij}$, for some $i \neq j$ gives the rate at 
 which the system transitions from state $i$ to $j$. We write $A_i$ for the 
 negative of the $i$th diagonal element $A_{ii}$. For an MJP,
@@ -69,14 +68,14 @@ The set of times of $T=(t_0, \cdots, t_{|T| })$ and states
 $S=(s_0, \cdots, s_{|T| })$ together define the MJP trajectory $S(t)$.
 
 \subsection{Structured rate matrices}
-In the general case, the rate matrix $A$ has $N(N-1)$ free parameters,
-corresponding to transition rates between every distinct pair of states. 
+In general, the rate matrix $A$ has $N(N-1)$ free parameters,
+giving transition rates between every distinct pair of states. 
 In typical applications, especially when large state-spaces
 are involved, this $N \times N$ matrix is determined by a much smaller
-set of parameters. We will write these as $\theta$, so that 
-$A$ is a deterministic function of these parameters: 
+set of parameters. We will write these as $\theta$, with
+$A$ a deterministic function of these parameters: 
 $A \equiv A(\theta)$. The parameters $\theta$ are often more 
-interpretable than the elements of $A$, corresponding directly to
+interpretable than the elements of $A$ and correspond directly to
 physical, biological or environmental parameters of interest. 
 We give three examples below:
 \begin{description}
@@ -84,10 +83,10 @@ We give three examples below:
     by two parameters: an arrival rate $\alpha$ and a death-rate
     $\beta$. The state space $\cS$ represents the size of a 
     population or the capacity of a queue. New individuals
-    enter the system according to a rate-$\alpha$ Poisson process,
-    so that the off-diagonal elements $A_{i,i+1}$ all equal to $\alpha$.
+    enter according to a rate-$\alpha$ Poisson process,
+    so that the off-diagonal elements $A_{i,i+1}$ all equal $\alpha$.
     On the other hand, each individual dies (or each job completes) 
-    at a rate $\beta$, so that the system moves from state $i$ to 
+    at a rate $\beta$, so the system moves from state $i$ to 
     $i-1$ with rate $A_{i,i-1}=i\beta$.
     All other transitions have rate $0$, so that $\theta = (\alpha,\beta)$,
     and $A(\theta)$ is a tri-diagonal matrix.
@@ -96,13 +95,13 @@ We give three examples below:
     to $i+1$ with rate $i\alpha$, so that the population grows at a 
     rate proportional to the population size. Once again, 
     $\theta=(\alpha,\beta)$.
-  \item[Codon substitution models] Such models are used in genetics,
+  \item[Codon substitution models] Such models are used in genetics
     to characterize transition-rates between nucleotides or codons at a locus on
     a DNA or RNA molecule over evolutionary time. In the simplest case,
     all transitions have the same rate~\cite{jukescantor69}, and the model is 
-    characterized by a single parameter. In other models, transitions might be 
-    categorized into groups, for instance, synonymous transitions that encode 
-    the same amino acid, and nonsynonymous transitions that encode different 
+    characterized by a single parameter. Other models categorize transitions 
+    into groups, for instance synonymous transitions encoding 
+    the same amino acid, and nonsynonymous transitions encoding different 
     amino acids.  These transitions types have their own rates, and noting that 
     there are $61$ amino acids, synonymous/nonsynonymous model results in a 
     $61\times 61$ transition matrix determined by 2 parameters. More refined 
