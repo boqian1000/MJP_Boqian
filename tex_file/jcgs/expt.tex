@@ -1,25 +1,30 @@
 
 \section{Experiments}~
 In the following, we evaluate Python implementations of our two proposed
-algorithms, the \naive\ MH algorithm (algorithm~\ref{alg:MH_naive}) and its 
-symmetrized improvement (algorithm~\ref{alg:MH_improved}, which we call
-symmetrized MH). We compare different variants of these algorithms, 
-corresponding to different uniformizing Poisson rates (i.e.\ different choices 
-of $\kappa$, see section~\ref{sec:comments}). For \naive\ MH, %~\ref{alg:MH_naive}, 
+algorithms, the \naive\ MH algorithm (algorithm~\ref{alg:MH_naive}, which we
+plot in yellow) and its symmetrized improvement (algorithm~\ref{alg:MH_improved}, 
+which we call symmetrized MH and plot in red). We compare different variants of 
+these algorithms, corresponding to different uniformizing Poisson rates 
+(i.e.\ different choices of $\kappa$, see section~\ref{sec:comments}). For 
+\naive\ MH, %~\ref{alg:MH_naive}, 
 we set $\Omega(\theta) = \kappa \max_s A_s(\theta) $ with $\kappa$  equal to 
-$1.5, 2$ and $3$. For symmetrized MH, %algorithm~\ref{alg:MH_improved}, 
+$1.5, 2$ and $3$, represented in our plots with circles, triangles and square
+symbols. For symmetrized MH, %algorithm~\ref{alg:MH_improved}, 
 where the uniformizing rate depends 
 on both the current and proposed parameter, we consider two settings
  $\Omega(\theta, \theta^*) = \kappa (\max A(\theta) + \max A(\theta^*))$ 
- ($\kappa = 1$ and $2$), and 
+ ($\kappa = 1$ and $2$, plotted with circles and triangles), and 
 $\Omega(\theta, \theta^*) = \kappa \max(\max A(\theta), \max A(\theta^*))$
-($\kappa=1.5$).  We compare these
-algorithms against two baselines: Gibbs sampling (algorithm~\ref{alg:MJP_gibbs}),
-and particle MCMC~\cite{Andrieu10}. 
-Unless specified, our results were
+($\kappa=1.5$, plotted with squares).  We compare these
+algorithms against two baselines: Gibbs sampling (algorithm~\ref{alg:MJP_gibbs},
+plotted in blue), and particle MCMC~\cite{Andrieu10}, plotted in black. Gibbs
+sampling involves a uniformization step to update the MJP trajectory, and for this
+we used three settings, $\kappa=1.5,2,3$, plotted with circles, squares and
+triangles.  Unless specified, our results were
 obtained from $100$ independent MCMC runs, each consisting of $10000$ iterations.
 We found particle MCMC to be more computationally intensive, and limited each 
-run to $3000$ iterations, the number of particles being $5, 10$ and $20$. 
+run to $3000$ iterations, the number of particles being $5, 10$ and $20$ 
+(plotted with circles, trianges and squares). 
 
 % We also considered exploiting gradient information of the target distribution to 
 % apply Hamiltonian Monte Carlo (HMC)~\cite{Neal2010}. In particular, the forward 
