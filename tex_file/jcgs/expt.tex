@@ -258,7 +258,7 @@ carrying out parameter inference.
   states. Thus, the rate matrix $A$ is given by 
   %Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, t_{N+1}(t_{end})]$, and y as observations.\\
 $A_i = -A_{i,i} = 3\alpha, A_{i, j} = \alpha,i \neq j.$
-We place a Gamma$(\alpha_0,\alpha_1)$ prior on the parameter $\alpha$.
+We place a Gamma$(3,2)$ prior on the parameter $\alpha$.
 Figure~\ref{fig:ESS_JC}(right) compares different samplers: we see that the
 symmetrized MH samplers comprehensively outperforms all others.
 Part of the reason why the difference is so dramatic here is because the
