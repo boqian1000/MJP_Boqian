@@ -144,9 +144,14 @@ a user-specified variance.
 %For particle MCMC, the number of particles can be $5, 10 , 20$. 
   Blue lines are the Gibbs sampler, orange lines are \naive\ MH, red lines 
 are the symmetrized MH and black lines are particle MCMC. 
-For uniformization, lines with dots correspond to $k = 1$, lines with 
-  triangle correspond to $k = 2$, and lines with squares correspond to $k = 1.5$.  )
-  For particle MCMC (plotted in black), the dot-dashed lines correspond to 
+For methods involving standard uniformization (Gibbs and \naive\ MH), dots 
+correspond to $\kappa = 1$, triangles correspond to $\kappa = 2$, and squares 
+correspond to $\kappa = 1.5$. For our symmetrized MH algorithm, circles,
+triangles and squares correspond to $\Omega = (\Omega_{old} + \Omega_{new}),
+2(\Omega_{old} + \Omega_{new})$ and $1.5 \max(\Omega_{old}, \Omega_{new})$
+respectively, where $\Omega_{new}$ and $\Omega_{old}$ equal $\max_i A_i$ under 
+the proposed and current parameters.
+  For particle MCMC, the dot-dashed lines correspond to 
   $5$ particles,  the dashed lines correspond to $10$ particles, and the solid 
   lines correspond to $20$ particles.
 
@@ -154,13 +159,12 @@ We see that our symmetrized MH algorithm is significantly more efficient
 than the baselines over a wide range of choices of the proposal distributions
 (including the natural choice of $1$).
 Among the three setting of our algorithm, the simple additive setting
-$\Omega = (\Omega_{old} + \Omega_{new})$ (shown as circles) 
-does best, though it is not significantly better than 
-$\Omega = 2(\Omega_{old} + \Omega_{new})$ (shown with triangles).
-$\Omega = 1.5 \max(\Omega_{old}, \Omega_{new})$ (plotted with squares) does 
-worse than both additive choices.  Among the baselines, simple Gibbs sampling 
+ (circles) does best, though it is not significantly better than the additive
+ setting with a multiplicative factor of $2$ (squares). The max-of-max setting
+ (squares) does worse than both additive choices but still better than the
+ other algorithms.  Among the baselines, simple Gibbs sampling 
 does better than \naive\ Metropolis-Hastings, suggesting that the dependency of 
-the uniformization grid on the MJP parameters does indeed significantly slow 
+the Poisson grid on the MJP parameters does indeed significantly slow 
 down mixing. Particle MCMC has the worst performance for this task. The
 results in figure~\ref{fig:ESS_EXP_D10} for the 10-dimensional state space
 show that for the parameter $\alpha$, the improvement that our proposed
