@@ -13,7 +13,7 @@ symbols. For symmetrized MH, %algorithm~\ref{alg:MH_improved},
 where the uniformizing rate depends 
 on both the current and proposed parameter, we consider two settings
  $\Omega(\theta, \theta^*) = \kappa (\max A(\theta) + \max A(\theta^*))$ 
- ($\kappa = 1$ and $1.5$, plotted with circles and triangles), and 
+ ($\kappa = 1$ and $1.5$, plotted with {triangles} \boqian{circles} and triangles), and 
 $\Omega(\theta, \theta^*) = \kappa \max(\max A(\theta), \max A(\theta^*))$
 ($\kappa=1.5$, plotted with squares).  We compare these
 algorithms against two baselines: Gibbs sampling (algorithm~\ref{alg:MJP_gibbs},
@@ -289,11 +289,11 @@ degradation with interval length that is much milder than the other algorithms.
   \centering
     \includegraphics [width=0.97\textwidth, angle=0]{figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
   \end{minipage}
-	\label{fig:jc_model_vs_t}
     \caption{Time Interval vs. ESS/sec. In the left plot, the number of 
     observations is fixed, in the right, this grows linearly with the
   interval length. Red, yellow and blue curves are the symmetrized MH,
   \naive\ MH and Gibbs algorithm. }
+	\label{fig:jc_model_vs_t}
   \end{figure}
 
 
@@ -338,7 +338,7 @@ the system moves from $i$ to $i - 1$ with rate $i\beta$.
   \end{minipage}
     \caption{ESS/sec for the immigration model, the top row being dimension 3, and the bottom,
       dimension 10. The left column is for $\alpha$, and the 
-    right is for $\beta$. Red, yellow, blue and black curves are the symmetrized MH,
+    right is for $\beta$. Red, yellow, and blue curves are the symmetrized MH,
   \naive\ MH, Gibbs sampling and particle MCMC.}
      \label{fig:ESS_Q_D10}
   \end{figure}
