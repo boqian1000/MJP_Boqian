@@ -152,8 +152,8 @@ $$ f(\alpha, \beta | s_0,S,T) \propto \exp(-(\lambda + t_{end} - t_{start}- \tau
 Thus, the posterior distributions of $\alpha$, $\beta$ are still independent. In
 particular,
 \begin{itemize}
-\item $\alpha | s_0,S,T$ is $Gamma(\mu+ U,\lambda + t_{end} - t_{start}- \tau_{N - 1})$ distributed\\
-\item $\beta | s_0,S,T$ is $Gamma(\omega+ D,\theta + \sum_{i=0}^n (t_{i+1} - t_i)s_i)$ distributed, which is equivalent to $Gamma(\omega+ D,\theta +\sum_{i=0}^{N - 1} \tau_ii)$\\
+\item $\alpha | s_0,S,T$ is Gamma$(\mu+ U,\lambda + t_{end} - t_{start}- \tau_{N - 1})$ distributed.\\
+\item $\beta | s_0,S,T$ is Gamma$(\omega+ D,\theta + \sum_{i=0}^n (t_{i+1} - t_i)s_i)$ distributed, which is equivalent to Gamma$(\omega+ D,\theta +\sum_{i=0}^{N - 1} \tau_ii)$.\\
 \end{itemize}
 Such immigration models have perfectly conjugate posterior distributions when we 
 assign Gamma priors to $\alpha$ and $\beta$. 
