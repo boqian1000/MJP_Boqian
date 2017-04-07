@@ -1,0 +1,21 @@
+\section{Conclusion}
+
+We have proposed a novel Metropolis-Hastings algorithm for parameter 
+inference in Markov jump processes. We use a representation called 
+uniformization to update the MJP parameters with state-values marginalized 
+out, although still conditioning on a random Poisson grid. The 
+distribution of this grid depends on the MJP parameters, significantly 
+slowing down MCMC mixing. We propose a novel symmetrization scheme to get 
+around this dependency. In our experiments, we demonstrate the usefulness 
+of this scheme, which outperforms a number of competing baselines.
+
+There are a number of interesting directions for future research.
+Our focus was on Metropolis-Hastings algorithms for parameter inference,
+and though we briefly considered Hamiltonian Monte Carlo, it is interesting
+to more thoroughly investigate how our ideas extend to this, and other 
+schemes like slice sampling~\cite{Nea2003a}. Another direction is to develop
+and study similar schemes for more complicated hierarchical models like
+mixtures of MJPs or coupled MJPs. From a theoretical viewpoint, it is
+important is to complement our empirical studies with theoretical analyses 
+of the mixing properties of our proposed scheme. Finally, we are applying 
+our ideas to other real-world applications from finance and genetics.
