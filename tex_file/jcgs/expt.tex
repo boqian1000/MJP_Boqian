@@ -13,14 +13,14 @@ symbols. For symmetrized MH, %algorithm~\ref{alg:MH_improved},
 where the uniformizing rate depends 
 on both the current and proposed parameter, we consider two settings
  $\Omega(\theta, \theta^*) = \kappa (\max A(\theta) + \max A(\theta^*))$ 
- ($\kappa = 1$ and $1.5$, plotted with {triangles} \boqian{circles} and {squares} \boqian{triangles}), and 
+ ($\kappa = 1$ and $1.5$, plotted with {triangles} and {squares}), and 
 $\Omega(\theta, \theta^*) = \kappa \max(\max A(\theta), \max A(\theta^*))$
-($\kappa=1.5$, plotted with {circles} \boqian{squares}).  We compare these
+($\kappa=1.5$, plotted with {circles}).  We compare these
 algorithms against two baselines: Gibbs sampling (algorithm~\ref{alg:MJP_gibbs},
 plotted in blue), and particle MCMC~\cite{Andrieu10}, plotted in black. Gibbs
 sampling involves a uniformization step to update the MJP trajectory, and for this
-we used three settings, $\kappa=1.5,2,3$, plotted with circles, {triangles} \boqian{squares} and
-{squares} \boqian{triangles}.  Unless specified, our results were
+we used three settings, $\kappa=1.5,2,3$, plotted with circles, {triangles}
+and {squares}.  Unless specified, our results were
 obtained from $100$ independent MCMC runs, each consisting of $10000$ iterations.
 We found particle MCMC to be more computationally intensive, and limited each 
 run to $3000$ iterations, the number of particles being $5, 10$ and $20$ 
@@ -158,9 +158,13 @@ We see that our symmetrized MH algorithm is significantly more efficient
 than the baselines over a wide range of choices of $\sigma^2$, 
 (including the natural choice of $1$).
 Among the three setting of our algorithm, the simple additive setting
- ({triangles} \boqian{circles}) does best, though it is not significantly better than the {max-of-max}\boqian{additive}
- setting \boqian{with a multiplicative factor of $2$}(triangles). \boqian{It suggests that the additive setting is more stable than the max-of-max setting when the proposal variance is large.}The {additive setting with a multiplicative factor of $1.5$} \boqian{max-of-max setting}
- (squares) does worse than both {additive choice with smaller multiplicative factor and the max-of-max choice}\boqian{additive choices} but still better than the other algorithms. Among the baselines, simple Gibbs sampling 
+ ({triangles}) does best, though it is only slightly better than 
+ the {max-of-max} setting (circles). {A possible reason for this improvement is 
+  that the additive setting is more stable than the max-of-max setting, when the 
+proposal variance can be large. The {additive setting with a multiplicative factor 
+of $1.5$} (squares) does worse than both {additive choice with smaller multiplicative
+factor and the max-of-max choice} but still better than the other algorithms. Among 
+the baselines, simple Gibbs sampling 
 does better than \naive\ Metropolis-Hastings, suggesting that the dependency of 
 the Poisson grid on the MJP parameters does indeed significantly slow 
 down mixing. Particle MCMC has the worst performance for this task. The
