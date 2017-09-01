@@ -1,0 +1,79 @@
+\section{Geometrical ergodicity}
+\begin{assumption}
+For some $k > 1$ and $\epsilon > 0$, $\Omega(\theta, \nu) \geq k \max \{ \max_s|A_{ss}(\theta)|, \max_s|A_{ss}(\nu)| \} + \epsilon.$ 
+\end{assumption}
+
+\begin{assumption}
+$\exists$ $ \xi > \eta > 0$ s.t. $\prod P(x_o | s_o, \theta) \in (\eta, \xi)$.
+\end{assumption}
+
+\begin{assumption}
+$\exists$ $\Omega > 0$ s.t. $\Omega(\theta, \nu)  \leq \Omega$ for $\forall \theta, \nu$.
+\end{assumption}
+
+%\begin{assumption}
+%$\exists l_{max} > l_{min} > 0$ s.t. $P(x| s) \in [l_{min}, l_{max}]$ for $\forall x, s$.
+%\end{assumption}
+\begin{assumption}
+For the ideal sampler with the proposal density $q(\nu| \theta)$ and the acceptance rate $\alpha_i(\theta, \nu) = 1 \wedge \frac{P(X | \nu)q(\theta| \nu)p_0(\nu)}{P(X | \nu)q(\nu| \theta)p_0(\theta)}$, $\exists$ a probability measure $\phi$ and a constant $\kappa > 0$, s.t. $q(\nu | \theta) \alpha_i(\theta, \nu) \geq \kappa \phi(\nu)$. 
+\end{assumption}
+
+\begin{theorem}
+Under the above assumptions, for $\forall h, \eta > 0$, the set $\{ W | |W| \leq h\}$ is a small set.
+\end{theorem}
+\begin{proof}
+\begin{align*}
+P(W', \nu, \theta | W, \theta, \theta^*) &= q(\nu | \theta)\alpha(\theta, \nu, W') \int_T \sum_S P(S,T | W, \theta, \theta^*, X) P(W'| S, T, \theta, \nu)dT  
+\end{align*}
+\begin{align*}
+P(S, T = \emptyset | W, \theta, \theta^*, X) & \geq p_0(s_0)\prod P(V_{i + 1} = s_0 | V_i = s_0) \prod P(X_{[w_i, w_{i + 1})} | v_i = s_0, \theta)\\
+& \geq p_0(s_0)(1 - 1/k)^{|W|}\eta
+\end{align*}
+Given $T = \emptyset$ and $S = [s_0]$, $W'$ is a poisson process with rate $r(\theta, \nu, s_0) = \Omega(\theta, \nu) - |A|_{s_0}(\theta) > \epsilon > 0$. Applying thinning theorem, $PP(r(\theta, \nu, s_0)) = PP(\epsilon) \cup PP(r(\theta, \nu, s_0) - \epsilon)$.
+\begin{align*}
+P(W' | S, T = \emptyset, \theta, \nu) & \geq P(W' from PP(\epsilon)) P(\emptyset from PP(r(\theta, \nu, s_0) - \epsilon))\\
+& \geq P(W' from PP(\epsilon)) \exp(-\Omega(\theta, \nu)) \geq P(W' from PP(\epsilon)) \exp(-\Omega)
+\end{align*}
+\begin{align*}
+\int_T \sum_S P(S,T | W, \theta, \theta^*, X) P(W'| S, T, \theta, \nu)dT &\geq \sum_S P(S, T = \emptyset | W, \theta, \theta^*, X) P(W' | S, T=\emptyset,\theta, \nu)\\
+& \geq (1 - 1/k)^{|W|}\eta \exp(-\Omega) P(W' from PP(\epsilon))
+\end{align*}
+Consider the acceptance rate.
+\begin{align*}
+\alpha(\theta, \nu, W') &= 1 \wedge \frac{P(X | W', \nu, \theta) q(\theta|\nu)p_0(\nu)}{P(X | W', \theta, \nu)q(\nu|\theta)p_0(\theta)}\\
+& \geq \alpha_i(\theta, \nu)(1 \wedge \frac{P(X|W', \nu, \theta) / P(X|\nu)}{P(X|W', \theta, \nu) / P(X|\theta)}) \geq \alpha_i(\theta, \nu)\eta^2
+\end{align*}
+Combine the property of the ideal sampler, we have the following inequality.
+\begin{align*}
+P(W', \nu, \theta | W, \theta, \theta^*) \geq (1 - 1/k)^{h} \eta^3 \exp(-\Omega)\kappa P(W' from PP(\epsilon))\phi(\nu)
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+$\exists \delta \in (0, 1)$ s.t. $\mathbb{E}[\mathbb{I}_{\{V_i = V_{i + 1}\}} | W, X, \theta, \theta^*] \geq \delta$ for $\forall i$. 
+\end{lemma}
+\begin{proof}
+\begin{align*}
+\mathbb{E}[\mathbb{I}_{\{V_i = V_{i + 1}\}} | W, X, \theta, \theta^*] &= P(V_i = V_{i + 1} | W, X, \theta, \theta^*) = \sum_v P(V_i = V_{i + 1} = v | W, X, \theta, \theta^*)\\
+& =\sum_v \frac{P(V_i = V_{i + 1} = v, X | W, \theta, \theta^*)}{P(X | W, \theta, \theta^*)} \\
+&=\sum_v \frac{P(X | V_i = V_{i + 1} = v, W, \theta, \theta^*)P( V_i = V_{i + 1} = v|W, \theta, \theta^*)}{P(X | W, \theta, \theta^*)}\\
+& \geq \eta\sum_v P(V_i = V_{i + 1} = v | W) /\xi =  \eta \sum_v P(V_{i + 1} = v | V_i = v, W)P(V_i = v) /\xi \\
+& \geq \eta (1 - 1/k)/\xi 
+\end{align*}
+\end{proof}
+\begin{theorem}
+$\exists \delta \in (0, 1), C > 0$ s.t. $\mathbb{E}[|W'| | W, \theta, \theta^*, X] \leq (1 - \delta)|W| + C$.
+\end{theorem}
+\begin{proof}
+Since $W' = T \cup U'$, we consider $\mathbb{E}[|T| | W, \theta, \theta^*, X]$ and $\mathbb{E}[|U'| | W, \theta, \theta^*, X]$ respectively.
+An upper bound of $\mathbb{E}[|T| | W, \theta, \theta^*]$ can be derived directly from lemma 1.
+\begin{align*}
+\mathbb{E}[|T| | W, \theta, \theta^*, X] &= \mathbb{E}[\sum_{i = 0}^{|W| - 1} \mathbb{I}_{\{ V_{i + 1} = V_i \}}| W, \theta, \theta^*, X]\\
+&\leq \sum_{i = 0}^{|W| - 1} (1 - \delta) = |W|(1 - \delta).
+\end{align*}
+\begin{align*}
+\mathbb{E}[|U'| |W, \theta, \theta^*, X] &= \mathbb{E}_{S,T}\mathbb{E}[|U'| | S, T, W, \theta, \theta^*, X] = \mathbb{E}_{S,T}\mathbb{E}[|U'| | S, T, W, \theta, \theta^*] \\
+& \leq \mathbb{E}_{S,T} (t_{end} - t_{start})\Omega = (t_{end} - t_{start})\Omega.
+\end{align*}
+So $\mathbb{E}[|W'| | W, \theta, \theta^*, X] \leq (1 - \delta)|W| + (t_{end} - t_{start})\Omega$. The drift condition is satisfied.
+\end{proof}
