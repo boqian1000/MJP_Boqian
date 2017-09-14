@@ -7,7 +7,7 @@ If we set $\Omega(\theta, \nu) = k (  \max_s|A_{ss}(\theta)| +  \max_s|A_{ss}(\n
 \end{assumption}
 
 \begin{assumption}
-Given the proposal density $q(\mu | \theta)$, $\exists \eta_0 > 0$ s.t. $$ \int_\Theta \max_s|A_{ss}(\nu)| q(\nu | \theta)d\nu \leq \eta_0 \max_s|A_{ss}(\theta)|.$$
+Given the proposal density $q(\nu | \theta)$, $\exists \eta_0 > 0$ s.t. $$ \int_\Theta \max_s|A_{ss}(\nu)| q(\nu | \theta)d\nu \leq \eta_0 \max_s|A_{ss}(\theta)|.$$
 \end{assumption}
 
 \begin{assumption}
@@ -25,11 +25,15 @@ For the above $C \subseteq \Theta$, $\exists$ $\bar{\Omega} > 0$ s.t. $\Omega(\t
 \begin{assumption}
 For the above constants, $\frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C)  - \eta_0 \in (0, 1).$
 \end{assumption}
+\vinayak{What is $p_{\phi}$. Is this a strong assumption? Since the first term on the LHS is less than 1,
+  can we write this as $\frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C) >\eta_0$? Also this requires
+$\eta_0 <1$. }
 
 \begin{theorem}
 Under the above assumptions, for $\forall h > 0$, the set $\{ (W, \theta, \theta^*) | |W| \leq h, \theta \in C \}$ is a small set.
 \end{theorem}
 \begin{proof}
+  \vinayak{Sometimes we include conditioning on $X$, othertimes we don't}
 \begin{align*}
 P(W', \nu, \theta | W, \theta, \theta^*) &\geq q(\nu | \theta)\alpha(\theta, \nu, W') \int_T \sum_S P(S,T | W, \theta, \theta^*, X) P(W'| S, T, \theta, \nu)dT  
 \end{align*}
@@ -37,7 +41,10 @@ P(W', \nu, \theta | W, \theta, \theta^*) &\geq q(\nu | \theta)\alpha(\theta, \nu
 P(S, T = \emptyset | W, \theta, \theta^*, X) & \geq p_0(s_0)\prod P(V_{i + 1} = s_0 | V_i = s_0) \prod P(X_{[w_i, w_{i + 1})} | v_i = s_0, \theta)\\
 & \geq p_0(s_0)(1 - 1/k_1)^{|W|}\eta_1
 \end{align*}
-Given $T = \emptyset$ and $S = [s_0]$, $W'$ is a poisson process with rate $r(\theta, \nu, s_0) = \Omega(\theta, \nu) - |A|_{s_0}(\theta) > \epsilon_1 > 0$. Applying thinning theorem, $PP(r(\theta, \nu, s_0)) = PP(\epsilon_1) \cup PP(r(\theta, \nu, s_0) - \epsilon_1)$.
+\vinayak{Explain how $k_1$ comes from assumption 1}\\
+Given $T = \emptyset$ and $S = [s_0]$, $W'$ is a Poisson process with rate 
+$r(\theta, \nu, s_0) = \Omega(\theta, \nu) - |A|_{s_0}(\theta) > \epsilon_1 > 0$. 
+Applying the superposition theorem, $PP(r(\theta, \nu, s_0)) = PP(\epsilon_1) \cup PP(r(\theta, \nu, s_0) - \epsilon_1)$.
 \begin{align*}
 P(W' | S, T = \emptyset, \theta, \nu) & \geq P(W' from PP(\epsilon_1)) P(\emptyset from PP(r(\theta, \nu, s_0) - \epsilon_1))\\
 & \geq P(W' from PP(\epsilon_1)) \exp(-\Omega(\theta, \nu)(t_{end} - t_{start}))\\
@@ -91,15 +98,15 @@ An upper bound of $\mathbb{E}[|T| | W, \theta, \theta^*]$ can be derived directl
 Consider the transition kernel of the sampler.
 
 \begin{align*}
-P(dW', d\mu, \theta | W, \theta, \theta^*) &=d\nu dW' [q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X)\\
-&+ \int_\Theta q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \mu)dT ( 1 - \alpha(\theta, \nu | W', X))d\mu \delta_\theta(\nu)].
+P(dW', d\nu, \theta | W, \theta, \theta^*) &=d\nu dW' [q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X)\\
+&+ \int_\Theta q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT ( 1 - \alpha(\theta, \nu | W', X))d\nu \delta_\theta(\nu)].
 \end{align*}
 Integrate out $W'$, then we get the following.
 \begin{align*}
-P(d\mu| W, \theta, \theta^*) &=d\nu \int_{W'}dW' [q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X)\\
-&+ \int_\Theta q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \mu)dT ( 1 - \alpha(\theta, \nu | W', X))d\mu \delta_\theta(\nu)]\\
-&\leq d\nu[q(\nu | \theta) +1 -  \int q(\mu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \mu)\alpha(\theta, \nu | W', X)d\mu dW' dT \delta_\theta(\nu)]\\
-& \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\mu | \theta)\alpha_i(\theta, \mu)d\mu)\delta_\theta(\nu)]\\
+P(d\nu| W, \theta, \theta^*) &=d\nu \int_{W'}dW' [q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X)\\
+&+ \int_\Theta q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT ( 1 - \alpha(\theta, \nu | W', X))d\nu \delta_\theta(\nu)]\\
+&\leq d\nu[q(\nu | \theta) +1 -  \int q(\nu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \nu)\alpha(\theta, \nu | W', X)d\nu dW' dT \delta_\theta(\nu)]\\
+& \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\nu | \theta)\alpha_i(\theta, \nu)d\nu)\delta_\theta(\nu)]\\
 & \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C))\delta_\theta(\nu)].
 \end{align*}
 Because of assumption 2 and assumption 6, we have the following.
