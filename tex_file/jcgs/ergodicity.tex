@@ -98,15 +98,18 @@ An upper bound of $\mathbb{E}[|T| | W, \theta, \theta^*]$ can be derived directl
 Consider the transition kernel of the sampler.
 
 \begin{align*}
-P(dW', d\nu, \theta | W, \theta, \theta^*) &=d\nu dW' [q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X)\\
-&+ \int_\Theta q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT ( 1 - \alpha(\theta, \nu | W', X))d\nu \delta_\theta(\nu)].
+P(dW', d\nu, \theta | W, \theta, \theta^*) &=d\nu dW' \left[q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X)\right. \\
+                                           &\left.+ \int_\Theta q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT ( 1 - {\color{red} \alpha(\theta, \nu | W', X)})d\nu \delta_\theta(\nu)\right].
 \end{align*}
+\vinayak{Is the term in red above correct? The rejection probability should not
+  depend in $\nu$, rather it is $1-\int \alpha(\theta,\nu)q(\nu|\theta)d\nu$ 
+(see e.g.\ the pseudomarginal paper or any proof of detailed balance of MH)}
 Integrate out $W'$, then we get the following.
 \begin{align*}
-P(d\nu| W, \theta, \theta^*) &=d\nu \int_{W'}dW' [q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X)\\
-&+ \int_\Theta q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT ( 1 - \alpha(\theta, \nu | W', X))d\nu \delta_\theta(\nu)]\\
-&\leq d\nu[q(\nu | \theta) +1 -  \int q(\nu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \nu)\alpha(\theta, \nu | W', X)d\nu dW' dT \delta_\theta(\nu)]\\
-& \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\nu | \theta)\alpha_i(\theta, \nu)d\nu)\delta_\theta(\nu)]\\
+P(d\nu| W, \theta, \theta^*) &=d\nu \int_{W'}dW' \left[q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', Xa\right.)\\
+&\left. + \int_\Theta q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT ( 1 - \alpha(\theta, \nu | W', X))d\nu \delta_\theta(\nu)\right]\\
+&\leq d\nu\left[q(\nu | \theta) +1 -  \int q(\nu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \nu)\alpha(\theta, \nu | W', X)d\nu dW' dT \delta_\theta(\nu)\right]\\
+                             & \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\nu | \theta)\alpha_I(\theta, \nu)d\nu)\delta_\theta(\nu)] \text{\vinayak{Dont understand this line, add an explanation}}\\
 & \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C))\delta_\theta(\nu)].
 \end{align*}
 Because of assumption 2 and assumption 6, we have the following.
