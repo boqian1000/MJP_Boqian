@@ -7,7 +7,7 @@ If we set $\Omega(\theta, \nu) = k (  \max_s|A_{ss}(\theta)| +  \max_s|A_{ss}(\n
 \end{assumption}
 
 \begin{assumption}
-Given the proposal density $q(\nu | \theta)$, $\exists \eta_0 > 0$ s.t. $$ \int_\Theta \max_s|A_{ss}(\nu)| q(\nu | \theta)d\nu \leq \eta_0 \max_s|A_{ss}(\theta)|.$$
+Given the proposal density $q(\nu | \theta)$, $\exists 1 >\eta_0 > 0$ s.t. $$ \int_\Theta \max_s|A_{ss}(\nu)| q(\nu | \theta)d\nu \leq \eta_0 \max_s|A_{ss}(\theta)|.$$
 \end{assumption}
 
 \begin{assumption}
@@ -23,7 +23,7 @@ For the above $C \subseteq \Theta$, $\exists$ $\bar{\Omega} > 0$ s.t. $\Omega(\t
 \end{assumption}
 
 \begin{assumption}
-For the above constants, $\frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C)  - \eta_0 \in (0, 1).$
+For the above constants, $\frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C)  - \eta_0 \in (0, 1)$, where $\mathbb{P}_\phi(C) = \int_C\phi(\mu)d\mu$.
 \end{assumption}
 \vinayak{What is $p_{\phi}$. Is this a strong assumption? Since the first term on the LHS is less than 1,
   can we write this as $\frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C) >\eta_0$? Also this requires
@@ -37,6 +37,7 @@ Under the above assumptions, for $\forall h > 0$, the set $\{ (W, \theta, \theta
 \begin{align*}
 P(W', \nu, \theta | W, \theta, \theta^*) &\geq q(\nu | \theta)\alpha(\theta, \nu, W') \int_T \sum_S P(S,T | W, \theta, \theta^*, X) P(W'| S, T, \theta, \nu)dT  
 \end{align*}
+By assumption 1,  $\Omega(\theta, \nu) \geq k_1 \max\{ \max_s|A_{ss}(\theta)|, \max_s|A_{ss}(\nu)|\} + \epsilon_1 $. $\forall i, s_0$ the self transition probability $P(V_{i + 1} = s_0 | V_i = s_0) = 1 - \frac{|A_{s_0s_0}(\theta)|}{\Omega(\theta, \nu)} \geq 1 - \frac{|A_{s_0s_0}(\theta)|}{k_1 \max_s|A_{ss}(\theta)|} \geq 1 - \frac{1}{k_1}$.
 \begin{align*}
 P(S, T = \emptyset | W, \theta, \theta^*, X) & \geq p_0(s_0)\prod P(V_{i + 1} = s_0 | V_i = s_0) \prod P(X_{[w_i, w_{i + 1})} | v_i = s_0, \theta)\\
 & \geq p_0(s_0)(1 - 1/k_1)^{|W|}\eta_1
@@ -99,7 +100,7 @@ Consider the transition kernel of the sampler.
 
 \begin{align*}
 P(dW', d\nu, \theta | W, \theta, \theta^*) &=d\nu dW' \left[q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X)\right. \\
-                                           &\left.+ \int_\Theta q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT ( 1 - {\color{red} \alpha(\theta, \nu | W', X)})d\nu \delta_\theta(\nu)\right].
+                                           &\left.+ \int_\Theta q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \mu)dT ( 1 - {\color{red} \alpha(\theta, \mu | W', X)})d\mu \delta_\theta(\nu)\right].
 \end{align*}
 \vinayak{Is the term in red above correct? The rejection probability should not
   depend in $\nu$, rather it is $1-\int \alpha(\theta,\nu)q(\nu|\theta)d\nu$ 
@@ -107,9 +108,12 @@ P(dW', d\nu, \theta | W, \theta, \theta^*) &=d\nu dW' \left[q(\nu | \theta) \int
 Integrate out $W'$, then we get the following.
 \begin{align*}
 P(d\nu| W, \theta, \theta^*) &=d\nu \int_{W'}dW' \left[q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', Xa\right.)\\
-&\left. + \int_\Theta q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT ( 1 - \alpha(\theta, \nu | W', X))d\nu \delta_\theta(\nu)\right]\\
-&\leq d\nu\left[q(\nu | \theta) +1 -  \int q(\nu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \nu)\alpha(\theta, \nu | W', X)d\nu dW' dT \delta_\theta(\nu)\right]\\
-                             & \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\nu | \theta)\alpha_I(\theta, \nu)d\nu)\delta_\theta(\nu)] \text{\vinayak{Dont understand this line, add an explanation}}\\
+&\left. + \int_\Theta q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \mu)dT ( 1 - \alpha(\theta, \mu | W', X))d\mu \delta_\theta(\nu)\right]\\
+&\leq d\nu\left[q(\nu | \theta) +(1 -  \int q(\mu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \mu)\alpha(\theta, \mu | W', X)d\mu dW' dT) \delta_\theta(\nu)\right]\\
+& \leq d\nu\left[q(\nu | \theta) +(1 -  \int q(\mu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \mu)\alpha_I(\theta, \mu) \frac{\eta_1^2}{\xi_1^2}d\mu dW' dT) \delta_\theta(\nu)\right]\\                              
+                             & \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\mu | \theta)\alpha_I(\theta, \mu)d\mu)\delta_\theta(\nu)] \text{\vinayak{Dont understand this line, add an explanation}}\\
+& \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \int_C q(\mu | \theta)\alpha_I(\theta, \mu)d\mu)\delta_\theta(\nu)]\\
+& \text{\boqian{It is not correct. We need some lower bound for the integral }}\\
 & \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C))\delta_\theta(\nu)].
 \end{align*}
 Because of assumption 2 and assumption 6, we have the following.
