@@ -63,6 +63,7 @@ Consider the acceptance rate.
 & \geq \alpha_I(\theta, \nu)\frac{\eta_1^2}{\xi_1^2}
 \end{align*}
 Combine the property of the ideal sampler, we have the following inequality.
+\vinayak{By assumption 4}
 \begin{align*}
 P(W', \nu, \theta | W, \theta, \theta^*) \geq \frac{(1 - 1/k_1)^{h} \eta_1^3 \exp(-\bar{\Omega}(t_{end} - t_{start}))\kappa_1}{\xi_1^2} P(W' from PP(\epsilon_1))\phi(\nu)\delta_C(\nu)
 \end{align*}
@@ -100,19 +101,19 @@ Consider the transition kernel of the sampler.
 
 \begin{align*}
 P(dW', d\nu, \theta | W, \theta, \theta^*) &=d\nu dW' \left[q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X)\right. \\
-                                           &\left.+ \int_\Theta q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \mu)dT ( 1 - {\color{red} \alpha(\theta, \mu | W', X)})d\mu \delta_\theta(\nu)\right].
+                                           &\left.+ \int_\Theta q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \mu)dT ( 1 - {\alpha(\theta, \mu | W', X)})d\mu \delta_\theta(\nu)\right].
 \end{align*}
-\vinayak{Is the term in red above correct? The rejection probability should not
-  depend in $\nu$, rather it is $1-\int \alpha(\theta,\nu)q(\nu|\theta)d\nu$ 
-(see e.g.\ the pseudomarginal paper or any proof of detailed balance of MH)}
+%\vinayak{Is the term in red above correct? The rejection probability should not
+%  depend in $\nu$, rather it is $1-\int \alpha(\theta,\nu)q(\nu|\theta)d\nu$ 
+%(see e.g.\ the pseudomarginal paper or any proof of detailed balance of MH)}
 Integrate out $W'$, then we get the following.
 \begin{align*}
-P(d\nu| W, \theta, \theta^*) &=d\nu \int_{W'}dW' \left[q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', Xa\right.)\\
+  P(d\nu| &W, \theta, \theta^*) =d\nu \int_{W'}dW' \left[q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X\right.)\\
 &\left. + \int_\Theta q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \mu)dT ( 1 - \alpha(\theta, \mu | W', X))d\mu \delta_\theta(\nu)\right]\\
-&\leq d\nu\left[q(\nu | \theta) +(1 -  \int q(\mu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \mu)\alpha(\theta, \mu | W', X)d\mu dW' dT) \delta_\theta(\nu)\right]\\
-& \leq d\nu\left[q(\nu | \theta) +(1 -  \int q(\mu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \mu)\alpha_I(\theta, \mu) \frac{\eta_1^2}{\xi_1^2}d\mu dW' dT) \delta_\theta(\nu)\right]\\                              
-                             & \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\mu | \theta)\alpha_I(\theta, \mu)d\mu)\delta_\theta(\nu)] \text{\vinayak{Dont understand this line, add an explanation}}\\
-& \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \int_C q(\mu | \theta)\alpha_I(\theta, \mu)d\mu)\delta_\theta(\nu)]\\
+&\leq d\nu\left[q(\nu | \theta) +\left(1 -  \int q(\mu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \mu)\alpha(\theta, \mu | W', X)d\mu dW' dT\right) \delta_\theta(\nu)\right]\\
+& \leq d\nu\left[q(\nu | \theta) +\left(1 -  \int q(\mu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \mu)\alpha_I(\theta, \mu) \frac{\eta_1^2}{\xi_1^2}d\mu dW' dT\right) \delta_\theta(\nu)\right]\\
+          & \leq d\nu \left[q(\nu | \theta) + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right)\delta_\theta(\nu)\right] \\
+          & \leq d\nu \left[q(\nu | \theta) + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int_C q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right)\delta_\theta(\nu)\right]\\
 & \text{\boqian{It is not correct. We need some lower bound for the integral }}\\
 & \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C))\delta_\theta(\nu)].
 \end{align*}
