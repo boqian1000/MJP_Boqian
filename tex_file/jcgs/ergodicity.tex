@@ -22,13 +22,17 @@ For the ideal sampler with the proposal density $q(\nu| \theta)$ and the accepta
 For the above $C \subseteq \Theta$, $\exists$ $\bar{\Omega} > 0$ s.t. $\Omega(\theta, \nu)  \leq \bar{\Omega}$ for $\forall (\theta, \nu) \in C \times C$.
 \end{assumption}
 
+%\begin{assumption}
+%For the above constants, $\frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C)  - \eta_0 \in (0, 1)$, where $\mathbb{P}_\phi(C) = \int_C\phi(\mu)d\mu$.
+%\end{assumption}
+%\vinayak{What is $p_{\phi}$. Is this a strong assumption? Since the first term on the LHS is less than 1,
+%  can we write this as $\frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C) >\eta_0$? Also this requires
+%$\eta_0 <1$. }
 \begin{assumption}
-For the above constants, $\frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C)  - \eta_0 \in (0, 1)$, where $\mathbb{P}_\phi(C) = \int_C\phi(\mu)d\mu$.
+$\exists \rho_1 \geq \left(1 - \frac{\eta_1^2}{\xi_1^2}\right)\sup_\theta \int q(\mu| \theta)\alpha_I(\theta, \mu)d\mu $ and $\rho_1 \leq \sup_\theta \int q(\mu| \theta)\alpha_I(\theta, \mu)d\mu$, s.t.
+$$\int \max_s A_s(\nu)q(\nu | \theta)d\nu + (1 - \int q(\mu | \theta)\alpha_I(\theta, \mu)d\mu)\max_s A_s(\theta) \leq (1 - \rho_1) \max_s A_s(\theta), \forall \theta \in \Theta.$$
+This implies that the drift condition of the ideal sampler.
 \end{assumption}
-\vinayak{What is $p_{\phi}$. Is this a strong assumption? Since the first term on the LHS is less than 1,
-  can we write this as $\frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C) >\eta_0$? Also this requires
-$\eta_0 <1$. }
-
 \begin{theorem}
 Under the above assumptions, for $\forall h > 0$, the set $\{ (W, \theta, \theta^*) | |W| \leq h, \theta \in C \}$ is a small set.
 \end{theorem}
@@ -62,7 +66,7 @@ Consider the acceptance rate.
 & \geq 1 \wedge \frac{\eta_1^2}{\xi_1^2} 	\frac{P(X | \nu) q(\theta|\nu)p(\nu)}{P(X | \theta)q(\nu|\theta)p(\theta)}\\
 & \geq \alpha_I(\theta, \nu)\frac{\eta_1^2}{\xi_1^2}
 \end{align*}
-Combine the property of the ideal sampler, we have the following inequality.
+By assumption 4, we have the following inequality.
 \vinayak{By assumption 4}
 \begin{align*}
 P(W', \nu, \theta | W, \theta, \theta^*) \geq \frac{(1 - 1/k_1)^{h} \eta_1^3 \exp(-\bar{\Omega}(t_{end} - t_{start}))\kappa_1}{\xi_1^2} P(W' from PP(\epsilon_1))\phi(\nu)\delta_C(\nu)
@@ -112,16 +116,23 @@ Integrate out $W'$, then we get the following.
 &\left. + \int_\Theta q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \mu)dT ( 1 - \alpha(\theta, \mu | W', X))d\mu \delta_\theta(\nu)\right]\\
 &\leq d\nu\left[q(\nu | \theta) +\left(1 -  \int q(\mu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \mu)\alpha(\theta, \mu | W', X)d\mu dW' dT\right) \delta_\theta(\nu)\right]\\
 & \leq d\nu\left[q(\nu | \theta) +\left(1 -  \int q(\mu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \mu)\alpha_I(\theta, \mu) \frac{\eta_1^2}{\xi_1^2}d\mu dW' dT\right) \delta_\theta(\nu)\right]\\
-          & \leq d\nu \left[q(\nu | \theta) + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right)\delta_\theta(\nu)\right] \\
-          & \leq d\nu \left[q(\nu | \theta) + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int_C q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right)\delta_\theta(\nu)\right]\\
-& \text{\boqian{It is not correct. We need some lower bound for the integral }}\\
-& \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C))\delta_\theta(\nu)].
+          & \leq d\nu \left[q(\nu | \theta) + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right)\delta_\theta(\nu)\right]
+%          & \leq d\nu \left[q(\nu | \theta) + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int_C q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right)\delta_\theta(\nu)\right]\\
+%& \text{\boqian{It is not correct. We need some lower bound for the integral }}\\
+%& \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C))\delta_\theta(\nu)].
 \end{align*}
 Because of assumption 2 and assumption 6, we have the following.
 \begin{align*}
-\int_\Theta \max_s|A_{ss}(\nu)|P(d\nu| W, \theta, \theta^*) d\nu \leq (\eta_0 + 1 - \frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C)) \max_s|A_{ss}(\theta)| \doteq (1 - \delta_3) \max_s|A_{ss}(\theta)|,
+\int_\Theta \max_sA_s(\nu)P(d\nu| W, \theta, \theta^*)  &\leq \int \max_sA_s(\nu) q(\nu | \theta) d\nu + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int_C q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right) \max_sA_s(\theta) \\ 
+&= \int \max_sA_s(\nu) q(\nu | \theta) d\nu + \left(1 -  \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right) \max_sA_s(\theta) \\
+& + \left( 1 - \frac{\eta_1^2}{\xi_1^2} \right) \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu \max_sA_s(\theta)\\
+&\leq \left(1 - \rho_1 + \left(1 - \frac{\eta_1^2}{\xi_1^2} \right) \sup_\theta \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu \right) \max_sA_s(\theta)\\
+& \doteq (1 - \delta_3) \max_sA_s(\theta)
 \end{align*}
-where $\delta_3 \in (0, 1)$.\\
-If we set  $\lambda = \lceil\frac{a}{\delta_3} \rceil = \lceil \frac{(t_{end} - t_{start})k_2(\eta_0 + 1)}{(\eta_1^2 \kappa_1 \mathbb{P}_\phi(C)/\xi_1^2 - \eta_0)} \rceil$, then the drift condition holds.\\
+%\begin{align*}
+%\int_\Theta \max_s|A_{ss}(\nu)|P(d\nu| W, \theta, \theta^*) d\nu \leq (\eta_0 + 1 - \frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C)) \max_s|A_{ss}(\theta)| \doteq (1 - \delta_3) \max_s|A_{ss}(\theta)|,
+%\end{align*}
+%where $\delta_3 \in (0, 1)$.\\
+If we set  $\lambda = \lceil\frac{a}{\delta_3} \rceil$, then the drift condition holds.\\
 i.e. $\exists \delta_2 \in (0, 1)$ and $L > 0$ s.t. $\mathbb{E}[|W'| + \lambda\max_s|A_{ss}(\nu)  | W, \theta, \theta^*, X] \leq (1 - \delta_2)(|W| + \lambda \max_s|A_{ss}(\theta)| ) + L$. 
 \end{proof}
