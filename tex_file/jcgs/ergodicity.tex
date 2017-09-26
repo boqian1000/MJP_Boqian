@@ -87,7 +87,9 @@ $\exists \delta_1 \in (0, 1)$ s.t. $\mathbb{E}[\mathbb{I}_{\{V_i = V_{i + 1}\}} 
 & \geq \frac{\eta_1 (1 - 1/k_1)}{\xi_1} \doteq \delta_1 
 \end{align*}
 \end{proof}
-\begin{theorem}(drift condition) $\exists \delta_2 \in (0, 1), L > 0$ s.t. $$\mathbb{E}\left[|W'| + \lambda \max_s |A_{ss}(\nu)| | W, \theta, \theta^*, X\right] \leq (1 - \delta_2)\left(|W| + \lambda \max_s |A_{ss}(\theta)| \right) + L.$$
+\begin{theorem}(drift condition) $\exists \delta_2 \in (0, 1), L > 0$ 
+  s.t. 
+  $$\mathbb{E}\left[|W'| + \lambda \max_s |A_{ss}(\nu)| | W, \theta, \theta^*, X\right] \leq (1 - \delta_2)\left(|W| + \lambda \max_s |A_{ss}(\theta)| \right) + L.$$
 where $\lambda = \lceil \frac{(t_{end} - t_{start})k_2(\eta_0 + 1)}{(\eta_1^2 \kappa_1 \mathbb{P}_\phi(C)/\xi_1^2 - \eta_0)} \rceil.$
 \end{theorem}
 \begin{proof}
@@ -123,18 +125,29 @@ Integrate out $W'$, then we get the following.
 %& \text{\boqian{It is not correct. We need some lower bound for the integral }}\\
 %& \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C))\delta_\theta(\nu)].
 \end{align*}
-Because of assumption 2 and assumption 6, we have the following.
+Because of assumption 2, we have the following.
 \begin{align*}
 \int \max_sA_s(\nu)P(d\nu| W, \theta, \theta^*)  &\leq \int \max_sA_s(\nu) q(\nu | \theta) d\nu + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right) \max_sA_s(\theta) \\ 
-&= \int \max_sA_s(\nu) q(\nu | \theta) d\nu + \left(1 -  \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right) \max_sA_s(\theta) \\
-& + \left( 1 - \frac{\eta_1^2}{\xi_1^2} \right) \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu \max_sA_s(\theta)\\
-&\leq \left[1 - \rho_1 + \left(1 - \frac{\eta_1^2}{\xi_1^2} \right) \sup_\theta \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu \right] \max_sA_s(\theta)\\
-& \doteq (1 - \delta_3) \max_sA_s(\theta)
+   &\leq \eta_0 \max_sA_s(\theta)  + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right) \max_sA_s(\theta)  
+%&= \int \max_sA_s(\nu) q(\nu | \theta) d\nu + \left(1 -  \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right) \max_sA_s(\theta) \\
+%& + \left( 1 - \frac{\eta_1^2}{\xi_1^2} \right) \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu \max_sA_s(\theta)\\
+%&\leq \left[1 - \rho_1 + \left(1 - \frac{\eta_1^2}{\xi_1^2} \right) \sup_\theta \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu \right] \max_sA_s(\theta)\\
+%& \doteq (1 - \delta_3) \max_sA_s(\theta)
 \end{align*}
 %\begin{align*}
 %\int_\Theta \max_s|A_{ss}(\nu)|P(d\nu| W, \theta, \theta^*) d\nu \leq (\eta_0 + 1 - \frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C)) \max_s|A_{ss}(\theta)| \doteq (1 - \delta_3) \max_s|A_{ss}(\theta)|,
 %\end{align*}
 %where $\delta_3 \in (0, 1)$.\\
-If we set  $\lambda = \lceil\frac{a}{\delta_3} \rceil$, then the drift condition holds.\\
-i.e. $\exists \delta_2 \in (0, 1)$ and $L > 0$ s.t. $$\mathbb{E}\left[|W'| + \lambda\max_s|A_{ss}(\nu)  | W, \theta, \theta^*, X\right] \leq (1 - \delta_2)\left(|W| + \lambda \max_s|A_{ss}(\theta)| \right) + L.$$ 
+(Too loose unless we assume $\eta_0 < 1$.)
+
+From these equations, we have
+\begin{align*}
+  \mathbb{E}\left[\lambda |W'| + \max_s |A_{ss}(\nu)|\right. & \left.| W, \theta, \theta^*, X\right] \leq 
+  \lambda \left[|W|(1 - \delta_1) +  \max_s|A_{ss}(\theta)| + b\right] + \\
+  &\left[\eta_0 + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right)\right] \max_sA_s(\theta)  
+\end{align*}
+If we set  $\lambda$ small enough, and the second term in square brackets is
+less than 1 (to prove), then the drift condition holds.
+%= \lceil\frac{a}{\delta_3} \rceil$, then the drift condition holds.\\
+%i.e. $\exists \delta_2 \in (0, 1)$ and $L > 0$ s.t. $$\mathbb{E}\left[|W'| + \lambda\max_s|A_{ss}(\nu)  | W, \theta, \theta^*, X\right] \leq (1 - \delta_2)\left(|W| + \lambda \max_s|A_{ss}(\theta)| \right) + L.$$ 
 \end{proof}
