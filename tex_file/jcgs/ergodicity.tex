@@ -41,25 +41,30 @@ Under the above assumptions, for $\forall h > 0$, the set $\left\lbrace (W, \the
 \begin{proof}
   \vinayak{Sometimes we include conditioning on $X$, othertimes we don't}
 \begin{align*}
-P(W', \nu, \theta | W, \theta, \theta^*) &\geq q(\nu | \theta)\alpha(\theta, \nu, W') \int_T \sum_S P(S,T | W, \theta, \theta^*, X) P(W'| S, T, \theta, \nu)dT  
+P(W', \nu, \theta | W, \theta, \theta^*,X) &\geq q(\nu | \theta)
+         \alpha(\theta, \nu, W',X) \int_T \sum_S P(S,T | W, \theta, \theta^*, X) P(W'| S, T, \theta, \nu)dT  
 \end{align*}
+Here we use the fact that both the proposal distribution $q(\nu|\theta)$
+and $P(W'|S,T,\theta,\nu,X))$ are independent of  $X$.
 By assumption 1,  $\Omega(\theta, \nu) \geq k_1 \max\{ \max_s|A_{ss}(\theta)|, \max_s|A_{ss}(\nu)|\} + \epsilon_1 $. $\forall i, s_0$ the self transition probability $P(V_{i + 1} = s_0 | V_i = s_0) = 1 - \frac{|A_{s_0s_0}(\theta)|}{\Omega(\theta, \nu)} \geq 1 - \frac{|A_{s_0s_0}(\theta)|}{k_1 \max_s|A_{ss}(\theta)|} \geq 1 - \frac{1}{k_1}$.
 \begin{align*}
-P(S, T = \emptyset | W, \theta, \theta^*, X) & \geq p_0(s_0)\prod P(V_{i + 1} = s_0 | V_i = s_0) \prod P(X_{[w_i, w_{i + 1})} | v_i = s_0, \theta)\\
+P(S=s_0, T = \emptyset | W, \theta, \theta^*, X) & = p_0(s_0)\prod P(V_{i + 1} = s_0 | V_i = s_0) \prod P(X_{[w_i, w_{i + 1})} | v_i = s_0, \theta)\\
 & \geq p_0(s_0)(1 - 1/k_1)^{|W|}\eta_1
 \end{align*}
-\vinayak{Explain how $k_1$ comes from assumption 1}\\
 Given $T = \emptyset$ and $S = [s_0]$, $W'$ is a Poisson process with rate 
 $r(\theta, \nu, s_0) = \Omega(\theta, \nu) - |A|_{s_0}(\theta) > \epsilon_1 > 0$. 
-Applying the superposition theorem, $PP(r(\theta, \nu, s_0)) = PP(\epsilon_1) \cup PP(r(\theta, \nu, s_0) - \epsilon_1)$.
+Applying the superposition theorem, $\PP(r(\theta, \nu, s_0)) =
+\PP(\epsilon_1) \cup \PP(r(\theta, \nu, s_0) - \epsilon_1)$.
 \begin{align*}
-P(W' | S, T = \emptyset, \theta, \nu) & \geq P(W' from PP(\epsilon_1)) P(\emptyset from PP(r(\theta, \nu, s_0) - \epsilon_1))\\
-& \geq P(W' from PP(\epsilon_1)) \exp(-\Omega(\theta, \nu)(t_{end} - t_{start}))\\
-& \geq P(W' from PP(\epsilon_1)) \exp(-\bar{\Omega}(t_{end} - t_{start}))\delta_C(\nu)
+P(W' | S, T = \emptyset, \theta, \nu) & \geq P(W' \from \PP(\epsilon_1))
+P(\emptyset \from \PP(r(\theta, \nu, s_0) - \epsilon_1))\\
+& \geq P(W' \from \PP(\epsilon_1)) \exp(-\Omega(\theta, \nu)(t_{end} - t_{start}))\\
+& \geq P(W' \from \PP(\epsilon_1)) \exp(-\bar{\Omega}(t_{end} - t_{start}))\delta_C(\nu)
 \end{align*}
 \begin{align*}
 \int_T \sum_S P(S,T | W, \theta, \theta^*, X) P(W'| S, T, \theta, \nu)dT &\geq \sum_S P(S, T = \emptyset | W, \theta, \theta^*, X) P(W' | S, T=\emptyset,\theta, \nu)\\
-& \geq (1 - 1/k_1)^{|W|}\eta_1 \exp(-\bar{\Omega}(t_{end} - t_{start})) P(W' from PP(\epsilon_1))\delta_C(\nu)
+& \geq (1 - 1/k_1)^{|W|}\eta_1 \exp(-\bar{\Omega}(t_{end} - t_{start})) \\
+& \quad P(W' \from \PP(\epsilon_1))\delta_C(\nu)
 \end{align*}
 Consider the acceptance rate.
 \begin{align*}
@@ -69,9 +74,11 @@ Consider the acceptance rate.
 & \geq \alpha_I(\theta, \nu)\frac{\eta_1^2}{\xi_1^2}
 \end{align*}
 By assumption 4, we have the following inequality.
-\vinayak{By assumption 4}
 \begin{align*}
-P(W', \nu, \theta | W, \theta, \theta^*) \geq \frac{(1 - 1/k_1)^{h} \eta_1^3 \exp(-\bar{\Omega}(t_{end} - t_{start}))\kappa_1}{\xi_1^2} P(W' from PP(\epsilon_1))\phi(\nu)\delta_C(\nu)
+P(W', \nu, \theta | W, \theta, \theta^*) \geq \frac{(1 - 1/k_1)^{h}
+\eta_1^3 \exp(-\bar{\Omega}(t_{end} - t_{start}))\kappa_1}{\xi_1^2} 
+ P(W'
+\from \PP(\epsilon_1))\phi(\nu)\delta_C(\nu)
 \end{align*}
 \end{proof}
 
