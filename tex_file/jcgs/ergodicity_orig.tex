@@ -1,0 +1,160 @@
+\section{Geometrical ergodicity}
+\begin{assumption}
+$\exists$ $k_2 > k_1 > 1$ and $\epsilon_1, \epsilon_2 > 0$, s.t. 
+$$\Omega(\theta, \nu) \leq k_2 \left(  \max_s|A_{ss}(\theta)| +  \max_s|A_{ss}(\nu)| \right) + \epsilon_2 ;$$
+$$\Omega(\theta, \nu) \geq k_1 \max \left\lbrace \max_s|A_{ss}(\theta)|, \max_s|A_{ss}(\nu)| \right\rbrace + \epsilon_1.$$ 
+If we set $\Omega(\theta, \nu) = k \left(  \max_s|A_{ss}(\theta)| +  \max_s|A_{ss}(\nu)| \right) + \epsilon$, for some $k > 1$ and $\epsilon > 0$, then this assumption is satisfied.
+\end{assumption}
+
+\begin{assumption}
+Given the proposal density $q(\nu | \theta)$, $\exists \eta_0 > 0$ s.t. $$ \int_\Theta \max_s|A_{ss}(\nu)| q(\nu | \theta)d\nu \leq \eta_0 \max_s|A_{ss}(\theta)|.$$
+\end{assumption}
+
+\begin{assumption}
+$\exists$ $ \xi_1 > \eta_1 > 0$ s.t. $\prod P(x_o | s_o, \theta) \in (\eta_1, \xi_1)$.
+\end{assumption}
+
+\begin{assumption}
+For the ideal sampler with the proposal density $q(\nu| \theta)$ and the acceptance rate $\alpha_I(\theta, \nu) = 1 \wedge \frac{P(X | \nu)q(\theta| \nu)p(\nu)}{P(X | \theta)q(\nu| \theta)p(\theta)}$, $\exists$ a probability measure $\phi$, a constant $\kappa_1 > 0$ and a set $C \subseteq \Theta$, s.t. $q(\nu | \theta) \alpha_I(\theta, \nu) \geq \kappa_1 \phi(\nu)$ for $\theta \in C$. 
+\end{assumption}
+
+%\begin{assumption}
+%For the above constants, $\frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C)  - \eta_0 \in (0, 1)$, where $\mathbb{P}_\phi(C) = \int_C\phi(\mu)d\mu$.
+%\end{assumption}
+%\vinayak{What is $p_{\phi}$. Is this a strong assumption? Since the first term on the LHS is less than 1,
+%  can we write this as $\frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C) >\eta_0$? Also this requires
+%$\eta_0 <1$. }
+\begin{assumption}
+$$\exists \rho_1 \geq \left(1 - \frac{\eta_1^2}{\xi_1^2}\right)\sup_\theta \int q(\mu| \theta)\alpha_I(\theta, \mu)d\mu , \text{ and } \rho_1 \leq \sup_\theta \int q(\mu| \theta)\alpha_I(\theta, \mu)d\mu, s.t.$$
+$$\int \max_s |A_{ss}(\nu)|q(\nu | \theta)d\nu + \left(1 - \int q(\mu | \theta)\alpha_I(\theta, \mu)d\mu\right)\max_s |A_{ss}(\theta)| \leq (1 - \rho_1) \max_s |A_{ss}(\theta)|, \forall \theta \in \Theta.$$
+This implies that the drift condition of the ideal sampler.
+\end{assumption}
+
+\begin{assumption}
+For the above $C \subseteq \Theta$, $\exists$ $\bar{\Omega} > 0$ s.t. $\Omega(\theta, \nu)  \leq \bar{\Omega}$ for $\forall (\theta, \nu) \in C \times C$.
+\end{assumption}
+
+
+\begin{theorem}
+Under the above assumptions, for $\forall h > 0$, the set $\left\lbrace (W, \theta, \theta^*) | |W| \leq h, \theta \in C \right\rbrace$ is a small set.
+\end{theorem}
+\begin{proof}
+  \vinayak{Sometimes we include conditioning on $X$, othertimes we don't}
+\begin{align*}
+P(W', \nu, \theta | W, \theta, \theta^*,X) &\geq q(\nu | \theta)
+         \alpha(\theta, \nu, W',X) \int_T \sum_S P(S,T | W, \theta, \theta^*, X) P(W'| S, T, \theta, \nu)dT  
+\end{align*}
+Here we use the fact that both the proposal distribution $q(\nu|\theta)$
+and $P(W'|S,T,\theta,\nu,X))$ are independent of  $X$.
+By assumption 1,  $\Omega(\theta, \nu) \geq k_1 \max\{ \max_s|A_{ss}(\theta)|, \max_s|A_{ss}(\nu)|\} + \epsilon_1 $. $\forall i, s_0$ the self transition probability $P(V_{i + 1} = s_0 | V_i = s_0) = 1 - \frac{|A_{s_0s_0}(\theta)|}{\Omega(\theta, \nu)} \geq 1 - \frac{|A_{s_0s_0}(\theta)|}{k_1 \max_s|A_{ss}(\theta)|} \geq 1 - \frac{1}{k_1}$.
+\begin{align*}
+P(S=s_0, T = \emptyset | W, \theta, \theta^*, X) & = p_0(s_0)\prod P(V_{i + 1} = s_0 | V_i = s_0) \prod P(X_{[w_i, w_{i + 1})} | v_i = s_0, \theta)\\
+& \geq p_0(s_0)(1 - 1/k_1)^{|W|}\eta_1
+\end{align*}
+Given $T = \emptyset$ and $S = [s_0]$, $W'$ is a Poisson process with rate 
+$r(\theta, \nu, s_0) = \Omega(\theta, \nu) - |A|_{s_0}(\theta) > \epsilon_1 > 0$. 
+Applying the superposition theorem, $\PP(r(\theta, \nu, s_0)) =
+\PP(\epsilon_1) \cup \PP(r(\theta, \nu, s_0) - \epsilon_1)$.
+\begin{align*}
+P(W' | S, T = \emptyset, \theta, \nu) & \geq P(W' \from \PP(\epsilon_1))
+P(\emptyset \from \PP(r(\theta, \nu, s_0) - \epsilon_1))\\
+& \geq P(W' \from \PP(\epsilon_1)) \exp(-\Omega(\theta, \nu)(t_{end} - t_{start}))\\
+& \geq P(W' \from \PP(\epsilon_1)) \exp(-\bar{\Omega}(t_{end} - t_{start}))\delta_C(\nu)
+\end{align*}
+\begin{align*}
+\int_T \sum_S P(S,T | W, \theta, \theta^*, X) P(W'| S, T, \theta, \nu)dT &\geq \sum_S P(S, T = \emptyset | W, \theta, \theta^*, X) P(W' | S, T=\emptyset,\theta, \nu)\\
+& \geq (1 - 1/k_1)^{|W|}\eta_1 \exp(-\bar{\Omega}(t_{end} - t_{start})) \\
+& \quad P(W' \from \PP(\epsilon_1))\delta_C(\nu)
+\end{align*}
+Consider the acceptance rate.
+\begin{align*}
+\alpha(\theta, \nu, W') &= 1 \wedge \frac{P(X | W', \nu, \theta) q(\theta|\nu)p(\nu)}{P(X | W', \theta, \nu)q(\nu|\theta)p(\theta)}\\
+&= 1 \wedge \frac{P(X|W', \nu, \theta) / P(X|\nu)}{P(X|W', \theta, \nu) / P(X|\theta)} \frac{P(X | \nu) q(\theta|\nu)p(\nu)}{P(X | \theta)q(\nu|\theta)p(\theta)}\\
+& \geq 1 \wedge \frac{\eta_1^2}{\xi_1^2} 	\frac{P(X | \nu) q(\theta|\nu)p(\nu)}{P(X | \theta)q(\nu|\theta)p(\theta)}\\
+& \geq \alpha_I(\theta, \nu)\frac{\eta_1^2}{\xi_1^2}
+\end{align*}
+By assumption 4, we have the following inequality.
+\begin{align*}
+P(W', \nu, \theta | W, \theta, \theta^*) \geq \frac{(1 - 1/k_1)^{h}
+\eta_1^3 \exp(-\bar{\Omega}(t_{end} - t_{start}))\kappa_1}{\xi_1^2} 
+ P(W'
+\from \PP(\epsilon_1))\phi(\nu)\delta_C(\nu)
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+$\exists \delta_1 \in (0, 1)$ s.t. $\mathbb{E}[\mathbb{I}_{\{V_i = V_{i + 1}\}} | W, X, \theta, \theta^*] \geq \delta_1$ for $i = 0, 1, 2, ..., |W|$. 
+\end{lemma}
+\begin{proof}
+\begin{align*}
+\mathbb{E}[\mathbb{I}_{\{V_i = V_{i + 1}\}} | W, X, \theta, \theta^*] &= P(V_i = V_{i + 1} | W, X, \theta, \theta^*) = \sum_v P(V_i = V_{i + 1} = v | W, X, \theta, \theta^*)\\
+& =\sum_v \frac{P(V_i = V_{i + 1} = v, X | W, \theta, \theta^*)}{P(X | W, \theta, \theta^*)} \\
+&=\sum_v \frac{P(X | V_i = V_{i + 1} = v, W, \theta, \theta^*)P( V_i = V_{i + 1} = v|W, \theta, \theta^*)}{P(X | W, \theta, \theta^*)}\\
+& \geq \eta_1\sum_v P(V_i = V_{i + 1} = v | W) /\xi_1 =  \eta_1 \sum_v P(V_{i + 1} = v | V_i = v, W)P(V_i = v) /\xi_1 \\
+& \geq \frac{\eta_1 (1 - 1/k_1)}{\xi_1} \doteq \delta_1 
+\end{align*}
+\end{proof}
+\begin{theorem}(drift condition) $\exists \delta_2 \in (0, 1), L > 0$ 
+  s.t. 
+  $$\mathbb{E}\left[|W'| + \lambda \max_s |A_{ss}(\nu)| | W, \theta, \theta^*, X\right] \leq (1 - \delta_2)\left(|W| + \lambda \max_s |A_{ss}(\theta)| \right) + L.$$
+where $\lambda = \lceil \frac{(t_{end} - t_{start})k_2(\eta_0 + 1)}{(\eta_1^2 \kappa_1 \mathbb{P}_\phi(C)/\xi_1^2 - \eta_0)} \rceil.$
+\end{theorem}
+\begin{proof}
+Since $W' = T \cup U'$, we consider $\mathbb{E}[|T| | W, \theta, \theta^*, X]$ and $\mathbb{E}[|U'| | W, \theta, \theta^*, X]$ respectively.
+An upper bound of $\mathbb{E}[|T| | W, \theta, \theta^*]$ can be derived directly from lemma 1.
+\begin{align*}
+\mathbb{E}[|T| | W, \theta, \theta^*, X] &= \mathbb{E}[\sum_{i = 0}^{|W| - 1} \mathbb{I}_{\{ V_{i + 1} \neq V_i \}}| W, \theta, \theta^*, X]\\
+&\leq \sum_{i = 0}^{|W| - 1} (1 - \delta_1) = |W|(1 - \delta_1).
+\end{align*}
+\begin{align*}
+\mathbb{E}[|U'| |W, \theta, \theta^*, X] &= \mathbb{E}_{S,T, \nu}\mathbb{E}[|U'| | S, T, W, \theta, \nu, X] = \mathbb{E}_{S,T, \nu}\mathbb{E}[|U'| | S, T, W, \theta, \nu] \\
+& \leq \mathbb{E}_{S,T, \nu} \left[(t_{end} - t_{start})\Omega(\theta, \nu)\right] = (t_{end} - t_{start})\int \Omega(\theta, \nu) q(\nu | \theta) d\nu\\
+& \leq (t_{end} - t_{start})\left[ k_2 \left(  \max_s|A_{ss}(\theta)| +  \int_\Theta \max_s|A_{ss}(\nu)|q(\nu | \theta)d\nu \right) + \epsilon_2 \right] \\
+& \leq (t_{end} - t_{start}) \left[ k_2 (\eta_0 + 1) \max_s|A_{ss}(\theta)| + \epsilon_2 \right] \doteq a \max_s|A_{ss}(\theta)| + b.
+\end{align*}
+Consider the transition kernel of the sampler.
+
+\begin{align*}
+P(dW', d\nu, \theta | W, \theta, \theta^*) &=d\nu dW' \left[q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X)\right. \\
+                                           &\left.+ \int q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \mu)dT ( 1 - {\alpha(\theta, \mu | W', X)})d\mu \delta_\theta(\nu)\right].
+\end{align*}
+%\vinayak{Is the term in red above correct? The rejection probability should not
+%  depend in $\nu$, rather it is $1-\int \alpha(\theta,\nu)q(\nu|\theta)d\nu$ 
+%(see e.g.\ the pseudomarginal paper or any proof of detailed balance of MH)}
+Integrate out $W'$, then we get the following.
+\begin{align*}
+  P(d\nu| &W, \theta, \theta^*) =d\nu \int_{W'}dW' \left[q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X\right.)\\
+&\left. + \int q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \mu)dT ( 1 - \alpha(\theta, \mu | W', X))d\mu \delta_\theta(\nu)\right]\\
+&\leq d\nu\left[q(\nu | \theta) +\left(1 -  \int q(\mu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \mu)\alpha(\theta, \mu | W', X)d\mu dW' dT\right) \delta_\theta(\nu)\right]\\
+& \leq d\nu\left[q(\nu | \theta) +\left(1 -  \int q(\mu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \mu)\alpha_I(\theta, \mu) \frac{\eta_1^2}{\xi_1^2}d\mu dW' dT\right) \delta_\theta(\nu)\right]\\
+          & \leq d\nu \left[q(\nu | \theta) + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right)\delta_\theta(\nu)\right]
+%          & \leq d\nu \left[q(\nu | \theta) + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right)\delta_\theta(\nu)\right]\\
+%& \text{\boqian{It is not correct. We need some lower bound for the integral }}\\
+%& \leq d\nu [q(\nu | \theta) + (1 - \frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C))\delta_\theta(\nu)].
+\end{align*}
+Because of assumption 2, we have the following.
+\begin{align*}
+\int \max_sA_s(\nu)P(d\nu| W, \theta, \theta^*)  &\leq \int \max_sA_s(\nu) q(\nu | \theta) d\nu + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right) \max_sA_s(\theta) \\ 
+   &\leq \eta_0 \max_sA_s(\theta)  + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right) \max_sA_s(\theta)  
+%&= \int \max_sA_s(\nu) q(\nu | \theta) d\nu + \left(1 -  \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right) \max_sA_s(\theta) \\
+%& + \left( 1 - \frac{\eta_1^2}{\xi_1^2} \right) \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu \max_sA_s(\theta)\\
+%&\leq \left[1 - \rho_1 + \left(1 - \frac{\eta_1^2}{\xi_1^2} \right) \sup_\theta \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu \right] \max_sA_s(\theta)\\
+%& \doteq (1 - \delta_3) \max_sA_s(\theta)
+\end{align*}
+%\begin{align*}
+%\int_\Theta \max_s|A_{ss}(\nu)|P(d\nu| W, \theta, \theta^*) d\nu \leq (\eta_0 + 1 - \frac{\eta_1^2}{\xi_1^2} \kappa_1 \mathbb{P}_\phi(C)) \max_s|A_{ss}(\theta)| \doteq (1 - \delta_3) \max_s|A_{ss}(\theta)|,
+%\end{align*}
+%where $\delta_3 \in (0, 1)$.\\
+(Too loose unless we assume $\eta_0 < 1$.)
+
+From these equations, we have
+\begin{align*}
+  \mathbb{E}\left[\lambda |W'| + \max_s |A_{ss}(\nu)|\right. & \left.| W, \theta, \theta^*, X\right] \leq 
+  \lambda \left[|W|(1 - \delta_1) +  \max_s|A_{ss}(\theta)| + b\right] + \\
+  &\left[\eta_0 + \left(1 - \frac{\eta_1^2}{\xi_1^2} \int q(\mu | \theta)\alpha_I(\theta, \mu) d\mu\right)\right] \max_sA_s(\theta)  
+\end{align*}
+If we set  $\lambda$ small enough, and the second term in square brackets is
+less than 1 (to prove), then the drift condition holds.
+%= \lceil\frac{a}{\delta_3} \rceil$, then the drift condition holds.\\
+%i.e. $\exists \delta_2 \in (0, 1)$ and $L > 0$ s.t. $$\mathbb{E}\left[|W'| + \lambda\max_s|A_{ss}(\nu)  | W, \theta, \theta^*, X\right] \leq (1 - \delta_2)\left(|W| + \lambda \max_s|A_{ss}(\theta)| \right) + L.$$ 
+\end{proof}
