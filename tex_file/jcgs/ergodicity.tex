@@ -7,44 +7,45 @@ from distribution $q(\nu|\theta)$, and accepts with probability
 $\alpha_I(\nu,\theta) = 1 \wedge \frac{P(X | \nu)q(\theta| \nu)p(\nu)}
       {P(X | \theta)q(\nu|\theta)p(\theta)}$. The resulting ideal
 Markov chain has transition probability 
-$p_I(\nu|\theta) = q(\nu|\theta)\alpha(\nu,\theta) + \left[1-\int d\nu
-q(\nu|\theta)\alpha_I(\nu,\theta)\right]\delta_\theta(\nu)$, the first
+$p_I(\theta'|\theta) = q(\theta'|\theta)\alpha(\theta',\theta) + \left[1-\int d\nu
+q(\nu|\theta)\alpha_I(\nu,\theta)\right]\delta_\theta(\theta')$, the first
 term corresponding to acceptance, and the second, rejection.
 
 Our main result is Theorem~\cite{}, which shows that if the ideal MCMC 
 sampler is geometrically ergodic, then so is our tractable auxiliary 
-variable sampler. The only non-trivial assumption we have to make is that
-the rate-matrix $A(\theta)$ cannot be arbitrarily ill-conditioned over all
+variable sampler. Assumption~\ref{asmp:cond_num} is the only non-trivial 
+one we have to make, requiring that the rate-matrix $A(\theta)$ not be 
+arbitrarily ill-conditioned over all
 settings of the parameter $\theta$. This assumption is reasonable from
 both theoretical and practical viewpoints.
 
 We first make explicit all our assumptions, before diving into the details
 of our proof.
 \begin{assumption}
-  $\exists$ $m > 0$, s.t.\ $\inf \Omega(\theta,\nu) \ge m$.
-  \label{asmp:low_bnd}
+  The rate-matrix $A(\theta)$ is ergodic for all $\theta$ and satisfies 
+  $\inf_\theta \frac{\mx{\theta}}{\Mx{\theta}} = \mu > 0$.
+%  $\forall \theta$ satisfying 
+%  $|\theta| > |\hat{\theta}|$, we have $\Mx{\theta} \asymp
+%  \mx{\theta}$.
+  \label{asmp:cond_num}
 \end{assumption}
-\noindent 
-This assumption is needed for the sampler of~\cite{RaoTeh13} to be 
-irreducible for all parameter settings and is easily enforced. In our 
-experiments, we set
-$\Omega(\theta,\nu) = \Omega(\theta)+\Omega(\nu)$. Then, if 
-$\inf_\theta \Mx{\theta} > 0$ we can set $\Omega(\cdot) = \Mx{\cdot}$,
-otherwise we can ensure this condition by setting 
-$\Omega(\cdot) = \Mx{\cdot} + m/2$ some $m > 0$. 
-
-\begin{assumption}
-$\exists$ $ \xi_1 > \eta_1 > 0$ s.t. 
-$\prod P(x_o | s_o, \theta) \in [\eta_1, \xi_1]$.
-  \label{asmp:obs_bnd}
-\end{assumption}
-\noindent This assumption holds if the observation process involves no 
-hard constraints over the latent state, and $\theta$ does not include
-parameters of the observation process. We can relax this assumption,
-though it will introduce technicalities that are tangential to our focus
-(which is on complications in parameter inference arising from the 
-dynamics, rather than the observation process). Extensions to the more 
-general case should be clear from our proof.
+\noindent The ergodicty assumption is natural. The second part is the
+strongest assumption needed to prove our result; nevertheless, it holds 
+for all the examples we considered. This condition requires the rate 
+matrix to be well-conditioned over all parameters of interest: the most 
+unstable state cannot have a leaving rate that is larger than that of
+the most stable state by an arbitrary factor. This condition controls the
+mixing behavior of the MJP (and the embedded Markov chain) for any 
+starting state. 
+%We note that we only need this
+%condition to hold in the tails of $\theta$, i.e.\ we only need
+%  $\inf_\theta \frac{\mx{\theta}}{\Mx{\theta}} > 0$ for all $\theta$
+%  satisfying $|\theta| > h$ for some $h$. For clarity, we restrict
+%  ourselves to $h=0$, extending our proof to the general case is
+%  straightforward.
+%for any interval $\Delta$, we can always find a $\theta_0$ such that the 
+%MJP has mixed at the end of the interval. The earlier assumption ensures
+%this holds for all $\theta \ge \theta_0$.
 
 \begin{assumption}
   $\exists$ $\hat{\theta}$ such that $\forall \theta$ satisfying 
@@ -57,63 +58,66 @@ and is not critical: we impose it to avoid book-keeping for
 situations where $\Mx{\theta}$ exhibits oscillations in the tails.
 
 \begin{assumption}
-For the ideal sampler with transition probability $p_I(\nu|\theta)$ \\
-i) the set $\SM_M=\{\theta:\Mx{\theta}\le M \}$ is small for every
+For the ideal sampler with transition probability $p_I(\theta'|\theta)$ \\
+i) the set $\SM_M=\{\theta:\Mx{\theta}\le M \}$ is a $1$-small set for 
+every
 $M$, i.e.\ $\exists$ a probability measure $\phi$ and a constant 
 $\kappa_1 > 0$ s.t.\ % $q(\nu | \theta) \alpha_I(\theta, \nu) 
-$p_I(\nu|\theta) \geq \kappa_1 \phi(\nu)$ for $\theta \in \SM_M$, \\
+$p_I(\theta'|\theta) \geq \kappa_1 \phi(\theta')$ for $\theta \in \SM_M$, \\
 ii) for $M$ large enough, $\exists \rho < 1$ s.\ t.\
 $\int \Mx{\nu} p_I(\nu|\theta) d\nu 
 \leq (1-\rho_I) \Mx{\theta}+C$, $\forall \theta \not\in \SM_M$.
   \label{asmp:ideal_geom}
 \end{assumption}
-\noindent These are standard small-set and drift conditions necessary
-for the ideal sampler to satisfy geometric ergodicity. The first condition
-implies that for $\theta$ in $\SM_M$, % (where $\Mx{\theta}$ is bounded),
-the ideal sampler forgets its current
+\noindent Here we specify the properties of the ideal sampler that we
+want our proposed sampler to inherit. The two conditions are standard 
+small-set and drift conditions necessary for the ideal sampler to satisfy 
+geometric ergodicity. The first implies that for $\theta$ in 
+$\SM_M$, the ideal sampler forgets its current
 location with probability $\kappa_1$. The second condition ensures that
 for $\theta$ outside this set, the ideal sampler drifts towards 
-$\SM_M$. These two conditions together imply geometric
-mixing with rate equal or faster than $\kappa_1$. Observe that we have
-used $\Mx{\theta}$ as the Lyapunov function to define geometric 
-ergodicity for the ideal sampler: this is the most natural choice, though our proof can be
-tailored to different choices.
+$\SM_M$, with a . These two conditions together imply geometric
+mixing with rate equal or faster than $\kappa_1$~\cite{meyn2009markov}. 
+Observe that we have used $\Mx{\theta}$ as the so-called Lyapunov-Foster 
+function to define geometric ergodicity for the ideal sampler and whose
+sub-level sets form the small sets. This is the most natural choice, 
+though our proof can be tailored to different choices. Similarly, we 
+could easily allow $\SM_M$ to be an $n$-small set for any $n\ge 1$ (so 
+now the ideal sampler needs $n$ steps before it can forget its current 
+value in $\SM_M$); we restrict ourselves to the $1$-small case for 
+clarity.
+
 
 \begin{assumption}
- The acceptance probability of the ideal sampler at any parameter
- $\theta$, $\alpha_I(\theta) = \int \alpha_I(\nu,\theta)q(\nu|\theta)d\nu$
- is bounded away from $0$.
-%  $\forall \theta$ satisfying 
-%  $|\theta| > |\hat{\theta}|$, we have $\Mx{\theta} \asymp
-%  \mx{\theta}$.
-  \label{asmp:ideal_rej_bnd}
+%  $\inf_{\nu} \left(\Omega(\theta,\nu) - \Mx{\theta}\right) 
+%  \ge m\Mx{\theta} \forall \theta$.
+  There exist constants $m_1$ and $m_2$ such that 
+  $\inf_\theta \Omega(\theta) = m_1 > 0$ and $\sup_{s,\theta}
+  \frac{A_s(\theta)}{\Omega(\theta)} = m_2 < 1$. 
+  \label{asmp:low_bnd}
 \end{assumption}
-\noindent This is a corollary of the previous assumption (???)
+\noindent 
+Assumption~\ref{asmp:cond_num} allows us to easily ensure this is 
+satisfied by setting $\Omega(\theta) = \Mx{\theta} + \mx{\theta}+m_1$. 
+Another option is to set $\Omega(\theta) = \kappa\Mx{\theta} + m_1$ some 
+$\kappa > 1$.  If $\inf_\theta \Mx{\theta} > 0$ (as is often the case), 
+we can just set $\Omega(\theta) = \Mx{\theta} + \mx{\theta}$ so that 
+$m_2 = \frac{1}{1+\mu}$. 
+
+
 \begin{assumption}
-  The rate-matrix $A(\theta)$ is ergodic for all $\theta$ and satisfies 
-  $\inf_\theta \frac{\mx{\theta}}{\Mx{\theta}} = \mu > 0$.
-%  $\forall \theta$ satisfying 
-%  $|\theta| > |\hat{\theta}|$, we have $\Mx{\theta} \asymp
-%  \mx{\theta}$.
-  \label{asmp:cond_num}
+$\exists$ $ \xi_1 > \eta_1 > 0$ s.t. 
+$\prod P(x_o | s_o, \theta) \in [\eta_1, \xi_1]$.
+  \label{asmp:obs_bnd}
 \end{assumption}
-\noindent The ergodicty assumption natural. The second part is the
-strongest assumption needed to prove our
-result; nevertheless, it holds for all the examples we considered. This 
-condition requires the rate matrix to
-be well-conditioned over all parameters of interest: the most unstable
-state cannot have a leaving rate that is is larger than that of
-the most stable state by an arbitrary factor. This condition ensures that
-mixing behavior of the MJP (and the embedded Markov chain) is effectively
-the same for any starting state. We note that we only need this
-condition to hold in the tails of $\theta$, i.e.\ we only need
-  $\inf_\theta \frac{\mx{\theta}}{\Mx{\theta}} > 0$ for all $\theta$
-  satisfying $|\theta| > h$ for some $h$. For clarity, we restrict
-  ourselves to $h=0$, extending our proof to the general case is
-  straightforward.
-%for any interval $\Delta$, we can always find a $\theta_0$ such that the 
-%MJP has mixed at the end of the interval. The earlier assumption ensures
-%this holds for all $\theta \ge \theta_0$.
+\noindent This assumption follows~\cite{miasojedow2017}, and holds if 
+%the observation process involves no hard constraints over the latent state, and 
+$\theta$ does not include parameters of the observation process (or if so,
+the likelihood is finite and nonzero for all settings of $\theta$). We can relax this assumption,
+though it will introduce technicalities that are tangential to our focus
+(which is on complications in parameter inference arising from the 
+dynamics, rather than the observation process). Extensions to the more 
+general case should be clear from our proof.
 
 \begin{assumption}
 Given the proposal density $q(\nu | \theta)$, $\exists \eta_0 > 0$ s.t. $$ \int_\Theta \max_s|A_{ss}(\nu)| q(\nu | \theta)d\nu \leq \eta_0 \max_s|A_{ss}(\theta)|.$$
@@ -128,280 +132,368 @@ to explore large $\theta$'s too aggressively.
 
 \begin{theorem}
 Under the above assumptions, our auxiliary variable sampler is
-geometrically ergodic.
-\label{thm:geom_erg}
+geometrically ergodic.  \label{thm:geom_erg} 
 \end{theorem}
-\noindent We prove this theorem by showing in lemma~\ref{lem:small_set} 
-the existence of a small set (within which our sampler forgets its 
-current state with some probability $>0$), and showing in
-lemma~\ref{lem:drift} that our sampler drifts towards this set whenever 
-outside. Together, these two results
-immediately imply geometric ergodicity~\cite{meyntweed}.
-We regard our sampler as operating on the space $(\theta,\theta^*,W)$, 
-with a transition step updating this to $(\nu,\theta,W')$. 
-We establish the drift condition via the Lyapunov function
-$V(\theta,\theta^*,W) = \left. \lambda_1|W| + \lambda_2 \Omega(\theta^*) +
-  \Omega(\theta) +L \right. $, for suitable settings of $\lambda_1,
+\begin{proof}
+\noindent This theorem follows from two lemmas we will prove, 
+lemma~\ref{lem:small_set} showing the existence of a small set (within 
+which our sampler forgets its 
+current state with some probability $>0$), and lemma~\ref{lem:drift}
+showing that our sampler drifts towards this set whenever 
+outside. Together, these two results immediately imply geometric 
+ergodicity~\citep[Theorems 15.0.1 and Lemma 15.2.8]{meyn2009markov}.
+\end{proof}
+We regard our sampler as operating on the space $(\theta,\vartheta,W)$, 
+with a transition step updating this to $(\theta',\vartheta',W')$. 
+We establish the drift condition via the Lyapunov-Foster function
+$\cV(W,\theta,\vartheta) = \left. \lambda_1|W| + \lambda_2 \Omega(\theta) +
+\Omega(\vartheta) +L \right. := \cV_W(W) + \cV_{\theta}(\theta) + 
+\cV_{\theta^*}(\theta^*)$, for suitable settings of $\lambda_1,
   \lambda_2$ and $L$.
 The small set will be a level set of this function, i.e.\ 
-$\{(\theta,\theta^*,W): V(\theta,\theta^*,W) \le \alpha\}$.
+$\SM_\alpha := \{(\theta,\theta^*,W): \cV(\theta,\vartheta,W) \le \alpha\}$.
+We show that this is a 2-small set (i.e.\ the distribution over states
+after 2-steps of our sampler, $P^2(\cdot|\theta,\vartheta,W) \ge \epsilon 
+\nu(\cdot)$ for all $(\theta,\vartheta,W) \in \SM_\alpha$. 
+The 2-step transition is necessary because of the exchange move we make, 
+where on acceptance $\vartheta'=\theta$, while on rejection, $\theta'=\theta$.
 We point out that if $\Mx{\theta}$ is bounded, then we can replace
 the two $\Omega$ terms by their supremum and absorb them into the 
-constant $C$, so that the
-Lyapunov function only involves $W$.
+constant $L$, so that the Lyapunov function only involves $W$.
 
-We start with two propositions bounding the self-transition probabilities
-of the embedded Markov chain away from $0$. \vinayak{Do we only need 
-these on the small set?}
-\begin{proposition}
-The a priori probability the embedded Markov chain makes a self-transition,
-$P(V_{i + 1}=s|V_i=s,\theta,\theta^*)$ is uniformly bounded away
-from $0$ for all $s,\theta,\theta^*$.
-\end{proposition}
-\begin{proof}
-  This is a direct consequence of assumption~\ref{asmp:cond_num}. The
-  self-transition probability satisfies
-  \begin{align*}
-  P(V_{i + 1}=s|V_i=s,\theta,\theta^*) &= 
-    1 - \frac{A_{s_0}(\theta)}{\Omega(\theta, \theta^*)} 
-    = 1 - \frac{A_{s_0}(\theta)}{\Omega(\theta) + \Omega(\theta^*)} \\
-    & \ge 1-\frac{A_{s_0}(\theta)}{\Mx{\theta}} \ge 1 - \mu
-  \end{align*}
-\end{proof}
+We start with a proposition bounding the self-transition probabilities
+of the embedded Markov chain away from $0$. 
+%\begin{proposition}
+%The a priori probability the embedded Markov chain makes a self-transition,
+%$P(V_{i + 1}=s|V_i=s,\theta,\theta^*)$ is uniformly bounded away
+%from $0$ for all $s,\theta,\theta^*$.
+%\end{proposition}
+%\begin{proof}
+%    & \ge 1-\frac{A_{s_0}(\theta)}{\Mx{\theta}} \ge 1 - \mu
+% \intertext{For $\Omega(\theta) \ge k\Omega(\theta^*)$}
+% P(V_{i + 1}=s|V_i=s,\theta,\theta^*) &= 
+%   1 - \frac{A_{s_0}(\theta)}{\Omega(\theta) + \Omega(\theta^*)} \ge
+%   1 - \frac{\Omega(\theta)}{m + \Omega(\theta^*)} 
+% \intertext{For $\Omega(\theta) < k\Omega(\theta^*)$}
+% P(V_{i + 1}=s|V_i=s,\theta,\theta^*) &\ge 
+%   1 - \frac{A_{s_0}(\theta)}{\Omega(\theta) + \Omega(\theta)/k} 
+%   \ge 1 - \frac{1}{1 + 1/k} 
+%\end{align*}
+%\end{proof}
 \begin{proposition}
 The a posteriori probability the embedded Markov chain makes a 
 self-transition,
-$P(V_i = V_{i + 1} | W, X, \theta, \theta^*) = \delta_1 > 0$,
+$P(V_i = V_{i + 1} | W, X, \theta, \vartheta) = \delta_1 > 0$,
 for %$i = 0, 1, 2, ..., |W|$ and 
-all $\theta,\theta^*$. 
+all $\theta,\vartheta$. 
+\label{prop:self_tr}
 \end{proposition}
-\begin{proof} This builds on the previous result:
-\begin{align*}
+\begin{proof} 
+  We first use $m_2$ from assumption~\ref{asmp:low_bnd} 
+  to bound a priori self-transition probabilities:
+  \begin{align*}
+  P(V_{i + 1}=s|V_i=s,\theta,\vartheta) &= 
+    1 - \frac{A_{s}(\theta)}{\Omega(\theta, \vartheta)} 
+    \ge 1 - \frac{A_{s}(\theta)}{\Omega(\theta)} \ge 1-m_2.
+    \intertext{  We then have}
 %\mathbb{E}[\mathbb{I}_{\{V_i = V_{i + 1}\}} | W, X, \theta, \theta^*] 
-  P(V_i = V_{i + 1} | W, X, \theta, \theta^*) &= \sum_v P(V_i = V_{i + 1} = v | W, X, \theta, \theta^*)\\
-& =\sum_v \frac{P(V_i = V_{i + 1} = v, X | W, \theta, \theta^*)}{P(X | W, \theta, \theta^*)} \\
-&=\sum_v \frac{P(X | V_i = V_{i + 1} = v, W, \theta, \theta^*)P( V_i = V_{i + 1} = v|W, \theta, \theta^*)}{P(X | W, \theta, \theta^*)}\\
-& \geq \eta_1\sum_v P(V_i = V_{i + 1} = v | W) /\xi_1 =  \eta_1 \sum_v P(V_{i + 1} = v | V_i = v, W)P(V_i = v) /\xi_1 \\
-& \geq \frac{\eta_1 (1 - \mu)}{\xi_1} \doteq \delta_1 
+  P(V_i = V_{i + 1} | W, X, \theta, \vartheta) &= \sum_v P(V_i = V_{i + 1}
+  = v | W, X, \theta, \vartheta)
+ =\sum_v \frac{P(V_i = V_{i + 1} = v, X | W, \theta, \vartheta)}{P(X | W,
+ \theta, \vartheta)} \\
+&=\sum_v \frac{P(X | V_i = V_{i + 1} = v, W, \theta, \vartheta)P( V_i =
+V_{i + 1} = v|W, \theta, \vartheta)}{P(X | W, \theta, \vartheta)}\\
+& \geq \frac{\eta_1}{\xi_1}\sum_v P(V_i = V_{i + 1} = v | W)  
+=  \frac{\eta_1}{\xi_1} \sum_v P(V_{i + 1} = v | V_i = v, W)P(V_i = v) \\
+& \geq \frac{\eta_1 (1-m_2)}{\xi_1} \doteq \delta_1 > 0
 \end{align*}
 \end{proof}
 
 
 \begin{lemma}
-Under our assumptions, for $\forall M,h > 0$, the set 
-$\left\lbrace (W, \theta, \theta^*) | |W| \leq h, \theta \in \SM_M 
+  Under our assumptions, for $\forall M,h > 0$, the set $B_{h,M,M} = 
+\left\lbrace (W, \theta, \vartheta) | |W| \leq h, \theta \in \SM_M, \vartheta \in \SM_M 
 \right\rbrace$ is a small set under our proposed sampler.
 \label{lem:small_set}
 \end{lemma}
-\begin{proof} The transition probability of our MCMC algorithm consists
-  of terms corresponding to the proposed parameter being accepted and
-  rejected. Discarding the latter, we have the bound
+\begin{proof} The $1$-step transition probability of our MCMC algorithm 
+  consists of two terms, corresponding to the proposed parameter being 
+  accepted and rejected. Discarding the latter, we have %the bound
 \begin{align*}
-P(W', \nu, \theta | W, \theta, \theta^*,X) &\geq q(\nu | \theta)
-\alpha(\theta, \nu, W',X) \sum_{S,T} P(S,T | W, \theta, \theta^*, X) 
-P(W'| S, T, \theta, \nu)  
+  P(W',\theta',\vartheta'|W,\theta,\vartheta,X)&\geq
+  \delta_\theta(\vartheta') q(\theta'|\theta)
+\alpha(\theta', \theta, W',X) \sum_{S,T} P(S,T | W, \theta, \vartheta, X) 
+P(W'| S, T, \theta', \theta)  
 \end{align*}
 Here we use the fact that the proposal distribution $q(\nu|\theta)$
-and $P(W'|S,T,\theta,\nu,X))$ are independent of  $X$.
+and $P(W'|S,T,\theta',\theta,X))$ are independent of  $X$.
 We further bound the summation over $(S,T)$ by considering only the term
-with $S$ a constant. This corresponds to $|W|$
-self-transitions, with
+with $S$ a constant. This corresponds to $|W|$ self-transitions, so that
 \begin{align*}
-P(S=s_0, T = \emptyset | W, \theta, \theta^*, X) & = 
-p_0(s_0|X,W)\prod P(V_{i + 1} = s_0 | V_i = s_0,X,W) \\ %\prod P(X_{[w_i, w_{i + 1})} | v_i = s_0, \theta)\\
-& \geq p_0(s_0)\delta_1^{|W|} \numberthis %\eta_1
+P(S=s_0, T = \emptyset | W, \theta, \vartheta, X) & = 
+p_0(s_0|X,W)\prod P(V_{i + 1} = s_0 | V_i = s_0,X,W,\theta,\vartheta) \\ %\prod P(X_{[w_i, w_{i + 1})} | v_i = s_0, \theta)\\
+& \geq p_0(s_0|X)\delta_1^{|W|} \numberthis %\eta_1
 \end{align*}
-Given $T = \emptyset$ and $S = [s_0]$, $W'$ is a Poisson process with rate 
-$r(\theta, \nu, s_0) = \Omega(\theta)+\Omega(\nu) - A_{s_0}(\theta)$.
+Given $T = \emptyset$ and $S = s_0$, $W'$ is a Poisson process with rate 
+$r(\theta', \theta, s_0) = \Omega(\theta',\theta) - A_{s_0}(\theta)$.
 %$> \epsilon_1 > 0$. 
-Applying the superposition theorem, 
+From the fact that $\Omega(\theta',\theta) = \Omega(\theta') + \Omega(\theta)$,
+we apply the superposition theorem to get 
 %$\PP(r(\theta, \nu, s_0)) = \PP(\Omega(\nu)) \cup \PP(r(\theta, \nu, s_0) - \Omega(\nu))$.
 \begin{align*}
-P(W' | S, T = \emptyset, \theta, \nu) & \geq P(W' \from \PP(\Omega(\nu)))
+P(W' | S, T = \emptyset, \theta', \theta) & \geq P(W' \from
+\PP(\Omega(\theta')))
 P(\emptyset \from \PP(\Omega(\theta)-A_{s_0}(\theta) ))\\
-  & \geq P(W' \from \PP(\Omega(\nu))) P(\emptyset \from \PP(\Omega(\theta) ))\\
-& \geq P(W' \from \PP(\Omega(\nu))) \exp(-\Omega(\theta)(t_{end} -
+  & \geq P(W' \from \PP(\Omega(\theta'))) P(\emptyset \from \PP(\Omega(\theta) ))\\
+& \geq P(W' \from \PP(\Omega(\theta'))) \exp(-\Omega(\theta)(t_{end} -
 t_{start}))\\
-& \geq P(W' \from \PP(\Omega(\nu))) \exp(-M(t_{end}-t_{start}))
+& \geq P(W' \from \PP(\Omega(\theta'))) \exp(-M(t_{end}-t_{start}))
 \numberthis %\quad (\text{since }\theta\in B_M)
 \end{align*}
 Thus we have
 \begin{align*}
-  \int_T \sum_S P(S,T | W, \theta, \theta^*, X) &P(W'| S, T, \theta, \nu)dT \geq \sum_S P(S, T = \emptyset | W, \theta, \theta^*, X) P(W' | S, T=\emptyset,\theta, \nu)\\
+  \int_T \sum_S P(S,T | W, \theta, \vartheta, X) &P(W'| S, T, \theta',
+  \theta)dT \geq \sum_S P(S, T = \emptyset | W, \theta, \vartheta, X) 
+  P(W' | S, T=\emptyset,\theta', \theta)\\
                &\geq \delta_1^{|W|} \exp(-M(t_{end}-t_{start})) 
-P(W' \from \PP(\Omega(\nu))) \numberthis
+P(W' \from \PP(\Omega(\theta'))) \numberthis
 \end{align*}
 Finally consider the acceptance rate:
 \begin{align*}
-\alpha(\theta, \nu, W',X) &= 1 \wedge \frac{P(X | W', \nu, \theta) q(\theta|\nu)p(\nu)}{P(X | W', \theta, \nu)q(\nu|\theta)p(\theta)}\\
-&= 1 \wedge \frac{P(X|W', \nu, \theta) / P(X|\nu)}{P(X|W', \theta, \nu) / P(X|\theta)} \frac{P(X | \nu) q(\theta|\nu)p(\nu)}{P(X | \theta)q(\nu|\theta)p(\theta)}\\
-& \geq 1 \wedge \frac{\eta_1^2}{\xi_1^2} 	\frac{P(X | \nu) q(\theta|\nu)p(\nu)}{P(X | \theta)q(\nu|\theta)p(\theta)}\\
-& \geq \alpha_I(\theta, \nu,X)\frac{\eta_1^2}{\xi_1^2} \numberthis
+\alpha(\theta', \theta, W',X) &= 1 \wedge \frac{P(X | W', \theta', \theta)
+q(\theta|\theta')p(\theta')}{P(X | W', \theta, \theta')q(\theta'|\theta)p(\theta)}\\
+&= 1 \wedge \frac{P(X|W', \theta', \theta) / P(X|\theta')}{P(X|W', \theta,
+\theta') / P(X|\theta)} \frac{P(X | \theta')
+q(\theta|\theta')p(\theta')}{P(X | \theta)q(\theta'|\theta)p(\theta)}\\
+& \geq 1 \wedge \frac{\eta_1^2}{\xi_1^2} 	\frac{P(X | \theta')
+q(\theta|\theta')p(\theta')}{P(X | \theta)q(\theta'|\theta)p(\theta)}\\
+& \geq \alpha_I(\theta', \theta,X)\frac{\eta_1^2}{\xi_1^2} \numberthis
+\label{eq:acc}
 \end{align*}
 By assumption \ref{asmp:ideal_geom}, we have the following inequality.
 \begin{align*}
-P(W', \nu | W, \theta, \theta^*) \geq \frac{\delta_1^{h}
+  P(W', \theta',\vartheta' | W, \theta, \vartheta) & \geq \frac{\delta_1^{h}
 \eta_1^2 \exp(-M(t_{end}-t_{start}))\kappa_1}{\xi_1^2} 
- P(W'
-   \from \PP(\Omega(\nu))\phi(\nu)
+\delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta') \\
+  &:= \rho \delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta') 
+  \intertext{The two-step transition probability is given by}
+  P(W'', \theta'',\vartheta'' | W, \theta, \vartheta) & =
+  \int P(W'', \theta'',\vartheta'' | W', \theta, \vartheta) 
+       P(W', \theta',\vartheta' | W, \theta, \vartheta) 
+       dW' d\theta' d\vartheta' \\
+       &\ge \int_{\SM_{h,M,M}} P(W'', \theta'',\vartheta'' | W', \theta, \vartheta) 
+       P(W', \theta',\vartheta' | W, \theta, \vartheta) 
+       dW' d\theta' d\vartheta' \\
+       & \ge P(W'' \from
+       \PP(\Omega(\theta''))\phi(\theta'')\phi(\vartheta'') 
 \end{align*}
-This is our desired condition.
+This is our desired result.
 \end{proof}
 
 \noindent Before proving the drift condition, we establish the proposition that
 is needed when $\Mx{\theta}$ is unbounded as $\theta$ increases.
+This result states that the acceptance probabilities of our proposed
+sampler and the ideal sampler can be brought arbitrarily close
+outside an appropriate small set, so long as $\Omega(\theta)$ is larger
+than $\Omega(\vartheta)$ by a sufficient factor. 
 \begin{proposition}
-  If $\lim_{\theta\rightarrow\infty} \Mx{\theta} = \infty$, then 
-for any $\epsilon$ and large enough $k$, there exists an $h$ such that for 
-all $W$ satisfying $|W|\ge h$ and all $(\theta,\theta^*)$ satisfying
-$\Omega(\theta) \ge k\Omega(\theta^*)$, we have 
-$|\alpha_I(\theta,\nu,X) - \alpha(\theta,\nu,W,X)| \le \epsilon$.
+  Write $P_{\theta,\nu,W}(W')$ for the conditional distribution over $W'$
+  given the current state of the MCMC sampler and the observations, and let
+  $\lim_{\theta\rightarrow\infty} \Mx{\theta} = \infty$. Then for any positive 
+  $\epsilon$, there exist $B_\theta$ and $k$ such that for all 
+  $\theta \ge B_\theta$ with $\Omega(\theta) \ge k\Omega(\vartheta)$, we have 
+  %\vinayak{Not quite, we need to bound the min, not max/sum. Actually, this needs
+%fixing, we don't depend on $W$, rather on $W'$}  
+  $P(\{W'\ s.t.\ |\alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
+  \le \epsilon)\} \ge 1-\epsilon$.%$(\theta,\theta^*)$ satisfying
+\label{prop:mix}
 \end{proposition}
 \begin{proof}
   Consider the nearest pair of observations, occuring at times $t$ and 
   $t + \Delta$. %let them be separated by a time interval $\Delta$. 
   By setting $\theta$ high enough, the distribution over waiting times 
   of each state can be concentrated arbitrarily tightly around
-  $0$ (from Assumption~\ref{asmp:cond_num}). Thus, the distribution over states after an 
+  $0$ (from the assumption of the proposition along with 
+  Assumption~\ref{asmp:cond_num}). Thus, the distribution over states after an 
   interval $\Delta$ can be brought arbitrarily close to the equilibrium 
   distribution of $A(\theta)$  (call this $p_{\theta}$).
 
   Next, recall that the embedded Markov chain has a transition matrix 
-  given by $B(\theta) = (I + A(\theta)/\Omega(\theta,\theta^*))$. 
+  given by $B(\theta,\vartheta) = (I + A(\theta)/\Omega(\theta,\vartheta))$. 
   For any setting of $\Omega$, this has the same stationary distribution 
-  $p_{\theta}$: this can be verified by multiplying $B(\theta)$ with 
+  $p_{\theta}$: this can be verified by multiplying $B(\theta,\vartheta)$ with 
   $p_\theta$.
-  The condition $\Omega(\theta) \ge k\Omega(\theta^*)$ prevents the
-  diagonal of $B$ from dominating; this together with
-  Assumption~\ref{asmp:cond_num} limits how poorly $B(\theta,\theta^*)$ 
-  can mix over all valid settings of $\theta$ and $\theta^*$. Then,
-  by choosing a grid $W$ over $\Delta$ with $|W|$ large enough, this 
-  distribution over states from the discrete-time Markov chain can also be 
-  brought arbitrarily close to $p_{\theta}$. Thus for any such pair 
-  $(\theta,W)$, terms $p(x_{t+\Delta}|s_t)$ and $p(x_{t+\Delta}|W,s_t)$ 
-  can be brought arbitrarily close for all values of $s_t$. 
-  Assumption~\ref{asmp:mono_tail} ensures that
+  The condition $\Omega(\theta) \ge k\Omega(\theta^*)$, together with 
+  assumption~\ref{asmp:cond_num}, prevents the
+  diagonal of $B$ from dominating; thus bounding self-transition 
+  probabilities in $B(\theta,\theta^*)$, and limiting how poorly $B$ can mix.
+  %over all valid settings of $\theta$ and $\theta^*$. 
+  Next, observe that with $|W|$ large enough, the distribution over states from 
+  the discrete-time Markov chain can be brought arbitrarily close to 
+  $p_{\theta}$. Further, as $\theta$ increases, $|W'|$ concentrates about
+  values further and further away from $0$, so that
+  %Then, by choosing a grid $W$ over $\Delta$ 
+ for any such value, the terms $p(x_{t+\Delta}|s_t)$ and 
+ $p(x_{t+\Delta}|W,s_t)$ can be brought $\epsilon$-close with high
+ probability.  Assumption~\ref{asmp:mono_tail} ensures that
   for sufficiently large $\theta$ and $W$, this continues to hold for
-  all larger $\theta$. 
+  all larger $\theta$ and $W$. 
  
   Thus we can find a $W$ and $\theta$ such that $p(x_{t+\Delta}|s_t)$ and 
   $p(x_{t+\Delta}|W,s_t)$ can be brought arbitrarily close for all larger
-  $\theta$ and $\Omega$.  By a simple chaining argument, $p(X|\theta)$ and 
+  $\theta$ and $W$.  By a simple chaining argument, $p(X|\theta)$ and 
   $p(X|\theta,W)$ can also be brought arbitrarily close, and
-  thus $\alpha_I(\nu,\theta,X)$ and $\alpha(\nu,\theta,W,X)$.
+  so too $\alpha_I(\theta',\theta,X)$ and $\alpha(\theta',\theta,W,X)$.
 \end{proof}
 
 \begin{lemma}(drift condition) $\exists \delta_2 \in (0, 1), L > 0$ 
   s.t. 
-  $\mathbb{E}\left[\lambda_1|W'| + \lambda_2\Mx{\theta}+ \Mx{\nu} | W, \theta, \theta^*, X\right] 
-  \leq (1 - \delta_2)\left(\lambda_1|W| + \lambda_2 \Mx{\theta^*} +
-  \Mx{\theta} \right) + L$
-%where $\lambda = \lceil \frac{(t_{end} - t_{start})k_2(\eta_0 + 1)}{(\eta_1^2 \kappa_1 \mathbb{P}_\phi(C)/\xi_1^2 - \eta_0)} \rceil.$
+  $\mathbb{E}\left[\lambda_1|W'| + \lambda_2\Omega(\theta')+
+  \Omega(\vartheta') | W, \theta, \vartheta, X\right] 
+  \leq (1 - \delta_2)\left(\lambda_1|W| + \lambda_2 \Omega(\theta) +
+  \Omega(\vartheta)\right) + L$ %where $\lambda = \lceil \frac{(t_{end} - t_{start})k_2(\eta_0 + 1)}{(\eta_1^2 \kappa_1 \mathbb{P}_\phi(C)/\xi_1^2 - \eta_0)} \rceil.$
 \label{lem:drift}
 \end{lemma}
 \begin{proof}
-Since $W' = T \cup U'$, we consider $\mathbb{E}[|T| | W, \theta, \theta^*, X]$ and $\mathbb{E}[|U'| | W, \theta, \theta^*, X]$ respectively.
-An upper bound of $\mathbb{E}[|T| | W, \theta, \theta^*]$ can be derived directly from lemma 1.
+Since $W'=T\cup U'$, we consider $\mathbb{E}[|T| |W,\theta,\vartheta,X]$ 
+and $\mathbb{E}[|U'| | W, \theta, \vartheta, X]$ separately.
+An upper bound of $\mathbb{E}[|T| | W,\theta,\vartheta]$ can be derived
+directly from proposition~\ref{prop:self_tr}:
 \begin{align*}
-\mathbb{E}[|T| | W, \theta, \theta^*, X] &= \mathbb{E}[\sum_{i = 0}^{|W| - 1} \mathbb{I}_{\{ V_{i + 1} \neq V_i \}}| W, \theta, \theta^*, X]\\
+\mathbb{E}[|T| |W,\theta,\vartheta,X] &= \mathbb{E}[\sum_{i = 0}^{|W|-1} 
+  \mathbb{I}_{\{ V_{i + 1} \neq V_i \}}| W, \theta, \vartheta, X]\\
 &\leq \sum_{i = 0}^{|W| - 1} (1 - \delta_1) = |W|(1 - \delta_1).
 \end{align*}
 \begin{align*}
-\mathbb{E}[|U'| |W, \theta, \theta^*, X] &= \mathbb{E}_{S,T, \nu}\mathbb{E}[|U'| | S, T, W, \theta, \nu, X] = \mathbb{E}_{S,T, \nu}\mathbb{E}[|U'| | S, T, W, \theta, \nu] \\
+\mathbb{E}[|U'| |W, \theta, \vartheta, X] &= \mathbb{E}_{S,T, \nu}\mathbb{E}[|U'| | S, T, W, \theta, \nu, X] = \mathbb{E}_{S,T, \nu}\mathbb{E}[|U'| | S, T, W, \theta, \nu] \\
 & \leq \mathbb{E}_{S,T, \nu} \left[(t_{end} - t_{start})\Omega(\theta, \nu)\right] = (t_{end} - t_{start})\int \Omega(\theta, \nu) q(\nu | \theta) d\nu\\
-& \leq (t_{end} - t_{start})\left[ k_2 \left(  \max_s|A_{ss}(\theta)| +  \int_\Theta \max_s|A_{ss}(\nu)|q(\nu | \theta)d\nu \right) + \epsilon_2 \right] \\
-& \leq (t_{end} - t_{start}) \left[ k_2 (\eta_0 + 1) \max_s|A_{ss}(\theta)| + \epsilon_2 \right] \doteq a \max_s|A_{ss}(\theta)| + b.
+& \leq (t_{end} - t_{start})\left[ \left(  \Omega(\theta) +
+\int_\Theta \Omega(\nu) q(\nu | \theta)d\nu \right) \right] \\
+& \leq (t_{end} - t_{start}) \left[ (\eta_0 + 1) \Omega(\theta) \right] 
+\doteq a \Omega(\theta) + b.
 \end{align*}
-Consider the transition kernel of the sampler:
+
+Next, we note that $\vartheta'$ takes on value $\theta$ with 
+probability of acceptance, else it takes the value $\nu$ proposed  from
+$q(\nu|\theta)$. We bound the acceptance
+probability by $1$, so that
+\begin{align}
+\mathbb{E}[\Omega(\vartheta')|\theta,\vartheta,W,X)] &\le \Omega(\theta)
++ \int d\nu (1-\alpha(\nu,\theta)) q(\nu|\theta) \Omega(\nu)\nonumber \\
+  & \le (1+\eta_0) \Omega(\theta)
+\end{align}
+
+Consider the transition probability over $(W',\theta')$:
 \begin{align*}
-P(dW', d\nu, \theta | W, \theta, \theta^*) &
-  =d\nu dW' \left[q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\alpha(\theta, \nu | W', X)\right. \\
-                                           &\left.+ \int q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \mu)dT ( 1 - {\alpha(\theta, \mu | W', X)})d\mu \delta_\theta(\nu)\right].
+P(dW', d\theta'| W, \theta, \vartheta) &
+=d\theta' dW' \left[q(\theta' | \theta) 
+\int \sum_S P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')dT
+\alpha(\theta, \theta' | W', X)\right. \\
+    &\left.+ \int q(\nu | \theta) \int \sum_S P(S, T|W,\theta,\vartheta,
+    X)P(W' | S, T, \theta, \nu)dT ( 1 - {\alpha(\theta, \nu | W', X)})d\nu
+    \delta_\theta(\theta')\right].
 \end{align*}
 Integrate out $W'$, then we get the following.
 \begin{align*}
-  P(d\nu| &W, \theta, \theta^*) =d\nu \int_{W'}dW' \left[q(\nu | \theta)
-    \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta,
-  \nu)dT\alpha(\theta, \nu | W', X)\right.\\
-&\left. + \int q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*, X)P(W' | S, T, \theta, \mu)dT ( 1 - \alpha(\theta, \mu | W', X))d\mu \delta_\theta(\nu)\right]
-\intertext{We consider two cases: $\Omega(\theta^*)>k\Omega(\theta)$ and
-its complement. For the former, we use $\alpha(\theta, \nu | W', X)\le 1$ and
-equation~\eqref{eq:} to get}
-  P(d\nu| &W, \theta, \theta^*) 
- \leq d\nu\left[q(\nu | \theta)\right. + \\
- &\left.\left(1 -  \int q(\mu | \theta) \sum_S P(S, T|W, \theta, \theta^*, X)P(W'|S, T, \theta, \mu)\alpha_I(\theta, \mu) \frac{\eta_1^2}{\xi_1^2}d\mu dW' dT\right) \delta_\theta(\nu)\right]\\
-          & \leq d\nu \left[q(\nu | \theta) + \left(1 -
-          \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\mu |
-      \theta)\alpha_I(\theta, \mu) d\mu\right)\delta_\theta(\nu)\right]
+  P(d\theta'| &W, \theta, \vartheta) =d\theta' \int_{W'}dW'
+  \left[q(\theta' | \theta)
+    \int \sum_S P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta,
+  \theta')dT\alpha(\theta, \theta' | W', X)\right.\\
+&\left. + \int q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \vartheta,
+X)P(W' | S, T, \theta, \nu)dT ( 1 - \alpha(\theta, \nu | W', X))d\nu
+\delta_\theta(\theta')\right]
+\intertext{We consider two cases: $\Omega(\vartheta)>k\Omega(\theta)$ and
+its complement. For the former, we use $\alpha(\theta, \nu | W', X)\in
+[0,1]$ to get}
+%and equation~\eqref{eq:acc} to get}
+  P(d\theta'| &W, \theta, \vartheta) 
+\leq d\nu\left[q(\theta' | \theta) + \delta_\theta(\theta')\right]
+% &\left.\left(1 -  \int q(\nu | \theta) \sum_S P(S, T|W, \theta,
+% \vartheta, X)P(W'|S, T, \theta, \nu)\alpha_I(\theta, \nu)
+% \frac{\eta_1^2}{\xi_1^2}d\nu dW' dT\right) \delta_\theta(\theta')\right]\\
+%          & \leq d\nu \left[q(\nu | \theta) + \left(1 -
+%          \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\nu |
+%      \theta)\alpha_I(\theta, \nu) d\nu\right)\delta_\theta(\theta')\right]
       \numberthis \label{eq:nu1}
-\intertext{For the latter, from Proposition~\ref{prop:mix},}
-   P(d\nu| &W, \theta, \theta^*)   \le d\nu \int_{W'}dW' \left[q(\nu | \theta) \int \sum_S P(S, T
-| W, \theta, \theta^*, X)P(W' | S, T, \theta, \nu)dT\left[\alpha_I(\theta,
-\nu | X)+\epsilon_\nu\right]\right.\\
-&\left. + \int q(\mu | \theta) \int \sum_S P(S, T | W, \theta, \theta^*,
-X)P(W' | S, T, \theta, \mu)dT ( 1 - [\alpha_I(\theta, \mu |
-X)-\epsilon_\nu])d\mu \delta_\theta(\nu)\right]  \\
-& \leq d\nu\left[q(\nu | \theta)\left[\alpha_I(\theta, \nu |
-X)+\epsilon_\nu\right] +
-\left(1 -  \int q(\mu | \theta) [\alpha_I(\theta, \mu|X)-\epsilon_\nu] d\mu \right) \delta_\theta(\nu)\right]\\
-& \leq d\nu\left[q(\nu | \theta) \alpha_I(\theta, \nu | X) +
-\left(1 -  \int q(\mu | \theta) \alpha_I(\theta, \mu|X) d\mu \right) \delta_\theta(\nu)\right]+
-\epsilon_\nu[q(\nu|\theta)+\delta_\theta(\nu)] \\
-& = p_I(\nu|\theta,X) + \epsilon_\nu[q(\nu|\theta)+\delta_\theta(\nu)]
+\intertext{For the latter, from Proposition~\ref{prop:mix}, and bounding
+$\alpha$ by one on the $W$-set with probability $\epsilon$, we have
+\vinayak{Need to clean up}}
+   P(d\theta'| &W, \theta, \vartheta)   \le d\theta' \int_{W'}dW'
+   \left[q(\theta' | \theta) \int \sum_S P(S, T
+| W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')dT
+\left[\alpha_I(\theta', \theta | X)+\epsilon_{\theta'}\right]\right.\\
+&\left. + \int q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \vartheta,
+X)P(W' | S, T, \theta, \nu)dT ( 1 - [\alpha_I(\theta, \nu |
+X)-\epsilon_\nu])d\nu \delta_\theta(\theta')\right]  \\
+& \leq d\theta'\left[q(\theta' | \theta)\left[\alpha_I(\theta', \theta |
+X)+\epsilon_{\theta'}\right] +
+\left(1 -  \int q(\nu | \theta) [\alpha_I(\nu, \theta|X)-\epsilon_\nu]
+d\nu \right) \delta_\theta(\theta')\right]\\
+& \leq d\theta'\left[q(\theta' | \theta) \alpha_I(\theta', \theta | X) +
+\left(1 -  \int q(\nu | \theta) \alpha_I(\theta, \nu|X) d\nu \right)
+\delta_\theta(\theta')\right]+\epsilon_{\theta'}q(\theta'|\theta)+
+\delta_\theta(\theta')\int \epsilon_{\nu} q(\nu|\theta) d\nu \\
+& = p_I(\theta'|\theta,X) + \epsilon_{\theta'}q(\theta'|\theta)+
+\delta_\theta(\theta')\int \epsilon_{\nu} q(\nu|\theta) d\nu
 \numberthis \label{eq:nu2}
-\end{align*}
-Finally, we note that $\theta^*$ takes on value $\theta$ with probability
-of acceptance, else it keeps its old value. We bound the acceptance
-probability by $1$, and the rejection probability by $1-b$, so that
-\begin{align*}
-\mathbb{E}[\Omega(\theta)|\theta,\theta^*,W,X)] \le \Omega(\theta)
- + (1-b)\Omega(\theta^*)
 \end{align*}
 
 From equation~\eqref{eq:nu1}, we have for 
-$\Omega(\theta) < k\Omega(\theta^*)$,
+$\Omega(\theta) < k\Omega(\vartheta)$,
 \begin{align*}
-\int \max_sA_s(\nu)P(d\nu| W, \theta, \theta^*)  
-  &\leq \int \max_sA_s(\nu) d\nu \left[q(\nu | \theta) + 
-    \left(1 - b \right)\delta_\theta(\nu)\right] \\
-    &\leq (\eta_0 + 1 - b) \max_sA_s(\theta) 
-    \leq \frac{(\eta_0 + 1 - b)}{k} \max_sA_s(\theta^*) 
+  \int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)  
+  &\leq \int \Omega(\theta') d\theta' \left[q(\theta' | \theta) + 
+    \delta_\theta(\theta')\right] \\
+    &\leq (\eta_0 + 1 ) \Omega(\theta) 
+    \leq \frac{(\eta_0 + 1)}{k} \Omega(\vartheta) 
 \end{align*}
 
 From equation~\eqref{eq:nu2} and assumption 2, we have for 
-$\Omega(\theta) > k\Omega(\theta^*)$
+$\Omega(\theta) > k\Omega(\vartheta)$
 \begin{align*}
-\int \max_sA_s(\nu)P(d\nu| W, \theta, \theta^*)  &\leq 
-\int \max_sA_s(\nu) p_I(\nu|\theta,X) d\nu +\int d\nu\max_s A_s(\nu)  \epsilon_\nu[q(\nu|\theta)+\delta_\theta(\nu)] \\ 
-&\leq (1-\rho_I) \max_sA_s(\theta)  + C_I  + \epsilon_\theta \max_sA_s(\theta)
- +\int d\nu\max_s A_s(\nu)  \epsilon_\nu q(\nu|\theta) 
+\int \Omega(\theta')P(d\theta'| W, \theta, \vartheta)  &\leq 
+\int \Omega(\theta') p_I(\theta'|\theta,X) d\theta' +\int d\theta'
+\Omega(\theta') \left[ \epsilon_{\theta'}q(\theta'|\theta)+
+\delta_\theta(\theta')\int \epsilon_{\nu} q(\nu|\theta) d\nu \right] \\
+%\epsilon_\nu[q(\nu|\theta)+\delta_\theta(\nu)] \\ 
+&\leq (1-\rho_I) \Omega(\theta)  + C_I  + \int d\theta'
+\Omega(\theta') \epsilon_{\theta'}q(\theta'|\theta)+
+\Omega(\theta)\int \epsilon_{\nu} q(\nu|\theta) d\nu 
 %&\leq (1-\rho_I) \max_sA_s(\theta)  + C_I  + \epsilon_\theta \max_sA_s(\theta)
 % + \epsilon_\theta \max_s A_s(\theta)  + C_q  
 \end{align*}
+We can bound the middle integral as follows
+\begin{align*}
+  \int d\theta'\Omega(\theta')  \epsilon_{\theta'} q(\theta'|\theta) &=  
+  \int_{B_\alpha} d\theta'\Omega(\theta')  \epsilon_{\theta'} q(\theta'|\theta) +  
+  \int_{B_\alpha^c} d\theta'\Omega(\theta')  \epsilon_{\theta'}
+  q(\theta'|\theta)  \\
+  &\le \alpha +  
+  \int_{B_\alpha^c} d\theta'\Omega(\theta')  \epsilon_{\theta'} q(\theta'|\theta) \\
+  &\le \alpha + \epsilon_\theta \eta_0 \Omega(\theta)+1
+\end{align*}
 We can bound the last integral as follows
 \begin{align*}
-  \int d\nu\max_s A_s(\nu)  \epsilon_\nu q(\nu|\theta) &=  
-  \int_{C_\alpha} d\nu\max_s A_s(\nu)  \epsilon_\nu q(\nu|\theta) +  
-  \int_{C_\alpha^c} d\nu\max_s A_s(\nu)  \epsilon_\nu q(\nu|\theta) \\
-  &\le \int_{C_\alpha} d\nu\max_s A_s(\nu)  q(\nu|\theta) +  
-  \int_{C_\alpha^c} d\nu\max_s A_s(\nu)  \epsilon q(\nu|\theta) \\
-  &\le \alpha + \epsilon (1+\eta) \Mx{\theta}
+\Omega(\theta)\int \epsilon_{\nu} q(\nu|\theta) d\nu 
 \end{align*}
 
-From these equations, we have for $\Omega(\theta) > k \Omega(\theta^*)$,
+From these equations, we have for $\Omega(\theta) > k \Omega(\vartheta)$,
 \begin{align*}
-  \mathbb{E}[\lambda |W'| &+ \lambda_2 \Mx{\theta} + \Mx{\nu}| 
-  W, \theta, \theta^*, X] \leq 
-  \lambda \left[|W|(1 - \delta_1) +  \Mx{\theta} + b\right] + \\
-  & \lambda_2\left[ \Omega(\theta) + (1-b)\Omega(\theta^*)\right] +
-  \left[(1-\rho_I)  +2 \epsilon \right] \max_sA_s(\theta) + C_I 
+  \mathbb{E}[\lambda |W'| &+ \lambda_2 \Omega(\vartheta') + \Omega(\theta')| 
+  W, \theta, \vartheta, X] \leq 
+  \lambda \left[|W|(1 - \delta_1) +  \Omega(\theta) + b\right] + \\
+  & \lambda_2 (1+\eta_0)\Omega(\theta) +
+  \left[(1-\rho_I)  +\epsilon_\theta \eta_0 \right] \Omega(\theta) + C_I 
 \end{align*}
 For $\Omega(\theta) < k \Omega(\theta^*)$,
 \begin{align*}
-  \mathbb{E}[\lambda |W'| &+ \lambda_2 \Mx{\theta} + \Mx{\nu}| W, \theta, \theta^*, X] \leq 
-  \lambda \left[|W|(1 - \delta_1) +  \max_s|A_{ss}(\theta)| + b\right] + \\
-  & \lambda_2\left[ \Omega(\theta) + (1-b)\Omega(\theta^*)\right] +
-    \frac{(\eta_0 + 1 - b)}{k} \max_sA_s(\theta^*) + C_I 
+  \mathbb{E}[\lambda |W'| &+ \lambda_2 \Omega(\vartheta') +
+  \Omega(\theta)| W, \theta, \vartheta, X] \leq 
+  \lambda \left[|W|(1 - \delta_1) +  \Omega(\theta)| + b\right] + \\
+& \lambda_2(1+\eta_0) \Omega(\theta) +
+    \frac{(\eta_0 + 1)}{k} \Omega(\vartheta) + C_I \\
+    &= (1-\delta_1)\lambda|W| + \frac{(\eta_0 + 1)}{k\lambda_2} \lambda_2\Omega(\vartheta)+
+    (\lambda + \lambda_2(1+\eta_0))a\Omega(\theta)
 \end{align*}
 If we set  $\lambda$ small enough, then the drift condition holds.
 \end{proof}
