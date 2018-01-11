@@ -1,0 +1,87 @@
+\documentclass{statsoc}
+\usepackage{graphicx,psfrag,epsf}
+\usepackage{enumerate}
+\usepackage{natbib}
+\usepackage{amsfonts}
+%\let\proof\relax
+%\let\endproof\relax
+\usepackage{amsmath}
+\usepackage{float}
+%\usepackage{amsthm}
+\usepackage{xcolor}
+%\usepackage{amssymb,mathabx}
+\usepackage{algorithm, algpseudocode}
+%\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\newtheorem{theorem}{Theorem}
+\newtheorem{assumption}{Assumption}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+%\newcommand{\blind}{0}
+\title[Efficient MCMC for parameter inference for MJPs]{\bf Efficient MCMC for parameter inference for Markov jump processes}
+\author{Boqian Zhang and Vinayak Rao}
+\address{Department of Statistics, Purdue University, USA
+}
+\email{zhan1977@purdue.edu, varao@purdue.edu}
+\input{mymacros.tex}
+
+\begin{document}
+\bibliographystyle{plain}
+\def\spacingset#1{\renewcommand{\baselinestretch}
+{#1}\small\normalsize} \spacingset{1}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract}
+Markov jump processes (MJPs) are continuous-time stochastic processes that 
+find wide application in a variety of disciplines. Inference for MJPs typically 
+proceeds via Markov chain Monte Carlo, the state-of-the-art being an auxiliary 
+variable Gibbs sampler proposed recently in~\cite{RaoTeh13}. This algorithm was 
+designed for the situation where the MJP parameters are known, and Bayesian 
+inference over unknown parameters is typically carried out by incorporating 
+this into a larger Gibbs sampler. 
+%In many situations, the MJP trajectory and parameters can exhibit
+%strong coupling, and 
+This strategy of alternately sampling parameters given path, and 
+then path given parameters can result in poor Markov chain mixing. In this 
+work, we propose a simple and elegant algorithm to address this 
+problem. Our scheme brings Metropolis-Hastings (MH) approaches 
+for discrete-time hidden Markov models (HMMs) to the continuous-time
+setting, and also also ties up some of the loose ends 
+in~\cite{RaoTeh13}. The result is a complete and clean recipe for 
+parameter and path inference in MJPs. In our experiments, we 
+demonstrate superior performance over the Gibbs sampling approach, as well as 
+other approaches like particle Markov chain Monte Carlo~\cite{Andrieu10}.
+\end{abstract}
+\noindent%
+{\it Keywords:}  Markov jump process, Markov chain Monte Carlo, Metropolis-Hasting, Bayesian 
+inference, Uniformization 
+%\spacingset{1.45}
+\input{intro.tex}
+\input{unif.tex}
+\input{simple_mh.tex}
+\input{main_alg.tex}
+\input{verif_alg2.tex}
+\input{expt.tex}
+\input{ergodicity.tex}
+
+\input{conc.tex}
+
+
+% ~\nocite{RaoTeh13}
+% ~\nocite{RaoTeh12}
+% ~\nocite{Andrieu10}
+% ~\nocite{Andrieu09}
+% ~\nocite{Golightly15}
+% ~\nocite{Andrieu102}
+% ~\nocite{Liu94}
+% ~\nocite{Neal12}
+% ~\nocite{Neal03}
+% ~\nocite{geoergo}
+\bibliography{bibfile}
+\bibliographystyle{plain}
+%\pagebreak
+%\input{supp.tex}
+%\input{proof.tex}
+\end{document}
