@@ -146,12 +146,12 @@ ergodicity~\citep[Theorems 15.0.1 and Lemma 15.2.8]{meyn2009markov}.
 We regard our sampler as operating on the space $(\theta,\vartheta,W)$, 
 with a transition step updating this to $(\theta',\vartheta',W')$. 
 We establish the drift condition via the Lyapunov-Foster function
-$\cV(W,\theta,\vartheta) = \left. \lambda_1|W| + \lambda_2 \Omega(\theta) +
-\Omega(\vartheta) +L \right. := \cV_W(W) + \cV_{\theta}(\theta) + 
-\cV_{\theta^*}(\theta^*)$, for suitable settings of $\lambda_1,
+$\ c V(W,\theta,\vartheta) = \left. \lambda_1|W| + \lambda_2 \Omega(\theta) +
+\Omega(\vartheta) +L \right. := \c V_W(W) + \c V_{\theta}(\theta) + 
+\c V_{\theta^*}(\theta^*)$, for suitable settings of $\lambda_1,
   \lambda_2$ and $L$.
 The small set will be a level set of this function, i.e.\ 
-$\SM_\alpha := \{(\theta,\theta^*,W): \cV(\theta,\vartheta,W) \le \alpha\}$.
+$\S M_\alpha := \{(\theta,\theta^*,W): \c V(\theta,\vartheta,W) \le \alpha\}$.
 We show that this is a 2-small set (i.e.\ the distribution over states
 after 2-steps of our sampler, $P^2(\cdot|\theta,\vartheta,W) \ge \epsilon 
 \nu(\cdot)$ for all $(\theta,\vartheta,W) \in \SM_\alpha$. 
