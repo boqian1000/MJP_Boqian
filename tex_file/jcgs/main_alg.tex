@@ -9,21 +9,21 @@ in a simpler, and significantly more efficient MCMC scheme.
 
 As before, the MCMC iteration begins with the pair $(S(t), \theta)$. 
 Instead of simulating the thinned events $U$, we first generate a new parameter 
-$\theta^*$ from some distribution $q(\theta^*|\theta)$. Treat this as an 
+$\theta^*$ from some distribution $q(\vartheta|\theta)$. Treat this as an 
 auxiliary variable, so that the augmented space now is the triple 
-$(S(t), \theta,\theta^*)$. We now pretend $S(t)$ was sampled by a 
+$(S(t), \theta,\vartheta)$. We now pretend $S(t)$ was sampled by a 
 uniformization scheme where the dominating Poisson rate is given by 
-$(\Omega(\theta) + \Omega(\theta^*))$ instead of just $\Omega(\theta)$ 
+$(\Omega(\theta) + \Omega(\vartheta))$ instead of just $\Omega(\theta)$ 
 (any choice greater than $\max_i A_i$ is valid).
 It now follows that the set of thinned events $U$ is a piecewise-constant
-Poisson process with intensity $\Omega(\theta) + \Omega(\theta^*) - 
+Poisson process with intensity $\Omega(\theta) + \Omega(\vartheta) - 
 A_{S(t)}$. Following~\cite{RaoTeh13}, the set $W$, the union of these events 
 with the actual
 trajectory transition times $T$, is a realization of homogeneous Poisson
-process with rate $\Omega(\theta) + \Omega(\theta^*)$. Now we discard all MJP 
+process with rate $\Omega(\theta) + \Omega(\vartheta)$. Now we discard all MJP 
 state information, so that the MCMC state space consists of $W$, the current
-MJP parameter $\theta$, and the auxiliary parameter $\theta^*$.
-Finally, we make an MH proposal that swaps $\theta$ with $\theta^*$. 
+MJP parameter $\theta$, and the auxiliary parameter $\vartheta$.
+Finally, we make an MH proposal that swaps $\theta$ with $\vartheta$. 
 Observe from
 symmetry that the Poisson skeleton $W$ has the same probability both
 before and after this proposal, so that unlike the previous scheme,
@@ -84,9 +84,9 @@ $$ \text{acc} =
     \vspace{-0 in}
   \end{minipage}
     \caption{Steps 0-3: Starting with a trajectory and parameter $\theta$,
-      simulate an auxiliary parameter $\theta'$, and then the thinned events
-      $U$ from a rate $\Omega(\theta) + \Omega(\theta') - A_{S(t)}$ Poisson
-      process. Step 4: Propose swapping $\theta$ and $\theta'$. Step 5:
+      simulate an auxiliary parameter $\theta^*$, and then the thinned events
+      $U$ from a rate $\Omega(\theta) + \Omega(\theta^*) - A_{S(t)}$ Poisson
+      process. Step 4: Propose swapping $\theta$ and $\theta^*$. Step 5:
       Run a forward pass to accept or reject this proposal, and use the accepted
     parameter to simulate a new trajectory. Step 6: Discard the thinned events.} 
    \label{fig:MH_improved}
@@ -100,8 +100,8 @@ $$ \text{acc} =
    \textbf{Input:  } & \text{A set of partial and noisy observations $X$}. \\
                       & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$}.\\ 
                      & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
-   \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, 
-                            new MJP parameters $\tilde{\theta}$}.\\
+   \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (S', T')$, 
+                            new MJP parameters $\theta'$}.\\
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
@@ -113,9 +113,9 @@ $$ \text{acc} =
     \State Sample virtual jumps $U\subset[t_{start}, t_{end}]$ from a nonhomogeneous Poisson process with 
     piecewise-constant rate $R(t) = (\Omega - A_{S(t)}(\theta))$. 
     Define $W = T \cup U$ and discard all MJP state information.
-    \State The current MCMC state-space is $(W,\theta,\theta^*)$. Propose swapping
+    \State The current MCMC state-space is $(W,\theta,\vartheta)$. Propose swapping
     $\theta$ and $\theta^*$, so that the new state-space is 
-    $(W, \theta^*, \theta)$. The acceptance probability is given by
+    $(W, \vartheta, \theta)$. The acceptance probability is given by
    % accept $\theta^*$ as $\tilde{\theta}$ with probability $\alpha$.
         \begin{align*}
         \alpha %&=  1 \wedge \frac{P(W,(\theta^*, \theta)| y)}{P(W, (\theta, \theta^*)| y)}\\
@@ -128,14 +128,14 @@ $$ \text{acc} =
     $w \in W$ given observations upto $w$. At the end, we have calculated
     $p(X|W,\theta)$ and $p(X|W,\theta^*)$. Use these to accept or reject the
     proposed swapping of $\theta$ and $\theta^*$. Write the new state space
-    as $(W,\tilde{\theta},\tilde{\theta}^*)$.
-    \State For the new parameter $\tilde{\theta}$, make a backward pass through 
+    as $(W,\theta',\vartheta')$.
+    \State For the new parameter $\theta'$, make a backward pass through 
     the elements of
     $W$, sequentially assigning a state to each element of $W$.
 %    Sample a path $\tilde{V}$, from a discret-time Markov chain with $|W| + 1$ steps, using FFBS algorithm. The transition matrix of the Markov chain is $B = (I + \frac{A(\tilde{\theta})}{\Omega})$ while the initial distribution over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
 %    $$ L_i(s) = P(Y_{[w_i, w_{i + 1})} | S(t) = s \; for\; t \in [w_i, w_{i + 1})) = \prod_{j: t_j \in [w_i, w_{i + 1})}p(y_{t_j} | S(t_j) = s).$$\\
 %%(i.e. $V(i) \sim P(V |  \theta(i), W(i - 1), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\
-    \State Let $\tilde{T}$ be the set of times in $W$ when the Markov chain changes state. Define $\tilde{S}$ as the corresponding set of state values. Return $(\tilde{S}, \tilde{T}, \tilde{\theta})$.
+    \State Let $T'$ be the set of times in $W$ when the Markov chain changes state. Define $S'$ as the corresponding set of state values. Return $(S', T', \theta')$.
 \end{algorithmic}
 \end{algorithm}
 

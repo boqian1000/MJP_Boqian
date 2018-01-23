@@ -2,13 +2,13 @@
 \section{Geometric ergodicity}
 We derive conditions under which our proposed algorithm
 inherits mixing properties of an `ideal' sampler that operates without
-computational constraints. The latter proposes a new parameter $\nu$
-from distribution $q(\nu|\theta)$, and accepts with probability 
-$\alpha_I(\nu,\theta) = 1 \wedge \frac{P(X | \nu)q(\theta| \nu)p(\nu)}
-      {P(X | \theta)q(\nu|\theta)p(\theta)}$. The resulting ideal
+computational constraints. The latter proposes a new parameter $\vartheta$
+from distribution $q(\vartheta|\theta)$, and accepts with probability 
+$\alpha_I(\vartheta,\theta) = 1 \wedge \frac{P(X | \vartheta)q(\theta| \vartheta)p(\vartheta)}
+      {P(X | \theta)q(\vartheta|\theta)p(\theta)}$. The resulting ideal
 Markov chain has transition probability 
-$p_I(\theta'|\theta) = q(\theta'|\theta)\alpha(\theta',\theta) + \left[1-\int d\nu
-q(\nu|\theta)\alpha_I(\nu,\theta)\right]\delta_\theta(\theta')$, the first
+$p_I(\theta'|\theta) = q(\theta'|\theta)\alpha(\theta',\theta) + \left[1-\int d\vartheta
+q(\vartheta|\theta)\alpha_I(\vartheta,\theta)\right]\delta_\theta(\theta')$, the first
 term corresponding to acceptance, and the second, rejection.
 
 Our main result is Theorem~\cite{}, which shows that if the ideal MCMC 

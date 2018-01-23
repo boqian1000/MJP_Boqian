@@ -6,39 +6,39 @@
 \end{proposition}
 \begin{proof}
   Suppose that at the start of the algorithm, we have a pair $(\theta,S(t))$ from
-  the posterior distribution $p(\theta,S(t)|X)$. Introducing $\theta^*$
-  from $q(\theta^*|\theta)$ results in a triplet whose marginal over the first
+  the posterior distribution $p(\theta,S(t)|X)$. Introducing $\vartheta$
+  from $q(\vartheta|\theta)$ results in a triplet whose marginal over the first
   two variables is still $p(\theta,S(t)|X)$.
 
   Sampling $U$ from a Poisson process with rate $\Omega(\theta) +
-  \Omega(\theta^*) - A_{S(t)}(\theta)$, results in a random grid $W = T \cup U$
-  that is distributed according to a rate $\Omega(\theta) + \Omega(\theta^*)$
+  \Omega(\vartheta) - A_{S(t)}(\theta)$, results in a random grid $W = T \cup U$
+  that is distributed according to a rate $\Omega(\theta) + \Omega(\vartheta)$
   Poisson process (Proposition 2 in~\cite{RaoTeh13}). Discarding all state 
-  information results in a triplet $(W,\theta,\theta^*)$ with probability
-  proportional to $p(\theta)q(\theta^*|\theta)p(W|\theta,\theta^*)
-  p(X|W,\theta,\theta^*)$.
+  information results in a triplet $(W,\theta,\vartheta)$ with probability
+  proportional to $p(\theta)q(\vartheta|\theta)p(W|\theta,\vartheta)
+  p(X|W,\theta,\vartheta)$.
 
-Next we propose swapping $\theta$ and $\theta^*$, since this
+Next we propose swapping $\theta$ and $\vartheta$, since this
 is a deterministic proposal, the MH-acceptance probability is given by
-$$\alpha = 1 \wedge \frac{p(\theta^*)q(\theta|\theta^*)p(W|\theta^*,\theta)
-p(X|W,\theta^*,\theta)}{p(\theta)q(\theta^*|\theta)p(W|\theta,\theta^*)
-p(X|W,\theta,\theta^*)}$$
-The term $p(W|\theta,\theta^*)$ is just a Poisson process with rate $\Omega(\theta)+
-\Omega(\theta^*)$, so that $p(W|\theta,\theta^*) = p(W|\theta,\theta^*)$. The
-terms $p(X|W,\theta,\theta^*)$ and $p(X|W,\theta^*,\theta)$ are obtained
+$$\alpha = 1 \wedge \frac{p(\vartheta)q(\theta|\vartheta)p(W|\vartheta,\theta)
+p(X|W,\vartheta,\theta)}{p(\theta)q(\vartheta|\theta)p(W|\theta,\vartheta)
+p(X|W,\theta,\vartheta)}$$
+The term $p(W|\theta,\vartheta)$ is just a Poisson process with rate $\Omega(\theta)+
+\Omega(\vartheta)$, so that $p(W|\theta,\vartheta) = p(W|\theta,\vartheta)$. The
+terms $p(X|W,\theta,\vartheta)$ and $p(X|W,\vartheta,\theta)$ are obtained
 after a forward pass over $W$ using discrete-time transition matrices
-$B(\theta,\theta^*) = \left(I + \frac{A(\theta)}{\Omega(\theta)+\Omega(\theta^*)}\right)$ 
-and $B(\theta^*,\theta) = \left(I + \frac{A(\theta^*)}{\Omega(\theta)+\Omega(\theta^*)}\right)$. 
+$B(\theta,\vartheta) = \left(I + \frac{A(\theta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$ 
+and $B(\vartheta,\theta) = \left(I + \frac{A(\vartheta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$. 
 
 Calling the parameters 
-after the accept step $(\tilde{\theta}, \tilde{\theta}^*)$, we have that
-$(\tilde{\theta}, \tilde{\theta}^*,W)$ has the same distribution as
-$(\theta, \theta^*,W)$.
+after the accept step $(\theta', \vartheta')$, we have that
+$(\theta', \vartheta',W)$ has the same distribution as
+$(\theta, \vartheta,W)$.
 Finally, following Lemma 1 in~\cite{RaoTeh13}, using the matrix 
-$B(\tilde{\theta},\tilde{\theta}^*)$ to make a backward pass through $W$,
-and discarding the self-transitions results in a trajectory $(\tilde{S}(t)$
-distributed according to $A(\tilde{\theta})$. Discarding the auxiliary parameter
-$\tilde{\theta}^*$ results is a pair $(\tilde{\theta},\tilde{S}(t))$ from
+$B(\theta,\vartheta)$ to make a backward pass through $W$,
+and discarding the self-transitions results in a trajectory $(S'(t)$
+distributed according to $A(\theta')$. Discarding the auxiliary parameter
+$\vartheta'$ results is a pair $(\theta',S'(t))$ from
 the posterior.
 % \begin{align*}
 %  p(y, W, S, T, \theta, \theta^*) &= p(\theta) q(\theta^* | \theta) P(S,T| \theta, \theta^*) P(W| S, T, \theta, \theta^*)P(y | S, T, \theta, \theta^*)\\
@@ -73,21 +73,21 @@ $U \sim \text{PoissonProc}(\Omega-A_{S(t)})$). Empirical results from~\cite{RaoT
 suggest setting $\Omega = 2 \max_i A_i$.
 
 Implicit in our new scheme is a uniformizing Poisson process with rate
-$\Omega(\theta,\theta') = \Omega(\theta) + \Omega(\theta')$. For our 
-scheme to be valid, $\Omega(\theta,\theta')$ must be greater than both
-$\max_i A_i(\theta)$ and $\max_i A_i(\theta')$. The smallest and simplest such
-choice is $\Omega(\theta,\theta') = \max A_i(\theta) + \max A_i(\theta')$.
+$\Omega(\theta,\vartheta) = \Omega(\theta) + \Omega(\vartheta)$. For our 
+scheme to be valid, $\Omega(\theta,\vartheta)$ must be greater than both
+$\max_i A_i(\theta)$ and $\max_i A_i(\vartheta)$. The smallest and simplest such
+choice is $\Omega(\theta,\vartheta) = \max A_i(\theta) + \max A_i(\vartheta)$.
 For a fixed $\theta$, this reduces to $\Omega = 2\max A_i$, providing
 an intuitive motivation for the approach in~\cite{RaoTeh13}.
 Larger alternatives include 
-$\Omega(\theta,\theta') = \kappa(\max A_i(\theta) + \max A_i(\theta'))$
+$\Omega(\theta,\vartheta) = \kappa(\max A_i(\theta) + \max A_i(\vartheta))$
 for $\kappa > 1$.  These result in more thinned events, and therefore more 
 computation, with the benefit of faster MCMC mixing. We study the effect of 
 $\kappa$ in our experiments.
 
-It is also possible to have non-additive settings for $\Omega(\theta,\theta')$.
+It is also possible to have non-additive settings for $\Omega(\theta,\vartheta)$.
 A simple option is to set it equal to 
-$\kappa \max( \max_i A_i(\theta), \max A_i(\theta')$ for some choice of $\kappa
+$\kappa \max( \max_i A_i(\theta), \max A_i(\vartheta)$ for some choice of $\kappa
 > 1$. We investigate this option as well.
 
 Our proposed algorithm is related to work on MCMC inference for doubly-intractable distributions.
