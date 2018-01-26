@@ -11,15 +11,15 @@ $p_I(\theta'|\theta) = q(\theta'|\theta)\alpha(\theta',\theta) + \left[1-\int d\
 q(\vartheta|\theta)\alpha_I(\vartheta,\theta)\right]\delta_\theta(\theta')$, the first
 term corresponding to acceptance, and the second, rejection.
 
-Our main result is Theorem~\cite{}, which shows that if the ideal MCMC 
-sampler is geometrically ergodic, then so is our tractable auxiliary 
+Our main result is Theorem~\ref{thm:geom_erg}, which shows that if the ideal MCMC 
+sampler is geometrically ergodic, then so is our tractable auxiliary
 variable sampler. Assumption~\ref{asmp:cond_num} is the only non-trivial 
 one we have to make, requiring that the rate-matrix $A(\theta)$ not be 
 arbitrarily ill-conditioned over all
 settings of the parameter $\theta$. This assumption is reasonable from
 both theoretical and practical viewpoints.
 
-We first make explicit all our assumptions, before diving into the details
+We first state all our assumptions, before diving into the details
 of our proof.
 \begin{assumption}
   The rate-matrix $A(\theta)$ is ergodic for all $\theta$ and satisfies 
@@ -58,7 +58,7 @@ and is not critical: we impose it to avoid book-keeping for
 situations where $\Mx{\theta}$ exhibits oscillations in the tails.
 
 \begin{assumption}
-For the ideal sampler with transition probability $p_I(\theta'|\theta)$ \\
+For the ideal sampler with transition probability $p_I(\theta'|\theta)$: \\
 i) the set $\SM_M=\{\theta:\Mx{\theta}\le M \}$ is a $1$-small set for 
 every
 $M$, i.e.\ $\exists$ a probability measure $\phi$ and a constant 
@@ -76,14 +76,14 @@ geometric ergodicity. The first implies that for $\theta$ in
 $\SM_M$, the ideal sampler forgets its current
 location with probability $\kappa_1$. The second condition ensures that
 for $\theta$ outside this set, the ideal sampler drifts towards 
-$\SM_M$, with a . These two conditions together imply geometric
-mixing with rate equal or faster than $\kappa_1$~\cite{meyn2009markov}. 
+$\SM_M$. These two conditions together imply geometric
+mixing with rate equal or faster than $\kappa_1$~\cite{meyn2012markov}. 
 Observe that we have used $\Mx{\theta}$ as the so-called Lyapunov-Foster 
 function to define geometric ergodicity for the ideal sampler and whose
 sub-level sets form the small sets. This is the most natural choice, 
 though our proof can be tailored to different choices. Similarly, we 
 could easily allow $\SM_M$ to be an $n$-small set for any $n\ge 1$ (so 
-now the ideal sampler needs $n$ steps before it can forget its current 
+the ideal sampler needs $n$ steps before it can forget its current 
 value in $\SM_M$); we restrict ourselves to the $1$-small case for 
 clarity.
 
