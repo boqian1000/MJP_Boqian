@@ -297,53 +297,52 @@ sampler and the ideal sampler can be brought arbitrarily close
 outside an appropriate small set, so long as $\Omega(\theta)$ is larger
 than $\Omega(\vartheta)$ by a sufficient factor. 
 \begin{proposition}
-  Write $P_{\theta,\nu,W}(W')$ for the conditional distribution over $W'$
-  given the current state of the MCMC sampler and the observations, and let
+  Write $P_{\theta,\nu,W}(W',\theta^*)$ for the conditional distribution 
+  over $(W',\theta^*)$ given the current state of the MCMC sampler and the 
+  observations, and let
   $\lim_{\theta\rightarrow\infty} \Mx{\theta} = \infty$. Then for any positive 
-  $\epsilon$, there exist $B_\theta$ and $k$ such that for all 
-  $\theta \ge B_\theta$ with $\Omega(\theta) \ge k\Omega(\vartheta)$, we have 
-  %\vinayak{Not quite, we need to bound the min, not max/sum. Actually, this needs
-%fixing, we don't depend on $W$, rather on $W'$}  
+  $\epsilon$, there exist $B_\theta$ such that for all 
+  $\theta \ge B_\theta$, % with $\Omega(\theta) \ge k\Omega(\vartheta)$, 
+  we have 
   $P(\{W'\ s.t.\ |\alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
   \le \epsilon)\} \ge 1-\epsilon$.%$(\theta,\theta^*)$ satisfying
 \label{prop:mix}
 \end{proposition}
 \begin{proof}
-  Consider the nearest pair of observations, occuring at times $t$ and 
-  $t + \Delta$. %let them be separated by a time interval $\Delta$. 
-  By setting $\theta$ high enough, the distribution over waiting times 
-  of each state can be concentrated arbitrarily tightly around
-  $0$ (from the assumption of the proposition along with 
-  Assumption~\ref{asmp:cond_num}). Thus, the distribution over states after an 
-  interval $\Delta$ can be brought arbitrarily close to the equilibrium 
-  distribution of $A(\theta)$  (call this $p_{\theta}$).
+Consider the nearest pair of observations, occuring at times $t$ and 
+$t + \Delta$. %let them be separated by a time interval $\Delta$. 
+By setting $\theta$ high enough, the distribution over waiting times 
+of each state can be concentrated arbitrarily tightly around
+$0$ (from the assumption of the proposition along with 
+Assumption~\ref{asmp:cond_num}). Thus, the distribution over states after an 
+interval $\Delta$ can be brought arbitrarily close to the equilibrium 
+distribution of $A(\theta)$  (call this $p_{\theta}$).
 
-  Next, recall that the embedded Markov chain has a transition matrix 
-  given by $B(\theta,\vartheta) = (I + A(\theta)/\Omega(\theta,\vartheta))$. 
-  For any setting of $\Omega$, this has the same stationary distribution 
-  $p_{\theta}$: this can be verified by multiplying $B(\theta,\vartheta)$ with 
-  $p_\theta$.
-  The condition $\Omega(\theta) \ge k\Omega(\theta^*)$, together with 
-  assumption~\ref{asmp:cond_num}, prevents the
-  diagonal of $B$ from dominating; thus bounding self-transition 
-  probabilities in $B(\theta,\theta^*)$, and limiting how poorly $B$ can mix.
-  %over all valid settings of $\theta$ and $\theta^*$. 
-  Next, observe that with $|W|$ large enough, the distribution over states from 
-  the discrete-time Markov chain can be brought arbitrarily close to 
-  $p_{\theta}$. Further, as $\theta$ increases, $|W'|$ concentrates about
-  values further and further away from $0$, so that
-  %Then, by choosing a grid $W$ over $\Delta$ 
+Next, recall that the embedded Markov chain has a transition matrix 
+given by $B(\theta^*,\theta) = (I + A(\theta^*)/\Omega(\theta,\theta^*))$. 
+For any setting of $\Omega$, this has the same stationary distribution 
+$p_{\theta}$: this can be verified by multiplying $B(\theta,\theta^*)$ with 
+$p_\theta$. By choosing $B_\theta$ large enough relative to the variance 
+of the proposal distribution $q(\theta^*|\theta)$, we can ensure that 
+$\Omega(\theta) \approx \Omega(\theta^*)$ (i.e.\ $\frac{\Omega(\theta)}{
+\Omega(\theta^*)} \in [1-\epsilon_1,1+\epsilon_1]$) with high probability.
+%The condition $\Omega(\theta) \ge k\Omega(\vartheta)$, 
+This, together with assumption~\ref{asmp:cond_num}, ensures that with 
+high probability, the self-transition probability of $B(\theta,\vartheta)$ 
+is bounded away from one, and limits how poorly $B$ can mix.
+Observe that with $|W'|$ large enough, the distribution over states 
+from the discrete-time Markov chain can be brought arbitrarily close to 
+$p_{\theta}$. Further, as $\theta$ increases, with high probability $|W'|$ 
+concentrates about values further and further away from $0$, so that
+%Then, by choosing a grid $W$ over $\Delta$ 
  for any such value, the terms $p(x_{t+\Delta}|s_t)$ and 
  $p(x_{t+\Delta}|W,s_t)$ can be brought $\epsilon$-close with high
  probability.  Assumption~\ref{asmp:mono_tail} ensures that
-  for sufficiently large $\theta$ and $W$, this continues to hold for
-  all larger $\theta$ and $W$. 
- 
-  Thus we can find a $W$ and $\theta$ such that $p(x_{t+\Delta}|s_t)$ and 
-  $p(x_{t+\Delta}|W,s_t)$ can be brought arbitrarily close for all larger
-  $\theta$ and $W$.  By a simple chaining argument, $p(X|\theta)$ and 
-  $p(X|\theta,W)$ can also be brought arbitrarily close, and
-  so too $\alpha_I(\theta',\theta,X)$ and $\alpha(\theta',\theta,W,X)$.
+this continues to hold for all larger $\theta$ as well.
+By a simple chaining argument, $p(X|\theta)$ and $p(X|\theta,W)$ can also 
+be brought arbitrarily close to each other, and
+  so too $\alpha_I(\theta',\theta,X)$ and $\alpha(\theta',\theta,W,X)$
+  \vinayak{expand}.
 \end{proof}
 
 \begin{lemma}(drift condition) $\exists \delta_2 \in (0, 1), L > 0$ 
@@ -402,26 +401,39 @@ Integrate out $W'$, then we get the following.
 &\left. + \int q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \vartheta,
 X)P(W' | S, T, \theta, \nu)dT ( 1 - \alpha(\theta, \nu | W', X))d\nu
 \delta_\theta(\theta')\right]
-\intertext{We consider two cases: $\Omega(\vartheta)>k\Omega(\theta)$ and
-its complement. For the former, we use $\alpha(\theta, \nu | W', X)\in
-[0,1]$ to get}
-%and equation~\eqref{eq:acc} to get}
-  P(d\theta'| &W, \theta, \vartheta) 
-\leq d\nu\left[q(\theta' | \theta) + \delta_\theta(\theta')\right]
+\intertext{Consider the integral over $(\nu,W')$ in the second term. We 
+  can break this into parts: where $\Omega(\vartheta)/\Omega(\theta) \in 
+  [1-\epsilon_1, 1+\epsilon_1]$ and its complement. The latter part has 
+  probability less than $\epsilon$, and using the bound $1-\alpha \le 1$, 
+we bound the integral by $\epsilon$.}
+%use $\alpha(\theta, \theta' | W', X)\le 1$ and $q(\theta'|\theta) < \epsilon$ 
+%to get}
+%%and equation~\eqref{eq:acc} to get}
+%  P(d\theta'| &W, \theta, \vartheta) 
+%\leq d\theta' \epsilon
 % &\left.\left(1 -  \int q(\nu | \theta) \sum_S P(S, T|W, \theta,
 % \vartheta, X)P(W'|S, T, \theta, \nu)\alpha_I(\theta, \nu)
 % \frac{\eta_1^2}{\xi_1^2}d\nu dW' dT\right) \delta_\theta(\theta')\right]\\
 %          & \leq d\nu \left[q(\nu | \theta) + \left(1 -
 %          \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\nu |
 %      \theta)\alpha_I(\theta, \nu) d\nu\right)\delta_\theta(\theta')\right]
-      \numberthis \label{eq:nu1}
-\intertext{For the latter, from Proposition~\ref{prop:mix}, and bounding
-$\alpha$ by one on the $W$-set with probability $\epsilon$, we have
-\vinayak{Need to clean up}}
+%      \numberthis \label{eq:nu1}
+\intertext{For the former, from Proposition~\ref{prop:mix}, and bounding
+$\alpha$ by one on the $W$-set with probability $\epsilon$, we have the 
+bound}
+\int_{W_1}dW' \int_S q(\nu | \theta) &\int \sum_S P(S, T | W, \theta, \vartheta,
+X)P(W' | S, T, \theta, \nu)dT ( 1 - [\alpha_I(\theta, \nu |
+X,W')])d\nu \\ 
+\le \int_{W_1}dW' \int_S q(\nu | \theta) &\int \sum_S P(S, T | W, \theta, \vartheta,
+X)P(W' | S, T, \theta, \nu)dT ( 1 - [\alpha_I(\theta, \nu |
+X)-\epsilon])d\nu \\
+\le (1-\epsilon) &q(\nu|\theta)( 1 - [\alpha_I(\theta, \nu |
+X)-\epsilon]) d\nu
+\intertext{Then}
    P(d\theta'| &W, \theta, \vartheta)   \le d\theta' \int_{W'}dW'
    \left[q(\theta' | \theta) \int \sum_S P(S, T
 | W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')dT
-\left[\alpha_I(\theta', \theta | X)+\epsilon_{\theta'}\right]\right.\\
+\left[\alpha_I(\theta', \theta | X)+\epsilon_{}\right]\right.\\
 &\left. + \int q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \vartheta,
 X)P(W' | S, T, \theta, \nu)dT ( 1 - [\alpha_I(\theta, \nu |
 X)-\epsilon_\nu])d\nu \delta_\theta(\theta')\right]  \\
