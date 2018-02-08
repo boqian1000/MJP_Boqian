@@ -297,24 +297,23 @@ sampler and the ideal sampler can be brought arbitrarily close
 outside an appropriate small set, so long as $\Omega(\theta)$ is larger
 than $\Omega(\vartheta)$ by a sufficient factor. 
 \begin{proposition}
-  Write $P_{\theta,\nu,W}(W',\theta^*)$ for the conditional distribution 
+  Write $P_{\theta}(W',\theta^*)$ for the conditional distribution 
   over $(W',\theta^*)$ given the current state of the MCMC sampler and the 
   observations, and let
   $\lim_{\theta\rightarrow\infty} \Mx{\theta} = \infty$. Then for any positive 
   $\epsilon$, there exist $B_\theta$ such that for all 
   $\theta \ge B_\theta$, % with $\Omega(\theta) \ge k\Omega(\vartheta)$, 
   we have 
-  $P(\{W'\ s.t.\ |\alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
+  $P_{\theta}(\{W'\ s.t.\ |\alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
   \le \epsilon)\} \ge 1-\epsilon$.%$(\theta,\theta^*)$ satisfying
 \label{prop:mix}
 \end{proposition}
 \begin{proof}
 Consider the nearest pair of observations, occuring at times $t$ and 
 $t + \Delta$. %let them be separated by a time interval $\Delta$. 
-By setting $\theta$ high enough, the distribution over waiting times 
-of each state can be concentrated arbitrarily tightly around
-$0$ (from the assumption of the proposition along with 
-Assumption~\ref{asmp:cond_num}). Thus, the distribution over states after an 
+By setting $\theta$ high enough, assumption~\ref{asmp:cond_num} ensures 
+that the distribution over waiting times of each state can be concentrated 
+arbitrarily close to $0$. Thus, the distribution over states after an 
 interval $\Delta$ can be brought arbitrarily close to the equilibrium 
 distribution of $A(\theta)$  (call this $p_{\theta}$).
 
@@ -322,27 +321,39 @@ Next, recall that the embedded Markov chain has a transition matrix
 given by $B(\theta^*,\theta) = (I + A(\theta^*)/\Omega(\theta,\theta^*))$. 
 For any setting of $\Omega$, this has the same stationary distribution 
 $p_{\theta}$: this can be verified by multiplying $B(\theta,\theta^*)$ with 
-$p_\theta$. By choosing $B_\theta$ large enough relative to the variance 
-of the proposal distribution $q(\theta^*|\theta)$, we can ensure that 
-$\Omega(\theta) \approx \Omega(\theta^*)$ (i.e.\ $\frac{\Omega(\theta)}{
-\Omega(\theta^*)} \in [1-\epsilon_1,1+\epsilon_1]$) with high probability.
+$p_\theta$. For the embedded Markov chain to be brought close to 
+equilibrium over $[t,t+\Delta]$, we need two conditions, 1) the number of 
+Poisson events must be large (to allow sufficient transitions), and 2) the 
+transition matrix $B$ must to mix arbitrarily poorly (otherwise even a 
+large number of transition opportunities will not forget the initial state). 
+We show that for $\theta$ large enough, this holds with high probability.
+Assumption~\ref{asmp:mono_tail} will ensure that this continues to hold 
+for all larger $\theta$ as well.
+
+Recall first that the proposal distribution $q(\theta^*|\theta)$ is 
+centered at the current value $\theta$. For any $\epsilon$, we can find 
+and interval $[\theta-h,\theta+h]$ such that $q(\theta^* \in [\theta-h,\theta+h]|\theta)
+\ge 1-\epsilon$. Thus for any $\epsilon_1$, by choosing $\theta$ large 
+enough, we can ensure that %$\Omega(\theta) \approx \Omega(\theta^*)$ (i.e.\ 
+$\frac{\Omega(\theta)}{ \Omega(\theta^*)} \in [1-\epsilon_1,1+\epsilon_1]$) 
+with probability greater than $1-\epsilon_1$.
 %The condition $\Omega(\theta) \ge k\Omega(\vartheta)$, 
 This, together with assumption~\ref{asmp:cond_num}, ensures that with 
-high probability, the self-transition probability of $B(\theta,\vartheta)$ 
+probability greater than $1-\epsilon$, the self-transition probability of $B(\theta,\vartheta)$ 
 is bounded away from one, and limits how poorly $B$ can mix.
-Observe that with $|W'|$ large enough, the distribution over states 
-from the discrete-time Markov chain can be brought arbitrarily close to 
-$p_{\theta}$. Further, as $\theta$ increases, with high probability $|W'|$ 
-concentrates about values further and further away from $0$, so that
-%Then, by choosing a grid $W$ over $\Delta$ 
- for any such value, the terms $p(x_{t+\Delta}|s_t)$ and 
- $p(x_{t+\Delta}|W,s_t)$ can be brought $\epsilon$-close with high
- probability.  Assumption~\ref{asmp:mono_tail} ensures that
-this continues to hold for all larger $\theta$ as well.
-By a simple chaining argument, $p(X|\theta)$ and $p(X|\theta,W)$ can also 
-be brought arbitrarily close to each other, and
-  so too $\alpha_I(\theta',\theta,X)$ and $\alpha(\theta',\theta,W,X)$
-  \vinayak{expand}.
+Second, since $W$ comes from a Poisson process with intensity 
+$\Omega(\theta')+ \Omega(\theta) - A_{S(t)}(\theta)$, a large $\theta'$
+ensures a large $|W'|$ with high probability: by setting $B_\theta$ large 
+enough we can ensure $|W'|$ is large enough with arbitrary probability.
+
+Thus, for large enough $B_\theta$ we can ensure that for all $\theta > 
+B_\theta$, the distributions $p(x_{t+\Delta}|s_t)$ and 
+$p(x_{t+\Delta}|W,s_t)$ can be brought arbitrarily close with arbitrarily 
+high probability.  
+By a simple chaining argument, this holds for $p(X|\theta)$ and 
+$p(X|\theta,W)$ as well and so too 
+  \vinayak{expand}
+$\alpha_I(\theta',\theta,X)$ and $\alpha(\theta',\theta,W,X)$
 \end{proof}
 
 \begin{lemma}(drift condition) $\exists \delta_2 \in (0, 1), L > 0$ 
@@ -384,28 +395,33 @@ probability by $1$, so that
 
 Consider the transition probability over $(W',\theta')$:
 \begin{align*}
-P(dW', d\theta'| W, \theta, \vartheta) &
+  P(dW', d\theta'&| W, \theta, \vartheta) 
 =d\theta' dW' \left[q(\theta' | \theta) 
-\int \sum_S P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')dT
+  \sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')
 \alpha(\theta, \theta' | W', X)\right. \\
-    &\left.+ \int q(\nu | \theta) \int \sum_S P(S, T|W,\theta,\vartheta,
-    X)P(W' | S, T, \theta, \nu)dT ( 1 - {\alpha(\theta, \nu | W', X)})d\nu
+&\left.+ \int q(\nu | \theta) \sum_{S,T} P(S, T|W,\theta,\vartheta,
+    X)P(W' | S, T, \theta, \nu) ( 1 - {\alpha(\theta, \nu | W', X)})d\nu
     \delta_\theta(\theta')\right].
 \end{align*}
 Integrate out $W'$, then we get the following.
 \begin{align*}
-  P(d\theta'| &W, \theta, \vartheta) =d\theta' \int_{W'}dW'
+  P(d\theta'| W, \theta, \vartheta) =d\theta' \int_{W'}dW'&
   \left[q(\theta' | \theta)
-    \int \sum_S P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta,
-  \theta')dT\alpha(\theta, \theta' | W', X)\right.\\
-&\left. + \int q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \vartheta,
-X)P(W' | S, T, \theta, \nu)dT ( 1 - \alpha(\theta, \nu | W', X))d\nu
-\delta_\theta(\theta')\right]
-\intertext{Consider the integral over $(\nu,W')$ in the second term. We 
-  can break this into parts: where $\Omega(\vartheta)/\Omega(\theta) \in 
-  [1-\epsilon_1, 1+\epsilon_1]$ and its complement. The latter part has 
-  probability less than $\epsilon$, and using the bound $1-\alpha \le 1$, 
-we bound the integral by $\epsilon$.}
+    \sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta,
+  \theta')\alpha(\theta, \theta' | W', X)\right.\\
+  &\hspace{-1.3in}\left.  + \int q(\nu | \theta) \sum_{S,T} P(S, T |  W, \theta, \vartheta,
+X)P(W' | S, T, \theta, \nu) ( 1 - \alpha(\theta, \nu | W', X))d\nu
+\delta_\theta(\theta')\right] \\
+&:= d\theta' I_1 + \delta_\theta(\theta')I_2
+\end{align*}
+{Consider the second term $I_2$, involving an integral over $(\nu,W')$. 
+  We can divide the area of integration into two complementary 
+  parts: $S_{\epsilon}$, the part of $(\nu,W')$ where 
+  $|\alpha(\theta, \nu | X,W') - \alpha_I(\theta, \nu | X)| \le \epsilon$,
+and its complement $S^c_{\epsilon}$. Call these $I_{2,S_{\epsilon}}$ and 
+$I_{2,S_{\epsilon}^c}$ respectively. 
+The second term has probability less than $\epsilon$, and using the bound 
+$1-\alpha \le 1$, we have}
 %use $\alpha(\theta, \theta' | W', X)\le 1$ and $q(\theta'|\theta) < \epsilon$ 
 %to get}
 %%and equation~\eqref{eq:acc} to get}
@@ -418,94 +434,103 @@ we bound the integral by $\epsilon$.}
 %          \frac{\eta_1^2}{\xi_1^2} \int_\Theta q(\nu |
 %      \theta)\alpha_I(\theta, \nu) d\nu\right)\delta_\theta(\theta')\right]
 %      \numberthis \label{eq:nu1}
-\intertext{For the former, from Proposition~\ref{prop:mix}, and bounding
-$\alpha$ by one on the $W$-set with probability $\epsilon$, we have the 
-bound}
-\int_{W_1}dW' \int_S q(\nu | \theta) &\int \sum_S P(S, T | W, \theta, \vartheta,
-X)P(W' | S, T, \theta, \nu)dT ( 1 - [\alpha_I(\theta, \nu |
-X,W')])d\nu \\ 
-\le \int_{W_1}dW' \int_S q(\nu | \theta) &\int \sum_S P(S, T | W, \theta, \vartheta,
-X)P(W' | S, T, \theta, \nu)dT ( 1 - [\alpha_I(\theta, \nu |
-X)-\epsilon])d\nu \\
-\le (1-\epsilon) &q(\nu|\theta)( 1 - [\alpha_I(\theta, \nu |
-X)-\epsilon]) d\nu
-\intertext{Then}
-   P(d\theta'| &W, \theta, \vartheta)   \le d\theta' \int_{W'}dW'
-   \left[q(\theta' | \theta) \int \sum_S P(S, T
-| W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')dT
-\left[\alpha_I(\theta', \theta | X)+\epsilon_{}\right]\right.\\
-&\left. + \int q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \vartheta,
-X)P(W' | S, T, \theta, \nu)dT ( 1 - [\alpha_I(\theta, \nu |
-X)-\epsilon_\nu])d\nu \delta_\theta(\theta')\right]  \\
-& \leq d\theta'\left[q(\theta' | \theta)\left[\alpha_I(\theta', \theta |
-X)+\epsilon_{\theta'}\right] +
-\left(1 -  \int q(\nu | \theta) [\alpha_I(\nu, \theta|X)-\epsilon_\nu]
-d\nu \right) \delta_\theta(\theta')\right]\\
-& \leq d\theta'\left[q(\theta' | \theta) \alpha_I(\theta', \theta | X) +
-\left(1 -  \int q(\nu | \theta) \alpha_I(\theta, \nu|X) d\nu \right)
-\delta_\theta(\theta')\right]+\epsilon_{\theta'}q(\theta'|\theta)+
-\delta_\theta(\theta')\int \epsilon_{\nu} q(\nu|\theta) d\nu \\
-& = p_I(\theta'|\theta,X) + \epsilon_{\theta'}q(\theta'|\theta)+
-\delta_\theta(\theta')\int \epsilon_{\nu} q(\nu|\theta) d\nu
-\numberthis \label{eq:nu2}
+\begin{align*}
+  I_{2,S_{\epsilon}^c} &\le \int_{S^c_{\epsilon}} d\nu dW'
+q(\nu | \theta) \sum_{S,T} P(S, T |  W, \theta, \vartheta,
+X)P(W' | S, T, \theta, \nu) \le \epsilon
+\end{align*}
+{For the former, we use Proposition~\ref{prop:mix} to get the bound}
+%, and bounding
+%$\alpha$ by one on the $W$-set with probability $\epsilon$, we have the 
+%bound}
+\begin{align*}
+%\int_{W_1}dW' \int_S q(\nu | \theta) &\int \sum_S P(S, T | W, \theta, \vartheta,
+%X)P(W' | S, T, \theta, \nu)dT ( 1 - [\alpha_I(\theta, \nu |
+%X,W')])d\nu \\ 
+I_{2,S_{\epsilon}} \le \int_{S_\epsilon}dW' d\nu q(\nu | \theta) &
+  \sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \nu) 
+  ( 1 - [\alpha_I(\theta, \nu | X)-\epsilon]) \\
+= \int_{S_\epsilon}dW' d\nu q(\nu | \theta) &
+  P(W' | S, T, \theta, \nu) 
+  ( 1 - [\alpha_I(\theta, \nu | X)-\epsilon]) \\
+  \le (1-\epsilon)^2 & - \int_{S_\epsilon} d\nu q(\nu | \theta) \alpha_I(\theta, \nu | X) 
+%   \intertext{Then}
+%      P(d\theta'| &W, \theta, \vartheta)   \le d\theta' \int_{W'}dW'
+%      \left[q(\theta' | \theta) \int \sum_S P(S, T
+%   | W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')dT
+%   \left[\alpha_I(\theta', \theta | X)+\epsilon_{}\right]\right.\\
+%   &\left. + \int q(\nu | \theta) \int \sum_S P(S, T | W, \theta, \vartheta,
+%   X)P(W' | S, T, \theta, \nu)dT ( 1 - [\alpha_I(\theta, \nu |
+%   X)-\epsilon_\nu])d\nu \delta_\theta(\theta')\right]  \\
+%   & \leq d\theta'\left[q(\theta' | \theta)\left[\alpha_I(\theta', \theta |
+%   X)+\epsilon_{\theta'}\right] +
+%   \left(1 -  \int q(\nu | \theta) [\alpha_I(\nu, \theta|X)-\epsilon_\nu]
+%   d\nu \right) \delta_\theta(\theta')\right]\\
+%   & \leq d\theta'\left[q(\theta' | \theta) \alpha_I(\theta', \theta | X) +
+%   \left(1 -  \int q(\nu | \theta) \alpha_I(\theta, \nu|X) d\nu \right)
+%   \delta_\theta(\theta')\right]+\epsilon_{\theta'}q(\theta'|\theta)+
+%   \delta_\theta(\theta')\int \epsilon_{\nu} q(\nu|\theta) d\nu \\
+%   & = p_I(\theta'|\theta,X) + \epsilon_{\theta'}q(\theta'|\theta)+
+%   \delta_\theta(\theta')\int \epsilon_{\nu} q(\nu|\theta) d\nu
+%   \numberthis \label{eq:nu2}
 \end{align*}
 
-From equation~\eqref{eq:nu1}, we have for 
-$\Omega(\theta) < k\Omega(\vartheta)$,
+Finally, we have
 \begin{align*}
   \int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)  
-  &\leq \int \Omega(\theta') d\theta' \left[q(\theta' | \theta) + 
-    \delta_\theta(\theta')\right] \\
-    &\leq (\eta_0 + 1 ) \Omega(\theta) 
-    \leq \frac{(\eta_0 + 1)}{k} \Omega(\vartheta) 
+  &= \int d\theta' \Omega(\theta') I_1 + I_2 \Omega(\theta)
+\end{align*}
+Again, the first term involves an integral over $(\theta',W')$ which we 
+divide into two regions $I_{1,S_\epsilon}$ and its complement 
+$I_{1,S^c_\epsilon}$. For the latter, we bound the acceptance probability 
+by one to get
+\begin{align*}
+  I_{1,S^c_\epsilon} &\le  \int_{S^c_\epsilon} d\theta'dW' \Omega(\theta')
 \end{align*}
 
-From equation~\eqref{eq:nu2} and assumption 2, we have for 
-$\Omega(\theta) > k\Omega(\vartheta)$
-\begin{align*}
-\int \Omega(\theta')P(d\theta'| W, \theta, \vartheta)  &\leq 
-\int \Omega(\theta') p_I(\theta'|\theta,X) d\theta' +\int d\theta'
-\Omega(\theta') \left[ \epsilon_{\theta'}q(\theta'|\theta)+
-\delta_\theta(\theta')\int \epsilon_{\nu} q(\nu|\theta) d\nu \right] \\
-%\epsilon_\nu[q(\nu|\theta)+\delta_\theta(\nu)] \\ 
-&\leq (1-\rho_I) \Omega(\theta)  + C_I  + \int d\theta'
-\Omega(\theta') \epsilon_{\theta'}q(\theta'|\theta)+
-\Omega(\theta)\int \epsilon_{\nu} q(\nu|\theta) d\nu 
-%&\leq (1-\rho_I) \max_sA_s(\theta)  + C_I  + \epsilon_\theta \max_sA_s(\theta)
-% + \epsilon_\theta \max_s A_s(\theta)  + C_q  
-\end{align*}
-We can bound the middle integral as follows
-\begin{align*}
-  \int d\theta'\Omega(\theta')  \epsilon_{\theta'} q(\theta'|\theta) &=  
-  \int_{B_\alpha} d\theta'\Omega(\theta')  \epsilon_{\theta'} q(\theta'|\theta) +  
-  \int_{B_\alpha^c} d\theta'\Omega(\theta')  \epsilon_{\theta'}
-  q(\theta'|\theta)  \\
-  &\le \alpha +  
-  \int_{B_\alpha^c} d\theta'\Omega(\theta')  \epsilon_{\theta'} q(\theta'|\theta) \\
-  &\le \alpha + \epsilon_\theta \eta_0 \Omega(\theta)+1
-\end{align*}
-We can bound the last integral as follows
-\begin{align*}
-\Omega(\theta)\int \epsilon_{\nu} q(\nu|\theta) d\nu 
-\end{align*}
 
-From these equations, we have for $\Omega(\theta) > k \Omega(\vartheta)$,
-\begin{align*}
-  \mathbb{E}[\lambda |W'| &+ \lambda_2 \Omega(\vartheta') + \Omega(\theta')| 
-  W, \theta, \vartheta, X] \leq 
-  \lambda \left[|W|(1 - \delta_1) +  \Omega(\theta) + b\right] + \\
-  & \lambda_2 (1+\eta_0)\Omega(\theta) +
-  \left[(1-\rho_I)  +\epsilon_\theta \eta_0 \right] \Omega(\theta) + C_I 
-\end{align*}
-For $\Omega(\theta) < k \Omega(\theta^*)$,
-\begin{align*}
-  \mathbb{E}[\lambda |W'| &+ \lambda_2 \Omega(\vartheta') +
-  \Omega(\theta)| W, \theta, \vartheta, X] \leq 
-  \lambda \left[|W|(1 - \delta_1) +  \Omega(\theta)| + b\right] + \\
-& \lambda_2(1+\eta_0) \Omega(\theta) +
-    \frac{(\eta_0 + 1)}{k} \Omega(\vartheta) + C_I \\
-    &= (1-\delta_1)\lambda|W| + \frac{(\eta_0 + 1)}{k\lambda_2} \lambda_2\Omega(\vartheta)+
-    (\lambda + \lambda_2(1+\eta_0))a\Omega(\theta)
-\end{align*}
+% From equation~\eqref{eq:nu2} and assumption 2, we have for 
+% $\Omega(\theta) > k\Omega(\vartheta)$
+% \begin{align*}
+% \int \Omega(\theta')P(d\theta'| W, \theta, \vartheta)  &\leq 
+% \int \Omega(\theta') p_I(\theta'|\theta,X) d\theta' +\int d\theta'
+% \Omega(\theta') \left[ \epsilon_{\theta'}q(\theta'|\theta)+
+% \delta_\theta(\theta')\int \epsilon_{\nu} q(\nu|\theta) d\nu \right] \\
+% %\epsilon_\nu[q(\nu|\theta)+\delta_\theta(\nu)] \\ 
+% &\leq (1-\rho_I) \Omega(\theta)  + C_I  + \int d\theta'
+% \Omega(\theta') \epsilon_{\theta'}q(\theta'|\theta)+
+% \Omega(\theta)\int \epsilon_{\nu} q(\nu|\theta) d\nu 
+% %&\leq (1-\rho_I) \max_sA_s(\theta)  + C_I  + \epsilon_\theta \max_sA_s(\theta)
+% % + \epsilon_\theta \max_s A_s(\theta)  + C_q  
+% \end{align*}
+% We can bound the middle integral as follows
+% \begin{align*}
+%   \int d\theta'\Omega(\theta')  \epsilon_{\theta'} q(\theta'|\theta) &=  
+%   \int_{B_\alpha} d\theta'\Omega(\theta')  \epsilon_{\theta'} q(\theta'|\theta) +  
+%   \int_{B_\alpha^c} d\theta'\Omega(\theta')  \epsilon_{\theta'}
+%   q(\theta'|\theta)  \\
+%   &\le \alpha +  
+%   \int_{B_\alpha^c} d\theta'\Omega(\theta')  \epsilon_{\theta'} q(\theta'|\theta) \\
+%   &\le \alpha + \epsilon_\theta \eta_0 \Omega(\theta)+1
+% \end{align*}
+
+% From these equations, we have for $\Omega(\theta) > k \Omega(\vartheta)$,
+% \begin{align*}
+%   \mathbb{E}[\lambda |W'| &+ \lambda_2 \Omega(\vartheta') + \Omega(\theta')| 
+%   W, \theta, \vartheta, X] \leq 
+%   \lambda \left[|W|(1 - \delta_1) +  \Omega(\theta) + b\right] + \\
+%   & \lambda_2 (1+\eta_0)\Omega(\theta) +
+%   \left[(1-\rho_I)  +\epsilon_\theta \eta_0 \right] \Omega(\theta) + C_I 
+% \end{align*}
+% For $\Omega(\theta) < k \Omega(\theta^*)$,
+% \begin{align*}
+%   \mathbb{E}[\lambda |W'| &+ \lambda_2 \Omega(\vartheta') +
+%   \Omega(\theta)| W, \theta, \vartheta, X] \leq 
+%   \lambda \left[|W|(1 - \delta_1) +  \Omega(\theta)| + b\right] + \\
+% & \lambda_2(1+\eta_0) \Omega(\theta) +
+%     \frac{(\eta_0 + 1)}{k} \Omega(\vartheta) + C_I \\
+%     &= (1-\delta_1)\lambda|W| + \frac{(\eta_0 + 1)}{k\lambda_2} \lambda_2\Omega(\vartheta)+
+%     (\lambda + \lambda_2(1+\eta_0))a\Omega(\theta)
+% \end{align*}
 If we set  $\lambda$ small enough, then the drift condition holds.
 \end{proof}
