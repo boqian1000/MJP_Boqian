@@ -278,12 +278,19 @@ By assumption \ref{asmp:ideal_geom}, we have the following inequality.
   &:= \rho \delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta') 
   \intertext{The two-step transition probability is given by}
   P(W'', \theta'',\vartheta'' | W, \theta, \vartheta) & =
-  \int P(W'', \theta'',\vartheta'' | W', \theta, \vartheta) 
+  \int P(W'', \theta'',\vartheta'' | W', \theta', \vartheta') 
        P(W', \theta',\vartheta' | W, \theta, \vartheta) 
        dW' d\theta' d\vartheta' \\
-       &\ge \int_{\SM_{h,M,M}} P(W'', \theta'',\vartheta'' | W', \theta, \vartheta) 
+       &\ge \int_{\SM_{h,M}} P(W'', \theta'',\vartheta'' | W', \theta', \vartheta') 
        P(W', \theta',\vartheta' | W, \theta, \vartheta) 
        dW' d\theta' d\vartheta' \\
+       &\ge \int_{\SM_{h,M}}  \rho \delta_{\theta'}(\vartheta'')P(W'' \from \PP(\Omega(\theta''))\phi(\theta'') \\
+         &\qquad \qquad \rho \delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta') 
+       dW' d\theta' d\vartheta' \\
+       &\ge \phi(\theta'')P(W'' \from \PP(\Omega(\theta'')) 
+       \int_{\SM_{h,M}} \!\!\!\! \delta_{\theta'}(\vartheta'') 
+       F_{Poiss(\Omega(\theta'))}(h)\phi(\theta') 
+       d\theta'  \\
        & \ge P(W'' \from
        \PP(\Omega(\theta''))\phi(\theta'')\phi(\vartheta'') 
 \end{align*}
@@ -324,7 +331,7 @@ $p_{\theta}$: this can be verified by multiplying $B(\theta,\theta^*)$ with
 $p_\theta$. For the embedded Markov chain to be brought close to 
 equilibrium over $[t,t+\Delta]$, we need two conditions, 1) the number of 
 Poisson events must be large (to allow sufficient transitions), and 2) the 
-transition matrix $B$ must to mix arbitrarily poorly (otherwise even a 
+transition matrix $B$ must not mix arbitrarily poorly (otherwise even a 
 large number of transition opportunities will not forget the initial state). 
 We show that for $\theta$ large enough, this holds with high probability.
 Assumption~\ref{asmp:mono_tail} will ensure that this continues to hold 
@@ -332,7 +339,8 @@ for all larger $\theta$ as well.
 
 Recall first that the proposal distribution $q(\theta^*|\theta)$ is 
 centered at the current value $\theta$. For any $\epsilon$, we can find 
-and interval $[\theta-h,\theta+h]$ such that $q(\theta^* \in [\theta-h,\theta+h]|\theta)
+an interval $[\theta-h,\theta+h]$ such that for all $\theta$, 
+$q(\theta^* \in [\theta-h,\theta+h]|\theta)
 \ge 1-\epsilon$. Thus for any $\epsilon_1$, by choosing $\theta$ large 
 enough, we can ensure that %$\Omega(\theta) \approx \Omega(\theta^*)$ (i.e.\ 
 $\frac{\Omega(\theta)}{ \Omega(\theta^*)} \in [1-\epsilon_1,1+\epsilon_1]$) 
@@ -437,7 +445,10 @@ $1-\alpha \le 1$, we have}
 \begin{align*}
   I_{2,S_{\epsilon}^c} &\le \int_{S^c_{\epsilon}} d\nu dW'
 q(\nu | \theta) \sum_{S,T} P(S, T |  W, \theta, \vartheta,
-X)P(W' | S, T, \theta, \nu) \le \epsilon
+X)P(W' | S, T, \theta, \nu) \\ 
+&\le \int_{S^c_{\epsilon}} d\nu dW'
+q(\nu | \theta) PoissP(W' | \Omega(\theta) + \Omega(\nu))
+\le \epsilon 
 \end{align*}
 {For the former, we use Proposition~\ref{prop:mix} to get the bound}
 %, and bounding
