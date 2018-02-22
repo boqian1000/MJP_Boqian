@@ -462,10 +462,10 @@ q(\nu | \theta) P(W' |  W, \theta, \nu, \vartheta, X)
 I_{2,S_{\epsilon}} \le \int_{S_\epsilon}dW' d\nu q(\nu | \theta) &
   \sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \nu) 
   ( 1 - [\alpha_I(\theta, \nu | X)-\epsilon]) \\
-= \int_{S_\epsilon}dW' d\nu q(\nu | \theta) &
+\le \int_{S}dW' d\nu q(\nu | \theta) &
   P(W' | S, T, \theta, \nu) 
   ( 1 - [\alpha_I(\theta, \nu | X)-\epsilon]) \\
-  \le (1-\epsilon)^2 & - \int_{S_\epsilon} d\nu q(\nu | \theta) \alpha_I(\theta, \nu | X) 
+  \le (1+\epsilon) & - \int_{S} d\nu q(\nu | \theta) \alpha_I(\theta, \nu | X) 
 %   \intertext{Then}
 %      P(d\theta'| &W, \theta, \vartheta)   \le d\theta' \int_{W'}dW'
 %      \left[q(\theta' | \theta) \int \sum_S P(S, T
