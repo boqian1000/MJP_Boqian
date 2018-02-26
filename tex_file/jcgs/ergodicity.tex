@@ -366,10 +366,8 @@ $\alpha_I(\theta',\theta,X)$ and $\alpha(\theta',\theta,W,X)$
 
 \begin{lemma}(drift condition) $\exists \delta_2 \in (0, 1), L > 0$ 
   s.t. 
-  $\mathbb{E}\left[\lambda_1|W'| + \lambda_2\Omega(\theta')+
-  \Omega(\vartheta') | W, \theta, \vartheta, X\right] 
-  \leq (1 - \delta_2)\left(\lambda_1|W| + \lambda_2 \Omega(\theta) +
-  \Omega(\vartheta)\right) + L$ %where $\lambda = \lceil \frac{(t_{end} - t_{start})k_2(\eta_0 + 1)}{(\eta_1^2 \kappa_1 \mathbb{P}_\phi(C)/\xi_1^2 - \eta_0)} \rceil.$
+  $\mathbb{E}\left[\lambda_1|W'| + \Omega(\theta')  | W, \theta, \vartheta, X\right] 
+  \leq (1 - \delta_2)\left(\lambda_1|W| + \Omega(\theta)   \right) + L$ %where $\lambda = \lceil \frac{(t_{end} - t_{start})k_2(\eta_0 + 1)}{(\eta_1^2 \kappa_1 \mathbb{P}_\phi(C)/\xi_1^2 - \eta_0)} \rceil.$
 \label{lem:drift}
 \end{lemma}
 \begin{proof}
@@ -465,7 +463,7 @@ I_{2,S_{\epsilon}} \le \int_{S_\epsilon}dW' d\nu q(\nu | \theta) &
 \le \int_{S}dW' d\nu q(\nu | \theta) &
   P(W' | S, T, \theta, \nu) 
   ( 1 - [\alpha_I(\theta, \nu | X)-\epsilon]) \\
-  \le (1+\epsilon) & - \int_{S} d\nu q(\nu | \theta) \alpha_I(\theta, \nu | X) 
+  \le (1+\epsilon) & - \int d\nu q(\nu | \theta) \alpha_I(\theta, \nu | X) 
 %   \intertext{Then}
 %      P(d\theta'| &W, \theta, \vartheta)   \le d\theta' \int_{W'}dW'
 %      \left[q(\theta' | \theta) \int \sum_S P(S, T
@@ -493,14 +491,28 @@ Finally, we have
   &= \int d\theta' \Omega(\theta') I_1 + I_2 \Omega(\theta)
 \end{align*}
 Again, the first term involves an integral over $(\theta',W')$ which we 
-divide into two regions $I_{1,S_\epsilon}$ and its complement 
-$I_{1,S^c_\epsilon}$. For the latter, we bound the acceptance probability 
+divide into two regions $\tilde{I}_{1,S_\epsilon}$ and its complement 
+$\tilde{I}_{1,S^c_\epsilon}$. For the latter, we bound the acceptance probability 
 by one to get
 \begin{align*}
-  I_{1,S^c_\epsilon} &\le  \int_{S^c_\epsilon} d\theta'dW' \Omega(\theta')
+  \tilde{I}_{1,S^c_\epsilon} &\le  \int_{S^c_\epsilon} d\theta'dW' \Omega(\theta')\\
+  & \leq \kappa \Omega(\theta) \epsilon\\
+  \boqian{?}
+\end{align*}
+For the first one, we have 
+\begin{align*}
+\tilde{I}_{1,S_\epsilon} &= \int_{S_\epsilon} I_1 \Omega(\theta') d\theta'\\
+& \leq \int_{S_\epsilon} \Omega(\theta')q(\theta' | \theta) (\alpha_I(\theta, \theta', X) + \epsilon) d\theta' \\
+& \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta' + \eta_0 \epsilon \Omega(\theta)
 \end{align*}
 
-
+Then we have the following.
+\begin{align*}
+  \int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)  
+  &= \tilde{I}_{1,S_\epsilon} + \tilde{I}_{1,S^c_\epsilon} + I_{2,S_{\epsilon}} + I_{2,S_{\epsilon}^c} \\
+  & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta'  + \int d\nu q(\nu | \theta) (1 - \alpha_I(\theta, \nu | X)) + (2 + \kappa) \Omega(\theta) \\
+  & \leq (1 - \rho) \Omega(\theta) + (2 + \kappa) \Omega(\theta)
+\end{align*}
 % From equation~\eqref{eq:nu2} and assumption 2, we have for 
 % $\Omega(\theta) > k\Omega(\vartheta)$
 % \begin{align*}
@@ -544,5 +556,5 @@ by one to get
 %     &= (1-\delta_1)\lambda|W| + \frac{(\eta_0 + 1)}{k\lambda_2} \lambda_2\Omega(\vartheta)+
 %     (\lambda + \lambda_2(1+\eta_0))a\Omega(\theta)
 % \end{align*}
-If we set  $\lambda$ small enough, then the drift condition holds.
+If we set  $\epsilon$ and $\lambda_1$ small enough, then the drift condition holds.
 \end{proof}
