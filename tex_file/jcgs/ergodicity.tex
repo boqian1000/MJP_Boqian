@@ -495,7 +495,8 @@ divide into two regions $\tilde{I}_{1,S_\epsilon}$ and its complement
 $\tilde{I}_{1,S^c_\epsilon}$. For the latter, we bound the acceptance probability 
 by one to get
 \begin{align*}
-  \tilde{I}_{1,S^c_\epsilon} &\le  \int_{S^c_\epsilon} d\theta'dW' \Omega(\theta')\\
+  \tilde{I}_{1,S^c_\epsilon} &\le   \int_{S^c_\epsilon} d\theta'dW' \Omega(\theta')q(\theta'|\theta)p(W'|W,\theta,\vartheta,\theta') \\
+    & = \int_{S^c_\epsilon} d\theta'dW' \Omega(\theta')\\
   & \leq \kappa \Omega(\theta) \epsilon\\
   \boqian{?}
 \end{align*}
