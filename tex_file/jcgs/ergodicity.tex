@@ -22,11 +22,13 @@ both theoretical and practical viewpoints.
 We first state all our assumptions, before diving into the details
 of our proof.
 \begin{assumption}
-  The rate-matrix $A(\theta)$ is ergodic for all $\theta$ and satisfies 
-  $\inf_\theta \frac{\mx{\theta}}{\Mx{\theta}} = \mu > 0$.
+%  The rate-matrix $A(\theta)$ is ergodic for all $\theta$ and satisfies 
+ % $\inf_\theta \frac{\mx{\theta}}{\Mx{\theta}} = \mu > 0$.
 %  $\forall \theta$ satisfying 
 %  $|\theta| > |\hat{\theta}|$, we have $\Mx{\theta} \asymp
 %  \mx{\theta}$.
+	Suppose the second smallest eigen value of rate-matrix  $A(\theta)$ is $\lambda ^A_2(\theta)$. Exists constants $\mu > 0$ and $C > 0$ such that 
+	$\forall \theta > C$,  $ \lambda ^A_2(\theta) \geq \mu \Omega(\theta)$.
   \label{asmp:cond_num}
 \end{assumption}
 \noindent The ergodicty assumption is natural. The second part is the
@@ -124,6 +126,10 @@ Given the proposal density $q(\nu | \theta)$, $\exists \eta_0 > 0$ s.t. $$ \int_
 \end{assumption}
 \noindent This mild requirement ensures the proposal distribution doesn't attempt
 to explore large $\theta$'s too aggressively.
+
+\begin{assumption}
+For any positive $\epsilon > 0$ and $K > 0$, there exists $\theta_0$, such that for $\theta > \theta_0$, $P(\mid \frac{q(\theta | \theta')p(\theta')}{q(\theta | \theta')p(\theta)}\mid \leq K) \geq 1 - \epsilon$, where $\theta' \sim q(\cdot | \theta)$.
+\end{assumption}
 
 %\begin{assumption}
 %For the above $C \subseteq \Theta$, $\exists$ $\bar{\Omega} > 0$ s.t. 
@@ -303,6 +309,44 @@ This result states that the acceptance probabilities of our proposed
 sampler and the ideal sampler can be brought arbitrarily close
 outside an appropriate small set, so long as $\Omega(\theta)$ is larger
 than $\Omega(\vartheta)$ by a sufficient factor. 
+
+\begin{lemma}
+Given an observation observed at $t_{end}$, and $h > 0$, $\theta$ and $\theta'$, with $\parallel \theta'  - \theta \parallel \leq h$, for $\forall \epsilon$, $\exists  W_0, B_\theta > 0$ such that for all $W$ with $|W| > W_0$, and $\theta > B_\theta$ we have $|P(X| W, \theta, \theta') - P(X | \theta)| < \epsilon$
+\label{lem:eigenvalue_lemma}
+\end{lemma}
+\begin{proof}
+From our assumption 1, there exists $\mu'$ such that $\lambda^A_2(\theta) \geq \mu \Omega(\theta, \theta')$. Since $B(\theta, \theta') = \frac{A(\theta)}{\Omega} + I $, there is a one to one mapping between the eigen values of B and the eigen values of A. $\lambda_B(\theta, \theta') = 1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$. So the second largest eigen value of the transition probability matrix $B(\theta, \theta')$ is less or equal to a constant which is less than 1. It leads to the following. for any $\epsilon > 0$ there exists $W_0'$ for $W$ with $|W| > W_0'$ we have $\parallel P^{(|W|)}(\cdot | W, \theta, \theta') - p_{st}(\cdot | W, \theta, \theta')\parallel_{TV} \leq \epsilon$. Where $P^{(t)}(\cdot | W, \theta, \theta' )$
+ is the t-step transition probability with respect to the Markov chain with transition matrix $B(\theta, \theta')$ and the determined time grid $W$, while $p_{st}$ is the stationary distribution.
+\begin{align*}
+P(X, W | \theta, \theta') &= \sum_V P(X | V, W, \theta, \theta') P(V | W, \theta, \theta') P(W | \theta, \theta')\\
+&= \sum_{V_{|W|}} P(X | V_{|W|}, \theta, \theta') P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')\\
+\end{align*}
+For $W$ with $|W| > W_0$, we have  $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon$. \\
+Similarly, we have
+\begin{align*}
+P(X | \theta) &= P(X| \theta, \theta')= \sum_W P(X, W | \theta, \theta')\\
+&= \sum_W \sum_{V_{|W|}} P(X | V_{|W|}, \theta, \theta') P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')\\
+&= \sum_{W s.t. |W| \leq W_0'} \sum_{V_{|W|}} P(X | V_{|W|}, \theta, \theta') P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta') + \\
+&\sum_{W s.t. |W| > W_0'} \sum_{V_{|W|}} P(X | V_{|W|}, \theta, \theta') P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')
+\end{align*}
+For $ \epsilon$, there exists $B_\theta > 0$, such that for $\parallel \theta \parallel  > B_\theta$, $|P(X | \theta) - P_{st}(X | \theta)| < \epsilon$.
+\end{proof}
+
+\begin{proposition}
+Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our MCMC sampler given the observations. For any positive $\epsilon$, there exist $B_\theta > 0$ such that for all $\theta \ge B_\theta$, we have
+  $P(\{(W', \theta') \ s.t.\ |\alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
+  \le \epsilon\} | W, \theta, \vartheta) \ge 1-\epsilon$.%$(\theta,\theta^*)$ satisfying
+\label{prop:mix0}
+\end{proposition}
+\begin{proof}
+From previous lemma, for any $\epsilon > 0$, $\exists B_\theta > 0, W_0 > 0$, if $\parallel \theta - \theta' \parallel < h$ and $|W| > W_0$ and $\theta > B_\theta$, then  $|P(X | W, \theta, \theta') - P(X | \theta)| < \epsilon$. 
+\begin{align*}
+|\alpha(\theta, \theta', W, X) - \alpha_I(\theta, \theta', X)| &= \ \mid 1 \wedge \frac{P(X | W, \theta' , \theta)q(\theta | \theta')p(\theta')}{P(X | W, \theta , \theta')q(\theta' | \theta)p(\theta)} - 1 \wedge \frac{P(X | \theta')q(\theta | \theta')p(\theta')}{P(X | \theta)q(\theta' | \theta)p(\theta)} \mid \\
+& \leq \ \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\\
+\end{align*}
+From assumption 7, we know that the second term can be bounded with high probability. Also, given large $\theta$ and $\theta'$ which is close to $\theta$, the probability of $|W|$ being large is large. 
+For $K = 1$ and $\epsilon$, there exists $\theta_1$ such that for $\theta > \theta_1$, $\mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\mid \leq 1$ with probability close to 1. Given $\theta$ and $\theta'$, $P(|W'| > W_0 | \theta, \theta')$ is close to 1.
+\end{proof}
 \begin{proposition}
   Write $P_{\theta}(W',\theta^*)$ for the conditional distribution 
   over $(W',\theta^*)$ given the current state of the MCMC sampler and the 
@@ -495,9 +539,12 @@ divide into two regions $\tilde{I}_{1,S_\epsilon}$ and its complement
 $\tilde{I}_{1,S^c_\epsilon}$. For the latter, we bound the acceptance probability 
 by one to get
 \begin{align*}
-  \tilde{I}_{1,S^c_\epsilon} &\le   \int_{S^c_\epsilon} d\theta'dW' \Omega(\theta')q(\theta'|\theta)p(W'|W,\theta,\vartheta,\theta') \\
-    & = \int_{S^c_\epsilon} d\theta'dW' \Omega(\theta')\\
-  & \leq \kappa \Omega(\theta) \epsilon\\
+  \tilde{I}_{1,S^c_\epsilon} &\le  \int_{S^c_\epsilon}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
+  &=  \int_{\theta' \leq \theta - h}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW' + \\
+&  \int_{\theta' > \theta + h, |W'| < W_0}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
+  & \leq  \Omega(\theta) \epsilon + \int_{\theta' > \theta + h} \Omega(\theta') q(\theta' | \theta)F_{poisson}(W_0 | \theta, \vartheta, \theta')d\theta'\\
+  & \leq  \Omega(\theta) \epsilon + \int_{\Theta} \Omega(\theta') q(\theta' | \theta)\epsilon d\theta'\\
+  &= \Omega(\theta) \epsilon (1 + \eta_0)
   \boqian{?}
 \end{align*}
 For the first one, we have 
@@ -511,8 +558,8 @@ Then we have the following.
 \begin{align*}
   \int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)  
   &= \tilde{I}_{1,S_\epsilon} + \tilde{I}_{1,S^c_\epsilon} + I_{2,S_{\epsilon}} + I_{2,S_{\epsilon}^c} \\
-  & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta'  + \int d\nu q(\nu | \theta) (1 - \alpha_I(\theta, \nu | X)) + (2 + \kappa) \Omega(\theta) \\
-  & \leq (1 - \rho) \Omega(\theta) + (2 + \kappa) \Omega(\theta)
+  & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta'  + \int d\nu q(\nu | \theta) (1 - \alpha_I(\theta, \nu | X)) + (3 + \eta_0) \Omega(\theta) \epsilon\\
+  & \leq (1 - \rho) \Omega(\theta) + (3 + \eta_0) \Omega(\theta) \epsilon
 \end{align*}
 % From equation~\eqref{eq:nu2} and assumption 2, we have for 
 % $\Omega(\theta) > k\Omega(\vartheta)$
