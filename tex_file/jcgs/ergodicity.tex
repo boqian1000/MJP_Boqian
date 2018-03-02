@@ -311,25 +311,60 @@ outside an appropriate small set, so long as $\Omega(\theta)$ is larger
 than $\Omega(\vartheta)$ by a sufficient factor. 
 
 \begin{lemma}
-Given an observation observed at $t_{end}$, and $h > 0$, $\theta$ and $\theta'$, with $\parallel \theta'  - \theta \parallel \leq h$, for $\forall \epsilon$, $\exists  W_0, B_\theta > 0$ such that for all $W$ with $|W| > W_0$, and $\theta > B_\theta$ we have $|P(X| W, \theta, \theta') - P(X | \theta)| < \epsilon$
+Given an observation observed at $t_{end}$, and $K_0 > 0$, $\theta$ and $\theta'$, with $\Omega(\theta') \leq K_0 \Omega(\theta)$ 
+%$\parallel \theta'  - \theta \parallel \leq h$
+, for $\forall \epsilon$, $\exists  W_0, B_\theta > 0$ such that for all $W$ with $|W| > W_0$, and $\theta > B_\theta$ we have $|P(X| W, \theta, \theta') - P(X | \theta)| < \epsilon$
 \label{lem:eigenvalue_lemma}
 \end{lemma}
 \begin{proof}
-From our assumption 1, there exists $\mu'$ such that $\lambda^A_2(\theta) \geq \mu \Omega(\theta, \theta')$. Since $B(\theta, \theta') = \frac{A(\theta)}{\Omega} + I $, there is a one to one mapping between the eigen values of B and the eigen values of A. $\lambda_B(\theta, \theta') = 1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$. So the second largest eigen value of the transition probability matrix $B(\theta, \theta')$ is less or equal to a constant which is less than 1. It leads to the following. for any $\epsilon > 0$ there exists $W_0'$ for $W$ with $|W| > W_0'$ we have $\parallel P^{(|W|)}(\cdot | W, \theta, \theta') - p_{st}(\cdot | W, \theta, \theta')\parallel_{TV} \leq \epsilon$. Where $P^{(t)}(\cdot | W, \theta, \theta' )$
- is the t-step transition probability with respect to the Markov chain with transition matrix $B(\theta, \theta')$ and the determined time grid $W$, while $p_{st}$ is the stationary distribution.
+From our assumption 1, there exists $\mu$ such that $\lambda^A_2(\theta) \geq \mu \Omega(\theta)$. So $\frac{\lambda^A_2(\theta)}{\Omega(\theta) + \Omega(\theta')} \geq \mu / (1 + K_0) $ Since $B(\theta, \theta') = \frac{A(\theta)}{\Omega(\theta, \theta')} + I $, there is a one to one mapping between the eigen values of B and the eigen values of A. $\lambda_B(\theta, \theta') = 1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$. So the second largest eigen value of the transition probability matrix $B(\theta, \theta')$ is less or equal to a constant which is less than 1. From the assumption 5, we have $\exists \ \xi_1 > \xi_1 > 0$, such that, $ \eta_1 \leq P(X | V=v, \theta) \leq \xi_1$. It leads to the following. Assume the state space has $N$ elements. For any $\epsilon > 0$ there exists $W_0$ for $W$ with $|W| > W_0$ we have $\parallel P^{(|W|)}(\cdot | W, \theta, \theta') - p_{st}(\cdot | W, \theta, \theta')\parallel_{TV} \leq \frac{\epsilon}{4\xi_1N} $. Where $P^{(t)}(\cdot | W, \theta, \theta' )$
+ is the t-step transition probability with respect to the Markov chain with transition matrix $B(\theta, \theta')$ corresponding to the determined time grid $W$, while $p_{st}(\cdot | \theta, \theta')$ is the stationary distribution accordingly.
 \begin{align*}
-P(X, W | \theta, \theta') &= \sum_V P(X | V, W, \theta, \theta') P(V | W, \theta, \theta') P(W | \theta, \theta')\\
-&= \sum_{V_{|W|}} P(X | V_{|W|}, \theta, \theta') P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')\\
+P(X|W , \theta, \theta') &= \sum_V P(X | V, W, \theta, \theta') P(V | W, \theta, \theta')\\
+&= \sum_{v} P(X | V_{|W|}=v, \theta) P^{(|W|)}(V_{|W|}=v | W, \theta, \theta')\\
 \end{align*}
-For $W$ with $|W| > W_0$, we have  $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon$. \\
-Similarly, we have
+ We also define the observation stationary distribution as $$P_{st}(X | \theta) = \sum_{v} P(X | V=v, \theta) P_{st}(V=v | \theta, \theta').$$
+ From the assumption 5, it is also bounded. $\eta_1 \leq P_{st}(X | \theta) \leq \xi_1$.
 \begin{align*}
-P(X | \theta) &= P(X| \theta, \theta')= \sum_W P(X, W | \theta, \theta')\\
-&= \sum_W \sum_{V_{|W|}} P(X | V_{|W|}, \theta, \theta') P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')\\
-&= \sum_{W s.t. |W| \leq W_0'} \sum_{V_{|W|}} P(X | V_{|W|}, \theta, \theta') P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta') + \\
-&\sum_{W s.t. |W| > W_0'} \sum_{V_{|W|}} P(X | V_{|W|}, \theta, \theta') P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')
+|P(X|W , \theta, \theta') - P_{st}(X | \theta)| &= | \sum_{v} P(X | V_{|W|}=v, \theta)(P^{(|W|)}(V_{|W|}=v | W, \theta, \theta') -  P_{st}(V=v | \theta, \theta'))|\\
+& \leq |\sum_{v} P(X | V_{|W|}=v, \theta)|P^{(|W|)}(V_{|W|}=v | W, \theta, \theta') -  P_{st}(V=v | \theta, \theta')|\\
+& \leq \sum_{v} P(X | V_{|W|}=v, \theta)\frac{\epsilon}{4\xi_1N}\\
+& \leq \epsilon / 3
 \end{align*}
-For $ \epsilon$, there exists $B_\theta > 0$, such that for $\parallel \theta \parallel  > B_\theta$, $|P(X | \theta) - P_{st}(X | \theta)| < \epsilon$.
+So for $W$ with $|W| > W_0$, we have  $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon / 4$. \\
+Similarly, given the $W_0$ which is defined before, we have
+\begin{align*}
+P(X | \theta) &= \sum_W P(X , W | \theta, \theta')\\
+&= \sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta') \\
+&+ \sum_{W s.t. |W| \leq W_0} \sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')
+%&= \sum_W \sum_{V_{|W|}} P(X | V_{|W|}, \theta) P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')\\
+%&= \sum_{W s.t. |W| \leq W_0'} \sum_{V_{|W|}} P(X | V_{|W|}, \theta) P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta') + \\
+%&\sum_{W s.t. |W| > W_0'} \sum_{V_{|W|}} P(X | V_{|W|}, \theta) P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')
+\end{align*}
+Consider the first term $\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')$.\\
+\begin{align*}
+&|\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')  - P_{st}(X | \theta)P(|W| > W_0 | \theta, \theta')|  \leq  \\
+&\sum_{W s.t. |W| > W_0} |P(X | W, \theta, \theta') - P_{st}(X | \theta)|  P(W | \theta, \theta') \leq P(|W| > W_0 | \theta, \theta') \epsilon / 4 
+\end{align*}
+For the $W_0$, there exists $\theta_0 > 0$ such that for any $\theta > \theta_0$, $P(|W| \leq W_0 | \theta, \theta') < \frac{\epsilon}{4\xi_1} $.
+For the second term, we have 
+\begin{align*}
+&|\sum_{W s.t. |W| \leq W_0} \sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')|  \\
+&\leq \xi_1 P(|W| \leq W_0 | \theta, \theta') \leq \epsilon / 4
+\end{align*}
+Consider the difference between $P(X|\theta)$ and $P_{st}(X|\theta)$ given $\theta > \theta_0$.
+\begin{align*}
+|P(X|\theta) - P_{st}(X|\theta)| &\leq |\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')  - P_{st}(X | \theta)P(|W| > W_0 |\theta, \theta')| \\
+&+ |\sum_{W s.t. |W| \leq W_0} \sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')|\\
+&+ |P_{st}(X | \theta)P(|W| \leq W_0 | \theta, \theta')|\\
+&\leq \epsilon / 4 + \epsilon / 4 + \epsilon / 4 = 3\epsilon/4
+\end{align*}
+So for $\epsilon > 0$, and $K_0 > 0$, if $|W| > W_0$ and $\theta > \theta_0$ and $\Omega(\theta') \leq K_0 \Omega(\theta)$, we have 
+\begin{align*}
+|P(X | \theta) - P(X | W, \theta, \theta')| &\leq |P(X | \theta) -P_{st}(X | \theta) | + | P_{st}(X | \theta) -  P(X | W, \theta, \theta')|\\
+& \leq \epsilon
+\end{align*}
+
 \end{proof}
 
 \begin{proposition}
