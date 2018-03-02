@@ -313,11 +313,11 @@ than $\Omega(\vartheta)$ by a sufficient factor.
 \begin{lemma}
 Given an observation observed at $t_{end}$, and $K_0 > 0$, $\theta$ and $\theta'$, with $\Omega(\theta') \leq K_0 \Omega(\theta)$ 
 %$\parallel \theta'  - \theta \parallel \leq h$
-, for $\forall \epsilon$, $\exists  W_0, B_\theta > 0$ such that for all $W$ with $|W| > W_0$, and $\theta > B_\theta$ we have $|P(X| W, \theta, \theta') - P(X | \theta)| < \epsilon$
+, for $\forall \epsilon$, $\exists  W_0, \theta_0 > 0$ such that for all $W$ with $|W| > W_0$, and $\theta > \theta_0$ we have $|P(X| W, \theta, \theta') - P(X | \theta)| < \epsilon$
 \label{lem:eigenvalue_lemma}
 \end{lemma}
 \begin{proof}
-From our assumption 1, there exists $\mu$ such that $\lambda^A_2(\theta) \geq \mu \Omega(\theta)$. So $\frac{\lambda^A_2(\theta)}{\Omega(\theta) + \Omega(\theta')} \geq \mu / (1 + K_0) $ Since $B(\theta, \theta') = \frac{A(\theta)}{\Omega(\theta, \theta')} + I $, there is a one to one mapping between the eigen values of B and the eigen values of A. $\lambda_B(\theta, \theta') = 1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$. So the second largest eigen value of the transition probability matrix $B(\theta, \theta')$ is less or equal to a constant which is less than 1. From the assumption 5, we have $\exists \ \xi_1 > \xi_1 > 0$, such that, $ \eta_1 \leq P(X | V=v, \theta) \leq \xi_1$. It leads to the following. Assume the state space has $N$ elements. For any $\epsilon > 0$ there exists $W_0$ for $W$ with $|W| > W_0$ we have $\parallel P^{(|W|)}(\cdot | W, \theta, \theta') - p_{st}(\cdot | W, \theta, \theta')\parallel_{TV} \leq \frac{\epsilon}{4\xi_1N} $. Where $P^{(t)}(\cdot | W, \theta, \theta' )$
+From our assumption 1, there exists $\mu$ such that $\lambda^A_2(\theta) \geq \mu \Omega(\theta)$. So $\frac{\lambda^A_2(\theta)}{\Omega(\theta) + \Omega(\theta')} \geq \mu / (1 + K_0) $ Since $B(\theta, \theta') = \frac{A(\theta)}{\Omega(\theta, \theta')} + I $, there is a one to one mapping between the eigen values of B and the eigen values of A. $\lambda_B(\theta, \theta') = 1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$. So the second largest eigen value of the transition probability matrix $B(\theta, \theta')$ is less or equal to a constant which is less than 1. Note that the constant is only related to $K_0$ and $\mu$. From the assumption 5, we have $\exists \ \xi_1 > \xi_1 > 0$, such that, $ \eta_1 \leq P(X | V=v, \theta) \leq \xi_1$. It leads to the following. Assume the state space has $N$ elements. For any $\epsilon > 0$, there exists $W_0$ for any $W$ with $|W| > W_0$, we have $\parallel P^{(|W|)}(\cdot | W, \theta, \theta') - p_{st}(\cdot | W, \theta, \theta')\parallel_{TV} \leq \frac{\epsilon}{4\xi_1N} $. Where $P^{(t)}(\cdot | W, \theta, \theta' )$
  is the t-step transition probability with respect to the Markov chain with transition matrix $B(\theta, \theta')$ corresponding to the determined time grid $W$, while $p_{st}(\cdot | \theta, \theta')$ is the stationary distribution accordingly.
 \begin{align*}
 P(X|W , \theta, \theta') &= \sum_V P(X | V, W, \theta, \theta') P(V | W, \theta, \theta')\\
@@ -368,13 +368,13 @@ So for $\epsilon > 0$, and $K_0 > 0$, if $|W| > W_0$ and $\theta > \theta_0$ and
 \end{proof}
 
 \begin{proposition}
-Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our MCMC sampler given the observations. For any positive $\epsilon$, there exist $B_\theta > 0$ such that for all $\theta \ge B_\theta$, we have
+Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our MCMC sampler given the observations. For any positive $\epsilon$, there exist $\theta_1 > 0$ such that for all $\theta \ge \theta_1$, we have
   $P(\{(W', \theta') \ s.t.\ |\alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
   \le \epsilon\} | W, \theta, \vartheta) \ge 1-\epsilon$.%$(\theta,\theta^*)$ satisfying
 \label{prop:mix0}
 \end{proposition}
 \begin{proof}
-From previous lemma, for any $\epsilon > 0$, $\exists B_\theta > 0, W_0 > 0$, if $\parallel \theta - \theta' \parallel < h$ and $|W| > W_0$ and $\theta > B_\theta$, then  $|P(X | W, \theta, \theta') - P(X | \theta)| < \epsilon$. 
+From previous lemma, for any $\epsilon > 0$ and $K_0 > 0$, given $\Omega(\theta') \leq K_0 \Omega(\theta)$, $\exists \theta_0 > 0, W_0 > 0$, such that for any $|W| > W_0$ and $\theta > \theta_0$, we have $|P(X | W, \theta, \theta') - P(X | \theta)| < \epsilon$. 
 \begin{align*}
 |\alpha(\theta, \theta', W, X) - \alpha_I(\theta, \theta', X)| &= \ \mid 1 \wedge \frac{P(X | W, \theta' , \theta)q(\theta | \theta')p(\theta')}{P(X | W, \theta , \theta')q(\theta' | \theta)p(\theta)} - 1 \wedge \frac{P(X | \theta')q(\theta | \theta')p(\theta')}{P(X | \theta)q(\theta' | \theta)p(\theta)} \mid \\
 & \leq \ \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\\
