@@ -132,7 +132,10 @@ For any positive $\epsilon > 0$ and $K_0 > 1$, there exists $\theta_2$, such tha
 \end{assumption}
 
 \begin{assumption}
-For any positive $\epsilon > 0$ and $K_1 > 1$, there exists $\theta_3$, such that for $\theta > \theta_2$, $P(\frac{1}{K_1}\frac{\Omega(\theta')}{\Omega(\theta)} \leq K_1 | \theta) \geq 1 - \epsilon$, where $\theta' \sim q(\cdot | \theta)$.
+For any positive $\epsilon > 0$ and $K_1 > 1$, there exists $\theta_3$, such that for $\theta > \theta_3$, $P(\frac{1}{K_1}\frac{\Omega(\theta')}{\Omega(\theta)} \leq K_1 | \theta) \geq 1 - \epsilon$, where $\theta' \sim q(\cdot | \theta)$.
+\end{assumption}
+\begin{assumption}
+For any positive $\epsilon > 0$ and $0 < K_2 < 1$, there exists $\theta_4$, such that for $\theta > \theta_4$, $P(\theta' > \theta K_2 | \theta) \geq 1 - \epsilon$, where $\theta' \sim q(\cdot | \theta)$.
 \end{assumption}
 
 %\begin{assumption}
@@ -378,17 +381,29 @@ Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our M
 \label{prop:mix0}
 \end{proposition}
 \begin{proof}
-From previous lemma, for any $\epsilon > 0$ and a determined $K_0 > 1$, given $\frac{1}{K_0} \Omega(\theta) \leq \Omega(\theta') \leq K_0 \Omega(\theta)$, $\exists \theta_0 > 0, W_0 > 0$, such that for any $|W| > W_0$ and $\theta > \theta_0$, we have $|\frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}| < \epsilon / 2$. 
+From previous lemma, for any $\epsilon > 0$ and a determined $K_0 > 1$, given $\frac{1}{K_0}  \leq \Omega(\theta) \leq \Omega(\theta') \leq K_0 \Omega(\theta)$, $\exists \theta_0 > 0, W_0 > 0$, such that for any $|W| > W_0$ and $\theta > \theta_0$ and $\theta' > \theta_0$, we have $|\frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}| < \epsilon / 2$. 
 \begin{align*}
 |\alpha(\theta, \theta', W, X) - \alpha_I(\theta, \theta', X)| &= \ \mid 1 \wedge \frac{P(X | W, \theta' , \theta)q(\theta | \theta')p(\theta')}{P(X | W, \theta , \theta')q(\theta' | \theta)p(\theta)} - 1 \wedge \frac{P(X | \theta')q(\theta | \theta')p(\theta')}{P(X | \theta)q(\theta' | \theta)p(\theta)} \mid \\
 & \leq \ \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\\
 \end{align*}
-From assumption 7 and assumption 8, we know that the second term can be bounded with high probability. Also, given large $\theta$ and $\theta'$ which is close to $\theta$, the probability of $|W|$ being large is large. 
-Given the current state $(W, \theta)$, from assumption 7, there exists $\theta_2 > 0$, such that for $\theta > \theta_2$, $P(\frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq 2 | \theta) > 1 - \epsilon / 3$.\\
-Consider the $K_0 $ in previous paragraph. Given the current state $(W, \theta)$, from assumption 8, there exists $\theta_3 > 0$, such that for $\theta > \theta_3$, $P(\frac{1}{K_0} \frac{\Omega(\theta')}{\Omega(\theta)} \leq K_0 | \theta) > 1 - \epsilon / 3 $.\\
-So given the current state $(W, \theta)$, and $K_0$, $P(\{ \frac{1}{K_0}\leq \frac{\Omega(\theta')}{\Omega(\theta)} \leq K_0 \} \cap \{ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq 2\}| \theta ) > 1 - 2\epsilon / 3 $, for any $\theta > \max(\theta_2, \theta_3)$.\\
-For $\epsilon > 0$, there exists $\theta_4 > 0$ such that for $\theta > \theta_4$ we have $P(|W| > W_0 | W, \theta, \theta') > 1- \epsilon / 2$.
-From previous lemma, we have $P(|\frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}| < \epsilon / 2 | W, \theta, \theta') > 1- \epsilon / 2$
+From assumption 7 and assumption 8, we know that the second term can be bounded with high probability. Also, given large $\theta$ and $\theta'$ which is close to $\theta$, the probability of $|W|$ being large is large. \\
+Given the current state $(W, \theta)$, from assumption 7, there exists $\theta_1 > 0$, such that for $\theta > \theta_1$, $$P(\frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq 2 | \theta) > 1 - \epsilon / 4.$$\\
+
+Consider the $K_0 $ in previous paragraph. From assumption 8, there exists $\theta_2 > 0$, such that for $\theta > \theta_2$, $$P(\frac{1}{K_0}  \leq \frac{\Omega(\theta')}{\Omega(\theta)} \leq K_0 | \theta) > 1 - \epsilon / 4 .$$\\
+
+Consider the $\theta_0$, and the assumption 9, there exists $\theta_3 > 0$, such that for $\theta > \theta_3$, 
+$$P(\theta' > \theta_0 | \theta) > 1 - \epsilon / 4.$$
+
+For the $W_0$, there exists $\theta_4 > 0$, such that for $\theta > \theta_4$, $$P(|W| > W_0 | W, \theta, \theta', \vartheta) > 1- \epsilon / 4.$$
+
+%So given the current state $(W, \theta)$, and $K_0$, $P(\{ \frac{1}{K_0}\leq \frac{\Omega(\theta')}{\Omega(\theta)} \leq K_0 \} \cap \{ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq 2\}| \theta ) > 1 - 2\epsilon / 4 $, for any $\theta > \max(\theta_2, \theta_3)$.\\
+
+Set $\theta_5 = \max(\theta_0, \theta_1,\theta_2, \theta_3, \theta_4)$, for $\theta > \theta_5$, we have 
+\begin{align*}
+\mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} < \epsilon
+\end{align*}
+with probability greater than $1 - \epsilon$.
+
 %For $K = 1$ and $\epsilon$, there exists $\theta_1$ such that for $\theta > \theta_1$, $\mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\mid \leq 1$ with probability close to 1. Given $\theta$ and $\theta'$, $P(|W'| > W_0 | \theta, \theta')$ is close to 1.
 
 \end{proof}
