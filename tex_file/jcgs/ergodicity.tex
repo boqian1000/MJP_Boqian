@@ -600,9 +600,9 @@ $\tilde{I}_{1,S^c_\epsilon}$. For the latter, we bound the acceptance probabilit
 by one to get
 \begin{align*}
   \tilde{I}_{1,S^c_\epsilon} &\le  \int_{S^c_\epsilon}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
-  &=  \int_{\theta' \leq \theta - h}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW' + \\
-&  \int_{\theta' > \theta + h, |W'| < W_0}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
-  & \leq  \Omega(\theta) \epsilon + \int_{\theta' > \theta + h} \Omega(\theta') q(\theta' | \theta)F_{poisson}(W_0 | \theta, \vartheta, \theta')d\theta'\\
+  &=  \int_{\theta' \leq \theta_0}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW' + \\
+&  \int_{\theta' > \theta_0, |W'| < W_0}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
+  & \leq  \Omega(\theta) \epsilon + \int_{\theta' > \theta_0} \Omega(\theta') q(\theta' | \theta)F_{poisson}(W_0 | \theta, \vartheta, \theta')d\theta'\\
   & \leq  \Omega(\theta) \epsilon + \int_{\Theta} \Omega(\theta') q(\theta' | \theta)\epsilon d\theta'\\
   &= \Omega(\theta) \epsilon (1 + \eta_0)
   \boqian{?}
