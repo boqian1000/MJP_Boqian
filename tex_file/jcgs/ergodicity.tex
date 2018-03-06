@@ -551,7 +551,6 @@ X)P(W' | S, T, \theta, \nu) \\
 & = \int_{S^c_{\epsilon}} d\nu dW'
 q(\nu | \theta) P(W' |  W, \theta, \nu, \vartheta, X) 
 \le \epsilon 
-\vinayak{Is\ this\ correct?}
 \end{align*}
 {For the former, we use Proposition~\ref{prop:mix} to get the bound}
 %, and bounding
@@ -561,11 +560,11 @@ q(\nu | \theta) P(W' |  W, \theta, \nu, \vartheta, X)
 %\int_{W_1}dW' \int_S q(\nu | \theta) &\int \sum_S P(S, T | W, \theta, \vartheta,
 %X)P(W' | S, T, \theta, \nu)dT ( 1 - [\alpha_I(\theta, \nu |
 %X,W')])d\nu \\ 
-I_{2,S_{\epsilon}} \le \int_{S_\epsilon}dW' d\nu q(\nu | \theta) &
+I_{2,\E_{\epsilon}} \le \int_{\E_\epsilon}dW' d\nu q(\nu | \theta) &
   \sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \nu) 
   ( 1 - [\alpha_I(\theta, \nu | X)-\epsilon]) \\
 \le \int_{S}dW' d\nu q(\nu | \theta) &
-  P(W' | S, T, \theta, \nu) 
+  P(W' | W, \theta, \vartheta, \nu) 
   ( 1 - [\alpha_I(\theta, \nu | X)-\epsilon]) \\
   \le (1+\epsilon) & - \int d\nu q(\nu | \theta) \alpha_I(\theta, \nu | X) 
 %   \intertext{Then}
