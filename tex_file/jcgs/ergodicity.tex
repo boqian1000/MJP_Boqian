@@ -376,8 +376,9 @@ So for $\epsilon > 0$, and $K_0 > 0$, if $|W| > W_0$ and $\theta > \theta_0$ and
 
 \begin{proposition}
 Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our MCMC sampler given the observations. For any positive $\epsilon$, there exist $\theta_1 > 0$ such that for all $\theta \ge \theta_1$, we have
-  $P(\{(W', \theta') \ s.t.\ |\alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
-  \le \epsilon\} | W, \theta, \vartheta) \ge 1-\epsilon$.%$(\theta,\theta^*)$ satisfying
+  $P(\{(W', \theta') \in \E_\epsilon \} | W, \theta, \vartheta) \ge 1-\epsilon$.  $| \alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
+  \le \epsilon | $ for any $(W', \theta') \in E_\epsilon$.
+  %$(\theta,\theta^*)$ satisfying
 \label{prop:mix0}
 \end{proposition}
 \begin{proof}
@@ -402,7 +403,7 @@ Set $\theta_5 = \max(\theta_0, \theta_1,\theta_2, \theta_3, \theta_4)$, for $\th
 \begin{align*}
 \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} < \epsilon
 \end{align*}
-with probability greater than $1 - \epsilon$.
+with probability greater than $1 - \epsilon$. Also, the set 
 
 %For $K = 1$ and $\epsilon$, there exists $\theta_1$ such that for $\theta > \theta_1$, $\mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\mid \leq 1$ with probability close to 1. Given $\theta$ and $\theta'$, $P(|W'| > W_0 | \theta, \theta')$ is close to 1.
 
@@ -467,6 +468,26 @@ $p(X|\theta,W)$ as well and so too
   \vinayak{expand}
 $\alpha_I(\theta',\theta,X)$ and $\alpha(\theta',\theta,W,X)$
 \end{proof}
+\begin{lemma}
+Write $P(W' | W, \theta, \vartheta, \theta')$ as the transition density with respect to the grids $W'$, there exists $\psi > 1$, such that $P(W' | W, \theta, \vartheta, \theta') \leq \psi ^{|W'|} \tilde{\Omega}(\theta,\theta')^{|W'|}\exp(-\tilde{\Omega}(\theta,\theta')\tau)$, where $\tilde{\Omega}(\theta, \theta') = (\Omega(\theta) + \Omega(\theta')) / \psi$ and $\tau$ is the length of the time interval. 
+\end{lemma}
+\begin{proof}
+As we defined,  there exists $k > 1$, such that $\Omega(\theta) = k \max\{ A_s(\theta)\}$. Recall that given the current state $(W, \theta, \vartheta)$, we first sample $(S, T)$, which is a discrete time Markov chain with rate matrix $B(\theta, \vartheta) = I + \frac{A(\theta)}{\Omega(\theta) + \Omega(\vartheta)}$. Then we sample $W'$ which is a Poisson process with rate $\Omega(\theta) + \Omega(\theta') - A_{S_t}(\theta)$. Integrating out $S, T$, we can get the transition density with respect to the grids $W'$. We have 
+\begin{align*}
+P(W' | W, \theta, \vartheta, \theta') &= \sum_{S,T} P(S, T | W, \theta, \vartheta) P(W' | S, T, \theta, \theta') .
+\end{align*}
+Given any $S, T$, the Poisson rate has a lower bound $\frac{k - 1}{k} (\Omega(\theta) + \Omega(\theta'))$. So 
+\begin{align*}
+P(W' | S, T, \theta, \theta') &= \prod_{i = 0}^{|T|} (\Omega(\theta) + \Omega(\theta') - A_{S_i}(\theta))^{|W_i'|} \exp(-(\Omega(\theta) + \Omega(\theta') - A_{S_i}(\theta))(T_{i + 1} - T_i))\\
+& \leq \prod_{i = 0}^{|T|} (\frac{k - 1}{k}(\Omega(\theta) + \Omega(\theta')))^{|W_i'|} \exp(- \frac{k - 1}{k} (\Omega(\theta) + \Omega(\theta'))(T_{i + 1} - T_i))(\frac{k}{k - 1})^{|W'|} \\
+&\leq (\frac{k - 1}{k}(\Omega(\theta) + \Omega(\theta')))^{|W'|} \exp(- \frac{k - 1}{k} (\Omega(\theta) + \Omega(\theta'))(T_{|T| + 1} - T_0))(\frac{k}{k - 1})^{|W'|}
+\end{align*}
+So we can set $\psi = \frac{k}{k - 1}$ and $\tilde{\Omega}(\theta, \theta') = (\Omega(\theta) + \Omega(\theta')) / \psi$, and then sum up $S, T$.
+\begin{align*}
+P(W' | W, \theta, \vartheta, \theta') &= \sum_{S,T} P(S, T | W, \theta, \vartheta) P(W' | S, T, \theta, \theta') \\
+& \leq  \psi ^{|W'|} \tilde{\Omega}(\theta,\theta')^{|W'|}\exp(-\tilde{\Omega}(\theta,\theta')\tau)
+\end{align*}
+\end{proof}
 
 \begin{lemma}(drift condition) $\exists \delta_2 \in (0, 1), L > 0$ 
   s.t. 
@@ -525,12 +546,11 @@ X)P(W' | S, T, \theta, \nu) ( 1 - \alpha(\theta, \nu | W', X))d\nu
 &:= d\theta' I_1 + \delta_\theta(\theta')I_2
 \end{align*}
 {Consider the second term $I_2$, involving an integral over $(\nu,W')$. 
-  We can divide the area of integration into two complementary 
-  parts: $S_{\epsilon}$, the part of $(\nu,W')$ where 
+ For any positive $\epsilon$, there exists $\theta_0 > 0$ and $W_0 > 0$, such that for $\theta > \theta_0$, we have $P(\theta' > \theta_0, |W'| > W_0 |\theta, \vartheta, W) > 1 - \epsilon$. Defining $\E_{\epsilon} = \{ (\theta', W') | \theta' > \theta_0, |W'| > W_0\}$, we can divide the area of integration into two complementary parts: $\E_{\epsilon}$, the part of $(\nu,W')$ where 
   $|\alpha(\theta, \nu | X,W') - \alpha_I(\theta, \nu | X)| \le \epsilon$,
-and its complement $S^c_{\epsilon}$. Call these $I_{2,S_{\epsilon}}$ and 
-$I_{2,S_{\epsilon}^c}$ respectively. 
-The second term has probability less than $\epsilon$, and using the bound 
+and its complement $\E^c_{\epsilon}$. Call these $I_{2,\E_{\epsilon}}$ and 
+$I_{2,\E_{\epsilon}^c}$ respectively. 
+For $\theta > \theta_0$, the second term has probability less than $\epsilon$, and using the bound 
 $1-\alpha \le 1$, we have}
 %use $\alpha(\theta, \theta' | W', X)\le 1$ and $q(\theta'|\theta) < \epsilon$ 
 %to get}
@@ -545,10 +565,10 @@ $1-\alpha \le 1$, we have}
 %      \theta)\alpha_I(\theta, \nu) d\nu\right)\delta_\theta(\theta')\right]
 %      \numberthis \label{eq:nu1}
 \begin{align*}
-  I_{2,S_{\epsilon}^c} &\le \int_{S^c_{\epsilon}} d\nu dW'
+  I_{2,\E_{\epsilon}^c} &\le \int_{\E^c_{\epsilon}} d\nu dW'
 q(\nu | \theta) \sum_{S,T} P(S, T |  W, \theta, \vartheta,
 X)P(W' | S, T, \theta, \nu) \\ 
-& = \int_{S^c_{\epsilon}} d\nu dW'
+& = \int_{\E^c_{\epsilon}} d\nu dW'
 q(\nu | \theta) P(W' |  W, \theta, \nu, \vartheta, X) 
 \le \epsilon 
 \end{align*}
@@ -562,11 +582,11 @@ q(\nu | \theta) P(W' |  W, \theta, \nu, \vartheta, X)
 %X,W')])d\nu \\ 
 I_{2,\E_{\epsilon}} \le \int_{\E_\epsilon}dW' d\nu q(\nu | \theta) &
   \sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \nu) 
-  ( 1 - [\alpha_I(\theta, \nu | X)-\epsilon]) \\
-\le \int_{S}dW' d\nu q(\nu | \theta) &
-  P(W' | W, \theta, \vartheta, \nu) 
-  ( 1 - [\alpha_I(\theta, \nu | X)-\epsilon]) \\
-  \le (1+\epsilon) & - \int d\nu q(\nu | \theta) \alpha_I(\theta, \nu | X) 
+  [ 1 - (\alpha_I(\theta, \nu | X)-\epsilon)] \\
+\le \int dW' d\nu q(\nu | \theta) &
+  P(W' | W, \theta, \vartheta, \nu, X) 
+  [ 1 - (\alpha_I(\theta, \nu | X)-\epsilon)] \\
+  \le (1+\epsilon) & - \int  q(\nu | \theta) \alpha_I(\theta, \nu | X) d\nu
 %   \intertext{Then}
 %      P(d\theta'| &W, \theta, \vartheta)   \le d\theta' \int_{W'}dW'
 %      \left[q(\theta' | \theta) \int \sum_S P(S, T
@@ -594,32 +614,51 @@ Finally, we have
   &= \int d\theta' \Omega(\theta') I_1 + I_2 \Omega(\theta)
 \end{align*}
 Again, the first term involves an integral over $(\theta',W')$ which we 
-divide into two regions $\tilde{I}_{1,S_\epsilon}$ and its complement 
-$\tilde{I}_{1,S^c_\epsilon}$. For the latter, we bound the acceptance probability 
+divide into two regions $\tilde{I}_{1,\E_\epsilon}$ and its complement 
+$\tilde{I}_{1,\E^c_\epsilon}$. From lemma 8, we have 
+$P(W' | W, \theta, \vartheta, \theta') \le \psi ^{|W'|} \tilde{\Omega}(\theta,\theta')^{|W'|}\exp(-\tilde{\Omega}(\theta,\theta')\tau)$, where $\tilde{\Omega} = (\Omega(\theta) + \Omega(\theta')) / \psi$ and $0 < \psi < 1$ and $\tau$ is the length of the time interval.\\
+For the latter, we bound the acceptance probability 
 by one to get
 \begin{align*}
-  \tilde{I}_{1,S^c_\epsilon} &\le  \int_{S^c_\epsilon}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
-  &=  \int_{\theta' \leq \theta_0}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW' + \\
-&  \int_{\theta' > \theta_0, |W'| < W_0}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
-  & \leq  \Omega(\theta) \epsilon + \int_{\theta' > \theta_0} \Omega(\theta') q(\theta' | \theta)F_{poisson}(W_0 | \theta, \vartheta, \theta')d\theta'\\
-  & \leq  \Omega(\theta) \epsilon + \int_{\Theta} \Omega(\theta') q(\theta' | \theta)\epsilon d\theta'\\
-  &= \Omega(\theta) \epsilon (1 + \eta_0)
-  \boqian{?}
-\end{align*}
-For the first one, we have 
+  \tilde{I}_{1,\E^c_\epsilon} &\le  \int_{\E^c_\epsilon}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
+  &=  \int_{\theta' \leq \theta_0}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW' +  \int_{\theta' > \theta_0, |W'| < W_0}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
+  & \leq  \Omega(\theta_0) \int_{\theta' > \theta_0}q(\theta' | \theta) d\theta' + \int_{\theta' > \theta_0} \Omega(\theta') q(\theta' | \theta) [ \sum_{w \le W_0}\frac{\tilde{\Omega}(\theta,\theta')^{w}}{w!}\exp(-\tilde{\Omega}(\theta,\theta')\tau)]d\theta'\\
+%  & \leq  \Omega(\theta) \epsilon + \int_{\Theta} \Omega(\theta') q(\theta' | \theta)\epsilon d\theta'\\
+%  &= \Omega(\theta) \epsilon (1 + \eta_0)
+%  \boqian{?}
+  \end{align*}
+  For $\epsilon > 0$, there exists $\theta_1 > 0$, such that for $\theta > \theta_1$ $\int_{\theta' > \theta_0}q(\theta' | \theta) d\theta' \le \epsilon$. There also exists $\theta_2 > 0$, such that for $\theta > \theta_2$ and any $\theta'$,  $\sum_{w \le W_0}\frac{\tilde{\Omega}(\theta,\theta')^{w}}{w!}\exp(-\tilde{\Omega}(\theta,\theta')\tau) < \epsilon$. For $\theta > \max(\theta_0, \theta_1, \theta_2)$, we have
 \begin{align*}
-\tilde{I}_{1,S_\epsilon} &= \int_{S_\epsilon} I_1 \Omega(\theta') d\theta'\\
-& \leq \int_{S_\epsilon} \Omega(\theta')q(\theta' | \theta) (\alpha_I(\theta, \theta', X) + \epsilon) d\theta' \\
+\tilde{I}_{1,\E^c_\epsilon} &\le \Omega(\theta_0) \int_{\theta' > \theta_0}q(\theta' | \theta) d\theta' + \int_{\theta' > \theta_0} \Omega(\theta') q(\theta' | \theta) [ \sum_{w \le W_0}\frac{\tilde{\Omega}(\theta,\theta')^{w}}{w!}\exp(-\tilde{\Omega}(\theta,\theta')\tau)]d\theta'\\
+& \le  \Omega(\theta_0) \epsilon + \int_{\Theta} \Omega(\theta') q(\theta' | \theta)\epsilon d\theta' \\
+& \le \Omega(\theta_0) \epsilon + \eta_0 \Omega(\theta)\epsilon \\
+& \le (1 + \eta_0) \Omega(\theta)\epsilon
+\end{align*}
+
+Then for the first one, we have 
+\begin{align*}
+\tilde{I}_{1,\E_\epsilon} &= \int_{S_\epsilon} I_1 \Omega(\theta') d\theta'\\
+& \leq \int_{\E_\epsilon} \Omega(\theta')q(\theta' | \theta) (\alpha_I(\theta, \theta', X) + \epsilon) d\theta' \\
 & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta' + \eta_0 \epsilon \Omega(\theta)
 \end{align*}
 
-Then we have the following.
+Then for $\theta > \max(\theta_0, \theta_1, \theta_2)\doteq \theta_\epsilon$, we have the following. 
 \begin{align*}
   \int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)  
-  &= \tilde{I}_{1,S_\epsilon} + \tilde{I}_{1,S^c_\epsilon} + I_{2,S_{\epsilon}} + I_{2,S_{\epsilon}^c} \\
-  & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta'  + \int d\nu q(\nu | \theta) (1 - \alpha_I(\theta, \nu | X)) + (3 + \eta_0) \Omega(\theta) \epsilon\\
-  & \leq (1 - \rho) \Omega(\theta) + (3 + \eta_0) \Omega(\theta) \epsilon
+  &= \tilde{I}_{1,\E_\epsilon} + \tilde{I}_{1,\E^c_\epsilon} + I_{2,\E_{\epsilon}} + I_{2,\E_{\epsilon}^c} \\
+  & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta'  + \int d\nu q(\nu | \theta) (1 - \alpha_I(\theta, \nu | X)) + (3 + 2\eta_0) \Omega(\theta) \epsilon\\
+  & \leq (1 - \rho) \Omega(\theta) + (3 + 2\eta_0) \Omega(\theta) \epsilon
 \end{align*}
+For $\theta > \theta_\epsilon$, we have
+\begin{align*}
+\mathbb{E}[\lambda_1 | W'| + \Omega(\theta')| W, \theta, \vartheta, X] & \le \lambda_1(1 - \delta_1)|W| + \lambda_1 \tau (1 + \eta_0)\Omega(\theta) +  (1 - \rho) \Omega(\theta) + (3 + 2\eta_0) \Omega(\theta) \epsilon\\
+& = (1 - \delta_1)\lambda_1 |W| + [1 - (\rho - \lambda_1 \tau (1 + \eta_0) - (3 + 2\eta_0)\epsilon)]\Omega(\theta) 
+\end{align*}
+There exists  $\tilde{\epsilon}_0 > 0$ and $\tilde{\lambda}_1 >0 $ , such that $\rho > \tilde{\lambda}_1 \tau (1 + \eta_0) + (3 + 2\eta_0)\tilde{\epsilon}_0$, and set $\rho_2  \doteq \rho - \tilde{\lambda}_1 \tau (1 + \eta_0) - (3 + 2\eta_0)\tilde{\epsilon}_0$. Let $\tilde{\rho} = \min(\rho_2, \delta_1)$ So there exists a small set $C \doteq \{(W, \theta) | |W| \leq h_0, \theta_{\tilde{\epsilon_0}} \}$, where $h_0$ is a positive constant.we have \begin{align*}
+\mathbb{E}[\tilde{\lambda}_1 | W'| + \Omega(\theta')| W, \theta, \vartheta, X] &\le (1 - \tilde{\rho}) [\tilde{\lambda}_1 | W| + \Omega(\theta)] + 
+\mathbb{I}_{C} \sup_{(W, \theta)} \{ \mathbb{E}[\tilde{\lambda}_1 | W'| + \Omega(\theta')| W, \theta, \vartheta, X] \}.  
+\end{align*}
+So the drift condition holds.
 % From equation~\eqref{eq:nu2} and assumption 2, we have for 
 % $\Omega(\theta) > k\Omega(\vartheta)$
 % \begin{align*}
@@ -663,5 +702,4 @@ Then we have the following.
 %     &= (1-\delta_1)\lambda|W| + \frac{(\eta_0 + 1)}{k\lambda_2} \lambda_2\Omega(\vartheta)+
 %     (\lambda + \lambda_2(1+\eta_0))a\Omega(\theta)
 % \end{align*}
-If we set  $\epsilon$ and $\lambda_1$ small enough, then the drift condition holds.
 \end{proof}
