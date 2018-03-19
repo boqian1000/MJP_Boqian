@@ -466,4 +466,23 @@ of the Gibbs sampler.
   \end{figure}
   \subsection{Analysis of Chi site data for Escherichia coli}~
   We analyze the Escherichia coli data used in Fearhead. The data are for E. coli DNA and consist of the position (in bases) of Chi sites along the genome while the Chi site is a motif of eight base pairs: GCTGGTGG. The circular double-stranded DNA genome of E. coli has two strands which are the inner and outer rings. The molecular mechanisms of DNA replication differ between the two half-strands and they are termed leading and lagging. The E. coli genome is 4639675 bases long and each half is 2319.838 kilobases long. We model this discrete process as continuous process because of the length. Further, we model this using Markov-modulated Poisson process. Specifically, we analyze the inner lagging strand data by our Metropolis Hasting sampler compared with Gibbs sampler. A Markov-modulated Poisson process is a Poisson process whose intensity depends on the current hidden state of a continuous time Markov chain. Points from the Markov-modulated Poisson process are observed. We assume the hidden state space is  $\{1, 2\}$ and the corresponding Poisson-rates are $\lambda_1$ and $\lambda_2$. Transitions from state $1$ to state $2$ have rate $\alpha$ while transitions from state $2$ to state $1$ have rate $\beta$. Gamma priors are placed for these four parameters. Specifically, we use Gamma$(2,2)$, Gamma$(2,3)$, Gamma$(3,2)$, Gamma$(1,2)$ for $\alpha$, $\beta$, $\lambda_1$, $\lambda_2$ respectively.
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[!hp]{0.9\linewidth}
+  \centering
+    \includegraphics [width=0.42\textwidth, angle=0]{figs/ECOLI_alpha.pdf}
+    \hspace{.2 in}
+    \includegraphics [width=0.42\textwidth, angle=0]{figs/ECOLI_l1.pdf}
+%    \vspace{-.81 in}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.9\linewidth}
+  \centering
+    \includegraphics [width=0.42\textwidth, angle=0]{figs/ECOLI_beta.pdf}
+    \hspace{.2 in}
+    \includegraphics [width=0.42\textwidth, angle=0]{figs/ECOLI_l2.pdf}
+  %  \vspace{-.5in}
+  \end{minipage}
+    \caption{ESS/sec the ECOLI data.}
+     \label{fig:ECOLI}
+  \end{figure}
 
