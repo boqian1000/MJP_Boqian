@@ -130,54 +130,58 @@ to explore large $\theta$'s too aggressively.
 %\begin{assumption}
 %For any positive $\epsilon > 0$ and $K_0 > 1$, there exists $\theta_2$, such that for $\theta > \theta_2$, $P(\mid \frac{q(\theta | \theta')p(\theta')}{q(\theta | \theta')p(\theta)}\mid \leq K_0 | \theta) \geq 1 - \epsilon$, where $\theta' \sim q(\cdot | \theta)$.
 %\end{assumption}
-\begin{assumption}
-For any positive $\epsilon$, there exists $h > 0$ and $\theta_2 > 0$, such that $P(\theta' \in B_{\theta, h} | \theta) > 1 - \epsilon$ for $\theta \in B_{0, \theta_2}^c$ .
-\end{assumption}
+
+%\begin{assumption}
+%For any positive $\epsilon$, there exists $h > 0$ and $\theta_2 > 0$, such that $P(\theta' \in B_{\theta, h} | \theta) > 1 - \epsilon$ for $\theta \in B_{0, \theta_2}^c$ .
+%\end{assumption}
 
 %\begin{assumption}
 %For any positive $\epsilon > 0$ and $K_1 > 1$, there exists $\theta_3$, such that for $\theta > \theta_3$, $P(\frac{1}{K_1}%\frac{\Omega(\theta')}{\Omega(\theta)} \leq K_1 | \theta) \geq 1 - \epsilon$, where $\theta' \sim q(\cdot | \theta)$.
 %\end{assumption}
-\begin{assumption}
-There exists $M_1 > 0$ and $\theta_3 > 0$ such that $\frac{-p(\theta')}{p(\theta)} \le M_1$ for $\theta \in B_{0, \theta_3}^c$.
-\end{assumption}
+%\begin{assumption}
+%There exists $M_1 > 0$ and $\theta_3 > 0$ such that $\frac{-p'(\theta)}{p(\theta)} \le M_1$ for $\theta \in B_{0, \theta_3}^c$.
+%\end{assumption}
 
 \begin{assumption}
-There exists $M_2 > 0$ and $\theta_4 > 0$ such that $\frac{\Omega(\theta')}{\Omega(\theta)} \le M_2$ for $\theta \in B_{0, \theta_4}^c$.
+For any positive $\epsilon > 0$, there exists $\theta_0$ and $K$ 
+such that $P(\frac{p(\theta')q(\theta|\theta')}{p(\theta)q(\theta'|\theta)} \le K | \theta) > 1 - \epsilon$, 
+for $\theta \in \theta_0$. 
 \end{assumption}
+%\begin{proof}
+%From the assumptoin, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$. 
+%\begin{align*}
+%\log \frac{p(\theta')}{p(\theta)} &\le \log\frac{p(\theta - h)}{p(\theta)} 
+%= \log p(\theta - h) - \log p(\theta)\\ 
+%& \le -h \frac{p'(\chi)}{p(\chi)} \le M_1h
+%\end{align*}
+%,where $\chi \in B_{\theta, h}$.
+%So $p(\theta')/p(\theta) \le M_1 h$ with probability greater than $1 - \epsilon$.
+%\end{proof}
+
+%\begin{assumption}
+%There exists $M_2 > 0$ and $\theta_4 > 0$ such that $\frac{\Omega'(\theta)}{\Omega(\theta)} \le M_2$ for $\theta \in B_{0, \theta_4}^c$.
+%\end{assumption}
+
+%\begin{assumption}
+%There exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$.
+%\end{assumption}
 
 \begin{assumption}
-There exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$.
-\end{assumption}
-
-\begin{lemma}
-For any positive $K > 0$ and $\epsilon > 0$, there exists $\theta_6 > 0$ such that $P(\frac{p(\theta')}{p(\theta)} \le K | \theta) > 1 - \epsilon$, for $\theta \in B_{0, \theta_6}^c$. 
-\end{lemma}
-\begin{proof}
-From the assumptoin, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$. 
-\begin{align*}
-\log(\frac{(\theta')}{p(\theta)}) &\le \log(\frac{p(\theta - h)}{p(\theta)}) = \log(f(\theta - h)) - \log(f(\theta))\\ 
-& \le -h \frac{p'(\chi)}{p(\chi)} \le M_1h
-\end{align*}
-,where $\chi \in B_{\theta, h}$.
-So $p(\theta')/p(\theta) \le M_1 h$ with probability greater than $1 - \epsilon$.
-\end{proof}
-
-\begin{lemma}
 For any positive $\epsilon > 0$, there exists $\theta_7 > 0$ and $M > 1$, such that $P(\frac{\Omega(\theta')}{\Omega(\theta)} \in [1/M, M] | \theta) > 1 - \epsilon$, for $\theta \in B_{0, \theta_7}^c$. 
-\end{lemma}
-\begin{proof}
-From the assumptoin, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$. 
-\begin{align*}
-\log(\frac{\Omega(\theta')}{\Omega(\theta)}) & \le \log(\frac{\Omega(\theta + h)}{\Omega(\theta)})\\
-& = h \frac{\Omega(\chi')}{\Omega(\chi')} \le h M_2 
-\end{align*}
-Similarily, we have 
-\begin{align*}
-\log(\frac{\Omega(\theta')}{\Omega(\theta)}) & \ge \log(\frac{\Omega(\theta - h)}{\Omega(\theta)})\\
-& = -h \frac{\Omega(\chi'')}{\Omega(\chi'')} \ge -h M_2 
-\end{align*}
-So $\Omega(\theta') / \Omega(\theta) \in [\exp(-hM_2), \exp(hM_2)]$ with probability greater than $1 - \epsilon$.
-\end{proof}
+\end{assumption}
+%\begin{proof}
+%From the assumptoin, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$. 
+%\begin{align*}
+%\log(\frac{\Omega(\theta')}{\Omega(\theta)}) & \le \log(\frac{\Omega(\theta + h)}{\Omega(\theta)})\\
+%& = h \frac{\Omega(\chi')}{\Omega(\chi')} \le h M_2 
+%\end{align*}
+%Similarily, we have 
+%\begin{align*}
+%\log(\frac{\Omega(\theta')}{\Omega(\theta)}) & \ge \log(\frac{\Omega(\theta - h)}{\Omega(\theta)})\\
+%& = -h \frac{\Omega(\chi'')}{\Omega(\chi'')} \ge -h M_2 
+%\end{align*}
+%So $\Omega(\theta') / \Omega(\theta) \in [\exp(-hM_2), \exp(hM_2)]$ with probability greater than $1 - \epsilon$.
+%\end{proof}
 
 %\begin{assumption}
 %For any positive $\epsilon > 0$ and $0 < K_2 < 1$, there exists $\theta_4$, such that for $\theta > \theta_4$, $P(\theta' > \theta K_2 | \theta) %\geq 1 - \epsilon$, where $\theta' \sim q(\cdot | \theta)$.
@@ -360,7 +364,7 @@ is needed when $\Mx{\theta}$ is unbounded as $\theta$ increases.
 This result states that the acceptance probabilities of our proposed
 sampler and the ideal sampler can be brought arbitrarily close
 outside an appropriate small set, so long as $\Omega(\theta)$ is larger
-than $\Omega(\vartheta)$ by a sufficient factor. 
+than $\Omega(\theta')$ by a sufficient factor. 
 
 \begin{lemma}
 Given an observation observed at $t_{end}$, and $K_0 > 0$, $\theta$ and $\theta'$, with $\Omega(\theta') \leq K_0 \Omega(\theta)$ 
@@ -369,7 +373,17 @@ Given an observation observed at $t_{end}$, and $K_0 > 0$, $\theta$ and $\theta'
 \label{lem:eigenvalue_lemma}
 \end{lemma}
 \begin{proof}
-From our assumption 1, there exists $\mu$ such that $\lambda^A_2(\theta) \geq \mu \Omega(\theta)$. So $\frac{\lambda^A_2(\theta)}{\Omega(\theta) + \Omega(\theta')} \geq \mu / (1 + K_0) $ Since $B(\theta, \theta') = \frac{A(\theta)}{\Omega(\theta, \theta')} + I $, there is a one to one mapping between the eigen values of B and the eigen values of A. $\lambda_B(\theta, \theta') = 1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$. So the second largest eigen value of the transition probability matrix $B(\theta, \theta')$ is less or equal to a constant which is less than 1. Note that the constant is only related to $K_0$ and $\mu$. From the assumption 5, we have $\exists \ \xi_1 > \eta_1 > 0$, such that, $ \eta_1 \leq P(X | V=v, \theta) \leq \xi_1$. It leads to the following. Assume the state space has $N$ elements. For any $\epsilon > 0$, there exists $W_0$ for any $W$ with $|W| > W_0$, we have $\parallel P^{(|W|)}(\cdot | W, \theta, \theta') - p_{st}(\cdot | W, \theta, \theta')\parallel_{TV} \leq \frac{\epsilon}{4\xi_1N} $. Where $P^{(t)}(\cdot | W, \theta, \theta' )$
+From our assumption 1, there exists $\mu$ such that $\lambda^A_2(\theta) 
+\geq \mu \Omega(\theta)$. 
+So $\frac{\lambda^A_2(\theta)}{\Omega(\theta) + \Omega(\theta')} \geq \mu / (1 + K_0) $ 
+Since $B(\theta, \theta') = \frac{A(\theta)}{\Omega(\theta, \theta')} + I $, 
+there is a one to one mapping between the eigen values of B and the 
+eigenvalues of A. $\lambda_B(\theta, \theta') = 
+1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$. So the second 
+largest eigenvalue of the transition probability matrix 
+$B(\theta, \theta')$ is less or equal to a constant which is less than 1. Note that the constant is only related to $K_0$ and $\mu$. 
+
+From the assumption 5, we have $\exists \ \xi_1 > \eta_1 > 0$, such that, $ \eta_1 \leq P(X | V=v, \theta) \leq \xi_1$. It leads to the following. Assume the state space has $N$ elements. For any $\epsilon > 0$, there exists $W_0$ for any $W$ with $|W| > W_0$, we have $\parallel P^{(|W|)}(\cdot | W, \theta, \theta') - p_{st}(\cdot | W, \theta, \theta')\parallel_{TV} \leq \frac{\epsilon}{4\xi_1N} $. Where $P^{(t)}(\cdot | W, \theta, \theta' )$
  is the t-step transition probability with respect to the Markov chain with transition matrix $B(\theta, \theta')$ corresponding to the determined time grid $W$, while $p_{st}(\cdot | \theta, \theta')$ is the stationary distribution accordingly.
 \begin{align*}
 P(X|W , \theta, \theta') &= \sum_V P(X | V, W, \theta, \theta') P(V | W, \theta, \theta')\\
