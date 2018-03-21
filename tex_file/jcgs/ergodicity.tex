@@ -391,28 +391,29 @@ $\lambda_B(\theta, \theta') =
 1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$. In particular,
 the second eigenvalue $\lambda^2_B(\theta,\theta')$ of $B$ (which determines 
 mixing properties of $B$) equals $1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$.
-Assumption~\ref{label_one} requires that $\lambda^A_2(\theta)$ satisfies 
+Assumption~\ref{asmp:cond_num} requires that $\lambda^A_2(\theta)$ satisfies 
 $\lambda^A_2(\theta) \geq \mu \Omega(\theta)$. 
 This, together with the assumption of the lemma, gives 
 $\frac{\lambda^A_2(\theta)}{\Omega(\theta) + \Omega(\theta')} \geq 
 \mu / (1 + K_0) $, implying that the second eigenvalue of 
 $B(\theta, \theta')$ is bounded away from $1$.
 
-From the assumption 5, we have $\exists \ \xi_1 > \eta_1 > 0$, such that, $ \eta_1 \leq P(X | V=v, \theta) \leq \xi_1$. It leads to the following. Assume the state space has $N$ elements. For any $\epsilon > 0$, there exists $W_0$ for any $W$ with $|W| > W_0$, we have $\parallel P^{(|W|)}(\cdot | W, \theta, \theta') - p_{st}(\cdot | W, \theta, \theta')\parallel_{TV} \leq \frac{\epsilon}{4\xi_1N} $. Where $P^{(t)}(\cdot | W, \theta, \theta' )$
+From the assumption \ref{asmp:obs_bnd}, we have $\exists \ \xi_1 > \eta_1 > 0$, such that, $ \eta_1 \leq P(X | V=v, \theta) \leq \xi_1$. It leads to the following. Assume the state space has $N$ elements. For any $\epsilon > 0$, there exists $W_0$ for any $W$ with $|W| > W_0$, we have $\parallel P^{(|W|)}(\cdot | W, \theta, \theta') - p_{st}(\cdot | \theta, \theta')\parallel_{TV} \leq \frac{\epsilon}{4\xi_1N} $. Where $P^{(t)}(\cdot | W, \theta, \theta' )$
  is the t-step transition probability with respect to the Markov chain with transition matrix $B(\theta, \theta')$ corresponding to the determined time grid $W$, while $p_{st}(\cdot | \theta, \theta')$ is the stationary distribution accordingly.
 \begin{align*}
 P(X|W , \theta, \theta') &= \sum_V P(X | V, W, \theta, \theta') P(V | W, \theta, \theta')\\
 &= \sum_{v} P(X | V_{|W|}=v, \theta) P^{(|W|)}(V_{|W|}=v | W, \theta, \theta')\\
 \end{align*}
  We also define the observation stationary distribution as $$P_{st}(X | \theta) = \sum_{v} P(X | V=v, \theta) P_{st}(V=v | \theta, \theta').$$
- From the assumption 5, it is also bounded. $\eta_1 \leq P_{st}(X | \theta) \leq \xi_1$.
+ From the assumption \ref{asmp:obs_bnd}, it is also bounded. $\eta_1 \leq P_{st}(X | \theta) \leq \xi_1$.\\
+So for $W$ with $|W| > W_0$, we have
 \begin{align*}
 |P(X|W , \theta, \theta') - P_{st}(X | \theta)| &= | \sum_{v} P(X | V_{|W|}=v, \theta)(P^{(|W|)}(V_{|W|}=v | W, \theta, \theta') -  P_{st}(V=v | \theta, \theta'))|\\
 & \leq |\sum_{v} P(X | V_{|W|}=v, \theta)|P^{(|W|)}(V_{|W|}=v | W, \theta, \theta') -  P_{st}(V=v | \theta, \theta')|\\
 & \leq \sum_{v} P(X | V_{|W|}=v, \theta)\frac{\epsilon}{4\xi_1N}\\
 & \leq \epsilon / 4
 \end{align*}
-So for $W$ with $|W| > W_0$, we have  $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon / 4$. \\
+%So for $W$ with $|W| > W_0$, we have  $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon / 4$. \\
 Similarly, given the $W_0$ which is defined before, we have
 \begin{align*}
 P(X | \theta) &= \sum_W P(X , W | \theta, \theta')\\
@@ -422,18 +423,18 @@ P(X | \theta) &= \sum_W P(X , W | \theta, \theta')\\
 %&= \sum_{W s.t. |W| \leq W_0'} \sum_{V_{|W|}} P(X | V_{|W|}, \theta) P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta') + \\
 %&\sum_{W s.t. |W| > W_0'} \sum_{V_{|W|}} P(X | V_{|W|}, \theta) P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')
 \end{align*}
-Consider the first term $\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')$.\\
+Consider the difference between the first term $\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')$ and $P_{st}(X | \theta)P(|W| > W_0 | \theta, \theta')$. Also from the previous derivations, $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon / 4$ for $W$ with $|W| > W_0$.\\
 \begin{align*}
 &|\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')  - P_{st}(X | \theta)P(|W| > W_0 | \theta, \theta')|  \leq  \\
 &\sum_{W s.t. |W| > W_0} |P(X | W, \theta, \theta') - P_{st}(X | \theta)|  P(W | \theta, \theta') \leq P(|W| > W_0 | \theta, \theta') \epsilon / 4 
 \end{align*}
-For the $W_0$, there exists $\theta_0 > 0$ such that for any $\theta > \theta_0$, $P(|W| \leq W_0 | \theta, \theta') < \frac{\epsilon}{4\xi_1} $.
+For the $W_0$, there exists $\theta_0 > 0$ such that for any $\theta > \theta_0$,and any $\theta'$, $P(|W| \leq W_0 | \theta, \theta') < \frac{\epsilon}{4\xi_1}.$
 For the second term, we have 
 \begin{align*}
 &|\sum_{W s.t. |W| \leq W_0} \sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')|  \\
 &\leq \xi_1 P(|W| \leq W_0 | \theta, \theta') \leq \epsilon / 4
 \end{align*}
-Consider the difference between $P(X|\theta)$ and $P_{st}(X|\theta)$ given $\theta > \theta_0$.
+Consider the difference between $P(X|\theta)$ and $P_{st}(X|\theta)$ for $\theta > \theta_0$, and any $\theta'$ with $\Omega(\theta') \le K_0\Omega(\theta)$.
 \begin{align*}
 |P(X|\theta) - P_{st}(X|\theta)| &\leq |\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')  - P_{st}(X | \theta)P(|W| > W_0 |\theta, \theta')| \\
 &+ |\sum_{W s.t. |W| \leq W_0} \sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')|\\
@@ -449,7 +450,7 @@ So for $\epsilon > 0$, and $K_0 > 0$, if $|W| > W_0$ and $\theta > \theta_0$ and
 \end{proof}
 
 \begin{proposition}
-Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our MCMC sampler given the observations. For any positive $\epsilon$, there exist $\theta_1 > 0$ and corresponding $W_1 > 0$, such that for all $\theta \ge \theta_1$, we have
+Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our MCMC sampler given the observations. For any positive $\epsilon$, there exist $\theta_1 > 0$ and corresponding $W_1 > 0$, such that for any $\theta \ge \theta_1$, and any $\vartheta$, we have
   $P(|W'| > W_1, \theta' > \theta_1  | W, \theta, \vartheta) \ge 1-\epsilon$.  $| \alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
   \le \epsilon $ for any $(W', \theta')$ with $|W'| > W_1$ and $\theta' > \theta_1$.
   %$(\theta,\theta^*)$ satisfying
