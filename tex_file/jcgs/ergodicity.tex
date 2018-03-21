@@ -27,13 +27,14 @@ of our proof.
 %  $\forall \theta$ satisfying 
 %  $|\theta| > |\hat{\theta}|$, we have $\Mx{\theta} \asymp
 %  \mx{\theta}$.
-	Suppose the second smallest eigen value of rate-matrix  $A(\theta)$ is $\lambda ^A_2(\theta)$. Exists constants $\mu > 0$ and $C > 0$ such that 
-	$\forall \theta > C$,  $ \lambda ^A_2(\theta) \geq \mu \Omega(\theta)$.
+	Writing $\lambda ^A_2(\theta)$ for the second smallest eigenvalue of 
+    rate-matrix  $A(\theta)$, there exist constants $\mu > 0$ and $\theta_0 > 0$ 
+    such that $ \lambda ^A_2(\theta) \geq \mu \Omega(\theta)$
+   for all $\theta > \theta_0$.
   \label{asmp:cond_num}
 \end{assumption}
-\noindent The ergodicty assumption is natural. The second part is the
-strongest assumption needed to prove our result; nevertheless, it holds 
-for all the examples we considered. This condition requires the rate 
+\noindent This is the strongest assumption needed to prove our result; 
+nevertheless, it holds for all the examples we considered. This condition requires the rate 
 matrix to be well-conditioned over all parameters of interest: the most 
 unstable state cannot have a leaving rate that is larger than that of
 the most stable state by an arbitrary factor. This condition controls the
@@ -203,25 +204,28 @@ which our sampler forgets its
 current state with some probability $>0$), and lemma~\ref{lem:drift}
 showing that our sampler drifts towards this set whenever 
 outside. Together, these two results immediately imply geometric 
-ergodicity~\citep[Theorems 15.0.1 and Lemma 15.2.8]{meyn2009markov}.
+ergodicity~\citep[Theorems 15.0.1 and Lemma 15.2.8]{meyn2012markov}.
 \end{proof}
-We regard our sampler as operating on the space $(\theta,\vartheta,W)$, 
-with a transition step updating this to $(\theta',\vartheta',W')$. 
+We regard our sampler as operating on the space $(\theta,\vartheta,W)$ 
+(recall $\theta$ is the current MJP parameter, $\vartheta$ is the 
+auxiliary variable, and $W$ is the Poisson grid). An MJP transition step 
+updates this to $(\theta',\vartheta',W')$. 
 We establish the drift condition via the Lyapunov-Foster function
-$\ c V(W,\theta,\vartheta) = \left. \lambda_1|W| + \lambda_2 \Omega(\theta) +
-\Omega(\vartheta) +L \right. := \c V_W(W) + \c V_{\theta}(\theta) + 
-\c V_{\theta^*}(\theta^*)$, for suitable settings of $\lambda_1,
-  \lambda_2$ and $L$.
-The small set will be a level set of this function, i.e.\ 
-$\S M_\alpha := \{(\theta,\theta^*,W): \c V(\theta,\vartheta,W) \le \alpha\}$.
-We show that this is a 2-small set (i.e.\ the distribution over states
-after 2-steps of our sampler, $P^2(\cdot|\theta,\vartheta,W) \ge \epsilon 
-\nu(\cdot)$ for all $(\theta,\vartheta,W) \in \SM_\alpha$. 
-The 2-step transition is necessary because of the exchange move we make, 
-where on acceptance $\vartheta'=\theta$, while on rejection, $\theta'=\theta$.
+$\cV(W,\theta,\vartheta) = \left. \lambda_1|W| + \lambda_2 \Omega(\theta) +
+\Omega(\vartheta) +L \right. := \cV_W(W) + \cV_{\theta}(\theta) + 
+\cV_{\theta^*}(\theta^*)$, for settings of $\lambda_1,
+  \lambda_2$ and $L$ we will define later.
 We point out that if $\Mx{\theta}$ is bounded, then we can replace
 the two $\Omega$ terms by their supremum and absorb them into the 
 constant $L$, so that the Lyapunov function only involves $W$.
+The small set will be a level set of this function, i.e.\ 
+$B_\alpha := \{(\theta,\theta^*,W): \cV(\theta,\vartheta,W) \le \alpha\}$.
+We show that this is a 2-small set (i.e.\ the distribution over states
+after 2-steps of our sampler satisfies $P^2(\cdot|\theta,\vartheta,W) 
+\ge \epsilon \nu(\cdot)$ for all $(\theta,\vartheta,W) \in \SM_\alpha$. 
+Unlike the ideal sampler, we need a 2-step transition because of the 
+exchange move we make, 
+where on acceptance $\vartheta'=\theta$, while on rejection, $\theta'=\theta$.
 
 We start with a proposition bounding the self-transition probabilities
 of the embedded Markov chain away from $0$. 
@@ -359,29 +363,40 @@ By assumption \ref{asmp:ideal_geom}, we have the following inequality.
 This is our desired result.
 \end{proof}
 
-\noindent Before proving the drift condition, we establish the proposition that
-is needed when $\Mx{\theta}$ is unbounded as $\theta$ increases.
+\noindent Observe that if $\Omega(\theta)$ is bounded uniformly, then 
+the drift condition need not include $\theta$. To prove the drift 
+condition for the general case when $\Mx{\theta}$ is unbounded,
+we first establish a necessary proposition next.
+%is needed when $\Mx{\theta}$ is unbounded as $\theta$ increases.
 This result states that the acceptance probabilities of our proposed
 sampler and the ideal sampler can be brought arbitrarily close
 outside an appropriate small set, so long as $\Omega(\theta)$ is larger
 than $\Omega(\theta')$ by a sufficient factor. 
 
 \begin{lemma}
-Given an observation observed at $t_{end}$, and $K_0 > 0$, $\theta$ and $\theta'$, with $\Omega(\theta') \leq K_0 \Omega(\theta)$ 
+Consider two successive observations, separated by time $t_{diff}$, and 
+suppose $\theta$ and $\theta'$ satisfy $\Omega(\theta') \leq K_0 
+\Omega(\theta)$ for some $K_0 > 0$. Then, 
 %$\parallel \theta'  - \theta \parallel \leq h$
-, for $\forall \epsilon$, $\exists  W_0, \theta_0 > 0$ such that for all $W$ with $|W| > W_0$, and $\theta > \theta_0$ we have $|P(X| W, \theta, \theta') - P(X | \theta)| < \epsilon$
+for any $\epsilon > 0$, there exist  $W_0, \theta_0 > 0$ such that 
+$|P(X| W, \theta, \theta') - P(X | \theta)| < \epsilon$
+for all $W$ with $|W| > W_0$ and $\theta > \theta_0$.
 \label{lem:eigenvalue_lemma}
 \end{lemma}
 \begin{proof}
-From our assumption 1, there exists $\mu$ such that $\lambda^A_2(\theta) 
-\geq \mu \Omega(\theta)$. 
-So $\frac{\lambda^A_2(\theta)}{\Omega(\theta) + \Omega(\theta')} \geq \mu / (1 + K_0) $ 
-Since $B(\theta, \theta') = \frac{A(\theta)}{\Omega(\theta, \theta')} + I $, 
-there is a one to one mapping between the eigen values of B and the 
-eigenvalues of A. $\lambda_B(\theta, \theta') = 
-1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$. So the second 
-largest eigenvalue of the transition probability matrix 
-$B(\theta, \theta')$ is less or equal to a constant which is less than 1. Note that the constant is only related to $K_0$ and $\mu$. 
+Since $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$, 
+%there is a one to one mapping between the eigen values of B and the 
+it is easy to see that the eigenvalues of $B(\theta,\theta')$ satisfy 
+$\lambda_B(\theta, \theta') = 
+1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$. In particular,
+the second eigenvalue $\lambda^2_B(\theta,\theta')$ of $B$ (which determines 
+mixing properties of $B$) equals $1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$.
+Assumption~\ref{label_one} requires that $\lambda^A_2(\theta)$ satisfies 
+$\lambda^A_2(\theta) \geq \mu \Omega(\theta)$. 
+This, together with the assumption of the lemma, gives 
+$\frac{\lambda^A_2(\theta)}{\Omega(\theta) + \Omega(\theta')} \geq 
+\mu / (1 + K_0) $, implying that the second eigenvalue of 
+$B(\theta, \theta')$ is bounded away from $1$.
 
 From the assumption 5, we have $\exists \ \xi_1 > \eta_1 > 0$, such that, $ \eta_1 \leq P(X | V=v, \theta) \leq \xi_1$. It leads to the following. Assume the state space has $N$ elements. For any $\epsilon > 0$, there exists $W_0$ for any $W$ with $|W| > W_0$, we have $\parallel P^{(|W|)}(\cdot | W, \theta, \theta') - p_{st}(\cdot | W, \theta, \theta')\parallel_{TV} \leq \frac{\epsilon}{4\xi_1N} $. Where $P^{(t)}(\cdot | W, \theta, \theta' )$
  is the t-step transition probability with respect to the Markov chain with transition matrix $B(\theta, \theta')$ corresponding to the determined time grid $W$, while $p_{st}(\cdot | \theta, \theta')$ is the stationary distribution accordingly.
