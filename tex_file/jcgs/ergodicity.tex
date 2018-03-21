@@ -147,6 +147,7 @@ to explore large $\theta$'s too aggressively.
 For any positive $\epsilon > 0$, there exists $\theta_0$ and $K$ 
 such that $P(\frac{p(\theta')q(\theta|\theta')}{p(\theta)q(\theta'|\theta)} \le K | \theta) > 1 - \epsilon$, 
 for $\theta \in \theta_0$. 
+  \label{asmp:prior}
 \end{assumption}
 %\begin{proof}
 %From the assumptoin, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$. 
@@ -168,7 +169,8 @@ for $\theta \in \theta_0$.
 %\end{assumption}
 
 \begin{assumption}
-For any positive $\epsilon > 0$, there exists $\theta_7 > 0$ and $M > 1$, such that $P(\frac{\Omega(\theta')}{\Omega(\theta)} \in [1/M, M] | \theta) > 1 - \epsilon$, for $\theta \in B_{0, \theta_7}^c$. 
+For any positive $\epsilon > 0$, there exists $\theta_1 > 0$ and $M > 1$, such that $P(\frac{\Omega(\theta')}{\Omega(\theta)} \in [1/M, M] | \theta) > 1 - \epsilon$, for $\theta \in B_{0, \theta_1}^c$. 
+  \label{asmp:omega}
 \end{assumption}
 %\begin{proof}
 %From the assumptoin, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$. 
@@ -450,35 +452,69 @@ So for $\epsilon > 0$, and $K_0 > 0$, if $|W| > W_0$ and $\theta > \theta_0$ and
 \end{proof}
 
 \begin{proposition}
-Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our MCMC sampler given the observations. For any positive $\epsilon$, there exist $\theta_1 > 0$ and corresponding $W_1 > 0$, such that for any $\theta \ge \theta_1$, and any $\vartheta$, we have
-  $P(|W'| > W_1, \theta' > \theta_1  | W, \theta, \vartheta) \ge 1-\epsilon$.  $| \alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
-  \le \epsilon $ for any $(W', \theta')$ with $|W'| > W_1$ and $\theta' > \theta_1$.
+Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our MCMC sampler given the observations. For any positive $\epsilon$, there exist $\theta_\epsilon > 0$ and corresponding $W_\epsilon > 0$, such that for any $\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
+  $P(|W'| > W_\epsilon, \theta' > \theta_\epsilon  | W, \theta, \vartheta) \ge 1-\epsilon$.  $| \alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
+  \le \epsilon $ for any $(W', \theta')$ with $|W'| > W_\epsilon$ and $\theta' > \theta_\epsilon$.
   %$(\theta,\theta^*)$ satisfying
 \label{prop:mix0}
 \end{proposition}
 \begin{proof}
-From previous lemma, for any $\epsilon > 0$ and a determined $K_0 > 1$, given $\frac{1}{K_0}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_0 $, $\exists \theta_0 > 0, W_0 > 0$, such that for any $|W| > W_0$ and $\theta > \theta_0$ and $\theta' > \theta_0$, we have $|\frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}| < \epsilon / 2$. 
 \begin{align*}
 |\alpha(\theta, \theta', W, X) - \alpha_I(\theta, \theta', X)| &= \ \mid 1 \wedge \frac{P(X | W, \theta' , \theta)q(\theta | \theta')p(\theta')}{P(X | W, \theta , \theta')q(\theta' | \theta)p(\theta)} - 1 \wedge \frac{P(X | \theta')q(\theta | \theta')p(\theta')}{P(X | \theta)q(\theta' | \theta)p(\theta)} \mid \\
 & \leq \ \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\\
 \end{align*}
-From assumption 7 and assumption 8, we know that the second term can be bounded with high probability. Also, given large $\theta$ and $\theta'$ which is close to $\theta$, the probability of $|W|$ being large is large. \\
-Given the current state $(W, \theta)$, from assumption 7, there exists $\theta_1 > 0$, such that for $\theta > \theta_1$, $$P(\frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq 2 | \theta) > 1 - \epsilon / 4.$$\\
+From assumption \ref{asmp:prior} and assumption \ref{asmp:omega}, we know that the second term can be bounded with high probability. Also, given large $\theta$ and $\theta'$ which is close to $\theta$, the probability of $|W|$ being large is large.
+Suppose current state is $(W, \theta)$.\\
+For $\epsilon / 4 > 0$,  from assumption \ref{asmp:prior}, there exists $\theta_2 > 0$ and $K_2 > 0$, such that for $\theta > \theta_2$, we have
+\begin{align*}
+P(\frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq \max(K_2, 1) | \theta) > 1 - \epsilon / 4.
+\end{align*}
 
-Consider the $K_0 $ in previous paragraph. From assumption 8, there exists $\theta_2 > 0$, such that for $\theta > \theta_2$, $$P(\frac{1}{K_0}  \leq \frac{\Omega(\theta')}{\Omega(\theta)} \leq K_0 | \theta) > 1 - \epsilon / 4 .$$\\
+For $\epsilon/4 > 0$, from assumption \ref{asmp:omega}, there exists $\theta_3 > 0$ and $K_3 > 1$, such that for $\theta > \theta_3$, $$P(\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)} \leq K_3 | \theta) > 1 - \epsilon / 4 .$$\\
 
-Consider the $\theta_0$, and the assumption 9, there exists $\theta_3 > 0$, such that for $\theta > \theta_3$, 
-$$P(\theta' > \theta_0 | \theta) > 1 - \epsilon / 4.$$
+From lemma \ref{lem:eigenvalue_lemma}, for $\epsilon$ and $K_3$ and $K_2$, given $\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3 $, $\exists \theta_4 > 0, W_4 > 0$, such that for any $|W| > W_4$ and $\theta > \theta_4$ and $\theta' > \theta_4$, we have \begin{align*}
+|\frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}| < \epsilon / \max(K_2, 1).
+\end{align*}
 
-For the $W_0$, there exists $\theta_4 > 0$, such that for $\theta > \theta_4$, $$P(|W| > W_0 | W, \theta, \theta', \vartheta) > 1- \epsilon / 4.$$
+For the $W_4$, there exists $\theta_5 > 0$, such that for $\theta > \theta_5$, and any $\theta'$ with $\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3$, we have \begin{align*}
+P(|W'| > W_4 | W, \theta, \theta', \vartheta) > 1- \epsilon / 4.
+\end{align*}
+
+\boqian{
+There exists $\theta_6 > 0$, such that for $\theta > \theta_6$, we have
+\begin{align*}
+P(\theta' > \theta_4 | \theta) > 1 - \epsilon / 4.
+\end{align*}}
 
 %So given the current state $(W, \theta)$, and $K_0$, $P(\{ \frac{1}{K_0}\leq \frac{\Omega(\theta')}{\Omega(\theta)} \leq K_0 \} \cap \{ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq 2\}| \theta ) > 1 - 2\epsilon / 4 $, for any $\theta > \max(\theta_2, \theta_3)$.\\
 
-Set $\theta_5 = \max(\theta_0, \theta_1,\theta_2, \theta_3, \theta_4)$, for $\theta > \theta_5$, we have 
+Given current state $(W, \theta)$, set $\theta_\epsilon = \max(\theta_2,\theta_3, \theta_4, \theta_5, \theta_6)$,  $E_1 = \{ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq \max(K_2, 1) \}$ and $E_2 = \{ \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3\}$.
+For $\theta > \theta_\epsilon$, we have 
 \begin{align*}
-\mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} < \epsilon
+P(E_1E_2) &= P(E_1) + P(E_2) - P(E_1 \cup E_2) \\
+& \le P(E_1) + P(E_2) - 1\ge 1 - \epsilon / 2
 \end{align*}
-with probability greater than $1 - \epsilon$. 
+Then set $E_3 = \{ \theta' > \theta_6\}$ and $E_4= \{ |W'| > W_4\}$. For $\theta > \theta_\epsilon$, we have 
+\begin{align*}
+P(E_4 | E_1E_2E_3) > 1- \epsilon / 4.
+\end{align*}
+Also we have 
+\begin{align*}
+P(E_1E_2E_3) &= P(E_3) + P(E_1E_2) - P(E_1 \cup E_2 \cup E_3)\\
+&\ge  P(E_3) + P(E_1E_2) - 1\\
+&\ge 1 - 3\epsilon /4. 
+\end{align*}
+We have \begin{align*}
+P(E_1E_2E_3E_4) &= P(E_1E_2E_3) P(E_4 | E_1E_2E_3)\\
+&\ge (1 - \epsilon / 4) (1 - 3 \epsilon / 4) \ge 1 - \epsilon.
+\end{align*}
+$E_1E_2E_3E_4 \subseteq \left\lbrace \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} < \epsilon \right\rbrace $.
+So for $\theta > \theta_\epsilon$, we have
+\begin{align*}
+P(\mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} < \epsilon) \ge P(E_1E_2E_3E_4) \ge 1- \epsilon.
+\end{align*}
+%with probability greater than $1 - \epsilon$. 
+
 %Also, the set 
 %For $K = 1$ and $\epsilon$, there exists $\theta_1$ such that for $\theta > \theta_1$, $\mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\mid \leq 1$ with probability close to 1. Given $\theta$ and $\theta'$, $P(|W'| > W_0 | \theta, \theta')$ is close to 1.
 
