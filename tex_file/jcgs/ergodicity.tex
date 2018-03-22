@@ -380,28 +380,48 @@ Consider two successive observations, separated by time $t_{diff}$, and
 suppose $\theta$ and $\theta'$ satisfy $\Omega(\theta') \leq K_0 
 \Omega(\theta)$ for some $K_0 > 0$. Then, 
 %$\parallel \theta'  - \theta \parallel \leq h$
-for any $\epsilon > 0$, there exist  $W_0, \theta_0 > 0$ such that 
+for any $\epsilon > 0$, there exist  $w_0, \theta_0 > 0$ such that 
 $|P(X| W, \theta, \theta') - P(X | \theta)| < \epsilon$
-for all $W$ with $|W| > W_0$ and $\theta > \theta_0$.
+for all $W$ with $|W| > w_0$ and $\theta > \theta_0$.
 \label{lem:eigenvalue_lemma}
 \end{lemma}
 \begin{proof}
 Since $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$, 
 %there is a one to one mapping between the eigen values of B and the 
-it is easy to see that the eigenvalues of $B(\theta,\theta')$ satisfy 
-$\lambda_B(\theta, \theta') = 
-1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$. In particular,
-the second eigenvalue $\lambda^2_B(\theta,\theta')$ of $B$ (which determines 
-mixing properties of $B$) equals $1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$.
-Assumption~\ref{asmp:cond_num} requires that $\lambda^A_2(\theta)$ satisfies 
+it is easy to see that 1) both $A(\theta)$ and $B(\theta,\theta')$ have 
+the same stationary distribution (call this $P_{st}(s|\theta)$), and 2) the 
+eigenvalues of $A(\theta)$ and $B(\theta,\theta')$ satisfy $\lambda_B(\theta, \theta') = 
+1 - \frac{\lambda_A(\theta)}{\Omega(\theta, \theta')}$ (in particular,
+the second eigenvalue $\lambda^2_B(\theta,\theta')$ of $B$, which 
+determines its mixing properties, equals 
+$1 - \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')}$). Our proof 
+strategy is to show that for $\theta$ and $W$ large enough, the 
+distribution over latent states for the continuous-time MJP and 
+its discrete-time counterpart embedded in $W$ can be brought arbitrarily 
+close to $P_{st}$ (and thus to each other). This combined with the 
+likelihood $p(X|s, \theta)$ being bounded  gives the result.
+
+We start with the discrete-time system. Write 
+$P^{w}(\cdot | W, \theta, \theta' )$ for the $w$-step transition 
+probability (equal to $B^w(\theta, \theta')$).
+Assumption~\ref{asmp:cond_num} requires 
+%that $\lambda^A_2(\theta)$ satisfies 
 $\lambda^A_2(\theta) \geq \mu \Omega(\theta)$. 
-This, together with the assumption of the lemma, gives 
+Together with the assumption of the lemma ($\Omega(\theta') 
+\leq K_0 \Omega(\theta)$), this gives 
 $\frac{\lambda^A_2(\theta)}{\Omega(\theta) + \Omega(\theta')} \geq 
 \mu / (1 + K_0) $, implying that the second eigenvalue of 
 $B(\theta, \theta')$ is bounded away from $1$.
+Thus for $(\theta,\theta')$ satisfying the assumptions of the lemma, 
+and for any $\epsilon' > 0$, there exists a $w_0$ such that for all $W$ 
+with $|W| > w_0$, we have $\parallel P^{|W|}(\cdot | W, \theta, \theta')
+- P_{st}(\cdot | \theta, \theta')\parallel_{\text{TV}} \leq 
+{\epsilon'}$. 
 
-From the assumption \ref{asmp:obs_bnd}, we have $\exists \ \xi_1 > \eta_1 > 0$, such that, $ \eta_1 \leq P(X | V=v, \theta) \leq \xi_1$. It leads to the following. Assume the state space has $N$ elements. For any $\epsilon > 0$, there exists $W_0$ for any $W$ with $|W| > W_0$, we have $\parallel P^{(|W|)}(\cdot | W, \theta, \theta') - p_{st}(\cdot | \theta, \theta')\parallel_{TV} \leq \frac{\epsilon}{4\xi_1N} $. Where $P^{(t)}(\cdot | W, \theta, \theta' )$
- is the t-step transition probability with respect to the Markov chain with transition matrix $B(\theta, \theta')$ corresponding to the determined time grid $W$, while $p_{st}(\cdot | \theta, \theta')$ is the stationary distribution accordingly.
+
+From the assumption \ref{asmp:obs_bnd}, we have %$\exists \ \xi_1 > \eta_1 > 0$, such that, 
+$0 < \eta_1 \leq P(X | V=v, \theta) \leq \xi_1$, so that
+%the following. Assume the state space has $N$ elements. 
 \begin{align*}
 P(X|W , \theta, \theta') &= \sum_V P(X | V, W, \theta, \theta') P(V | W, \theta, \theta')\\
 &= \sum_{v} P(X | V_{|W|}=v, \theta) P^{(|W|)}(V_{|W|}=v | W, \theta, \theta')\\
@@ -657,7 +677,12 @@ X)P(W' | S, T, \theta, \nu) ( 1 - \alpha(\theta, \nu | W', X))d\nu
 &:= d\theta' I_1 + \delta_\theta(\theta')I_2
 \end{align*}
 {Consider the second term $I_2$, involving an integral over $(\nu,W')$. 
- For any positive $\epsilon$, there exists $\theta_0 > 0$ and $W_0 > 0$, such that for $\theta > \theta_0$, we have $P(\theta' > \theta_0, |W'| > W_0 |\theta, \vartheta, W) > 1 - \epsilon$. Defining $\E_{\epsilon} = \{ (\theta', W') | \theta' > \theta_0, |W'| > W_0\}$, we can divide the area of integration into two complementary parts: $\E_{\epsilon}$, the part of $(\nu,W')$ where 
+ For any positive $\epsilon$, there exists $\theta_0 > 0$ and $W_0 > 0$, 
+ such that for $\theta > \theta_0$, we have $P(\theta' > \theta_0, |W'| > 
+ W_0 |\theta, \vartheta, W) > 1 - \epsilon$. Defining $\E_{\epsilon} = 
+ \{ (\theta', W') | \theta' > \theta_0, |W'| > W_0\}$, we can divide the 
+ area of integration into two complementary parts: $\E_{\epsilon}$, the 
+ part of $(\nu,W')$ where 
   $|\alpha(\theta, \nu | X,W') - \alpha_I(\theta, \nu | X)| \le \epsilon$,
 and its complement $\E^c_{\epsilon}$. Call these $I_{2,\E_{\epsilon}}$ and 
 $I_{2,\E_{\epsilon}^c}$ respectively. 
