@@ -426,44 +426,49 @@ $0 < \eta_1 \leq P(X | V=v, \theta) \leq \xi_1$, so that
 P(X|W , \theta, \theta') &= \sum_V P(X | V, W, \theta, \theta') P(V | W, \theta, \theta')\\
 &= \sum_{v} P(X | V_{|W|}=v, \theta) P^{(|W|)}(V_{|W|}=v | W, \theta, \theta')\\
 \end{align*}
- We also define the observation stationary distribution as $$P_{st}(X | \theta) = \sum_{v} P(X | V=v, \theta) P_{st}(V=v | \theta, \theta').$$
- From the assumption \ref{asmp:obs_bnd}, it is also bounded. $\eta_1 \leq P_{st}(X | \theta) \leq \xi_1$.\\
-So for $W$ with $|W| > W_0$, we have
+ We also define the stationary likelihood as $$P_{st}(X | \theta) = \sum_{v} P(X | V=v, \theta) P_{st}(V=v | \theta).$$
+Then for $W$ with $|W| > w_0$, we have
 \begin{align*}
-|P(X|W , \theta, \theta') - P_{st}(X | \theta)| &= | \sum_{v} P(X | V_{|W|}=v, \theta)(P^{(|W|)}(V_{|W|}=v | W, \theta, \theta') -  P_{st}(V=v | \theta, \theta'))|\\
-& \leq |\sum_{v} P(X | V_{|W|}=v, \theta)|P^{(|W|)}(V_{|W|}=v | W, \theta, \theta') -  P_{st}(V=v | \theta, \theta')|\\
-& \leq \sum_{v} P(X | V_{|W|}=v, \theta)\frac{\epsilon}{4\xi_1N}\\
-& \leq \epsilon / 4
+|P(X|W , \theta, \theta') - P_{st}(X | \theta)| &= | \sum_{v} P(X | v, \theta)(P^{|W|}(v | W, \theta, \theta') -  P_{st}(v | \theta))|\\
+& \leq |\sum_{v} P(X | v, \theta)|P^{|W|}(v | W, \theta, \theta') -  P_{st}(v | \theta)|\\
+& \leq \sum_{v} P(X | v, \theta){\epsilon'}\\
+& \leq N\xi\epsilon' := \epsilon''
 \end{align*}
 %So for $W$ with $|W| > W_0$, we have  $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon / 4$. \\
-Similarly, given the $W_0$ which is defined before, we have
+Using the same $W_0$ as before, we can get a similar result for the 
+continuous case.
 \begin{align*}
-P(X | \theta) &= \sum_W P(X , W | \theta, \theta')\\
-&= \sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta') \\
-&+ \sum_{W s.t. |W| \leq W_0} \sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')
+P(X | \theta) &= \int_W dW P(X , W | \theta, \theta')\\
+&= \int_{|W| > w_0} + \int_{|W| \leq w_0}dW P(X | W, \theta, \theta') P(W | \theta, \theta') 
+%\sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')
 %&= \sum_W \sum_{V_{|W|}} P(X | V_{|W|}, \theta) P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')\\
 %&= \sum_{W s.t. |W| \leq W_0'} \sum_{V_{|W|}} P(X | V_{|W|}, \theta) P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta') + \\
 %&\sum_{W s.t. |W| > W_0'} \sum_{V_{|W|}} P(X | V_{|W|}, \theta) P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')
 \end{align*}
-Consider the difference between the first term $\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')$ and $P_{st}(X | \theta)P(|W| > W_0 | \theta, \theta')$. Also from the previous derivations, $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon / 4$ for $W$ with $|W| > W_0$.\\
-\begin{align*}
-&|\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')  - P_{st}(X | \theta)P(|W| > W_0 | \theta, \theta')|  \leq  \\
-&\sum_{W s.t. |W| > W_0} |P(X | W, \theta, \theta') - P_{st}(X | \theta)|  P(W | \theta, \theta') \leq P(|W| > W_0 | \theta, \theta') \epsilon / 4 
-\end{align*}
-For the $W_0$, there exists $\theta_0 > 0$ such that for any $\theta > \theta_0$,and any $\theta'$, $P(|W| \leq W_0 | \theta, \theta') < \frac{\epsilon}{4\xi_1}.$
-For the second term, we have 
-\begin{align*}
-&|\sum_{W s.t. |W| \leq W_0} \sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')|  \\
-&\leq \xi_1 P(|W| \leq W_0 | \theta, \theta') \leq \epsilon / 4
-\end{align*}
-Consider the difference between $P(X|\theta)$ and $P_{st}(X|\theta)$ for $\theta > \theta_0$, and any $\theta'$ with $\Omega(\theta') \le K_0\Omega(\theta)$.
-\begin{align*}
-|P(X|\theta) - P_{st}(X|\theta)| &\leq |\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')  - P_{st}(X | \theta)P(|W| > W_0 |\theta, \theta')| \\
-&+ |\sum_{W s.t. |W| \leq W_0} \sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')|\\
-&+ |P_{st}(X | \theta)P(|W| \leq W_0 | \theta, \theta')|\\
-&\leq \epsilon / 4 + \epsilon / 4 + \epsilon / 4 = 3\epsilon/4
-\end{align*}
-So for $\epsilon > 0$, and $K_0 > 0$, if $|W| > W_0$ and $\theta > \theta_0$ and $\Omega(\theta') \leq K_0 \Omega(\theta)$, we have 
+% Consider the difference between the first term $\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')$ and $P_{st}(X | \theta)P(|W| > W_0 | \theta, \theta')$. Also from the previous derivations, $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon / 4$ for $W$ with $|W| > W_0$.\\
+% \begin{align*}
+% &|\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')  - P_{st}(X | \theta)P(|W| > W_0 | \theta, \theta')|  \leq  \\
+% &\sum_{W s.t. |W| > W_0} |P(X | W, \theta, \theta') - P_{st}(X | \theta)|  P(W | \theta, \theta') \leq P(|W| > W_0 | \theta, \theta') \epsilon / 4 
+% \end{align*}
+% For the $W_0$, there exists $\theta_0 > 0$ such that for any $\theta > \theta_0$,and any $\theta'$, $P(|W| \leq W_0 | \theta, \theta') < \frac{\epsilon}{4\xi_1}.$
+% For the second term, we have 
+% \begin{align*}
+% &|\sum_{W s.t. |W| \leq W_0} \sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')|  \\
+% &\leq \xi_1 P(|W| \leq W_0 | \theta, \theta') \leq \epsilon / 4
+% \end{align*}
+% Consider the difference between $P(X|\theta)$ and $P_{st}(X|\theta)$ for $\theta > \theta_0$, and any $\theta'$ with $\Omega(\theta') \le K_0\Omega(\theta)$.
+% \begin{align*}
+% |P(X|\theta) - P_{st}(X|\theta)| &\leq |\sum_{W s.t. |W| > W_0} P(X | W, \theta, \theta') P(W | \theta, \theta')  - P_{st}(X | \theta)P(|W| > W_0 |\theta, \theta')| \\
+% &+ |\sum_{W s.t. |W| \leq W_0} \sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')|\\
+% &+ |P_{st}(X | \theta)P(|W| \leq W_0 | \theta, \theta')|\\
+% &\leq \epsilon / 4 + \epsilon / 4 + \epsilon / 4 = 3\epsilon/4
+% \end{align*}
+On the set $\{|W| > w_0\}$, $|P(X |W, \theta, \theta')-P_{st}(X|\theta)| 
+\le \epsilon''$, and and by choosing $\theta'$ large enough, this occurs 
+with arbitrarily high probability. Since the likelihood is bounded, the 
+second integral can be made arbitrarily small. Finally, from the triangle 
+inequality,
+%So for $\epsilon > 0$, and $K_0 > 0$, if $|W| > W_0$ and $\theta > \theta_0$ and $\Omega(\theta') \leq K_0 \Omega(\theta)$, we have 
 \begin{align*}
 |P(X | \theta) - P(X | W, \theta, \theta')| &\leq |P(X | \theta) -P_{st}(X | \theta) | + | P_{st}(X | \theta) -  P(X | W, \theta, \theta')|\\
 & \leq \epsilon
