@@ -477,7 +477,11 @@ inequality,
 \end{proof}
 
 \begin{proposition}
-Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our MCMC sampler given the observations. For any positive $\epsilon$, there exist $\theta_\epsilon > 0$ and corresponding $W_\epsilon > 0$, such that for any $\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
+%Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our MCMC sampler given the observations. For any positive $\epsilon$, there exist $\theta_\epsilon > 0$ and corresponding $W_\epsilon > 0$, such that for any $\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
+Write $q(W', \theta' | W, \theta, \vartheta)$ for the proposal 
+distribution of our MCMC sampler. For any $\epsilon$, there exist 
+$\theta_\epsilon$ and $W_\epsilon > 0$, such that for 
+$\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
   $P(|W'| > W_\epsilon, \theta' > \theta_\epsilon  | W, \theta, \vartheta) \ge 1-\epsilon$.  $| \alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
   \le \epsilon $ for any $(W', \theta')$ with $|W'| > W_\epsilon$ and $\theta' > \theta_\epsilon$.
   %$(\theta,\theta^*)$ satisfying
@@ -489,7 +493,6 @@ Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our M
 & \leq \ \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\\
 \end{align*}
 From assumption \ref{asmp:prior} and assumption \ref{asmp:omega}, we know that the second term can be bounded with high probability. Also, given large $\theta$ and $\theta'$ which is close to $\theta$, the probability of $|W|$ being large is large.
-Suppose current state is $(W, \theta)$.\\
 For $\epsilon / 4 > 0$,  from assumption \ref{asmp:prior}, there exists $\theta_2 > 0$ and $K_2 > 0$, such that for $\theta > \theta_2$, we have
 \begin{align*}
 P(\frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq \max(K_2, 1) | \theta) > 1 - \epsilon / 4.
