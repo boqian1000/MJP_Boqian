@@ -498,9 +498,16 @@ For $\epsilon / 4 > 0$,  from assumption \ref{asmp:prior}, there exists $\theta_
 P(\frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq \max(K_2, 1) | \theta) > 1 - \epsilon / 4.
 \end{align*}
 
-For $\epsilon/4 > 0$, from assumption \ref{asmp:omega}, there exists $\theta_3 > 0$ and $K_3 > 1$, such that for $\theta > \theta_3$, $$P(\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)} \leq K_3 | \theta) > 1 - \epsilon / 4 .$$\\
+%For $\epsilon/4 > 0$, 
+From assumption \ref{asmp:omega}, given any $\epsilon,K$, we can find 
+$\theta_3 > 0$ such that for $\theta > \theta_3$, 
+$$P(\frac{\Omega(\theta')}{\Omega(\theta)} \in [{1}/{K_3},  K_3] | \theta) 
+> 1 - \epsilon .$$
 
-From lemma \ref{lem:eigenvalue_lemma}, for $\epsilon$ and $K_3$ and $K_2$, given $\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3 $, $\exists \theta_4 > 0, W_4 > 0$, such that for any $|W| > W_4$ and $\theta > \theta_4$ and $\theta' > \theta_4$, we have \begin{align*}
+On this set, lemma \ref{lem:eigenvalue_lemma} ensures that 
+%for $\epsilon$ and $K_3$ and $K_2$, given 
+%$\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3 $, 
+there exist $\theta_4 > 0, W_4 > 0$, such that for any $|W| > W_4$ and $\theta > \theta_4$ and $\theta' > \theta_4$, we have \begin{align*}
 |\frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}| < \epsilon / \max(K_2, 1).
 \end{align*}
 
