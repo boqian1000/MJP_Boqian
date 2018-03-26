@@ -492,42 +492,57 @@ $\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
 |\alpha(\theta, \theta', W, X) - \alpha_I(\theta, \theta', X)| &= \ \mid 1 \wedge \frac{P(X | W, \theta' , \theta)q(\theta | \theta')p(\theta')}{P(X | W, \theta , \theta')q(\theta' | \theta)p(\theta)} - 1 \wedge \frac{P(X | \theta')q(\theta | \theta')p(\theta')}{P(X | \theta)q(\theta' | \theta)p(\theta)} \mid \\
 & \leq \ \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\\
 \end{align*}
-From assumption \ref{asmp:prior} and assumption \ref{asmp:omega}, we know that the second term can be bounded with high probability. Also, given large $\theta$ and $\theta'$ which is close to $\theta$, the probability of $|W|$ being large is large.
-For $\epsilon / 4 > 0$,  from assumption \ref{asmp:prior}, there exists $\theta_2 > 0$ and $K_2 > 0$, such that for $\theta > \theta_2$, we have
+Define $E_1 = \{\theta' s.t.\ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\leq \max(K_2, 1)\}$.
+From assumption \ref{asmp:prior}, for any $\epsilon$, we can find a 
+$\theta_1$  such that {for all } $\theta \ge \theta_1$,
 \begin{align*}
-P(\frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq \max(K_2, 1) | \theta) > 1 - \epsilon / 4.
+  P(E_1  | \theta) > 1 - \epsilon / 4.
 \end{align*}
+%the second term can be bounded with high probability. Also, given large $\theta$ and $\theta'$ which is close to $\theta$, the probability of $|W|$ being large is large.
+%For $\epsilon / 4 > 0$,  from assumption \ref{asmp:prior}, there exists $\theta_2 > 0$ and $K_2 > 0$, such that for $\theta > \theta_2$, we have
 
 %For $\epsilon/4 > 0$, 
-From assumption \ref{asmp:omega}, given any $\epsilon,K$, we can find 
-$\theta_3 > 0$ such that for $\theta > \theta_3$, 
-$$P(\frac{\Omega(\theta')}{\Omega(\theta)} \in [{1}/{K_3},  K_3] | \theta) 
-> 1 - \epsilon .$$
+Next, let $E^K_2 = \{\theta' s.t.\ \frac{\Omega(\theta')}{\Omega(\theta)} 
+\in [1/K,K] \}$ for any $K$. From assumption \ref{asmp:omega}, given any 
+$\epsilon$, we can find a $\theta_2$ such that for all $\theta > \theta_2$, 
+$$P(E^K_2 | \theta) > 1 - \epsilon .$$
 
-On this set, lemma \ref{lem:eigenvalue_lemma} ensures that 
+On this set $E^K_2$, $\Omega(\theta') \le K \Omega(\theta)$ (and also 
+$\Omega(\theta) \le K \Omega(\theta')$), and 
+lemma~\ref{lem:eigenvalue_lemma} ensures that 
 %for $\epsilon$ and $K_3$ and $K_2$, given 
 %$\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3 $, 
-there exist $\theta_4 > 0, W_4 > 0$, such that for any $|W| > W_4$ and $\theta > \theta_4$ and $\theta' > \theta_4$, we have \begin{align*}
+there exist $\theta_3 > 0, W_3 > 0$, such that for any $|W| > W_3$ and 
+$\theta > \theta_3$ and $\theta' > \theta_3$, we have 
+$|P(X | W, \theta' , \theta) - P(X | \theta' , \theta)| < \epsilon$, and
+$|P(X | W, \theta , \theta') - P(X | \theta , \theta')| < \epsilon$. 
+Together with the fact that the likelihoods are lower-bounded by $\eta$,
+this implies that
+\begin{align*}
 |\frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}| < \epsilon / \max(K_2, 1).
 \end{align*}
+Call the event $E_3$. The probability of $E_3$ given $E_2$ is the 
+probability $|W| > W_3$ given $E_2$. As $\theta$ increases, this 
+probability can be brought arbitrarily close to $1$.
+%For the $W_4$, there exists $\theta_5 > 0$, such that for $\theta > \theta_5$, and any $\theta'$ with $\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3$, we have \begin{align*}
+%P(|W'| > W_4 | W, \theta, \theta', \vartheta) > 1- \epsilon / 4.
+%\end{align*}
 
-For the $W_4$, there exists $\theta_5 > 0$, such that for $\theta > \theta_5$, and any $\theta'$ with $\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3$, we have \begin{align*}
-P(|W'| > W_4 | W, \theta, \theta', \vartheta) > 1- \epsilon / 4.
-\end{align*}
-
-\boqian{
-There exists $\theta_6 > 0$, such that for $\theta > \theta_6$, we have
-\begin{align*}
-P(\theta' > \theta_4 | \theta) > 1 - \epsilon / 4.
-\end{align*}}
+%\boqian{
+%There exists $\theta_6 > 0$, such that for $\theta > \theta_6$, we have
+%\begin{align*}
+%P(\theta' > \theta_4 | \theta) > 1 - \epsilon / 4.
+%\end{align*}}
 
 %So given the current state $(W, \theta)$, and $K_0$, $P(\{ \frac{1}{K_0}\leq \frac{\Omega(\theta')}{\Omega(\theta)} \leq K_0 \} \cap \{ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq 2\}| \theta ) > 1 - 2\epsilon / 4 $, for any $\theta > \max(\theta_2, \theta_3)$.\\
 
-Given current state $(W, \theta)$, set $\theta_\epsilon = \max(\theta_2,\theta_3, \theta_4, \theta_5, \theta_6)$,  $E_1 = \{ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq \max(K_2, 1) \}$ and $E_2 = \{ \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3\}$.
+Given current state $(W, \theta)$, set $\theta_\epsilon = \max(\theta_2,\theta_3, \theta_4, \theta_5, \theta_6)$.  
+%$E_1 = \{ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq \max(K_2, 1) \}$ and 
+%$E_2 = \{ \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3\}$.
 For $\theta > \theta_\epsilon$, we have 
 \begin{align*}
-P(E_1E_2) &= P(E_1) + P(E_2) - P(E_1 \cup E_2) \\
-& \le P(E_1) + P(E_2) - 1\ge 1 - \epsilon / 2
+P(E_1E_2) %&= P(E_1) + P(E_2) - P(E_1 \cup E_2) \\
+& \ge P(E_1) + P(E_2) - 1\ge 1 - \epsilon / 2
 \end{align*}
 Then set $E_3 = \{ \theta' > \theta_6\}$ and $E_4= \{ |W'| > W_4\}$. For $\theta > \theta_\epsilon$, we have 
 \begin{align*}
