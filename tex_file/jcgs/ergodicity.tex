@@ -430,9 +430,9 @@ for the state of the Markov chain at these times.
 Let $P_B(V_X | W, \theta, \theta')$ be the probability distribution over 
 $V_X$ under the Markov chain with transition matrix $B$ given the grid $W$.
 Let $P_{st}(V_X|\theta)$ be the probability of the same vector, sampled 
-independently under the stationary distribution. Write $|\Delta W_X|$ for the 
+independently under the stationary distribution. Write $\mW$ for the 
 minimum number of grid points between two successive observations. So 
-long as $|\Delta W_X| > w_0$ for large enough $w_0$,  
+long as $\mW > w_0$ for large enough $w_0$,  
 $P_B(V_X | W, \theta, \theta')$ and  $P_{st}(V_X | W, \theta)$ can be 
 brought aribtrarily close.
 % Then,
@@ -442,19 +442,19 @@ brought aribtrarily close.
 % \end{align*}
 %  We also define the stationary likelihood as 
 %  $$P_{st}(X | \theta) = \sum_{V_X} P(X | V_X, \theta) P_{st}(V_X | \theta).$$
-Then for any $W$ with $| \Delta W_X| > w_0$, we have
+Then for any $W$ with $\mW > w_0$, we have
 \begin{align*}
-|P(X|W , \theta, \theta') - P_{st}(X | \theta)| &= | \sum_{v} P(X | v, \theta)(P^{|W|}(v | W, \theta, \theta') -  P_{st}(v | \theta))|\\
-& \leq |\sum_{v} P(X | v, \theta)|P^{|W|}(v | W, \theta, \theta') -  P_{st}(v | \theta)|\\
-& \leq \sum_{v} P(X | v, \theta){\epsilon'}\\
+|P(X|W , \theta, \theta') - P_{st}(X | \theta)| &= | \sum_{V_X} P(X|V_X, \theta)(P_B(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta))|\\
+& \leq |\sum_{v} P(X | V_X, \theta)|P^{|W|}(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta)|\\
+& \leq \sum_{V_X} P(X | V_X, \theta){\epsilon'}\\
 & \leq N\xi\epsilon' := \epsilon''
 \end{align*}
 %So for $W$ with $|W| > W_0$, we have  $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon / 4$. \\
-Using the same $w_0$ as before, we can get a similar result for the 
-continuous case.
+Using the same $w_0$ as before, we get a similar result for the 
+continuous case. First,
 \begin{align*}
 P(X | \theta) &= \int_W dW P(X , W | \theta, \theta')\\
-&= \int_{|W| > w_0} + \int_{|W| \leq w_0}dW P(X | W, \theta, \theta') P(W | \theta, \theta') 
+&= \int_{\mW > w_0} + \int_{\mW \leq w_0}dW P(X | W, \theta, \theta') P(W | \theta, \theta') 
 %\sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')
 %&= \sum_W \sum_{V_{|W|}} P(X | V_{|W|}, \theta) P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')\\
 %&= \sum_{W s.t. |W| \leq W_0'} \sum_{V_{|W|}} P(X | V_{|W|}, \theta) P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta') + \\
@@ -478,28 +478,36 @@ P(X | \theta) &= \int_W dW P(X , W | \theta, \theta')\\
 % &+ |P_{st}(X | \theta)P(|W| \leq W_0 | \theta, \theta')|\\
 % &\leq \epsilon / 4 + \epsilon / 4 + \epsilon / 4 = 3\epsilon/4
 % \end{align*}
-On the set $\{|W| > w_0\}$, $|P(X |W, \theta, \theta')-P_{st}(X|\theta)| 
-\le \epsilon''$, and and by choosing $\theta'$ large enough, this occurs 
+On the set $\{\mW > w_0\}$, $|P(X |W, \theta, \theta')-P_{st}(X|\theta)| 
+\le \epsilon''$. Since, under uniformization, $W$ comes from a rate-$(\Omega(\theta) + \Omega(\theta'))$
+Poisson process, and by choosing $\theta'$ large enough, this occurs 
 with arbitrarily high probability. Since the likelihood is bounded, the 
 second integral can be made arbitrarily small. Finally, from the triangle 
 inequality,
 %So for $\epsilon > 0$, and $K_0 > 0$, if $|W| > W_0$ and $\theta > \theta_0$ and $\Omega(\theta') \leq K_0 \Omega(\theta)$, we have 
 \begin{align*}
 |P(X | \theta) - P(X | W, \theta, \theta')| &\leq |P(X | \theta) -P_{st}(X | \theta) | + | P_{st}(X | \theta) -  P(X | W, \theta, \theta')|\\
-& \leq \epsilon
+       & \leq (\epsilon'' + \epsilon'') + \epsilon'' := \epsilon
 \end{align*}
 
 \end{proof}
 
 \begin{proposition}
 %Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our MCMC sampler given the observations. For any positive $\epsilon$, there exist $\theta_\epsilon > 0$ and corresponding $W_\epsilon > 0$, such that for any $\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
-Write $q(W', \theta' | W, \theta, \vartheta)$ for the proposal 
-distribution of our MCMC sampler. For any $\epsilon$, there exist 
-$\theta_\epsilon$ and $W_\epsilon > 0$, such that for 
-$\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
-  $P(|W'| > W_\epsilon, \theta' > \theta_\epsilon  | W, \theta, \vartheta) \ge 1-\epsilon$.  $| \alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
-  \le \epsilon $ for any $(W', \theta')$ with $|W'| > W_\epsilon$ and $\theta' > \theta_\epsilon$.
+  Let $(W, \theta, \vartheta)$ be the current state of the sampler. 
+ Given this, let $E$ be the event that $| \alpha_I(\theta,\vartheta,X) - 
+ \alpha(\theta,\vartheta,W',X)| \le \epsilon $.
+%Write $q(W', \theta' | W, \theta, \vartheta)$ for the proposal 
+%distribution of our MCMC sampler. 
+Then, for any $\epsilon$, there exist $\theta_\epsilon$ such that
+for $\theta \ge \theta_\epsilon$, we have
+%and $W_\epsilon > 0$, such that for 
+%$\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
+%  $P(|W'| > W_\epsilon, \theta' > \theta_\epsilon  | W, \theta, \vartheta) \ge 1-\epsilon$.  
+%  $| \alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
+%  \le \epsilon $ for any $(W', \theta')$ with $|W'| > W_\epsilon$ and $\theta' > \theta_\epsilon$.
   %$(\theta,\theta^*)$ satisfying
+$P(E|W,\theta,\vartheta) > 1-\epsilon$.
 \label{prop:mix0}
 \end{proposition}
 \begin{proof}
@@ -519,26 +527,27 @@ $\theta_1$  such that {for all } $\theta \ge \theta_1$,
 %For $\epsilon/4 > 0$, 
 Next, let $E^K_2 = \{\theta' s.t.\ \frac{\Omega(\theta')}{\Omega(\theta)} 
 \in [1/K,K] \}$ for any $K$. From assumption \ref{asmp:omega}, given any 
-$\epsilon$, we can find a $\theta_2$ such that for all $\theta > \theta_2$, 
+$\epsilon$, we can find a $\theta^K_2$ such that for all $\theta > \
+\theta^K_2$, 
 $$P(E^K_2 | \theta) > 1 - \epsilon .$$
-
 On this set $E^K_2$, $\Omega(\theta') \le K \Omega(\theta)$ (and also 
-$\Omega(\theta) \le K \Omega(\theta')$), and 
-lemma~\ref{lem:eigenvalue_lemma} ensures that 
-%for $\epsilon$ and $K_3$ and $K_2$, given 
+$\Omega(\theta) \le K \Omega(\theta')$).  Lemma~\ref{lem:eigenvalue_lemma} 
+ensures that %for $\epsilon$ and $K_3$ and $K_2$, given 
 %$\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3 $, 
-there exist $\theta_3 > 0, W_3 > 0$, such that for any $|W| > W_3$ and 
-$\theta > \theta_3$ and $\theta' > \theta_3$, we have 
+there exist $\theta^K_3 > 0, W^K_3 > 0$, such that for $|W| > W^K_3$, 
+$\theta > \theta^K_3$ and $\theta' > \theta^K_3$, we have 
 $|P(X | W, \theta' , \theta) - P(X | \theta' , \theta)| < \epsilon$, and
 $|P(X | W, \theta , \theta') - P(X | \theta , \theta')| < \epsilon$. 
-Together with the fact that the likelihoods are lower-bounded by $\eta$,
-this implies that
+Together with the fact that ${P(X | W, \theta , \theta')}$ and ${P(X | \theta)}$
+are lower-bounded by $\eta$,
+we can find a $K$ so that
 \begin{align*}
 |\frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}| < \epsilon / \max(K_2, 1).
 \end{align*}
-Call the event $E_3$. The probability of $E_3$ given $E_2$ is the 
-probability $|W| > W_3$ given $E_2$. As $\theta$ increases, this 
-probability can be brought arbitrarily close to $1$.
+Call this event $E_3$. Necessary for $E_3$ given $E_2$ is that 
+$|W| > W^K_3$ for our choice of $K$. As before, we can find a $\theta_4$
+such that for $\theta > \theta_4$, this probability can brought 
+arbitrarily close to $1$.
 %For the $W_4$, there exists $\theta_5 > 0$, such that for $\theta > \theta_5$, and any $\theta'$ with $\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3$, we have \begin{align*}
 %P(|W'| > W_4 | W, \theta, \theta', \vartheta) > 1- \epsilon / 4.
 %\end{align*}
@@ -551,99 +560,89 @@ probability can be brought arbitrarily close to $1$.
 
 %So given the current state $(W, \theta)$, and $K_0$, $P(\{ \frac{1}{K_0}\leq \frac{\Omega(\theta')}{\Omega(\theta)} \leq K_0 \} \cap \{ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq 2\}| \theta ) > 1 - 2\epsilon / 4 $, for any $\theta > \max(\theta_2, \theta_3)$.\\
 
-Given current state $(W, \theta)$, set $\theta_\epsilon = \max(\theta_2,\theta_3, \theta_4, \theta_5, \theta_6)$.  
+Given current state $(W, \theta)$, set $\theta_\epsilon = 
+\kappa \max(\theta_1,\theta^K_2,\theta^K_3, \theta_4)$, $\kappa > 1$.  
 %$E_1 = \{ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq \max(K_2, 1) \}$ and 
 %$E_2 = \{ \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3\}$.
-For $\theta > \theta_\epsilon$, we have 
+For $\theta > \theta_\epsilon$, $P(E^K_2 | E_1)>1-\epsilon$, and 
 \begin{align*}
-P(E_1E_2) %&= P(E_1) + P(E_2) - P(E_1 \cup E_2) \\
-& \ge P(E_1) + P(E_2) - 1\ge 1 - \epsilon / 2
+P(E_1E^K_2) %&= P(E_1) + P(E_2) - P(E_1 \cup E_2) \\
+& = P(E_1) P(E^K_2|E_1) \ge (1 - \epsilon)^2.
 \end{align*}
-Then set $E_3 = \{ \theta' > \theta_6\}$ and $E_4= \{ |W'| > W_4\}$. For $\theta > \theta_\epsilon$, we have 
+When $E^K_2$ holds, $\theta' \ge \Omega^{-1}(\Omega(\kappa\theta)/K)$.
+By choosing $\kappa$ large enough, $\theta' > \theta^K_3$. Then, for 
+$E_3$ to hold, we only need $|W| > W^K_3$. This holds with probability 
+greater than $1-\epsilon$, so that
 \begin{align*}
-P(E_4 | E_1E_2E_3) > 1- \epsilon / 4.
+  P(E_1E_2E_3) > (1- \epsilon)^3.
 \end{align*}
-Also we have 
-\begin{align*}
-P(E_1E_2E_3) &= P(E_3) + P(E_1E_2) - P(E_1 \cup E_2 \cup E_3)\\
-&\ge  P(E_3) + P(E_1E_2) - 1\\
-&\ge 1 - 3\epsilon /4. 
-\end{align*}
-We have \begin{align*}
-P(E_1E_2E_3E_4) &= P(E_1E_2E_3) P(E_4 | E_1E_2E_3)\\
-&\ge (1 - \epsilon / 4) (1 - 3 \epsilon / 4) \ge 1 - \epsilon.
-\end{align*}
-$E_1E_2E_3E_4 \subseteq \left\lbrace \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} < \epsilon \right\rbrace $.
-So for $\theta > \theta_\epsilon$, we have
-\begin{align*}
-P(\mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} < \epsilon) \ge P(E_1E_2E_3E_4) \ge 1- \epsilon.
-\end{align*}
+Finally, $E_1\cap E_2 \cap E_3$ implies $E$, giving us our result.
 %with probability greater than $1 - \epsilon$. 
 
 %Also, the set 
 %For $K = 1$ and $\epsilon$, there exists $\theta_1$ such that for $\theta > \theta_1$, $\mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\mid \leq 1$ with probability close to 1. Given $\theta$ and $\theta'$, $P(|W'| > W_0 | \theta, \theta')$ is close to 1.
 
 \end{proof}
-\begin{proposition}
-  Write $P_{\theta}(W',\theta^*)$ for the conditional distribution 
-  over $(W',\theta^*)$ given the current state of the MCMC sampler and the 
-  observations, and let
-  $\lim_{\theta\rightarrow\infty} \Mx{\theta} = \infty$. Then for any positive 
-  $\epsilon$, there exist $B_\theta$ such that for all 
-  $\theta \ge B_\theta$, % with $\Omega(\theta) \ge k\Omega(\vartheta)$, 
-  we have 
-  $P_{\theta}(\{W'\ s.t.\ |\alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
-  \le \epsilon)\} \ge 1-\epsilon$.%$(\theta,\theta^*)$ satisfying
-\label{prop:mix}
-\end{proposition}
-\begin{proof}
-Consider the nearest pair of observations, occuring at times $t$ and 
-$t + \Delta$. %let them be separated by a time interval $\Delta$. 
-By setting $\theta$ high enough, assumption~\ref{asmp:cond_num} ensures 
-that the distribution over waiting times of each state can be concentrated 
-arbitrarily close to $0$. Thus, the distribution over states after an 
-interval $\Delta$ can be brought arbitrarily close to the equilibrium 
-distribution of $A(\theta)$  (call this $p_{\theta}$).
+%   \begin{proposition}
+%     Write $P_{\theta}(W',\theta^*)$ for the conditional distribution 
+%     over $(W',\theta^*)$ given the current state of the MCMC sampler and the 
+%     observations, and let
+%     $\lim_{\theta\rightarrow\infty} \Mx{\theta} = \infty$. Then for any positive 
+%     $\epsilon$, there exist $B_\theta$ such that for all 
+%     $\theta \ge B_\theta$, % with $\Omega(\theta) \ge k\Omega(\vartheta)$, 
+%     we have 
+%     $P_{\theta}(\{W'\ s.t.\ |\alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)| 
+%     \le \epsilon)\} \ge 1-\epsilon$.%$(\theta,\theta^*)$ satisfying
+%   \label{prop:mix}
+%   \end{proposition}
+%   \begin{proof}
+%   Consider the nearest pair of observations, occuring at times $t$ and 
+%   $t + \Delta$. %let them be separated by a time interval $\Delta$. 
+%   By setting $\theta$ high enough, assumption~\ref{asmp:cond_num} ensures 
+%   that the distribution over waiting times of each state can be concentrated 
+%   arbitrarily close to $0$. Thus, the distribution over states after an 
+%   interval $\Delta$ can be brought arbitrarily close to the equilibrium 
+%   distribution of $A(\theta)$  (call this $p_{\theta}$).
 
-Next, recall that the embedded Markov chain has a transition matrix 
-given by $B(\theta^*,\theta) = (I + A(\theta^*)/\Omega(\theta,\theta^*))$. 
-For any setting of $\Omega$, this has the same stationary distribution 
-$p_{\theta}$: this can be verified by multiplying $B(\theta,\theta^*)$ with 
-$p_\theta$. For the embedded Markov chain to be brought close to 
-equilibrium over $[t,t+\Delta]$, we need two conditions, 1) the number of 
-Poisson events must be large enough (to allow sufficient transitions), and 2) the 
-transition matrix $B$ must mix well enough (otherwise even a 
-large number of transition opportunities will not forget the initial state). 
-We show that for $\theta$ large enough, this holds with high probability.
-Assumption~\ref{asmp:mono_tail} will ensure that this continues to hold 
-for all larger $\theta$ as well.
+%   Next, recall that the embedded Markov chain has a transition matrix 
+%   given by $B(\theta^*,\theta) = (I + A(\theta^*)/\Omega(\theta,\theta^*))$. 
+%   For any setting of $\Omega$, this has the same stationary distribution 
+%   $p_{\theta}$: this can be verified by multiplying $B(\theta,\theta^*)$ with 
+%   $p_\theta$. For the embedded Markov chain to be brought close to 
+%   equilibrium over $[t,t+\Delta]$, we need two conditions, 1) the number of 
+%   Poisson events must be large enough (to allow sufficient transitions), and 2) the 
+%   transition matrix $B$ must mix well enough (otherwise even a 
+%   large number of transition opportunities will not forget the initial state). 
+%   We show that for $\theta$ large enough, this holds with high probability.
+%   Assumption~\ref{asmp:mono_tail} will ensure that this continues to hold 
+%   for all larger $\theta$ as well.
 
-Recall first that the proposal distribution $q(\theta^*|\theta)$ is 
-centered at the current value $\theta$. For any $\epsilon$, we can find 
-an interval $[\theta-h,\theta+h]$ such that for all $\theta$, 
-$q(\theta^* \in [\theta-h,\theta+h]|\theta)
-\ge 1-\epsilon$. By choosing $\theta$ large 
-enough, we can ensure that %$\Omega(\theta) \approx \Omega(\theta^*)$ (i.e.\ 
-$\frac{\Omega(\theta)}{ \Omega(\theta^*)} \in [1-\epsilon,1+\epsilon]$) 
-with probability greater than $1-\epsilon$.
-%The condition $\Omega(\theta) \ge k\Omega(\vartheta)$, 
-This, together with assumption~\ref{asmp:cond_num}, ensures that with 
-probability greater than $1-\epsilon$, the self-transition probability of $B(\theta,\vartheta)$ 
-is bounded away from one, and limits how poorly $B$ can mix.
-Second, since $W$ comes from a Poisson process with intensity 
-$\Omega(\theta')+ \Omega(\theta) - A_{S(t)}(\theta)$, a large $\theta'$
-ensures a large $|W'|$ with high probability: by setting $B_\theta$ large 
-enough we can ensure $|W'|$ is large enough with arbitrary probability.
+%   Recall first that the proposal distribution $q(\theta^*|\theta)$ is 
+%   centered at the current value $\theta$. For any $\epsilon$, we can find 
+%   an interval $[\theta-h,\theta+h]$ such that for all $\theta$, 
+%   $q(\theta^* \in [\theta-h,\theta+h]|\theta)
+%   \ge 1-\epsilon$. By choosing $\theta$ large 
+%   enough, we can ensure that %$\Omega(\theta) \approx \Omega(\theta^*)$ (i.e.\ 
+%   $\frac{\Omega(\theta)}{ \Omega(\theta^*)} \in [1-\epsilon,1+\epsilon]$) 
+%   with probability greater than $1-\epsilon$.
+%   %The condition $\Omega(\theta) \ge k\Omega(\vartheta)$, 
+%   This, together with assumption~\ref{asmp:cond_num}, ensures that with 
+%   probability greater than $1-\epsilon$, the self-transition probability of $B(\theta,\vartheta)$ 
+%   is bounded away from one, and limits how poorly $B$ can mix.
+%   Second, since $W$ comes from a Poisson process with intensity 
+%   $\Omega(\theta')+ \Omega(\theta) - A_{S(t)}(\theta)$, a large $\theta'$
+%   ensures a large $|W'|$ with high probability: by setting $B_\theta$ large 
+%   enough we can ensure $|W'|$ is large enough with arbitrary probability.
 
-Thus, for large enough $B_\theta$ we can ensure that for all $\theta > 
-B_\theta$, the distributions $p(x_{t+\Delta}|s_t)$ and 
-$p(x_{t+\Delta}|W,s_t)$ can be brought arbitrarily close with arbitrarily 
-high probability.  
-By a simple chaining argument, this holds for $p(X|\theta)$ and 
-$p(X|\theta,W)$ as well and so too 
-  \vinayak{expand}
-$\alpha_I(\theta',\theta,X)$ and $\alpha(\theta',\theta,W,X)$
-\end{proof}
+%   Thus, for large enough $B_\theta$ we can ensure that for all $\theta > 
+%   B_\theta$, the distributions $p(x_{t+\Delta}|s_t)$ and 
+%   $p(x_{t+\Delta}|W,s_t)$ can be brought arbitrarily close with arbitrarily 
+%   high probability.  
+%   By a simple chaining argument, this holds for $p(X|\theta)$ and 
+%   $p(X|\theta,W)$ as well and so too 
+%     \vinayak{expand}
+%   $\alpha_I(\theta',\theta,X)$ and $\alpha(\theta',\theta,W,X)$
+%   \end{proof}
 \begin{lemma}
 Write $P(W' | W, \theta, \vartheta, \theta')$ as the transition density with respect to the grids $W'$, there exists $\psi > 1$, such that $P(W' | W, \theta, \vartheta, \theta') \leq \psi ^{|W'|} \tilde{\Omega}(\theta,\theta')^{|W'|}\exp(-\tilde{\Omega}(\theta,\theta')\tau)$, where $\tilde{\Omega}(\theta, \theta') = (\Omega(\theta) + \Omega(\theta')) / \psi$ and $\tau$ is the length of the time interval. 
 \end{lemma}
