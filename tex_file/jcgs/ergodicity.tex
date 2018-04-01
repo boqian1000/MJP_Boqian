@@ -721,17 +721,23 @@ X)P(W' | S, T, \theta, \nu) ( 1 - \alpha(\theta, \nu | W', X))d\nu
 &:= d\theta' I_1 + \delta_\theta(\theta')I_2
 \end{align*}
 {Consider the second term $I_2$, involving an integral over $(\nu,W')$. 
- For any positive $\epsilon$, there exists $\theta_0 > 0$ and $W_0 > 0$, 
- such that for $\theta > \theta_0$, we have $P(\theta' > \theta_0, |W'| > 
- W_0 |\theta, \vartheta, W) > 1 - \epsilon$. Defining $\E_{\epsilon} = 
- \{ (\theta', W') | \theta' > \theta_0, |W'| > W_0\}$, we can divide the 
- area of integration into two complementary parts: $\E_{\epsilon}$, the 
- part of $(\nu,W')$ where 
-  $|\alpha(\theta, \nu | X,W') - \alpha_I(\theta, \nu | X)| \le \epsilon$,
-and its complement $\E^c_{\epsilon}$. Call these $I_{2,\E_{\epsilon}}$ and 
-$I_{2,\E_{\epsilon}^c}$ respectively. 
-For $\theta > \theta_0$, the second term has probability less than $\epsilon$, and using the bound 
-$1-\alpha \le 1$, we have}
+  From Proposition~\ref{prop:mix0}, for any positive $\epsilon$, there 
+  exists $\theta_0 > 0$ and $W_0 > 0$ such that the set $E_{\epsilon}$ 
+  (where $|\alpha(\theta, \nu | X,W') - \alpha_I(\theta, \nu | X)| \le 
+  \epsilon$) has probability greater than $1-\epsilon$.
+  Write $I_{2,\E_{\epsilon}}$ for the integral over this set, and 
+  $I_{2,\E_{\epsilon}^c}$ for that over the complement. Then,
+% such that for $\theta > \theta_0$, we have $P(\theta' > \theta_0, |W'| > 
+% W_0 |\theta, \vartheta, W) > 1 - \epsilon$. Defining $\E_{\epsilon} = 
+% \{ (\theta', W') | \theta' > \theta_0, |W'| > W_0\}$, we can divide the 
+% area of integration into two complementary parts: $\E_{\epsilon}$, the 
+% part of $(\nu,W')$ where 
+%  $|\alpha(\theta, \nu | X,W') - \alpha_I(\theta, \nu | X)| \le \epsilon$,
+%and its complement $\E^c_{\epsilon}$. Call these $I_{2,\E_{\epsilon}}$ and 
+%$I_{2,\E_{\epsilon}^c}$ respectively. 
+%For $\theta > \theta_0$, the second term has probability less than $\epsilon$, and using the bound 
+%$1-\alpha \le 1$, we have
+}
 %use $\alpha(\theta, \theta' | W', X)\le 1$ and $q(\theta'|\theta) < \epsilon$ 
 %to get}
 %%and equation~\eqref{eq:acc} to get}
@@ -745,18 +751,6 @@ $1-\alpha \le 1$, we have}
 %      \theta)\alpha_I(\theta, \nu) d\nu\right)\delta_\theta(\theta')\right]
 %      \numberthis \label{eq:nu1}
 \begin{align*}
-  I_{2,\E_{\epsilon}^c} &\le \int_{\E^c_{\epsilon}} d\nu dW'
-q(\nu | \theta) \sum_{S,T} P(S, T |  W, \theta, \vartheta,
-X)P(W' | S, T, \theta, \nu) \\ 
-& = \int_{\E^c_{\epsilon}} d\nu dW'
-q(\nu | \theta) P(W' |  W, \theta, \nu, \vartheta, X) 
-\le \epsilon 
-\end{align*}
-{For the former, we use Proposition~\ref{prop:mix} to get the bound}
-%, and bounding
-%$\alpha$ by one on the $W$-set with probability $\epsilon$, we have the 
-%bound}
-\begin{align*}
 %\int_{W_1}dW' \int_S q(\nu | \theta) &\int \sum_S P(S, T | W, \theta, \vartheta,
 %X)P(W' | S, T, \theta, \nu)dT ( 1 - [\alpha_I(\theta, \nu |
 %X,W')])d\nu \\ 
@@ -766,7 +760,7 @@ I_{2,\E_{\epsilon}} \le \int_{\E_\epsilon}dW' d\nu q(\nu | \theta) &
 \le \int dW' d\nu q(\nu | \theta) &
   P(W' | W, \theta, \vartheta, \nu, X) 
   [ 1 - (\alpha_I(\theta, \nu | X)-\epsilon)] \\
-  \le (1+\epsilon) & - \int  q(\nu | \theta) \alpha_I(\theta, \nu | X) d\nu
+  \le (1+\epsilon) & - \int  q(\nu | \theta) \alpha_I(\theta, \nu | X) d\nu, \text{while} \\
 %   \intertext{Then}
 %      P(d\theta'| &W, \theta, \vartheta)   \le d\theta' \int_{W'}dW'
 %      \left[q(\theta' | \theta) \int \sum_S P(S, T
@@ -786,7 +780,16 @@ I_{2,\E_{\epsilon}} \le \int_{\E_\epsilon}dW' d\nu q(\nu | \theta) &
 %   & = p_I(\theta'|\theta,X) + \epsilon_{\theta'}q(\theta'|\theta)+
 %   \delta_\theta(\theta')\int \epsilon_{\nu} q(\nu|\theta) d\nu
 %   \numberthis \label{eq:nu2}
+  I_{2,\E_{\epsilon}^c} \le \int_{\E^c_{\epsilon}} d\nu dW'
+  q(\nu | \theta) &\sum_{S,T} P(S, T |  W, \theta, \vartheta,
+X)P(W' | S, T, \theta, \nu) \\ 
+ = \int_{\E^c_{\epsilon}} d\nu dW'
+ q(\nu | \theta) &P(W' |  W, \theta, \nu, \vartheta, X) 
+\le \epsilon 
 \end{align*}
+%, and bounding
+%$\alpha$ by one on the $W$-set with probability $\epsilon$, we have the 
+%bound}
 
 Finally, we have
 \begin{align*}
