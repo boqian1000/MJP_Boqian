@@ -826,9 +826,9 @@ Finally, we have
   \int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)  
   &= \int d\theta' \Omega(\theta') I_1 + I_2 \Omega(\theta)
 \end{align*}
-Again, the first term involves an integral over $(\theta',W')$ which we 
-divide into two regions $\tilde{I}_{1,\E_\epsilon}$ and its complement 
-$\tilde{I}_{1,\E^c_\epsilon}$. 
+Again, the first term involves an integral over $(\theta',W')$ which as 
+before, we divide into two regions $\E_\epsilon$ and its complement 
+$\E^c_\epsilon$. 
 
 %From lemma 8, we have 
 %$P(W' | W, \theta, \vartheta, \theta') \le \psi ^{|W'|} \tilde{\Omega}(\theta,\theta')^{|W'|}\exp(-\tilde{\Omega}(\theta,\theta')\tau)$, where $\tilde{\Omega} = (\Omega(\theta) + \Omega(\theta')) / \psi$ and $0 < \psi < 1$ and $\tau$ is the length of the time interval.\\
@@ -847,11 +847,15 @@ $\tilde{I}_{1,\E^c_\epsilon}$.
 %& \le \Omega(\theta_0) \epsilon + \eta_0 \Omega(\theta)\epsilon \\
 %& \le (1 + \eta_0) \Omega(\theta)\epsilon
 %\end{align*}
-$$\int d\theta' \Omega(\theta') I_1 = \tilde{I}_{1,\E_\epsilon} + \tilde{I}_{1,\E^c_\epsilon}.$$
-For $\tilde{I}_{1,\E_\epsilon}$, by corollary \ref{corol:integ_bound}, and bounding the acceptance probability by $\alpha_I + \epsilon$ to get, for $\theta \in B_{0, \theta_1}^c$
+$$\int d\theta' \Omega(\theta') I_1 = 
+\int_{\E_\epsilon} d\theta' \Omega(\theta') I_1 + 
+\int_{\E_\epsilon^c} d\theta' \Omega(\theta') I_1.
+  $$
+For the first term, by corollary \ref{corol:integ_bound}, and bounding 
+the acceptance probability by $\alpha_I + \epsilon$ we get, for $\theta \in B_{0, \theta_1}^c$
 \begin{align*}
-\tilde{I}_{1,\E_\epsilon} &= \int_{\E_\epsilon} I_1 \Omega(\theta') d\theta'\\
-& \leq \int_{\E_\epsilon} \Omega(\theta')q(\theta' | \theta) (\alpha_I(\theta, \theta', X) + \epsilon) d\theta' \\
+\int_{\E_\epsilon} d\theta' \Omega(\theta') I_1  & 
+ \leq \int_{\E_\epsilon} \Omega(\theta')q(\theta' | \theta) (\alpha_I(\theta, \theta', X) + \epsilon) d\theta' \\
 & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta' + \eta_1 \epsilon \Omega(\theta)
 \end{align*}
 For $\tilde{I}_{1,\E^c_\epsilon}$, from assumption \ref{asmp:integ_bound}, there exists $\eta_0 , \theta_0 > 0$ such that for $\theta \in B_{0, \theta_3}^c$, we have 
@@ -860,7 +864,7 @@ For $\tilde{I}_{1,\E^c_\epsilon}$, from assumption \ref{asmp:integ_bound}, there
 \end{align*}
 So, by Cauchy inequality and bounding the acceptance probability by one, we have 
 \begin{align*}
-\tilde{I}_{1,\E_\epsilon^c}^2 &=  \left[  \int_{\E_\epsilon^c} I_1 \Omega(\theta') d\theta' \right]^2 \\
+\left[  \int_{\E_\epsilon^c} I_1 \Omega(\theta') d\theta' \right]^2 
 & \le \left[  \int_{\E_\epsilon^c}  \Omega(\theta') q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \right]^2\\
 & \le \int_{\E_\epsilon^c}  \Omega(\theta')^2 q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \cdot \int_{\E_\epsilon^c} q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \\
 & \le  \int  \Omega(\theta')^2 q(\theta' | \theta)d\theta' \cdot \epsilon \\
