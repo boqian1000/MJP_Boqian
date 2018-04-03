@@ -123,11 +123,23 @@ dynamics, rather than the observation process). Extensions to the more
 general case should be clear from our proof.
 
 \begin{assumption}
-Given the proposal density $q(\nu | \theta)$, $\exists \eta_0 > 0$ s.t. $$ \int_\Theta \max_s|A_{ss}(\nu)| q(\nu | \theta)d\nu \leq \eta_0 \max_s|A_{ss}(\theta)|.$$
+Set $\Omega(\theta) \doteq k \max_s |A_{ss}(\theta)|$, for $k > 1$ in the sampler. Given the proposal density $q(\nu | \theta)$, $\exists \eta_0 > 0, \theta_0 > 0$ such that for $\theta \in B_{0, \theta_0}^c$, $$ \int_\Theta \Omega(\mu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2.$$ 
+\label{asmp:integ_bound}
 \end{assumption}
 \noindent This mild requirement ensures the proposal distribution doesn't attempt
 to explore large $\theta$'s too aggressively.
-
+\begin{corollary}
+Given the proposal density $q(\nu | \theta)$, $\exists \eta_1 > 0, \theta_1 > 0$ such that for $\theta \in B_{0, \theta_1}^c$, $$ \int_\Theta \Omega(\nu) q(\nu | \theta)d\nu \leq \eta_1 \Omega(\theta).$$ 
+\label{corol:integ_bound}
+\end{corollary}
+\begin{proof}
+From assumption \ref{asmp:integ_bound},  $\exists \eta_0 > 0$, we have $ \int_\Theta \Omega(\mu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2$ for $\theta \in B_{0, \theta_0}^c$.
+For $\theta \in B_{0, \theta_0}^c$, from Cauchy inequality, we have 
+\begin{align*}
+\left[ \int_\Theta \Omega(\nu) q(\nu | \theta) d\nu \right]^2 &\le \int_\Theta \Omega(\nu)^2 q(\nu | \theta) d\nu \cdot \int_\Theta q(\nu | \theta) d\nu \le \eta_0 \Omega(\theta)^2.
+\end{align*}
+So for $\theta \in B_{0, \theta_0}^c$, we have $\int_\Theta \Omega(\nu) q(\nu | \theta) d\nu \le \sqrt{\eta_0} \Omega(\theta).$
+\end{proof}
 %\begin{assumption}
 %For any positive $\epsilon > 0$ and $K_0 > 1$, there exists $\theta_2$, such that for $\theta > \theta_2$, $P(\mid \frac{q(\theta | \theta')p(\theta')}{q(\theta | \theta')p(\theta)}\mid \leq K_0 | \theta) \geq 1 - \epsilon$, where $\theta' \sim q(\cdot | \theta)$.
 %\end{assumption}
@@ -144,9 +156,9 @@ to explore large $\theta$'s too aggressively.
 %\end{assumption}
 
 \begin{assumption}
-For any positive $\epsilon > 0$, there exists $\theta_0$ and $K$ 
+For any positive $\epsilon > 0$, there exists $\theta_2$ and $K$ 
 such that $P(\frac{p(\theta')q(\theta|\theta')}{p(\theta)q(\theta'|\theta)} \le K | \theta) > 1 - \epsilon$, 
-for $\theta \in \theta_0$. 
+for $\theta \in B_{0, \theta_2}^c$. 
   \label{asmp:prior}
 \end{assumption}
 %\begin{proof}
@@ -169,7 +181,7 @@ for $\theta \in \theta_0$.
 %\end{assumption}
 
 \begin{assumption}
-For any positive $\epsilon > 0$, there exists $\theta_1 > 0$ and $M > 1$, such that $P(\frac{\Omega(\theta')}{\Omega(\theta)} \in [1/M, M] | \theta) > 1 - \epsilon$, for $\theta \in B_{0, \theta_1}^c$. 
+For any positive $\epsilon > 0$, there exists $\theta_3 > 0$ and $M > 1$, such that $P(\frac{\Omega(\theta')}{\Omega(\theta)} \in [1/M, M] | \theta) > 1 - \epsilon$, for $\theta \in B_{0, \theta_3}^c$. 
   \label{asmp:omega}
 \end{assumption}
 %\begin{proof}
@@ -818,13 +830,28 @@ by one to get
 & \le (1 + \eta_0) \Omega(\theta)\epsilon
 \end{align*}
 
-Then for the first one, we have 
+For the first one, we have 
 \begin{align*}
-\tilde{I}_{1,\E_\epsilon} &= \int_{S_\epsilon} I_1 \Omega(\theta') d\theta'\\
+\tilde{I}_{1,\E_\epsilon} &= \int_{\E_\epsilon} I_1 \Omega(\theta') d\theta'\\
 & \leq \int_{\E_\epsilon} \Omega(\theta')q(\theta' | \theta) (\alpha_I(\theta, \theta', X) + \epsilon) d\theta' \\
 & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta' + \eta_0 \epsilon \Omega(\theta)
 \end{align*}
-
+For the second one, from assumption \ref{asmp:integ_bound}, there exists $\eta_0 , \theta_0 > 0$ such that for $\theta \in B_{0, \theta_0}^c$, we have 
+\begin{align*}
+\int_\Theta \Omega(\nu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2.
+\end{align*}
+So, from Cauchy inequality, we have 
+\begin{align*}
+\tilde{I}_{1,\E_\epsilon^c}^2 &=  \left[  \int_{\E_\epsilon^c} I_1 \Omega(\theta') d\theta' \right]^2 \\
+& \le \left[  \int_{\E_\epsilon^c}  \Omega(\theta') q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \right]^2\\
+& \le \int_{\E_\epsilon^c}  \Omega(\theta')^2 q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \cdot \int_{\E_\epsilon^c} q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \\
+& \le  \int  \Omega(\theta')^2 q(\theta' | \theta)d\theta' \cdot \epsilon \\
+& \le  \eta_0 \Omega(\theta)^2 \epsilon.
+\end{align*}
+So we have 
+\begin{align*}
+\tilde{I}_{1,\E_\epsilon^c} \le \sqrt{\eta_0}\Omega(\theta) \sqrt{\epsilon}.
+\end{align*}
 Then for $\theta > \max(\theta_0, \theta_1, \theta_2)\doteq \theta_\epsilon$, we have the following. 
 \begin{align*}
   \int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)  
