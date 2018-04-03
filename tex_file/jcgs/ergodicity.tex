@@ -810,56 +810,57 @@ Finally, we have
 \end{align*}
 Again, the first term involves an integral over $(\theta',W')$ which we 
 divide into two regions $\tilde{I}_{1,\E_\epsilon}$ and its complement 
-$\tilde{I}_{1,\E^c_\epsilon}$. From lemma 8, we have 
-$P(W' | W, \theta, \vartheta, \theta') \le \psi ^{|W'|} \tilde{\Omega}(\theta,\theta')^{|W'|}\exp(-\tilde{\Omega}(\theta,\theta')\tau)$, where $\tilde{\Omega} = (\Omega(\theta) + \Omega(\theta')) / \psi$ and $0 < \psi < 1$ and $\tau$ is the length of the time interval.\\
-For the latter, we bound the acceptance probability 
-by one to get
-\begin{align*}
-  \tilde{I}_{1,\E^c_\epsilon} &\le  \int_{\E^c_\epsilon}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
-  &=  \int_{\theta' \leq \theta_0}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW' +  \int_{\theta' > \theta_0, |W'| < W_0}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
-  & \leq  \Omega(\theta_0) \int_{\theta' > \theta_0}q(\theta' | \theta) d\theta' + \int_{\theta' > \theta_0} \Omega(\theta') q(\theta' | \theta) [ \sum_{w \le W_0}\frac{\tilde{\Omega}(\theta,\theta')^{w}}{w!}\exp(-\tilde{\Omega}(\theta,\theta')\tau)]d\theta'\\
+$\tilde{I}_{1,\E^c_\epsilon}$. 
+
+%From lemma 8, we have 
+%$P(W' | W, \theta, \vartheta, \theta') \le \psi ^{|W'|} \tilde{\Omega}(\theta,\theta')^{|W'|}\exp(-\tilde{\Omega}(\theta,\theta')\tau)$, where $\tilde{\Omega} = (\Omega(\theta) + \Omega(\theta')) / \psi$ and $0 < \psi < 1$ and $\tau$ is the length of the time interval.\\
+%\begin{align*}
+%  \tilde{I}_{1,\E^c_\epsilon} &\le  \int_{\E^c_\epsilon}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
+%  &=  \int_{\theta' \leq \theta_0}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW' +  \int_{\theta' > \theta_0, |W'| < W_0}  \Omega(\theta') q(\theta' | \theta)P(W' | W, \theta, \vartheta, \theta')d\theta'dW'\\
+%  & \leq  \Omega(\theta_0) \int_{\theta' > \theta_0}q(\theta' | \theta) d\theta' + \int_{\theta' > \theta_0} \Omega(\theta') q(\theta' | \theta) [ \sum_{w \le W_0}\frac{\tilde{\Omega}(\theta,\theta')^{w}}{w!}\exp(-\tilde{\Omega}(\theta,\theta')\tau)]d\theta'\\
 %  & \leq  \Omega(\theta) \epsilon + \int_{\Theta} \Omega(\theta') q(\theta' | \theta)\epsilon d\theta'\\
 %  &= \Omega(\theta) \epsilon (1 + \eta_0)
 %  \boqian{?}
-  \end{align*}
-  For $\epsilon > 0$, there exists $\theta_1 > 0$, such that for $\theta > \theta_1$ $\int_{\theta' > \theta_0}q(\theta' | \theta) d\theta' \le \epsilon$. There also exists $\theta_2 > 0$, such that for $\theta > \theta_2$ and any $\theta'$,  $\sum_{w \le W_0}\frac{\tilde{\Omega}(\theta,\theta')^{w}}{w!}\exp(-\tilde{\Omega}(\theta,\theta')\tau) < \epsilon$. For $\theta > \max(\theta_0, \theta_1, \theta_2)$, we have
-\begin{align*}
-\tilde{I}_{1,\E^c_\epsilon} &\le \Omega(\theta_0) \int_{\theta' > \theta_0}q(\theta' | \theta) d\theta' + \int_{\theta' > \theta_0} \Omega(\theta') q(\theta' | \theta) [ \sum_{w \le W_0}\frac{\tilde{\Omega}(\theta,\theta')^{w}}{w!}\exp(-\tilde{\Omega}(\theta,\theta')\tau)]d\theta'\\
-& \le  \Omega(\theta_0) \epsilon + \int_{\Theta} \Omega(\theta') q(\theta' | \theta)\epsilon d\theta' \\
-& \le \Omega(\theta_0) \epsilon + \eta_0 \Omega(\theta)\epsilon \\
-& \le (1 + \eta_0) \Omega(\theta)\epsilon
-\end{align*}
-
-For the first one, we have 
+%  \end{align*}
+%  For $\epsilon > 0$, there exists $\theta_1 > 0$, such that for $\theta > \theta_1$ $\int_{\theta' > \theta_0}q(\theta' | \theta) d\theta' \le \epsilon$. There also exists $\theta_2 > 0$, such that for $\theta > \theta_2$ and any $\theta'$,  $\sum_{w \le W_0}\frac{\tilde{\Omega}(\theta,\theta')^{w}}{w!}\exp(-\tilde{\Omega}(\theta,\theta')\tau) < \epsilon$. For $\theta > \max(\theta_0, \theta_1, \theta_2)$, we have
+%\begin{align*}
+%\tilde{I}_{1,\E^c_\epsilon} &\le \Omega(\theta_0) \int_{\theta' > \theta_0}q(\theta' | \theta) d\theta' + \int_{\theta' > \theta_0} \Omega(\theta') q(\theta' | \theta) [ \sum_{w \le W_0}\frac{\tilde{\Omega}(\theta,\theta')^{w}}{w!}\exp(-\tilde{\Omega}(\theta,\theta')\tau)]d\theta'\\
+%& \le  \Omega(\theta_0) \epsilon + \int_{\Theta} \Omega(\theta') q(\theta' | \theta)\epsilon d\theta' \\
+%& \le \Omega(\theta_0) \epsilon + \eta_0 \Omega(\theta)\epsilon \\
+%& \le (1 + \eta_0) \Omega(\theta)\epsilon
+%\end{align*}
+$$\int d\theta' \Omega(\theta') I_1 = \tilde{I}_{1,\E_\epsilon} + \tilde{I}_{1,\E^c_\epsilon}.$$
+For $\tilde{I}_{1,\E_\epsilon}$, we bound the acceptance probability by $\alpha_I + \epsilon$ to get 
 \begin{align*}
 \tilde{I}_{1,\E_\epsilon} &= \int_{\E_\epsilon} I_1 \Omega(\theta') d\theta'\\
 & \leq \int_{\E_\epsilon} \Omega(\theta')q(\theta' | \theta) (\alpha_I(\theta, \theta', X) + \epsilon) d\theta' \\
 & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta' + \eta_0 \epsilon \Omega(\theta)
 \end{align*}
-For the second one, from assumption \ref{asmp:integ_bound}, there exists $\eta_0 , \theta_0 > 0$ such that for $\theta \in B_{0, \theta_0}^c$, we have 
+For $\tilde{I}_{1,\E^c_\epsilon}$, from assumption \ref{asmp:integ_bound}, there exists $\eta_1 , \theta_3 > 0$ such that for $\theta \in B_{0, \theta_3}^c$, we have 
 \begin{align*}
-\int_\Theta \Omega(\nu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2.
+\int_\Theta \Omega(\nu)^2 q(\nu | \theta)d\nu \leq \eta_1 \Omega(\theta)^2.
 \end{align*}
-So, from Cauchy inequality, we have 
+So, by Cauchy inequality and bounding the acceptance probability by one, we have 
 \begin{align*}
 \tilde{I}_{1,\E_\epsilon^c}^2 &=  \left[  \int_{\E_\epsilon^c} I_1 \Omega(\theta') d\theta' \right]^2 \\
 & \le \left[  \int_{\E_\epsilon^c}  \Omega(\theta') q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \right]^2\\
 & \le \int_{\E_\epsilon^c}  \Omega(\theta')^2 q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \cdot \int_{\E_\epsilon^c} q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \\
 & \le  \int  \Omega(\theta')^2 q(\theta' | \theta)d\theta' \cdot \epsilon \\
-& \le  \eta_0 \Omega(\theta)^2 \epsilon.
+& \le  \eta_1 \Omega(\theta)^2 \epsilon.
 \end{align*}
 So we have 
 \begin{align*}
-\tilde{I}_{1,\E_\epsilon^c} \le \sqrt{\eta_0}\Omega(\theta) \sqrt{\epsilon}.
+\tilde{I}_{1,\E_\epsilon^c} \le \sqrt{\eta_1}\Omega(\theta) \sqrt{\epsilon}.
 \end{align*}
-Then for $\theta > \max(\theta_0, \theta_1, \theta_2)\doteq \theta_\epsilon$, we have the following. 
+Then for $\theta > \max(\theta_0, \theta_1, \theta_2, \theta_3)\doteq \theta_\epsilon$, we have the following. 
 \begin{align*}
   \int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)  
   &= \tilde{I}_{1,\E_\epsilon} + \tilde{I}_{1,\E^c_\epsilon} + I_{2,\E_{\epsilon}} + I_{2,\E_{\epsilon}^c} \\
-  & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta'  + \int d\nu q(\nu | \theta) (1 - \alpha_I(\theta, \nu | X)) + (3 + 2\eta_0) \Omega(\theta) \epsilon\\
-  & \leq (1 - \rho) \Omega(\theta) + (3 + 2\eta_0) \Omega(\theta) \epsilon
+  & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta'  + \int d\nu q(\nu | \theta) (1 - \alpha_I(\theta, \nu | X)) + \\
+  &\sqrt{\eta_1}\Omega(\theta) \sqrt{\epsilon} +  \eta_0 \epsilon \Omega(\theta) + \epsilon \Omega(\theta)\\
+  & \leq (1 - \rho) \Omega(\theta) + \sqrt{\eta_1}\Omega(\theta) \sqrt{\epsilon} +  \eta_0 \epsilon \Omega(\theta) + \epsilon \Omega(\theta)
 \end{align*}
-For $\theta > \theta_\epsilon$, we have
+For $\theta > \theta_\epsilon$, we have \boqian{need to change afterwards}
 \begin{align*}
 \mathbb{E}[\lambda_1 | W'| + \Omega(\theta')| W, \theta, \vartheta, X] & \le \lambda_1(1 - \delta_1)|W| + \lambda_1 \tau (1 + \eta_0)\Omega(\theta) +  (1 - \rho) \Omega(\theta) + (3 + 2\eta_0) \Omega(\theta) \epsilon\\
 & = (1 - \delta_1)\lambda_1 |W| + [1 - (\rho - \lambda_1 \tau (1 + \eta_0) - (3 + 2\eta_0)\epsilon)]\Omega(\theta) 
