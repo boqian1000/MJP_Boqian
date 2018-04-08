@@ -406,9 +406,9 @@ any $\theta,\vartheta, W$.
  \theta, \vartheta)} \\
 &=\sum_v \frac{P(X | V_i = V_{i + 1} = v, W, \theta, \vartheta)P( V_i =
 V_{i + 1} = v|W, \theta, \vartheta)}{P(X | W, \theta, \vartheta)}\\
-& \geq \frac{\eta_1}{\xi_1}\sum_v P(V_i = V_{i + 1} = v | W, \theta, \vartheta)\\
-&=  \frac{\eta_1}{\xi_1} \sum_v P(V_{i + 1} = v | V_i = v, W, \theta,\vartheta)P(V_i = v | \theta, \vartheta) \\
-& \geq \frac{\eta_1}{\xi_1} (1-\frac{1}{k}) \doteq \delta_1 > 0
+& \geq \frac{\lb}{\ub}\sum_v P(V_i = V_{i + 1} = v | W, \theta, \vartheta)\\
+&=  \frac{\lb}{\ub} \sum_v P(V_{i + 1} = v | V_i = v, W, \theta,\vartheta)P(V_i = v | \theta, \vartheta) \\
+& \geq \frac{\lb}{\ub} (1-\frac{1}{k}) \doteq \delta_1 > 0
 \end{align*}
 \end{proof}
 
@@ -468,19 +468,19 @@ q(\theta|\theta')p(\theta')}{P(X | W', \theta, \theta')q(\theta'|\theta)p(\theta
 &= 1 \wedge \frac{P(X|W', \theta', \theta) / P(X|\theta')}{P(X|W', \theta,
 \theta') / P(X|\theta)} \cdot \frac{P(X | \theta')
 q(\theta|\theta')p(\theta')}{P(X | \theta)q(\theta'|\theta)p(\theta)}\\
-& \geq 1 \wedge \frac{\eta_1^2}{\xi_1^2} \cdot 	\frac{P(X | \theta')
+& \geq 1 \wedge \frac{\lb^2}{\ub^2} \cdot 	\frac{P(X | \theta')
 q(\theta|\theta')p(\theta')}{P(X | \theta)q(\theta'|\theta)p(\theta)}\\
-& \geq \alpha_I(\theta', \theta;X)\frac{\eta_1^2}{\xi_1^2}
+& \geq \alpha_I(\theta', \theta;X)\frac{\lb^2}{\ub^2}
 \numberthis
 \label{eq:acc}
 \end{align*}
 By assumption \ref{asmp:ideal_geom}, we have the following inequality.
 \begin{align*}
-P(W', \theta',\vartheta' | W, \theta, \vartheta)  &\ge \frac{\eta_1^2 }{\xi_1^2}\delta_1^{h}
+P(W', \theta',\vartheta' | W, \theta, \vartheta)  &\ge \frac{\lb^2 }{\ub^2}\delta_1^{h}
 \exp(-M(t_{end}-t_{start}))\delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta')) \\
 & \alpha_I(\theta', \theta;X)q(\theta'|\theta)\\
-  &\boqian{? \text{assumption 3 should be stronger.}}\\
-  & \geq \frac{\eta_1^2 }{\xi_1^2}\delta_1^{h}
+  &\boqian{? \text{assumption 4 should be stronger.}}\\
+  & \geq \frac{\lb^2 }{\ub^2}\delta_1^{h}
 \exp(-M(t_{end}-t_{start}))\kappa_1\delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta') \\
   & \doteq \rho_1 \delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta')
   \intertext{The two-step transition probability is given by}
