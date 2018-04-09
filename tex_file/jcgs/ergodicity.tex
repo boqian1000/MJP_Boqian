@@ -32,14 +32,14 @@ The uniformization-rate is set as $\Omega(\theta, \vartheta) = \Omega(\theta) +
 \Omega(\vartheta)$, where %$A$ is the rate matrix of the Markov jump process and 
 $\Omega(\theta) = k_1 \max_s |A_{ss}(\theta)| + k_0$, for some 
 $k_1 \ge 1, k_0 > 0$.
-\label{def:poisson-rate}
+\label{asmp:unif_rate}
 \end{assumption}
 %If $\inf_\theta \Mx{\theta} > 0$ (as is often the case),
 % we can just set $\Omega(\theta) = \Mx{\theta} + \mx{\theta}$ so that
 % $m_2 = \frac{1}{1+\mu}$.}
 Although it is possible to specify broader conditions under which our 
-result holds, for clarity we focus on this case. This is how we 
-setup our sampler in our experiments, and also what we recommend.
+result holds, for clarity we focus on this case. This is also how we 
+setup our sampler in our experiments.
 
 \begin{assumption}
   There exists a positive constant $\theta_1$ such that $\forall$ $\theta_x, \theta_y$ satisfying
@@ -50,8 +50,8 @@ setup our sampler in our experiments, and also what we recommend.
 \noindent Proving our result when $\Omega(\theta)$ is bounded is 
 easy. %This assumption usually holds under suitable reparametrization,
 %and is not critical: we impose 
-When this is not the case, this assumption avoids book-keeping for 
-when $\Omega(\theta)$ does not increase monotonically with $\theta$.
+When this is not the case, this assumption avoids book-keeping by making 
+$\Omega(\theta)$ increase monotonically with $\theta$.
 
 \begin{definition}
 Let $\pi_\theta$ be the stationary distribution of the MJP with rate-matrix 
@@ -61,9 +61,9 @@ $\tilde{A}(\theta) = D_\theta^{-1}A(\theta)D_\theta$, and the
 (A(\theta)+\tilde{A}(\theta))/2$. 
 \label{def:mjp_symm}
 \end{definition}
-This definition is from~\cite{fill1991}, who shows that the matrix 
+This definition is from~\cite{fill1991}, who show that the matrix 
 $R_A(\theta)$ is reversible with real eigenvalues, the smallest being $0$. 
-The larger the second smallest, the faster the MJP converges to its 
+The larger the second smallest eigenvalue, the faster the MJP converges to its 
 stationary distribution $\pi_\theta$.
 Note that if the original MJP is reversible, then $R_A(\theta) = A(\theta)$.
 \begin{assumption}
@@ -92,11 +92,11 @@ $\theta$ at similar rates.
 %rules 
 %out any state $s'$ such that 
 %$\frac{|A_{s's'}(\theta)}{\max_s A_{ss}(\theta)}| \rightarrow 0$ as $\theta$ increases.
-While not a trivial assumption, it holds for the examples we 
+While not trivial, it holds for the examples we 
 considered. %One open question is whether this assumption is necessary.
-We suspect that assumption~\ref{asmp:ideal_geom}, which requires 
-the ideal sampler to be geometrically ergodic, implies this condition,
-however we do not try to prove it here.
+%We suspect that assumption~\ref{asmp:ideal_geom}, which requires 
+%the ideal sampler to be geometrically ergodic, implies this condition,
+%however we do not try to prove it here.
 %is not sufficient to ensure that $ $ is a 
 %stronger requirement, ensures
 %parameters of interest\boqian{?: the most
@@ -117,7 +117,7 @@ however we do not try to prove it here.
 Let $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$
 be the transition matrix of the embedded Markov chain, and note that 
 it has the same stationary distribution $\pi_\theta$ as $A(\theta)$.
-Define the reversibilization $R_B(\theta,\theta)$ from $B(\theta,\theta')$ 
+Define the reversibilization $R_B(\theta,\theta')$ from $B(\theta,\theta')$ 
 just as we did $R_A(\theta)$ from $A(\theta)$. 
 \begin{lemma}
   Suppose $\theta > \max (\theta_0, \theta_1)$ and $\theta'$ satisfies 
@@ -128,7 +128,7 @@ distribution
 %The second largest eigenvalue $\lambda^2_B(\theta,\theta')$ of $R_B$ and  
 %second smallest eigenvalue $\lambda^2_B(\theta,\theta')$ of $R_B$ satisfy  
 %$\lambda^2_B(\theta,\theta') = 1 - \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')}$.
-at a rate bounded away from $0$.
+at rates uniformly bounded away from $0$.
   \label{lem:eig_lemma}
 \end{lemma}
 \begin{proof}
@@ -146,11 +146,14 @@ second smallest eigenvalue $\lambda^2_A(\theta,\theta')$ of $R_A$ satisfy
 $\lambda^2_B(\theta,\theta') = 1 - \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')}$.
 Then $1 - \lambda^2_B(\theta,\theta') = \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')} 
 \ge \frac{\lambda^2_A(\theta)}{(K_0+1)\Omega(\theta)} 
-\ge \frac{\mu}{K_0+1} $. Following~\cite{fill1991}, this bound on the 
+\ge \frac{\mu}{K_0+1} $. The last two inequalities follow from 
+assumptions~\ref{asmp:unif_rate} and~\ref{asmp:cond_num}. 
+Following~\cite{fill1991}, this bound on the 
 eigenvalue gap of $R_B(\theta,\theta')$ gives the result.
+\qed
 \end{proof}
 
-Our proof strategy is to show that for $\theta$ and $W$ large enough, 
+Our overall proof strategy is to show that for $\theta$ and $W$ large enough, 
 the condition $\Omega(\theta') \le K_0 \Omega(\theta)$ holds with 
 high probability. Lemma~\ref{lem:eig_lemma} then allows the distribution 
 over latent states for the continuous-time MJP and its discrete-time 
@@ -218,8 +221,8 @@ clarity.
 
 
 \begin{assumption}
-$\exists$ $ \xi_1 > \eta_1 > 0$ s.t.
-$\prod P(x_o | s_o, \theta) \in [\lb, \ub]$ for any state $s_o$ and $\theta$.%\vinayak{Is this for all $s_o$?}
+$\exists$ $ \ub > \lb > 0$ s.t.
+$\prod P(X | s_o, \theta) \in [\lb, \ub]$ for any state $s_o$ and $\theta$.%\vinayak{Is this for all $s_o$?}
   \label{asmp:obs_bnd}
 \end{assumption}
 \noindent This assumption follows~\cite{miasojedow2017}, and holds if
@@ -397,7 +400,7 @@ any $\theta,\vartheta, W$.
   \begin{align*}
     P(V_{i + 1}=s|V_i=s,\theta,\vartheta) &= B_{ss}(\theta,\theta') =
     1 - \frac{A_{s}(\theta)}{\Omega(\theta, \vartheta)}
-    \ge 1 - \frac{A_{s}(\theta)}{\Omega(\theta)} \ge 1-\frac{1}{k}.
+    \ge 1 - \frac{A_{s}(\theta)}{\Omega(\theta)} \ge 1-\frac{1}{k_0}.
     \intertext{  We then have}
 %\mathbb{E}[\mathbb{I}_{\{V_i = V_{i + 1}\}} | W, X, \theta, \theta^*]
   P(V_i = V_{i + 1} | W, X, \theta, \vartheta) &= \sum_v P(V_i = V_{i + 1}
@@ -408,7 +411,7 @@ any $\theta,\vartheta, W$.
 V_{i + 1} = v|W, \theta, \vartheta)}{P(X | W, \theta, \vartheta)}\\
 & \geq \frac{\lb}{\ub}\sum_v P(V_i = V_{i + 1} = v | W, \theta, \vartheta)\\
 &=  \frac{\lb}{\ub} \sum_v P(V_{i + 1} = v | V_i = v, W, \theta,\vartheta)P(V_i = v | \theta, \vartheta) \\
-& \geq \frac{\lb}{\ub} (1-\frac{1}{k}) \doteq \delta_1 > 0
+& \geq \frac{\lb}{\ub} (1-\frac{1}{k_0}) \doteq \delta_1 > 0
 \end{align*}
 \end{proof}
 
