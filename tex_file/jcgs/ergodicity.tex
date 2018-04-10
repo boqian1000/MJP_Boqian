@@ -31,7 +31,7 @@ of our proof.
 The uniformization-rate is set as $\Omega(\theta, \vartheta) = \Omega(\theta) + 
 \Omega(\vartheta)$, where %$A$ is the rate matrix of the Markov jump process and 
 $\Omega(\theta) = k_1 \max_s |A_{ss}(\theta)| + k_0$, for some 
-$k_1 \ge 1, k_0 > 0$.
+$k_1 \ge 2, k_0 > 0$.
 \label{asmp:unif_rate}
 \end{assumption}
 %If $\inf_\theta \Mx{\theta} > 0$ (as is often the case),
@@ -43,7 +43,7 @@ setup our sampler in our experiments.
 
 \begin{assumption}
   There exists a positive constant $\theta_1$ such that $\forall$ $\theta_x, \theta_y$ satisfying
-  $\| \theta_x \| > \| \theta_y \| > \theta_1$, we
+  $\| \theta_x \| \ge \| \theta_y \| > \theta_1$, we
   have $\Omega(\theta_x) \ge \Omega(\theta_y)$.
   \label{asmp:mono_tail}
 \end{assumption}
@@ -66,6 +66,11 @@ $R_A(\theta)$ is reversible with real eigenvalues, the smallest being $0$.
 The larger the second smallest eigenvalue, the faster the MJP converges to its 
 stationary distribution $\pi_\theta$.
 Note that if the original MJP is reversible, then $R_A(\theta) = A(\theta)$.
+
+\begin{assumption}
+For the stationary distribution $\pi_\theta$, there exists $\pi_0 > 0$, such that $\inf_{\theta, s} \pi_{\theta}(s) > \pi_0$.
+\label{asmp:stationary_dist_lower_bound}
+\end{assumption}
 \begin{assumption}
 %  The rate-matrix $A(\theta)$ is ergodic for all $\theta$ and satisfies
  % $\inf_\theta \frac{\mx{\theta}}{\Mx{\theta}} = \mu > 0$.
@@ -395,7 +400,7 @@ any $\theta,\vartheta, W$.
 \label{prop:self_tr}
 \end{proposition}
 \begin{proof}
-  We use $k_0$ from assumption~\ref{def:poisson-rate}
+  We use $k_0$ from assumption~\ref{asmp:unif_rate}
   to bound {\em a priori} self-transition probabilities:
   \begin{align*}
     P(V_{i + 1}=s|V_i=s,\theta,\vartheta) &= B_{ss}(\theta,\theta') =
@@ -871,11 +876,11 @@ Integrate out $W'$, then we get the following.
   &\hspace{-1.3in}\left.  + \int q(\nu | \theta) \sum_{S,T} P(S, T |  W, \theta, \vartheta,
 X)P(W' | S, T, \theta, \nu) ( 1 - \alpha(\theta, \nu | W', X))d\nu
 \delta_\theta(\theta')\right] \\
-&:= d\theta' I_1(W, \theta, \vartheta) + \delta_\theta(\theta')I_2(W, \theta, \vartheta)
+&:= d\theta' I_1(W, \theta', \theta, \vartheta) + \delta_\theta(\theta')I_2(W, \theta, \vartheta)
 \end{align*}
 We denote the transition density of $W$, $\sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')$, as $P(W' | W, \theta, \vartheta, \theta', X)$. So we have
 \begin{align*}
-&I_1(W, \theta, \vartheta) = q(\theta' | \theta)\int dW'P(W' | W, \theta, \vartheta, \theta', X)\alpha(\theta, \theta' | W', X); \\
+&I_1(W, \theta', \theta, \vartheta) = q(\theta' | \theta)\int dW'P(W' | W, \theta, \vartheta, \theta', X)\alpha(\theta, \theta' | W', X); \\
 &I_2(W, \theta, \vartheta) =\int d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu | W', X)).
 \end{align*}
 
@@ -910,7 +915,7 @@ We denote the transition density of $W$, $\sum_{S,T} P(S, T | W, \theta, \varthe
 %      \theta)\alpha_I(\theta, \nu) d\nu\right)\delta_\theta(\theta')\right]
 %      \numberthis \label{eq:nu1}
 \begin{align*}
-I_{2,\E_{\epsilon}} &= \int_{\E_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu | W', X)) \\
+I_{2,\E_{\epsilon}}(W, \theta, \vartheta) &= \int_{\E_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu | W', X)) \\
 &\le \int_{\E_\epsilon}d\nu dW' q(\nu | \theta)
   P(W' | W, \theta, \vartheta, \nu, X)  [ 1 - (\alpha_I(\theta, \nu | X)-\epsilon)] \\
 &\le d\nu \int dW'  q(\nu | \theta)
@@ -918,7 +923,7 @@ I_{2,\E_{\epsilon}} &= \int_{\E_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \t
   [ 1 - (\alpha_I(\theta, \nu | X)-\epsilon)] \\
   &\le (1+\epsilon)  - \int  q(\nu | \theta) \alpha_I(\theta, \nu | X) d\nu, \\
  & \text{while bounding the acceptance rate by 1,} \\
-  I_{2,\E_{\epsilon}^c}  &= \int_{\E^c_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu | W', X)) \\
+  I_{2,\E_{\epsilon}^c}(W, \theta, \vartheta)  &= \int_{\E^c_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu | W', X)) \\
   &\le \int_{\E^c_{\epsilon}} d\nu dW'
   q(\nu | \theta) P(W' | W, \theta, \vartheta, \nu, X) \\
  &= \int_{\E^c_{\epsilon}} d\nu dW'
@@ -961,7 +966,7 @@ I_{2,\E_{\epsilon}} &= \int_{\E_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \t
 Finally, we have
 \begin{align*}
   \int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)
-  &= \int d\theta' \Omega(\theta') I_1 + I_2 \Omega(\theta)
+  &= \int d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta) + I_2(W, \theta, \vartheta) \Omega(\theta)
 \end{align*}
 Again, the first term involves an integral over $(\theta',W')$ which as
 before, we divide into two regions $\E_\epsilon$ and its complement
@@ -984,24 +989,24 @@ $\E^c_\epsilon$.
 %& \le \Omega(\theta_0) \epsilon + \eta_0 \Omega(\theta)\epsilon \\
 %& \le (1 + \eta_0) \Omega(\theta)\epsilon
 %\end{align*}
-$$\int d\theta' \Omega(\theta') I_1 =
-\int_{\E_\epsilon} d\theta' \Omega(\theta') I_1 +
-\int_{\E_\epsilon^c} d\theta' \Omega(\theta') I_1.
+$$\int d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta) =
+\int_{\E_\epsilon} d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta) +
+\int_{\E_\epsilon^c} d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta).
   $$
 For the first term, by corollary \ref{corol:integ_bound}, and bounding
 the acceptance probability by $\alpha_I + \epsilon$ we get, for $\theta$ satisfying $ \| \theta \| > \theta_3$,
 \begin{align*}
-\int_{\E_\epsilon} d\theta' \Omega(\theta') I_1  &
+\int_{\E_\epsilon} d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta)  &
  \leq \int_{\E_\epsilon} \Omega(\theta')q(\theta' | \theta) (\alpha_I(\theta, \theta', X) + \epsilon) d\theta' \\
 & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta' + \eta_1 \epsilon \Omega(\theta)
 \end{align*}
-For $\tilde{I}_{1,\E^c_\epsilon}$, from assumption \ref{asmp:integ_bound}, there exists $\eta_0 , \theta_2 > 0$ such that for $\theta$ satisfying $ \| \theta \| > \theta_2$, we have
+For $\int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta'$, from assumption \ref{asmp:integ_bound}, there exists $\eta_0 , \theta_2 > 0$ such that for $\theta$ satisfying $ \| \theta \| > \theta_2$, we have
 \begin{align*}
 \int_\Theta \Omega(\nu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2.
 \end{align*}
 So, by Cauchy–Schwarz inequality and bounding the acceptance probability by one, we have
 \begin{align*}
-\left[  \int_{\E_\epsilon^c} I_1 \Omega(\theta') d\theta' \right]^2
+\left[  \int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta' \right]^2
 & \le \left[  \int_{\E_\epsilon^c}  \Omega(\theta') q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \right]^2\\
 & \le \int_{\E_\epsilon^c}  \Omega(\theta')^2 q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \cdot \int_{\E_\epsilon^c} q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \\
 & \le  \int  \Omega(\theta')^2 q(\theta' | \theta)d\theta' \cdot \epsilon \\
@@ -1009,12 +1014,12 @@ So, by Cauchy–Schwarz inequality and bounding the acceptance probability by on
 \end{align*}
 So we have
 \begin{align*}
-\tilde{I}_{1,\E_\epsilon^c} \le \sqrt{\eta_0}\Omega(\theta) \sqrt{\epsilon}.
+\int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta' \le \sqrt{\eta_0}\Omega(\theta) \sqrt{\epsilon}.
 \end{align*}
 Then for $\theta$ satisfying $ \| \theta \| >\max(\theta_2, \theta_3, \theta_\epsilon)$, we have the following.
 \begin{align*}
   \int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)
-  &= \tilde{I}_{1,\E_\epsilon} + \tilde{I}_{1,\E^c_\epsilon} + I_{2,\E_{\epsilon}} + I_{2,\E_{\epsilon}^c} \\
+  &= \int_{\E_\epsilon} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta' + \int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta' \\ &+ I_{2,\E_{\epsilon}}(W, \theta, \vartheta) + I_{2,\E_{\epsilon}^c}(W, \theta, \vartheta) \\
   & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta'| X) d\theta'  + \Omega(\theta)\int  q(\nu | \theta) (1 - \alpha_I(\theta, \nu | X)) d\nu+ \\
   &\sqrt{\eta_0}\Omega(\theta) \sqrt{\epsilon} +  \eta_1 \epsilon \Omega(\theta) + 2\epsilon \Omega(\theta)\\
   & \leq (1 - \rho) \Omega(\theta) + (\sqrt{\eta_0} \sqrt{\epsilon} +  \eta_1 \epsilon + 2\epsilon) \Omega(\theta)
