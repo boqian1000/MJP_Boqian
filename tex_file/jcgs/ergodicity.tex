@@ -601,7 +601,7 @@ brought aribtrarily close.
 Then for any $W$ with $\mW > w_0$, we have
 \begin{align*}
 |P(X|W , \theta, \theta') - P_{st}(X | \theta)| &= | \sum_{V_X} P(X|V_X, \theta)(P_B(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta))|\\
-& \leq |\sum_{V_X} P(X | V_X, \theta)|P_B(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta)|\\
+& \leq \sum_{V_X} P(X | V_X, \theta)|P_B(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta)|\\
 & \leq \sum_{V_X} P(X | V_X, \theta){\epsilon'}\\
 & \leq N \| X \| \xi_1\epsilon' := \epsilon''
 \end{align*}
