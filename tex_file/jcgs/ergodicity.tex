@@ -31,7 +31,7 @@ of our proof.
 The uniformization-rate is set as $\Omega(\theta, \vartheta) = \Omega(\theta) + 
 \Omega(\vartheta)$, where %$A$ is the rate matrix of the Markov jump process and 
 $\Omega(\theta) = k_1 \max_s |A_{ss}(\theta)| + k_0$, for some 
-$k_1 \ge 2, k_0 > 0$.
+$k_1 > 1, k_0 > 0$.
 \label{asmp:unif_rate}
 \end{assumption}
 %If $\inf_\theta \Mx{\theta} > 0$ (as is often the case),
@@ -42,8 +42,8 @@ result holds, for clarity we focus on this case. This is also how we
 setup our sampler in our experiments.
 
 \begin{assumption}
-  There exists a positive constant $\theta_1$ such that $\forall$ $\theta_x, \theta_y$ satisfying
-  $\| \theta_x \| \ge \| \theta_y \| > \theta_1$, we
+  There exists a positive constant $\theta_0$ such that $\forall$ $\theta_x, \theta_y$ satisfying
+  $\| \theta_x \| \ge \| \theta_y \| > \theta_0$, we
   have $\Omega(\theta_x) \ge \Omega(\theta_y)$.
   \label{asmp:mono_tail}
 \end{assumption}
@@ -78,9 +78,9 @@ For the stationary distribution $\pi_\theta$, there exists $\pi_0 > 0$, such tha
 %  $|\theta| > |\hat{\theta}|$, we have $\Mx{\theta} \asymp
 %  \mx{\theta}$.
 	Writing $\lambda ^A_2(\theta)$ for the second smallest eigenvalue of
-    matrix  $R_A(\theta)$, there exist constants $\mu > 0$ and $\theta_0 > 0$
+    matrix  $R_A(\theta)$, there exist constants $\mu > 0$ and $\theta_1 > 0$
     such that $ \lambda ^A_2(\theta) \geq \mu \Omega(\theta)$
-   for all $\theta$ satisfying $ \| \theta \|> \theta_0$.
+   for all $\theta$ satisfying $ \| \theta \|> \theta_1$.
   \label{asmp:cond_num}
 \end{assumption} 
 \noindent %This is the strongest assumption needed to prove our result;
@@ -126,14 +126,13 @@ Define the reversibilization $R_B(\theta,\theta')$ from $B(\theta,\theta')$
 just as we did $R_A(\theta)$ from $A(\theta)$. 
 \begin{lemma}
   Suppose $\theta > \max (\theta_0, \theta_1)$ and $\theta'$ satisfies 
-$\Omega(\theta') \le K_0 \Omega(\theta)$ for some $K_0 > 0$. 
-  For all such $(\theta,\theta')$, the Markov chain with transition 
-matrix $B(\theta,\theta')$ converges geometrically to its stationary 
-distribution
+$\frac{1}{K_0} \le \frac{\Omega(\theta)'}{\Omega(\theta)} \le K_0 $ for some $K_0 > 0$, which satisfies $(1 + \frac{1}{K_0})k_1 > 2$. 
+For all such $(\theta,\theta')$, the Markov chain with transition matrix $B(\theta,\theta')$ converges geometrically to its stationary 
+distribution at rates uniformly bounded away from $0$.
 %The second largest eigenvalue $\lambda^2_B(\theta,\theta')$ of $R_B$ and  
 %second smallest eigenvalue $\lambda^2_B(\theta,\theta')$ of $R_B$ satisfy  
 %$\lambda^2_B(\theta,\theta') = 1 - \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')}$.
-at rates uniformly bounded away from $0$.
+
   \label{lem:eig_lemma}
 \end{lemma}
 \begin{proof}
@@ -152,9 +151,14 @@ $\lambda^2_B(\theta,\theta') = 1 - \frac{\lambda^2_A(\theta)}{\Omega(\theta, \th
 Then $1 - \lambda^2_B(\theta,\theta') = \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')} 
 \ge \frac{\lambda^2_A(\theta)}{(K_0+1)\Omega(\theta)} 
 \ge \frac{\mu}{K_0+1} $. The last two inequalities follow from 
-assumptions~\ref{asmp:unif_rate} and~\ref{asmp:cond_num}. 
-Following~\cite{fill1991}, this bound on the 
-eigenvalue gap of $R_B(\theta,\theta')$ gives the result.
+assumptions~\ref{asmp:unif_rate} and~\ref{asmp:cond_num}. \\
+Also, we have
+\begin{align*}
+\Omega(\theta, \theta') &= \Omega(\theta) + \Omega(\theta') > (1 + \frac{1}{K_0})\Omega(\theta)\\
+& > (1 + \frac{1}{K_0})k_1\max_s |A_{ss}(\theta)| > 2\max_s |A_{ss}(\theta)| %\ge -2 A(\theta)_{s,s}.
+\end{align*}
+So for any state $s$, the diagonal element $B(\theta, \theta')_{s,s} = 1 + \frac{A(\theta)_{s,s}}{\Omega(\theta, \theta')}> \frac{1}{2}$.
+Following~\cite{fill1991}, this bound on the eigenvalue gap of $R_B(\theta,\theta')$ gives the result.
 \qed
 \end{proof}
 
@@ -181,6 +185,9 @@ every
 $M$, i.e.\ there exists a probability measure $\phi$ and a constant
 $\kappa_1 > 0$ s.t.\ % $q(\nu | \theta) \alpha_I(\theta, \nu)
 $p_I(\theta'|\theta) \geq \kappa_1 \phi(\theta')$ for $\theta \in \SM_M$, \\
+\boqian{
+$\alpha_I(\theta', \theta; X) q(\theta' | \theta) \ge \kappa_1 \phi(\theta')$?
+}\\
 ii) for $M$ large enough, $\exists \rho < 1$ s.\ t.\
 $\int \Omega(\nu) p_I(\nu|\theta) d\nu
 \leq (1-\rho) \Omega(\theta)+C$, $\forall \theta \not\in \SM_M$.
@@ -280,9 +287,9 @@ So for $\theta$ satisfying $\| \theta \|  > \theta_2$, we have $\int_\Theta \Ome
 
 We need two further assumptions on the proposal distribution $q(\theta'|\theta)$.
 \begin{assumption}
-For any positive $\epsilon > 0$, there exists $\theta_4$ and $K$
-such that $P(\frac{p(\theta')q(\theta|\theta')}{p(\theta)q(\theta'|\theta)} \le K | \theta) > 1 - \epsilon$,
-for $\theta$ satisfying $\| \theta \|  > \theta_4$.
+For any positive $\epsilon$,  there exist $M_\epsilon$ and $\theta_{4,\epsilon} > 0$,
+such that $P(\frac{p(\theta')q(\theta|\theta')}{p(\theta)q(\theta'|\theta)} \le M_\epsilon | \theta) > 1 - \epsilon$,
+for $\theta$ satisfying $\| \theta \|  > \theta_{4,\epsilon}$.
   \label{asmp:prior}
 \end{assumption}
 This holds in our experiments, where $p(\theta)$ is a gamma distribution,
@@ -307,11 +314,12 @@ and $q(\theta'|\theta)$, Gaussian.
 %\end{assumption}
 
 \begin{assumption}
-For any positive $\epsilon > 0$, there exists $\theta_5 > 0$ and $M > 1$, such that $P(\frac{\Omega(\theta')}{\Omega(\theta)} \in [1/M, M] | \theta) > 1 - \epsilon$, for $\theta$ satisfying $\| \theta \|  > \theta_5$.
+For any positive $\epsilon > 0$, there exists $K_\epsilon > 1$ and $\theta_{5,\epsilon}> 0$, such that $P(\frac{\Omega(\theta')}{\Omega(\theta)} \in [1/K_\epsilon, K_\epsilon] | \theta) > 1 - \epsilon$, for $\theta$ satisfying $\| \theta \|  > \theta_{5,\epsilon}$.
   \label{asmp:omega}
 \end{assumption}
 This holds when $q(\theta'|\theta)$ is a centered on $\theta$ and has 
 finite variance.
+
 %\begin{proof}
 %From the assumptoin, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$.
 %\begin{align*}
@@ -334,6 +342,12 @@ finite variance.
 %For the above $C \subseteq \Theta$, $\exists$ $\bar{\Omega} > 0$ s.t.
 %$\Omega(\theta)  \leq \bar{\Omega}$ for $\forall \theta \in C$.
 %\end{assumption}
+
+\begin{definition}
+Given $K > 1$, $\epsilon > 0$, define $\theta_{K, M}^\epsilon$ as $\max\{ \theta_0, \theta_1, \theta_2, \theta_3, \theta_4^\epsilon, \theta_{5, K}^\epsilon\}$.
+\label{def:constant}
+\end{definition}
+
 
 \begin{theorem}
 Under the above assumptions, our auxiliary variable sampler is
@@ -487,7 +501,7 @@ By assumption \ref{asmp:ideal_geom}, we have the following inequality.
 P(W', \theta',\vartheta' | W, \theta, \vartheta)  &\ge \frac{\lb^2 }{\ub^2}\delta_1^{h}
 \exp(-M(t_{end}-t_{start}))\delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta')) \\
 & \alpha_I(\theta', \theta;X)q(\theta'|\theta)\\
-  &\boqian{? \text{assumption 4 should be stronger.}}\\
+  &\boqian{? \text{assumption \ref{asmp:ideal_geom} should be stronger.}}\\
   & \geq \frac{\lb^2 }{\ub^2}\delta_1^{h}
 \exp(-M(t_{end}-t_{start}))\kappa_1\delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta') \\
   & \doteq \rho_1 \delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta')
@@ -533,13 +547,13 @@ than $\Omega(\theta')$ by a sufficient factor.
 
 \begin{lemma}
 %Consider two successive observations, separated by time $t_{diff}$, and
-Suppose $\theta$ and $\theta'$ satisfy $\Omega(\theta') \leq K_0
-\Omega(\theta)$ for some $K_0 > 0$. Write $\mW$ for the
+Suppose $\theta$ and $\theta'$ satisfy $\frac{1}{K_0} \le \frac{\Omega(\theta)}{\Omega(\theta)}\Omega(\theta') \leq K_0
+$ for some $K_0 > 0$ which satisfies $(1 + \frac{1}{K_0})k_1 > 2$. Write $\mW$ for the
 minimum number of grid points between two successive observations.
 %$\| \theta'  - \theta \| \leq h$
-For any $\epsilon > 0$, there exist  $w_0, \theta_6 > 0$ such that
+For any $\epsilon > 0$, there exist  $w_{K_0}^\epsilon,  \theta_{6, K_0}^\epsilon > 0$ such that
 $|P(X| W, \theta, \theta') - P(X | \theta)| < \epsilon$
-for any $W$ with $\mW > w_0$ and $\theta $ satisfying $\| \theta \| > \theta_6$.
+for any $W$ with $\mW > w_{K_0}^\epsilon$ and $\theta $ satisfying $\| \theta \| > \theta_{6, K_0}^\epsilon > 0$.
 \label{lem:eigenvalue_lemma}
 \end{lemma}
 \begin{proof}
@@ -552,6 +566,9 @@ $\lambda_B(\theta, \theta') = 1 - \frac{\lambda_A(\theta)}{\Omega(\theta,
 \theta')}$, in particular, the second eigenvalue
 $\lambda^2_B(\theta,\theta')$ of $B$ (which determines its mixing
 properties) equals $1 - \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')}$.
+
+\boqian{From \ref{lem:eig_lemma}, For all such the Markov chain with transition matrix $B(\theta, \theta')$ converges geometrically to its stationary distribution $\pi_\theta$ at rates uniformly bounded away from 0.
+}
 Our proof strategy is to show that for $\theta$ and $W$ large enough, the
 distribution over latent states for the continuous-time MJP and
 its discrete-time counterpart embedded in $W$ can be brought arbitrarily
@@ -570,9 +587,9 @@ $\frac{\lambda^A_2(\theta)}{\Omega(\theta) + \Omega(\theta')} \geq
 \mu / (1 + K_0) $, implying that the second eigenvalue of
 $B(\theta, \theta')$ is bounded away from $1$.
 Thus for all $(\theta,\theta')$ satisfying the assumptions of the lemma,
-and for any initial state, the distribution over states after $w_0$ steps
+and for any initial state, the distribution over states after \boqian{$w_{K_0}$} steps
 can be brought arbitrarily close to the distribution under the
-stationary distribution by setting $w_0$ large enough.
+stationary distribution by setting \boqian{$w_{K_0}$} large enough.
 %any $\epsilon' > 0$, there exists a $w_0$ such that for all $W$
 %with $|W| > w_0$, we have $\| P^{|W|}(\cdot | W, \theta, \theta')
 %- P_{st}(\cdot | \theta)\|{\text{TV}} \leq
@@ -588,7 +605,7 @@ Let $P_B(V_X | W, \theta, \theta')$ be the probability distribution over
 $V_X$ under the Markov chain with transition matrix $B$ given the grid $W$.
 Let $P_{st}(V_X|\theta)$ be the probability of the same vector, sampled
 independently under the stationary distribution. So
-long as $\mW > w_0$ for large enough $w_0$,
+long as $\mW > \boqian{w_{K_0}^\epsilon}$ for large enough $\boqian{w_{K_0}^\epsilon}$,
 $P_B(V_X | W, \theta, \theta')$ and  $P_{st}(V_X | W, \theta)$ can be
 brought aribtrarily close.
 % Then,
@@ -598,7 +615,7 @@ brought aribtrarily close.
 % \end{align*}
 %  We also define the stationary likelihood as
 %  $$P_{st}(X | \theta) = \sum_{V_X} P(X | V_X, \theta) P_{st}(V_X | \theta).$$
-Then for any $W$ with $\mW > w_0$, we have
+Then for any $W$ with $\mW > \boqian{w_{K_0}^\epsilon}$, we have
 \begin{align*}
 |P(X|W , \theta, \theta') - P_{st}(X | \theta)| &= | \sum_{V_X} P(X|V_X, \theta)(P_B(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta))|\\
 & \leq \sum_{V_X} P(X | V_X, \theta)|P_B(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta)|\\
@@ -606,7 +623,7 @@ Then for any $W$ with $\mW > w_0$, we have
 & \leq N \| X \| \xi_1\epsilon' := \epsilon''
 \end{align*}
 %So for $W$ with $|W| > W_0$, we have  $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon / 4$. \\
-Using the same $w_0$ as before, we get a similar result for the
+Using the same \boqian{$w_{K_0}^\epsilon$} as before, we get a similar result for the
 continuous case. First,
 \begin{align*}
 P(X | \theta) &= \int_W dW P(X , W | \theta, \theta')\\
@@ -655,7 +672,7 @@ inequality,
  %\alpha(\theta,\vartheta,W',X)| \le \epsilon $.
 %Write $q(W', \theta' | W, \theta, \vartheta)$ for the proposal
 %distribution of our MCMC sampler.
-Then, for any $\epsilon$, there exists $\theta_\epsilon$ as well as a set a set $\E_\epsilon \subseteq \{(W', \theta'): |\alpha_I(\theta,\theta',X) - \alpha(\theta,\theta',W',X)| \le \epsilon\}$, such that for $\theta$ satisfying $\| \theta \| > \theta_\epsilon$ and any $\theta'$, we have
+Then, for any $\epsilon$, there exists $\theta_\epsilon > 0$ as well as a set $\E_\epsilon \subseteq \{(W', \theta'): |\alpha_I(\theta,\theta',X) - \alpha(\theta,\theta',W',X)| \le \epsilon\}$, such that for $\theta$ satisfying $\| \theta \| > \theta_\epsilon$ and any $\theta'$, we have
 %and $W_\epsilon > 0$, such that for
 %$\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
 %  $P(|W'| > W_\epsilon, \theta' > \theta_\epsilon  | W, \theta, \vartheta) \ge 1-\epsilon$.
@@ -668,39 +685,59 @@ $P(E_\epsilon|W,\theta,\theta') > 1-\epsilon$.
 \begin{proof}
 \begin{align*}
 |\alpha(\theta, \theta', W, X) - \alpha_I(\theta, \theta', X)| &= \ \mid 1 \wedge \frac{P(X | W, \theta' , \theta)q(\theta | \theta')p(\theta')}{P(X | W, \theta , \theta')q(\theta' | \theta)p(\theta)} - 1 \wedge \frac{P(X | \theta')q(\theta | \theta')p(\theta')}{P(X | \theta)q(\theta' | \theta)p(\theta)} \mid \\
-& \leq \ \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)} \mid \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\\
+& \leq \ \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}\mid  \cdot  \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\\
 \end{align*}
-Define $E_1 = \{\theta' s.t.\ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\leq \max(K_2, 1)\}$.
-From assumption \ref{asmp:prior}, for any $\epsilon$, we can find a
-$\theta_1$  such that {for all } $\theta$ satisfying $ \| \theta \| > \theta_1$,
-\begin{align*}
-  P(E_1  | \theta) > 1 - \epsilon / 4.
-\end{align*}
+Given $\epsilon > 0$, from assumption \ref{asmp:prior}, there exist $M_\epsilon > 0$ and $\theta_{1,\epsilon} > 0$, such that $P(\frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\leq M_\epsilon) > 1 - \epsilon / 2$ {for all } $\theta$ satisfying $ \| \theta \| > \theta_{1,\epsilon}$.
+Define $E_1^\epsilon = \{\theta' s.t.\ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\leq M_\epsilon\}$.%, for any $M > 1$.
+%From assumption \ref{asmp:prior}, for any $\epsilon$, we can find a
+%$\theta_{1,M}^\epsilon$  such that {for all } $\theta$ satisfying $ \| \theta \| > \theta_{1,M}^\epsilon$,
+%\begin{align*}
+%  P(E_1^\epsilon| \theta) > 1 - \epsilon / 2.
+%\end{align*}
 %the second term can be bounded with high probability. Also, given large $\theta$ and $\theta'$ which is close to $\theta$, the probability of $|W|$ being large is large.
 %For $\epsilon / 4 > 0$,  from assumption \ref{asmp:prior}, there exists $\theta_2 > 0$ and $K_2 > 0$, such that for $\theta > \theta_2$, we have
 
 %For $\epsilon/4 > 0$,
-Next, let $E^K_2 = \{\theta' s.t.\ \frac{\Omega(\theta')}{\Omega(\theta)}
-\in [1/K,K] \}$ for any $K$. From assumption \ref{asmp:omega}, given any
-$\epsilon$, we can find a $\theta^K_2$ such that for all $\theta$ satisfying $\| \theta \| > \theta^K_2$,
-$$P(E^K_2 | \theta) > 1 - \epsilon .$$
-On this set $E^K_2$, $\Omega(\theta') \le K \Omega(\theta)$ (and also
-$\Omega(\theta) \le K \Omega(\theta')$).  Lemma~\ref{lem:eigenvalue_lemma}
+Next, for $\epsilon$, from assumption \ref{asmp:omega}, we can find $K_\epsilon > 1$ and $\theta_{2, \epsilon} > 0$, such that for all $\theta$ satisfying $\| \theta \| > \theta_{2, \epsilon}$,
+$P(E^\epsilon_2 | \theta) > 1 - \epsilon / 2$, where we define $E^\epsilon_2 = \{\theta' s.t.\ \frac{\Omega(\theta')}{\Omega(\theta)}\in [1/K_\epsilon, K_\epsilon] \}$.
+
+On this set $E^\epsilon_2$, $\Omega(\theta') \le K_\epsilon \Omega(\theta)$ (and also
+$\Omega(\theta) \le K_\epsilon \Omega(\theta')$).  Lemma~\ref{lem:eigenvalue_lemma}
 ensures that %for $\epsilon$ and $K_3$ and $K_2$, given
 %$\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3 $,
-there exist $\theta^K_3 > 0, W^K_3 > 0$, such that for $|W| > W^K_3$,
-$\theta$ satisfying $ \| \theta \| > \theta^K_3$ and $\theta'$ satisfying $ \| \theta' \| > \theta^K_3$, we have
+there exist $\theta_{3,\epsilon} > 0, w_\epsilon > 0$, such that for $\mW > w_\epsilon$,
+$\theta$ satisfying $ \| \theta \| > \theta_{3,\epsilon}$ and $\theta'$ satisfying $ \| \theta' \| > \theta_{3,\epsilon}$, we have
 $|P(X | W, \theta' , \theta) - P(X | \theta' , \theta)| < \epsilon$, and
 $|P(X | W, \theta , \theta') - P(X | \theta , \theta')| < \epsilon$.
 Together with the fact that ${P(X | W, \theta , \theta')}$ and ${P(X | \theta)}$
-are lower-bounded by $\eta$,
-we can find a $K$ so that
+are lower-bounded by $\lb$,
+we can find a $\tilde{\theta}_{3,\epsilon} > 0, \tilde{w}_\epsilon > 0$ so that for $\mW > \tilde{w}_\epsilon$,
+$\theta$ satisfying $ \| \theta \| > \tilde{\theta}_{3,\epsilon}$ and $\theta'$ satisfying $ \| \theta' \| > \tilde{\theta}_{3,\epsilon}$, we have
 \begin{align*}
-|\frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}| < \epsilon / \max(K_2, 1).
+|\frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}| < \epsilon / M_\epsilon.
 \end{align*}
-Call this event $E_3$. Necessary for $E_3$ given $E_2$ is that
-$|W| > W^K_3$ for our choice of $K$. As before, we can find a $\theta_4$
-such that for $\theta$ satisfying $ \| \theta \|  > \theta_4$, this probability can brought arbitrarily close to $1$.
+\boqian{
+Define $E_{3}^\epsilon = \{\theta' s.t. \| \theta'\| > \tilde{\theta}_{3,\epsilon} \}$. Also define $E_{4}^\epsilon =\{W s.t. \mW >  \tilde{w}_{\epsilon}\}$. Conditioning on $E_1^\epsilon E_2^\epsilon E_{3}^\epsilon$, we can find $\theta_{4,\epsilon}$, such that for $\theta$ satisfying $\| \theta \| > \theta_{4,\epsilon}$, the conditional probability 
+\begin{align*}
+P(E_{4}^\epsilon|E_1^\epsilon E_2^\epsilon E_{3}\epsilon) > 1 - \epsilon.
+\numberthis
+\end{align*}
+Given current state $(W, \theta)$, set $\theta_\epsilon =
+\kappa \max(\theta_{1, \epsilon},\theta_{2, \epsilon},\theta_{3, \epsilon}, \theta_{4, \epsilon})$, $\kappa > 1$. \\ For $\theta$ satisfying $ \| \theta \| > \theta_\epsilon$, we have 
+\begin{align*}
+P(E^\epsilon_2E^\epsilon_1) \ge P(E^\epsilon_2) + P(E_1^\epsilon) - 1 \ge 1 - \epsilon.
+\end{align*}
+When $E^\epsilon_2$ holds, $\theta' \ge \Omega^{-1}(\Omega(\kappa\theta)/K_\epsilon)$.
+By choosing $\kappa$ large enough, $\theta'$ satisfying $ \| \theta \| > \theta^K_3$, which means $P(E_3^\epsilon | E_2^\epsilon E_1^\epsilon) = 1$.\\
+So \begin{align*}
+P(E_1^\epsilon E_2^\epsilon E_3^\epsilon E_4^\epsilon) > (1- \epsilon)^2.
+\end{align*} 
+Finally, let $E_\epsilon \doteq E_1^\epsilon \cap E_2^\epsilon \cap E_3^\epsilon \cap E_4^\epsilon$ , giving us our result.
+}
+
+Call this event $E_{3,K}^\epsilon$. Necessary for $E_3^{K}$ given $E_2^{K}$ is that
+$\mW > W^K_3$ for our choice of $K$. As before, we can find a $\theta_{4,\epsilon}$
+such that for $\theta$ satisfying $ \| \theta \|  > \theta_{4,\epsilon}$, this probability can brought arbitrarily close to $1$.
 %For the $W_4$, there exists $\theta_5 > 0$, such that for $\theta > \theta_5$, and any $\theta'$ with $\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3$, we have \begin{align*}
 %P(|W'| > W_4 | W, \theta, \theta', \vartheta) > 1- \epsilon / 4.
 %\end{align*}
@@ -714,7 +751,7 @@ such that for $\theta$ satisfying $ \| \theta \|  > \theta_4$, this probability 
 %So given the current state $(W, \theta)$, and $K_0$, $P(\{ \frac{1}{K_0}\leq \frac{\Omega(\theta')}{\Omega(\theta)} \leq K_0 \} \cap \{ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq 2\}| \theta ) > 1 - 2\epsilon / 4 $, for any $\theta > \max(\theta_2, \theta_3)$.\\
 
 Given current state $(W, \theta)$, set $\theta_\epsilon =
-\kappa \max(\theta_1,\theta^K_2,\theta^K_3, \theta_4)$, $\kappa > 1$.
+\kappa \max(\theta_{1, M}^\epsilon,\theta^K_{2, \epsilon},\theta^K_{3, \epsilon}, \theta_4)$, $\kappa > 1$.
 %$E_1 = \{ \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \leq \max(K_2, 1) \}$ and
 %$E_2 = \{ \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3\}$.
 For $\theta$ satisfying $ \| \theta \| > \theta_\epsilon$, $P(E^K_2 | E_1)>1-\epsilon$, and
