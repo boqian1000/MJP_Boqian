@@ -345,10 +345,10 @@ finite variance.
 %$\Omega(\theta)  \leq \bar{\Omega}$ for $\forall \theta \in C$.
 %\end{assumption}
 
-\begin{definition}
-Given $K > 1$, $\epsilon > 0$, define $\theta_\epsilon^K$ as $\max\{ \theta_0, \theta_1, \theta_2, \theta_3, \theta_4^\epsilon, \theta_{5, K}^\epsilon\}$.
-\label{def:constant}
-\end{definition}
+%\begin{definition}
+%Given $K > 1$, $\epsilon > 0$, define $\theta_\epsilon^K$ as $\max\{ \theta_0, \theta_1, \theta_2, \theta_3, \theta_4^\epsilon, \theta_{5, K}^\epsilon\}$.
+%\label{def:constant}
+%\end{definition}
 
 
 \begin{theorem}
@@ -724,19 +724,18 @@ Define $E_{3, \epsilon}^K = \{\theta' s.t. \| \theta'\| > \tilde{\theta}_{3,\eps
 P(E_{4,\epsilon}^K | E_1^\epsilon E_2^K E_{3, \epsilon}^K) > 1 - \epsilon.
 \numberthis
 \end{align*}
-Given current state $(W, \theta)$, set $\theta_\epsilon =
-\kappa \max(\theta_{1, \epsilon},\theta_{2, \epsilon}^K,\tilde{\theta}_{3, \epsilon}^K, \theta_{4, \epsilon}^K)$, $\kappa > 1$. \\ For $\theta$ satisfying $ \| \theta \| > \theta_\epsilon$, we have 
+From assumption \ref{asmp:mono_tail}, there exists $\theta_0$, such that $\Omega(\theta)$ increases as $\| \theta \|$ increases.
+Given current state $(W, \theta)$, set $\tilde{\theta}_\epsilon =\max(\theta_0, \theta_{1, \epsilon},\theta_{2, \epsilon}^K,\tilde{\theta}_{3, \epsilon}^K, \theta_{4, \epsilon}^K)$. \\ For $\theta$ satisfying $ \| \theta \| > \kappa \tilde{\theta}_\epsilon$,where $\kappa > 1$ we have 
 \begin{align*}
 P(E^K_2 E^\epsilon_1) \ge P(E^K_2) + P(E_1^\epsilon) - 1 \ge 1 - \epsilon.
 \end{align*}
-When $E^\epsilon_2$ holds, $\theta' \ge \Omega^{-1}(\Omega(\kappa\theta)/K_\epsilon)$.
-By choosing $\kappa$ large enough, $\theta'$ satisfying $ \| \theta \| > \theta^K_3$, which means $P(E_3^\epsilon | E_2^\epsilon E_1^\epsilon) = 1$.\\
+When $E^K_2$ holds, $\Omega(\theta') \ge \Omega(\theta)/K$.
+By choosing $\kappa$ large enough, $\theta'$ satisfying $ \| \theta \| > \tilde{\theta}^K_{3,\epsilon}$ with probability one, which means $P(E_{3,\epsilon}^K | E_2^K E_1^\epsilon) = 1$.\\
 So \begin{align*}
-P(E_1^\epsilon E_2^\epsilon E_3^\epsilon E_4^\epsilon) > (1- \epsilon)^2.
+P(E_1^\epsilon E_2^K E_{3,\epsilon}^K E_{4,\epsilon}^K) > (1- \epsilon)^2.
 \end{align*} 
-Finally, let $E_\epsilon \doteq E_1^\epsilon \cap E_2^\epsilon \cap E_3^\epsilon \cap E_4^\epsilon$ , giving us our result.
+Finally, let $E_\epsilon \doteq E_1^\epsilon \cap E_2^K \cap E_{3,\epsilon}^K \cap E_{4,\epsilon}^K$ , giving us our result.
 }
-
 Call this event $E_{3,K}^\epsilon$. Necessary for $E_3^{K}$ given $E_2^{K}$ is that
 $\mW > W^K_3$ for our choice of $K$. As before, we can find a $\theta_{4,\epsilon}$
 such that for $\theta$ satisfying $ \| \theta \|  > \theta_{4,\epsilon}$, this probability can brought arbitrarily close to $1$.
