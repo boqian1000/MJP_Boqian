@@ -39,8 +39,8 @@
 \begin{abstract}
 Markov jump processes (MJPs) are continuous-time stochastic processes that
 find wide application in a variety of disciplines. Inference for MJPs typically
-proceeds via Markov chain Monte Carlo, the state-of-the-art being an auxiliary
-variable Gibbs sampler proposed recently in~\cite{RaoTeh13}. This algorithm was
+proceeds via Markov chain Monte Carlo (MCMC), the state-of-the-art being an auxiliary
+variable Gibbs sampler proposed in~\cite{RaoTeh13}. This algorithm was
 designed for the situation where the MJP parameters are known, and Bayesian
 inference over unknown parameters is typically carried out by incorporating
 this into a larger Gibbs sampler.
@@ -51,11 +51,11 @@ then path given parameters can result in poor Markov chain mixing. In this
 work, we propose a simple and elegant algorithm to address this
 problem. Our scheme brings Metropolis-Hastings (MH) approaches
 for discrete-time hidden Markov models (HMMs) to the continuous-time
-setting, and also also ties up some of the loose ends
-in~\cite{RaoTeh13}. The result is a complete and clean recipe for
+setting, %and also also ties up some of the loose ends in~\cite{RaoTeh13}. 
+resulting is a complete and clean recipe for
 parameter and path inference in MJPs. In our experiments, we
 demonstrate superior performance over the Gibbs sampling approach, as well as
-other approaches like particle Markov chain Monte Carlo~\cite{Andrieu10}.
+another popular approach, particle MCMC~\cite{Andrieu10}.
 \end{abstract}
 \noindent%
 {\it Keywords:}  Markov jump process, Markov chain Monte Carlo, Metropolis-Hasting, Bayesian
@@ -85,6 +85,6 @@ inference, Uniformization
 \bibliography{bibfile}
 \bibliographystyle{plain}
 %\pagebreak
-%\input{supp.tex}
+\input{appendix.tex}
 %\input{proof.tex}
 \end{document}

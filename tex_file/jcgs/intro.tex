@@ -18,11 +18,11 @@ trajectory as well as any system parameters. Such
 inference is complicated by two facts: one cannot {\em a priori} 
 bound the number of state transitions, and the state-transition times themselves
 are continuous-valued. This is in contrast to the situation with
-{\em discrete-time} hidden Markov models, and trajectory inference for 
-MJPs typically proceeds via Markov chain Monte Carlo. The 
-state-of-the-art is a recent auxiliary variable Gibbs sampler proposed 
-in~\cite{RaoTeh13}, we will henceforth refer to this as the Rao-Teh algorithm.
-The Rao-Teh algorithm was designed to sample paths when the MJP parameters
+{\em discrete-time} hidden Markov models. %and trajectory inference for 
+%MJPs typically proceeds via Markov chain Monte Carlo. 
+The state-of-the-art inference method is an auxiliary variable Gibbs sampler proposed 
+in~\cite{RaoTeh13}, we will henceforth refer to this as the {\algname} 
+algorithm. The {\algname} algorithm was designed to sample paths when the MJP parameters
 are known. Parameter inference is typically carried out by 
 incorporating this into an outer Gibbs sampler that also simulates
 parameters given the currently sampled trajectory. 
@@ -43,7 +43,7 @@ piecewise-constant stochastic process $S(t)$ taking values in a countable, and
 usually finite state space $\cS$ (see Figure~\ref{fig:naive_mh}, top-left).
 For simplicity, we will assume $N$-states, with $\cS = \{1,\ldots,N\}$. Then, 
 an MJP is parameterized by two quantities, an $N$-component probability vector 
-$\pi$ and a rate-matrix $A$. The former gives the distribution over states at 
+$\pi_0$ and a rate-matrix $A$. The former gives the distribution over states at 
 the initial time (which without loss of generality we assume is $0$), while 
 the latter is an $N \times N$-matrix governing the dynamics of the system.  An 
 off-diagonal element $A_{ij}$, for some $i \neq j$ gives the rate at 
@@ -77,7 +77,7 @@ $A$ a deterministic function of these parameters:
 $A \equiv A(\theta)$. The parameters $\theta$ are often more 
 interpretable than the elements of $A$ and correspond directly to
 physical, biological or environmental parameters of interest. 
-We give three examples below:
+For example:
 \begin{description}
   \item[The immigration-death process] This is a simple MJP governed
     by two parameters: an arrival rate $\alpha$ and a death-rate
@@ -100,10 +100,10 @@ We give three examples below:
     a DNA or RNA molecule over evolutionary time. In the simplest case,
     all transitions have the same rate~\cite{jukescantor69}, and the model is 
     characterized by a single parameter. Other models categorize transitions 
-    into groups, for instance synonymous transitions encoding 
-    the same amino acid, and nonsynonymous transitions encoding different 
-    amino acids.  These transitions types have their own rates, and noting that 
-    there are $61$ amino acids, synonymous/nonsynonymous model results in a 
+    into groups, for instance `synonymous' transitions that continue to 
+    encode the same amino acid, and `nonsynonymous' transitions giving 
+    a new amino acid.  These have their own rates, and noting that 
+    there are $61$ codons, the synonymous/nonsynonymous model results in a 
     $61\times 61$ transition matrix determined by 2 parameters. More refined 
     models~\cite{goldman1994codon} introduce additional parameters, however the 
     number of parameters is still significantly smaller than the general case.
