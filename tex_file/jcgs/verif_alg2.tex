@@ -18,14 +18,14 @@
   proportional to $p(\theta)q(\vartheta|\theta)p(W|\theta,\vartheta)
   p(X|W,\theta,\vartheta)$.
 
-Next we propose swapping $\theta$ and $\vartheta$, since this
+Next we propose swapping $\theta$ and $\vartheta$. Since this
 is a deterministic proposal, the MH-acceptance probability is given by
 $$\alpha = 1 \wedge \frac{p(\vartheta)q(\theta|\vartheta)p(W|\vartheta,\theta)
 p(X|W,\vartheta,\theta)}{p(\theta)q(\vartheta|\theta)p(W|\theta,\vartheta)
 p(X|W,\theta,\vartheta)}$$
 The term $p(W|\theta,\vartheta)$ is just a Poisson process with rate $\Omega(\theta)+
-\Omega(\vartheta)$, so that $p(W|\theta,\vartheta) = p(W|\theta,\vartheta)$. The
-terms $p(X|W,\theta,\vartheta)$ and $p(X|W,\vartheta,\theta)$ are obtained
+\Omega(\vartheta)$, so that $p(W|\theta,\vartheta) = p(W|\theta,\vartheta)$. 
+$p(X|W,\theta,\vartheta)$ and $p(X|W,\vartheta,\theta)$ are obtained
 after a forward pass over $W$ using discrete-time transition matrices
 $B(\theta,\vartheta) = \left(I + \frac{A(\theta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$ 
 and $B(\vartheta,\theta) = \left(I + \frac{A(\vartheta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$. 
@@ -91,13 +91,13 @@ $\kappa \max( \max_i A_i(\theta), \max A_i(\vartheta)$ for some choice of $\kapp
 > 1$. We investigate this option as well.
 
 Our proposed algorithm is related to work on MCMC inference for doubly-intractable distributions.
-Algorithm like~\cite{moller,Murray,Andrieu09} \boqian{bib no moller and murray}all attempt to evaluate to evaluate an intractable
+Algorithm like~\cite{Moller2006,murray2006,Andrieu09} all attempt to evaluate to evaluate an intractable
 likelihood under a proposed parameter $\theta^*$ by introducing auxiliary variables, however there
 the auxiliary variable is sampled independently under the proposed parameters. For MJP, this would
 involve proposing a new parameter $\theta^*$, generating a new uniformizing grid $U^*$, and then
 accepting or rejecting. This can complicate computations (with two sets of time points), and also
 reduce acceptance rates is the new parameter $\theta^*$ is incompatible with the old grid $U$ or
-vice versa. While~\cite{Murray} \boqian{bib no murray}suggest annealing schemes to try to address this issue, we exploit
+vice versa. While~\cite{murray2006} suggest annealing schemes to try to address this issue, we exploit
 the structure of the Poisson process and provide a cleaner solution: generate a single set of
 auxiliary variables that depends symmetrically on both the new and old parameters. It is interesting
 to see whether a similar idea can be used in other applications as well.

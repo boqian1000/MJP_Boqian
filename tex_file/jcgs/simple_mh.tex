@@ -1,7 +1,7 @@
 \section{\Naive\ parameter inference via Metropolis-Hastings}
 
 The key idea of the Rao-Teh algorithm~\cite{RaoTeh13} is create a random 
-grid $W$ by combining the extant transition times $T$ with a set of 
+grid $W$ by combining extant transition times $T$ with a set of 
 thinned candidate transition times $U$, sampled from a rate-$(\Omega-A_{S(t)})$ 
 Poisson process. Conditioned on $W$, sampling a new trajectory is a 
 standard sampling step for a discrete-time HMM with transition matrix $B$. 
@@ -10,26 +10,25 @@ the MJP parameters as well, following the discrete-time MH-scheme from
 algorithm~\ref{alg:disc_time_mh}.
 %The resulting scheme updates $\theta$ conditioned on the random 
 %grid, but with the trajectory integrated out 
-In particular, given $W$, we discard all state information, and propose a 
+In particular, given $W$, discard all state information, and propose a 
 new parameter $\theta^*$ from $q(\theta^*|\theta)$. 
 %now conditioning on the set of times $W$.
 To calculate the MH-acceptance probability $\min\left(1,
 \frac{p(X|W,\theta^*)p(W|\theta^*)p(\theta^*)q(\theta|\theta^*)}
      {p(X|W,\theta)p(W|\theta)p(\theta)q(\theta^*|\theta)}\right)$, 
-we make a forward pass over $W$, and calculate the marginal 
+make a forward pass over $W$, and calculate the marginal 
 probabilities $p(X|W,\theta)$ and $p(X|W,\theta^*)$. % as in algorithm~\ref{alg:disc_time_mh}.
 After accepting or rejecting $\theta^*$, the new $\theta$ can be used in
-a backward pass that samples a new trajectory. We then discard all 
+a backward pass that samples a new trajectory. Then discard all 
 self-transitions and repeat; algorithm~\ref{alg:MH_naive}, and 
-figure~\ref{fig:naive_mh} in the appendix sketch out this 
-scheme.
-
+figure~\ref{fig:naive_mh} in the appendix sketch this out.
+\vspace{-.1in}
 \begin{algorithm}[H]
    \caption{\Naive\  MH for parameter inference for MJPs }
    \label{alg:MH_naive}
   \begin{tabular}{l l}
-   \textbf{Input:  } & \text{A set of partial and noisy observations $X$}. \\
-                      & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$}.\\ 
+   \textbf{Input:  } & \text{The observations $X$}, 
+                       \text{the previous MJP path $S(t) = (S, T)$ and parameters $\theta$}.\\ 
                      & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
    \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, 
                             new MJP parameters $\tilde{\theta}$}.\\
@@ -37,12 +36,12 @@ scheme.
    \end{tabular}
    \begin{algorithmic}[1]
      \State Set $\Omega \equiv \Omega(\theta) > \max_s{A_s(\theta)}$ for
-     some deterministic function $\Omega(\cdot)$ (e.g.\ $\Omega(\theta) = 
+     some function $\Omega(\cdot)$ (e.g.\ $\Omega(\theta) = 
       2\max_s A_s(\theta))$.
       \State Sample virtual jumps $U\subset[t_{start}, t_{end}]$ from a 
-      nonhomogeneous Poisson process with piecewise-constant rate 
+      Poisson process with piecewise-constant rate 
       $R(t) = (\Omega - A_{S(t)})$. 
-    Define $W = T \cup U$ and discard all MJP state information.
+    Set $W = T \cup U$ and discard MJP state information.
       \State Propose $\theta^* \sim q(\cdot| \theta)$.
           The acceptance probability is given by 
           \begin{align*}
@@ -60,7 +59,7 @@ scheme.
     At the end, we have 
     $p(X|W,\theta)$ and $p(X|W,\theta^*)$. Use these, and the fact that 
     $p(W|\theta)$ is Poisson-distributed to accept or reject the
-    proposed $\theta$ and $\theta^*$. Write the new state space
+    proposed $\theta^*$. Write the new state space
     as $(W,\tilde{\theta},\tilde{\theta}^*)$.
     \State For the new parameter $\tilde{\theta}$, make a backward pass through 
     the elements of
@@ -69,23 +68,26 @@ scheme.
     \State Let $\tilde{T}$ be the set of times in $W$ when the Markov chain changes state. Define $\tilde{S}$ as the corresponding set of state values. Return $(\tilde{S}, \tilde{T}, \tilde{\theta})$.
 \end{algorithmic}
 \end{algorithm}
+\vspace{-.1in}
 The resulting algorithm updates $\theta$ with the MJP trajectory integrated out, 
-and one would expect it to mix more rapidly than simple Gibbs sampling. 
-It is important to note however that $\theta$ is updated conditioned on
-$W$, and that
+and will mix more rapidly than simple Gibbs. 
+Note however that $\theta$ is updated {\em conditioned on
+$W$}, and that
 %determines not just the MJP trajectory $S(t)$.
 %, and with $S(t)$ 
 %marginalized out, the observations $X$. 
-the distribution of $W$ depends on $\theta$. These are the $p(W|\theta)$ terms
-in the acceptance probability; under uniformization, $W$ follows a homogeneous
+the distribution of $W$ depends on $\theta$: 
+%These are the $p(W|\theta)$ terms
+%in the acceptance probability; under uniformization, 
+$W$ is a homogeneous
 Poisson process with rate $\Omega(\theta) = 2 \max A(\theta)$. 
 %who probability can
 %calculated easily during the forward pass.
 The fact that the MH-acceptance probability involves a $p(X|\theta)$ term
 is inevitable, however in our experiments, we found that the $p(W|\theta)$
-terms have a significant effect acceptance probability. 
+terms significantly effect acceptance. 
 Any proposal that halves $\max A_s$ (and thus $\Omega$) will halve the
 mean and variance of the distribution of the number of events in $W$, 
 resulting in an extremely low acceptance probability.
-In the next section, we describe a way around this issue.
+The next section describes a way around this.
 
