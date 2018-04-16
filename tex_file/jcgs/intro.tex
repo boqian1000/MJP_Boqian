@@ -1,3 +1,4 @@
+
 \section{Introduction}
 \label{sec:intro}
 Markov jump processes (MJPs) are continuous-time stochastic processes that
@@ -10,8 +11,8 @@ of a queuing network, segmentation of a strand of DNA, user activity on social
 media, among many others.
 
 MJPs model temporal evolution in continuous-time, resulting in 
-realistic, mechanistic, and interpretable models, often amenable to 
-mathematical analysis. These same dynamics however raise computational
+realistic, mechanistic, and interpretable models. %, often amenable to mathematical analysis. 
+These same dynamics however raise computational
 challenges in statistical applications, where given partial and noisy 
 measurements, one has to make inferences over the latent MJP 
 trajectory as well as any system parameters. Such
@@ -20,11 +21,11 @@ bound the number of state transitions, and the state-transition times themselves
 are continuous-valued. This is in contrast to the situation with
 {\em discrete-time} hidden Markov models. %and trajectory inference for 
 %MJPs typically proceeds via Markov chain Monte Carlo. 
-The state-of-the-art inference method is an auxiliary variable Gibbs sampler proposed 
+The state-of-the-art inference method for MJPs is an auxiliary variable Gibbs sampler proposed 
 in~\cite{RaoTeh13}, we will henceforth refer to this as the {\algname} 
 algorithm. The {\algname} algorithm was designed to sample paths when the MJP parameters
 are known. Parameter inference is typically carried out by 
-incorporating this into an outer Gibbs sampler that also simulates
+incorporating it into an outer Gibbs sampler that also simulates
 parameters given the currently sampled trajectory. 
 
 In many situations, the MJP trajectory and parameters can exhibit 
@@ -50,8 +51,7 @@ off-diagonal element $A_{ij}$, for some $i \neq j$ gives the rate at
 which the system transitions from state $i$ to $j$. We write $A_i$ for the 
 negative of the $i$th diagonal element $A_{ii}$. For an MJP,
 $A_i = -A_{ii} = \sum_{j \neq i} A_{ij}$, so that the rows of $A$ sum to $0$.  
-$A_i$ is the absolute value of the diagonal,
-and gives the total rate at which the system leaves state $i$ for any other state.
+$A_i$ gives the total rate at which the system leaves state $i$ for any other state.
 To simulate an MJP trajectory over an interval $[0,\cT]$, one follows 
 Gillespie's algorithm~\cite{gillespie97}: 
 first sample an initial state $s_0$ from the distribution $\pi$, and
@@ -64,8 +64,8 @@ $t_{curr} < \cT$:
   \item At the end of this time, jump to a new state $s_{k+1} \neq s_k$ with 
     probability equal to $A_{s_ks_{k+1}}/A_{s_k}$. Set $k=k+1$.
 \end{itemize}
-The set of times of $T=(t_0, \cdots, t_{|T| })$ and states 
-$S=(s_0, \cdots, s_{|T| })$ together define the MJP trajectory $S(t)$.
+The times $T=(t_0, \cdots, t_{|T| })$ and states 
+$S=(s_0, \cdots, s_{|T| })$ define the MJP path $S(t)$.
 
 \subsection{Structured rate matrices}
 In general, the rate matrix $A$ has $N(N-1)$ free parameters,
@@ -79,32 +79,34 @@ interpretable than the elements of $A$ and correspond directly to
 physical, biological or environmental parameters of interest. 
 For example:
 \begin{description}
-  \item[The immigration-death process] This is a simple MJP governed
+  \item[The immigration-death process] This MJP is governed
     by two parameters: an arrival rate $\alpha$ and a death-rate
     $\beta$. The state space $\cS$ represents the size of a 
     population or the capacity of a queue. New individuals
     enter according to a rate-$\alpha$ Poisson process,
-    so that the off-diagonal elements $A_{i,i+1}$ all equal $\alpha$.
-    On the other hand, each individual dies (or each job completes) 
+    so off-diagonal elements $A_{i,i+1}$ all equal $\alpha$.
+    Each individual dies %(or each job completes) 
     at a rate $\beta$, so the system moves from state $i$ to 
     $i-1$ with rate $A_{i,i-1}=i\beta$.
     All other transitions have rate $0$, so that $\theta = (\alpha,\beta)$,
     and $A(\theta)$ is a tri-diagonal matrix.
-  \item[Birth-death processes] This is a simple variant of the
-    immigration-death process where the system moves from state $i$ 
-    to $i+1$ with rate $i\alpha$, so that the population grows at a 
-    rate proportional to the population size. Once again, 
+  \item[Birth-death processes] This variant of the
+    earlier MJP moves from state $i$ 
+    to $i+1$ with rate $i\alpha$, with growth-rate proportional to 
+    population size. Again, 
     $\theta=(\alpha,\beta)$.
-  \item[Codon substitution models] Such models are used in genetics
-    to characterize transition-rates between nucleotides or codons at a locus on
-    a DNA or RNA molecule over evolutionary time. In the simplest case,
-    all transitions have the same rate~\cite{jukescantor69}, and the model is 
-    characterized by a single parameter. Other models categorize transitions 
+  \item[Codon substitution models] Such models %are used in genetics
+    characterize transition-rates between nucleotides or codons at a 
+    DNA or RNA locus % on a DNA or RNA molecule 
+    over evolutionary time. In the simplest case,
+    all transitions have the same rate~\cite{jukescantor69}, 
+    requiring just a single parameter. Other models categorize transitions 
     into groups, for instance `synonymous' transitions that continue to 
     encode the same amino acid, and `nonsynonymous' transitions giving 
-    a new amino acid.  These have their own rates, and noting that 
-    there are $61$ codons, the synonymous/nonsynonymous model results in a 
+    a new amino acid.  These have their own rates, and as 
+    there are $61$ codons, this model results in a 
     $61\times 61$ transition matrix determined by 2 parameters. More refined 
-    models~\cite{goldman1994codon} introduce additional parameters, however the 
-    number of parameters is still significantly smaller than the general case.
+    models~\cite{goldman1994codon} can introduce additional parameters. 
+    %however the 
+    %number of parameters is still significantly smaller than the general case.
 \end{description}

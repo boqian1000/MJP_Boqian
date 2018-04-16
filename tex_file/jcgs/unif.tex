@@ -1,18 +1,18 @@
 \section{Bayesian inference for MJPs}
-In practical situations, an MJP trajectory is only observed at
+In practical situations, an MJP is only observed at
 a finite set of times, with the observations themselves
-noisy. There are then two questions the practitioner faces:
-\begin{itemize}
-  \item What is the MJP trajectory underlying the observations?
-  \item What are the unknown parameters governing the dynamics of the MJP?
-\end{itemize}
-
+noisy. This raises two questions: 
+%\begin{itemize}
+1) what is the trajectory underlying the observations? and 2)
+  what are the MJP parameters governing the dynamics?
+%\end{itemize}
+  \vspace{-.1in}
 \subsection{Trajectory inference for MJPs}
 This problem was addressed in~\cite{RaoTeh13}, and was extended to a broader class of 
 MJPs (as well as other jump processes like semi-Markov processes) 
 in~\cite{RaoTeh12}. Both schemes center on alternate approaches to 
-Gillespie's algorithm, which introduce auxiliary {\em candidate} jump times 
-that are {\em thinned} while simulating an MJP path.  We focus on 
+Gillespie's algorithm, simulating an MJP path by introducing auxiliary 
+{\em candidate} jump times that are later {\em thinned}.  We focus on 
 the simpler, more widely used {\algname} algorithm from~\cite{RaoTeh13},
 which based on the idea of {\em uniformization}~\cite{Jen1953}. 
 %We refer to this as the Rao-Teh algorithm. % and describe it next.
@@ -21,10 +21,10 @@ which based on the idea of {\em uniformization}~\cite{Jen1953}.
 %the latter below: it is more general, and we are not aware of any work
 %before~\cite{RaoTeh12} that describes it.
 
-Recall that the diagonal element $A_i$ of the rate matrix give the 
-rate at which the MJP leaves state $i$ for any other state. Importantly,
+Recall $A_i$ gives the 
+rate at which the MJP leaves $i$ for any other state. The
 parameters are set up so that self-transitions cannot occur. 
-Now introduce an additional parameter $\Omega \ge \max_i A_i$;
+Now introduce a parameter $\Omega \ge \max_i A_i$;
 \cite{RaoTeh13} suggest setting $\Omega = 2 \max_i A_i$. 
 %Assuming the system is
 %in state $i$, we sample a {\em candidate} transition-time from an
@@ -33,19 +33,19 @@ Now introduce an additional parameter $\Omega \ge \max_i A_i$;
 %$B_{ij} = A_{ij}/\Omega_i$. The system continues to remain in its current 
 %state with probability $1-A_i/\Omega_i$. 
 Instead of sequentially sampling a wait-time and then a new state as
-in Gillespie's algorithm, we first simulate a set of candidate
-transition-times over the interval $[0,\cT]$. We draw these from a homogeneous 
-Poisson process with rate $\Omega$. Call these times $W$; these along with $0$ 
-define a random grid on $[0,\cT]$.
+in Gillespie's algorithm, first simulate a set $W$ of candidate
+transition-times over $[0,\cT]$ from a rate-$\Omega$ 
+Poisson process. $W$ %; these along with $0$ 
+defines a random grid on $[0,\cT]$.
 Define $B = \left(I +\frac{1}{\Omega}A\right)$; observe that this is a
-stochastic matric with positive elements, and rows adding up to $1$.
+stochastic matrix with positive elements, and rows adding up to $1$.
 Assign state-values to the elements in $0 \cup W$ according to a discrete-time 
 Markov chain with initial distribution $\pi_0$, and transition matrix $B$.
 Call these states $V$. Thus $v_0 \sim \pi_0$, while $p(v_{k+1}=j|v_k=i) = B_{ij}$
 for $k \in \{0,\cdots,|W|-1\}$.
 Note that $\Omega > \max_i A_i$ results in more
-candidate-times than actual MJP transitions; at the same time the transition
-matrix $B$ allows self-transitions (unlike A). These two effects cancel
+candidate-times than actual MJP transitions; at the same time, unlike $A$, 
+the matrix $B$ allows self-transitions. These two effects cancel
 each other out, and trajectories sampled this way for any $\Omega \ge \max_i A_i$
 %These self-transitions correct for the extra candidate transition times
 %produced by the higher rate $\Omega_i$, and~\cite{RaoTeh12} show that
