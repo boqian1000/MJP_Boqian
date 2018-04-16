@@ -192,8 +192,8 @@ For the discrete-time case, this problem of parameter-trajectory
 coupling can be circumvented by marginalizing out the MJP trajectory 
 and directly sampling from the posterior over parameters $p(\theta|X)$.
 In its simplest form, this approach involves a Metropolis-Hastings
-scheme that proposes a new parameter $\theta$ from some proposal distribution 
-$q(\theta_{new}|\theta_{old})$, accepting or rejecting according to the usual
+scheme that proposes a new parameter $\vartheta$ from some proposal distribution 
+$q(\vartheta|\ctheta)$, accepting or rejecting according to the usual
 Metropolis-Hastings probability. The latter step requires calculating the 
 marginal probability of the observations $p(X|\theta)$, integrating out
 the exponential number of possible latent trajectories. Fortunately
@@ -208,18 +208,19 @@ Markov chain}
    \label{alg:disc_time_mh}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{A set of observations $X$};
-    a proposal distribution $q(\theta^*|\theta)$. \\
-  & \text{The previous Markov chain parameters $\theta$}.\\
-  \textbf{Output:  }& \text{A new Markov chain parameter $\theta^*$}.\\
+   a proposal distribution $q(\vartheta|\ctheta)$. \\
+   & \text{The previous Markov chain parameters $\ctheta$}.\\
+   \textbf{Output:  }& \text{A new Markov chain parameter $\ntheta$}.\\
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
-  \State Propose a new parameter $\theta^*$ from the proposal distribution
-    $q(\theta^*|\theta)$.
+  \State Propose a new parameter $\vartheta$ from the proposal distribution
+  $q(\vartheta|\ctheta)$.
   \State Run the forward pass of the forward-backward algorithm to 
-    obtain the marginal likelihood of the observations, $p(X|\theta^*)$.
-  \State Accept the proposed $\theta^*$ according to the MH probability, 
-    $\min(1,\frac{p(X,\theta^*)q(\theta|\theta^*)}{p(X,\theta)q(\theta^*|\theta)})$.
+    obtain the marginal likelihood of the observations, $p(X|\vartheta)$.
+    \State Set $\theta_{new} = \vartheta$ with probability 
+    $\min(1,\frac{p(X,\vartheta)q(\ctheta|\vartheta)}{p(X,\ctheta)q(\vartheta|\ctheta)})$, else 
+    $\ntheta = \ctheta$.
   \State If desired, a new trajectory sample can be obtained by
     completing the backward pass of the forward-backward algorithm for the chosen
     parameter.
