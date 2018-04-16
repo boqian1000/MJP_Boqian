@@ -1,58 +1,54 @@
 
 \section{An improved Metropolis-Hasting algorithm}
-
 Our main idea is to symmetrize the probability of $W$ under the old and new 
 $\theta$, so that the term
-$p(W|\theta)$ disappears from the acceptance probability. This will result
-in a simpler, and significantly more efficient MCMC scheme.
+$p(W|\theta)$ disappears from the acceptance ratio. This will result
+in a significantly more efficient, and also a simpler MCMC scheme.
 %This forms the main contribution of this paper.
-
 As before, the MCMC iteration begins with the pair $(S(t), \theta)$. 
-Instead of simulating the thinned events $U$, we first generate a new parameter 
-$\theta^*$ from some distribution $q(\vartheta|\theta)$. Treat this as an 
-auxiliary variable, so that the augmented space now is the triple 
-$(S(t), \theta,\vartheta)$. We now pretend $S(t)$ was sampled by a 
-uniformization scheme where the dominating Poisson rate is given by 
+Instead of simulating the Poisson events $U$, we first generate a new 
+parameter $\vartheta$ from $q(\vartheta|\theta)$. Treat this as an 
+auxiliary variable, so that the augmented space now is the triplet 
+$(S(t), \theta,\vartheta)$. We pretend $S(t)$ was sampled by a 
+uniformization scheme where the dominating Poisson rate $\Omega$ equals 
 $(\Omega(\theta) + \Omega(\vartheta))$ instead of just $\Omega(\theta)$ 
-(any choice greater than $\max_i A_i$ is valid).
-It now follows that the set of thinned events $U$ is a piecewise-constant
-Poisson process with intensity $\Omega(\theta) + \Omega(\vartheta) - 
+(recall any choice greater than $\max_i A_i$ is valid).
+Now follows the set of thinned events $U$ is piecewise-constant
+Poisson with intensity $\Omega(\theta) + \Omega(\vartheta) - 
 A_{S(t)}$. Following~\cite{RaoTeh13}, the set $W$, the union of these events 
 with the actual
-trajectory transition times $T$, is a realization of homogeneous Poisson
-process with rate $\Omega(\theta) + \Omega(\vartheta)$. Now we discard all MJP 
-state information, so that the MCMC state space consists of $W$, the current
-MJP parameter $\theta$, and the auxiliary parameter $\vartheta$.
-Finally, we make an MH proposal that swaps $\theta$ with $\vartheta$. 
+trajectory transition times $T$, is a homogeneous Poisson process with 
+rate $\Omega(\theta) + \Omega(\vartheta)$. Now discard all MJP 
+state information, so that the MCMC state space is $(W, \theta, \vartheta)$.
+Now make an MH proposal that swaps $\theta$ with $\vartheta$. 
 Observe from
 symmetry that the Poisson skeleton $W$ has the same probability both
 before and after this proposal, so that unlike the previous scheme,
-the ratio $p(W|\theta^*)/p(W|\theta)$ does not appear in the acceptance 
-ratio. This simplifies computation, and significantly improves mixing.
+the ratio $p(W|\theta^*)/p(W|\theta)$ equals $1$.  This simplifies 
+computation, and significantly improves mixing.
 The acceptance probability 
 %depends only on the probability of the observations
 %under both set of parameters, %as we can use the forward-backward algorithm
 %to calculate this. Our acceptance probability 
-is given by
-$$ \text{acc} = 
+equals
+$ \text{acc} = 
   \min\left(1, \frac{p(X,\theta^*)q(\theta|\theta^*)}
    {p(X,\theta)q(\theta^*|\theta)}\right) = 
   \min\left(1, \frac{p(X|\theta^*)p(\theta^*)q(\theta|\theta^*)}
    {p(X|\theta)p(\theta)q(\theta^*|\theta)}\right).
-   $$
+   $
    The terms $p(X|\theta^*)$ and  $p(X|\theta)$ can be calculated by 
-   running a forward pass of the forward-backward algorithm. Having
-   accepted or rejected the proposal, a new trajectory is sampled by
-   completing the backward pass, after which the thinned events are
+   running a forward pass of the forward-backward algorithm, and after
+   accepting or rejecting the proposal, a new trajectory is sampled by
+   completing the backward pass. Finally, the thinned events are
    discarded. We sketch out our algorithm in 
    figure~\ref{fig:MH_improved} and algorithm~\ref{alg:MH_improved}.
-
 \begin{algorithm}[H]
    \caption{Improved MH for parameter inference for MJPs }
    \label{alg:MH_improved}
   \begin{tabular}{l l}
-   \textbf{Input:  } & \text{A set of partial and noisy observations $X$}. \\
-                      & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$}.\\ 
+   \textbf{Input:  } & \text{The observations $X$,}
+                      \text{the previous MJP path $S(t) = (S, T)$ and parameters $\theta$}.\\ 
                      & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
    \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (S', T')$, 
                             new MJP parameters $\theta'$}.\\
@@ -64,9 +60,9 @@ $$ \text{acc} =
       %In the case of uniformization, we
       %have a single $\Omega$ for all states, with $\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$.
       %, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
-    \State Sample virtual jumps $U\subset[t_{start}, t_{end}]$ from a nonhomogeneous Poisson process with 
+    \State Sample virtual jumps $U\subset[t_{start}, t_{end}]$ from a Poisson process with 
     piecewise-constant rate $R(t) = (\Omega - A_{S(t)}(\theta))$. 
-    Define $W = T \cup U$ and discard all MJP state information.
+    Set $W = T \cup U$ and discard MJP states.
     \State The current MCMC state-space is $(W,\theta,\vartheta)$. Propose swapping
     $\theta$ and $\theta^*$, so that the new state-space is 
     $(W, \vartheta, \theta)$. The acceptance probability is given by
