@@ -164,26 +164,27 @@ challenges.
 % \end{minipage}
   \begin{minipage}[hp]{0.55\linewidth}
     \vspace{-0.3 in}
-  \caption{Prior distribution of an MJP parameter (the wide red histogram),
-  as well as two conditional distributions. The narrow green histogram is the
-distribution conditioned on both the observations as well as a simulated
-MJP posterior. The wider blue histogram is the distribution of interest: the
+  \caption{Prior distribution of an MJP parameter (the wide red density),
+  as well as two conditional distributions. Narrow green is the
+density conditioned on both the observations as well as a simulated
+MJP posterior. The wider blue curve is density of interest: the
 marginal distribution of the paramters conditioned on observations. These
 plots were produced from the experiment in section~\ref{sec:immig}.}
      \label{fig:hist}
   \end{minipage}
+    \vspace{-0.6 in}
   \end{figure}
   However, the Gibbs sampling approach %of algorithm~\ref{alg:MJP_gibbs} 
   comes with a well-known limitation:
 coupling between path and parameters can result in a very sluggish
 exploration of parameter and path space. We illustrate this in figure~\ref{fig:hist},
-which shows the posterior distribution of an MJP parameter in blue
+which shows the posterior distribution of an MJP parameter (in blue)
 %(this is the distribution of interest, conditioned only on the observations) 
-along with the distribution conditioned on both the observations 
-as well as a realization of the MJP trajectory (in green). 
+is more concentrated than the distribution conditioned on both observations 
+as well the MJP trajectory (in green). 
 %We have also included the prior distribution in red. 
-Observe that the latter is more concentrated than the former. The
-coupling is strengthened as the trajectory grows longer, and
+%Observe that the latter is more concentrated than the former. 
+The coupling is strengthened as the trajectory grows longer, and
 the Gibbs sampler can mix very poorly for situations with
 long observation periods, even if the observations themselves are
 sparse and only mildly informative about the parameters.
@@ -201,15 +202,14 @@ this marginal probability is a by-product of the forward-backward
 algorithm used to sample a new trajectory, so that no 
 additional computational burden is involved. 
 %The overall algorithm then is:
-
 \begin{algorithm}[H]
   \caption{Metropolis-Hastings parameter inference for a discrete-time 
 Markov chain}
    \label{alg:disc_time_mh}
   \begin{tabular}{l l}
-   \textbf{Input:  } & \text{A set of observations $X$};
-   a proposal distribution $q(\vartheta|\ctheta)$. \\
-   & \text{The previous Markov chain parameters $\ctheta$}.\\
+   \textbf{Input:  } & \text{Observations $X$};
+   proposal density $q(\vartheta|\ctheta)$; 
+   \text{previous parameters $\ctheta$}.\\
    \textbf{Output:  }& \text{A new Markov chain parameter $\ntheta$}.\\
    \hline
    \end{tabular}
@@ -221,40 +221,40 @@ Markov chain}
     \State Set $\theta_{new} = \vartheta$ with probability 
     $\min(1,\frac{p(X,\vartheta)q(\ctheta|\vartheta)}{p(X,\ctheta)q(\vartheta|\ctheta)})$, else 
     $\ntheta = \ctheta$.
-  \State If desired, a new trajectory sample can be obtained by
-    completing the backward pass of the forward-backward algorithm for the chosen
-    parameter.
+  \State Sample a new path with
+    the backward pass of the forward-backward algorithm.
+    %for the chosen parameter.
 \end{algorithmic}
 \end{algorithm}
 
 \subsection{A marginal sampler for MJP parameters} 
-Constructing such a marginal sampler over the MJP parameters by
-integrating out the continuous-time hidden trajectory is less straightforward:
-the set of transition times is unbounded, with individual elements
-unconstrained over the observation interval $[0,\cT]$.
+Constructing a marginal sampler over the MJP parameters by
+integrating out the continuous-time trajectory is harder.
+%the set of transition times is unbounded, with individual elements
+%unconstrained over the observation interval $[0,\cT]$.
 %Naively calculating this marginal probability for the continuous-time
 %case is not straightforward, as there is no finite set of candidate
 %times to make a pass over. 
-One approach~\cite{FearnSher2006} is to instead make a sequential 
-forward pass through all {\em observations} $X$, using the matrix-exponential
-operator to marginalize out the infinite number of possible 
-continuous-time trajectories linking two successive times. As
-demonstrated in~\cite{RaoTeh13} however, this approach has a number of 
-drawbacks: it scales cubically rather than quadratically with the 
-number of states, it cannot exploit structure like sparsity in the 
+One approach~\cite{FearnSher2006} makes a sequential 
+forward pass through all {\em observations} $X$, using matrix exponentiation
+to marginalize out all
+continuous-time paths between successive times. As
+shown in~\cite{RaoTeh13}, this approach is cubic rather than 
+quadratic in the 
+number of states, cannot exploit structure like sparsity in the 
 transition matrix, and can depend in not trivial ways on the exact 
 nature of the observation process.
-Additionally, the number of expensive matrix exponential calculations scales
+Also, the number of expensive matrix exponentiations scales
 with the number of observations rather than the number of transitions.
-
-
-A second approach is particle MCMC~\cite{Andrieu10}. Here, one uses 
-particle filtering to obtain an unbiased estimate of the marginal 
-probability $p(X|\theta)$; this is then plugged into the 
-Metropolis-Hastings acceptance probability. While the resulting MCMC 
-sampler targets the correct posterior distribution, %~\cite{Andrieu09}, 
+%
+%
+A second approach, particle MCMC~\cite{Andrieu10}, uses 
+particle filtering to get an unbiased estimate of the marginal 
+$p(X|\theta)$. Plugging this into the Metropolis-Hastings 
+acceptance probability results in an MCMC sampler that targets the 
+correct posterior, however %~\cite{Andrieu09}, 
 the resulting scheme resulting scheme does not exploit the structure 
-of the MJP, and we show that it can be quite inefficient.
+of the MJP, and we show that it is quite inefficient.
 
 Work in~\cite{RaoTeh13, RaoTeh12} demonstrated the advantage of
 introduced the thinned events $U$: this allows exploiting discrete-time 
@@ -265,4 +265,3 @@ In the next section, we outline a \naive\  first attempt at extending this
 approach to parameter inference in continuous time.
 We describe why this approach is not adequate, and describe our
 final algorithm in the section after. 
-
