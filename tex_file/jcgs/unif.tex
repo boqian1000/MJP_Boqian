@@ -8,62 +8,19 @@ noisy. This raises two questions:
 %\end{itemize}
   \vspace{-.1in}
 \subsection{Trajectory inference for MJPs}
-This problem was addressed in~\cite{RaoTeh13}, and was extended to a broader class of 
-MJPs (as well as other jump processes like semi-Markov processes) 
-in~\cite{RaoTeh12}. Both schemes center on alternate approaches to 
-Gillespie's algorithm, simulating an MJP path by introducing auxiliary 
+This was addressed in~\cite{RaoTeh13}, and was extended to a broader class of 
+jump processes %(like semi-Markov processes) 
+in~\cite{RaoTeh12}. %Both center on alternate approaches to 
+% Gillespie's algorithm, 
+Both involve simulating an MJP by introducing auxiliary 
 {\em candidate} jump times that are later {\em thinned}.  We focus on 
 the simpler, more widely used {\algname} algorithm from~\cite{RaoTeh13},
-which based on the idea of {\em uniformization}~\cite{Jen1953}. 
+based on the idea of {\em uniformization}~\cite{Jen1953}. 
 %We refer to this as the Rao-Teh algorithm. % and describe it next.
 %while in~\cite{RaoTeh12}, this was extended to a more general dependent thinning approach. 
 %We outline
 %the latter below: it is more general, and we are not aware of any work
 %before~\cite{RaoTeh12} that describes it.
-
-Recall $A_i$ gives the 
-rate at which the MJP leaves $i$ for any other state. The
-parameters are set up so that self-transitions cannot occur. 
-Now introduce a parameter $\Omega \ge \max_i A_i$;
-\cite{RaoTeh13} suggest setting $\Omega = 2 \max_i A_i$. 
-%Assuming the system is
-%in state $i$, we sample a {\em candidate} transition-time from an
-%exponential, now with rate $\Omega_i$. The system remains in state $i$
-%until this time, after which it moves to state $j \neq i$ with probability
-%$B_{ij} = A_{ij}/\Omega_i$. The system continues to remain in its current 
-%state with probability $1-A_i/\Omega_i$. 
-Instead of sequentially sampling a wait-time and then a new state as
-in Gillespie's algorithm, first simulate a set $W$ of candidate
-transition-times over $[0,\cT]$ from a rate-$\Omega$ 
-Poisson process. $W$ %; these along with $0$ 
-defines a random grid on $[0,\cT]$.
-Define $B = \left(I +\frac{1}{\Omega}A\right)$; observe that this is a
-stochastic matrix with positive elements, and rows adding up to $1$.
-Assign state-values to the elements in $0 \cup W$ according to a discrete-time 
-Markov chain with initial distribution $\pi_0$, and transition matrix $B$.
-Call these states $V$. Thus $v_0 \sim \pi_0$, while $p(v_{k+1}=j|v_k=i) = B_{ij}$
-for $k \in \{0,\cdots,|W|-1\}$.
-Note that $\Omega > \max_i A_i$ results in more
-candidate-times than actual MJP transitions; at the same time, unlike $A$, 
-the matrix $B$ allows self-transitions. These two effects cancel
-each other out, and trajectories sampled this way for any $\Omega \ge \max_i A_i$
-%These self-transitions correct for the extra candidate transition times
-%produced by the higher rate $\Omega_i$, and~\cite{RaoTeh12} show that
-%trajectories sampled this way 
-have the same distribution as trajectories
-sampled by Gillespie's algorithm~\cite{Jen1953,RaoTeh13}.
-
-Introducing the thinned variables allowed~\cite{RaoTeh13} to develop
-a novel and efficient MCMC sampler. We outline this in 
-algorithm~\ref{alg:Unif_gibbs}. At a high-level, each MCMC iteration 
-samples a new grid $W$ conditioned on the MJP trajectory $S(t)$, 
-and then a new trajectory $S(t)$ conditioned on the grid $W$. The latter
-can be carried out using standard techniques from the discrete-time
-HMM literature.
-    ~\cite{RaoTeh13} show that the resulting Markov chain targets
-    the desired posterior distribution over trajectories, and is 
-    ergodic for any choice of $\Omega$ strictly greater than all the
-    $A_i$'s. As mentioned earlier, \cite{RaoTeh13} suggest setting $\Omega = 2\max_i A_i$.
 \begin{algorithm}[H]
   \caption{The {\algname}~\cite{RaoTeh13} auxiliary variable sampler for MJP trajectories}
    \label{alg:Unif_gibbs}
@@ -109,6 +66,49 @@ sample a new trajectory}:
     forward pass. 
 \end{algorithmic}
 \end{algorithm}
+Recall $A_i$ gives the 
+rate at which the MJP leaves $i$ for any other state. The
+parameters are set up so that self-transitions cannot occur. 
+Now introduce a parameter $\Omega \ge \max_i A_i$;
+\cite{RaoTeh13} suggest setting $\Omega = 2 \max_i A_i$. 
+%Assuming the system is
+%in state $i$, we sample a {\em candidate} transition-time from an
+%exponential, now with rate $\Omega_i$. The system remains in state $i$
+%until this time, after which it moves to state $j \neq i$ with probability
+%$B_{ij} = A_{ij}/\Omega_i$. The system continues to remain in its current 
+%state with probability $1-A_i/\Omega_i$. 
+Instead of sequentially sampling a wait-time and then a new state as
+in Gillespie's algorithm, first simulate a set $W$ of candidate
+transition-times over $[0,\cT]$ from a rate-$\Omega$ 
+Poisson process. $W$ %; these along with $0$ 
+defines a random grid on $[0,\cT]$.
+Define $B = \left(I +\frac{1}{\Omega}A\right)$; observe that this is a
+stochastic matrix with positive elements, and rows adding up to $1$.
+Assign state-values to the elements in $0 \cup W$ according to a discrete-time 
+Markov chain with initial distribution $\pi_0$, and transition matrix $B$.
+Call these states $V$. Thus $v_0 \sim \pi_0$, while $p(v_{k+1}=j|v_k=i) = B_{ij}$
+for $k \in \{0,\cdots,|W|-1\}$.
+Note that $\Omega > \max_i A_i$ results in more
+candidate-times than actual MJP transitions; at the same time, unlike $A$, 
+the matrix $B$ allows self-transitions. These two effects cancel
+each other out, and trajectories sampled this way for any $\Omega \ge \max_i A_i$
+%These self-transitions correct for the extra candidate transition times
+%produced by the higher rate $\Omega_i$, and~\cite{RaoTeh12} show that
+%trajectories sampled this way 
+have the same distribution as trajectories
+sampled by Gillespie's algorithm~\cite{Jen1953,RaoTeh13}.
+
+Introducing the thinned variables allowed~\cite{RaoTeh13} to develop
+a novel and efficient MCMC sampler. We outline this in 
+algorithm~\ref{alg:Unif_gibbs}. At a high-level, each MCMC iteration 
+samples a new grid $W$ conditioned on the MJP trajectory $S(t)$, 
+and then a new trajectory $S(t)$ conditioned on the grid $W$. The latter
+can be carried out using standard techniques from the discrete-time
+HMM literature.
+    ~\cite{RaoTeh13} show that the resulting Markov chain targets
+    the desired posterior distribution over trajectories, and is 
+    ergodic for any choice of $\Omega$ strictly greater than all the
+    $A_i$'s. As mentioned earlier, \cite{RaoTeh13} suggest setting $\Omega = 2\max_i A_i$.
 
 \subsection{Parameter inference for MJPs}
 In practice, the MJP parameters themselves are unknown: often,
@@ -256,12 +256,12 @@ correct posterior, however %~\cite{Andrieu09},
 the resulting scheme resulting scheme does not exploit the structure 
 of the MJP, and we show that it is quite inefficient.
 
-Work in~\cite{RaoTeh13, RaoTeh12} demonstrated the advantage of
-introduced the thinned events $U$: this allows exploiting discrete-time 
-algorithms like FFBS for efficient parameter inference.
+\cite{RaoTeh13, RaoTeh12} demonstrated the advantage of
+introducing the thinned events $U$: this allows exploiting discrete-time 
+algorithms like FFBS for efficient inference.
 %be brought to playthe thinning-based approach over matrix exponential and particle-MCMC
 %approaches for trajectory inference. 
 In the next section, we outline a \naive\  first attempt at extending this 
-approach to parameter inference in continuous time.
-We describe why this approach is not adequate, and describe our
-final algorithm in the section after. 
+approach to parameter inference.
+We describe why this approach is not adequate, and then describe our
+final algorithm. % in the section after. 

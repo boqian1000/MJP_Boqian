@@ -1,11 +1,12 @@
 \section{\Naive\ parameter inference via Metropolis-Hastings}
-The key idea of the Rao-Teh algorithm~\cite{RaoTeh13} is to create a random 
-grid $W$ by combining extant transition times $T$ with a set of 
-thinned candidate transition times $U$, sampled from a rate-$(\Omega-A_{S(t)})$ 
-Poisson process. Conditioned on $W$, sampling a new trajectory is a 
-standard sampling step for a discrete-time HMM with transition matrix $B$. 
+The idea of the Rao-Teh algorithm~\cite{RaoTeh13} is to simplify
+computations by conditioning on the
+random grid $W$.
+%by combining extant transition times $T$ with a set of 
+%thinned candidate transition times $U$, sampled from a rate-$(\Omega-A_{S(t)})$ 
+%Poisson process. 
 This suggests conditioning on $W$ to update
-the MJP parameters as well, following the discrete-time MH-scheme from
+the parameters as well, following discrete-time scheme from
 algorithm~\ref{alg:disc_time_mh}.
 %The resulting scheme updates $\theta$ conditioned on the random 
 %grid, but with the trajectory integrated out 
@@ -15,8 +16,8 @@ new parameter $\theta^*$ from $q(\theta^*|\theta)$.
 To calculate the MH-acceptance probability $\min\left(1,
 \frac{p(X|W,\theta^*)p(W|\theta^*)p(\theta^*)q(\theta|\theta^*)}
      {p(X|W,\theta)p(W|\theta)p(\theta)q(\theta^*|\theta)}\right)$, 
-make a forward pass over $W$, and calculate the marginal 
-probabilities $p(X|W,\theta)$ and $p(X|W,\theta^*)$. % as in algorithm~\ref{alg:disc_time_mh}.
+make a forward pass over $W$, and calculate 
+$p(X|W,\theta)$ and $p(X|W,\theta^*)$. % as in algorithm~\ref{alg:disc_time_mh}.
 After accepting or rejecting $\theta^*$, the new $\theta$ can be used in
 a backward pass that samples a new trajectory. Then discard all 
 self-transitions and repeat; algorithm~\ref{alg:MH_naive}, and 
@@ -26,7 +27,7 @@ figure~\ref{fig:naive_mh} in the appendix sketch this out.
    \caption{\Naive\  MH for parameter inference for MJPs }
    \label{alg:MH_naive}
   \begin{tabular}{l l}
-   \textbf{Input:  } & \text{The observations $X$}, 
+   \textbf{Input:  } & \text{Observations $X$}, 
                        \text{the previous MJP path $S(t) = (S, T)$ and parameters $\theta$}.\\ 
                      & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
    \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, 
