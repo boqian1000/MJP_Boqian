@@ -674,14 +674,14 @@ inequality,
  %\alpha(\theta,\vartheta,W',X)| \le \epsilon $.
 %Write $q(W', \theta' | W, \theta, \vartheta)$ for the proposal
 %distribution of our MCMC sampler.
-Then, for any $\epsilon$, there exists $\theta_\epsilon > 0$ as well as a set $\E_\epsilon \subseteq \{(W', \theta'): |\alpha_I(\theta,\theta',X) - \alpha(\theta,\theta',W',X)| \le \epsilon\}$, such that for $\theta$ satisfying $\| \theta \| > \theta_\epsilon$ and any $\theta'$, we have
+Then, for any $\epsilon$, there exists $\theta_\epsilon > 0$ as well as a set $\E_\epsilon \subseteq \{(W', \theta'): |\alpha_I(\theta,\theta',X) - \alpha(\theta,\theta',W',X)| \le \epsilon\}$, such that for $\theta$ satisfying $\| \theta \| > \theta_\epsilon$ and any $\vartheta$, we have
 %and $W_\epsilon > 0$, such that for
 %$\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
 %  $P(|W'| > W_\epsilon, \theta' > \theta_\epsilon  | W, \theta, \vartheta) \ge 1-\epsilon$.
 %  $| \alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)|
 %  \le \epsilon $ for any $(W', \theta')$ with $|W'| > W_\epsilon$ and $\theta' > \theta_\epsilon$.
   %$(\theta,\theta^*)$ satisfying
-$P(E_\epsilon|W,\theta,\theta') > 1-\epsilon$.
+$P(E_\epsilon|W,\theta,\vartheta) > 1-\epsilon$.
 \label{prop:mix0}
 \end{proposition}
 \begin{proof}
@@ -913,7 +913,7 @@ Integrate out $W'$, then we get the following.
   &\hspace{-1.3in}\left.  + \int q(\nu | \theta) \sum_{S,T} P(S, T |  W, \theta, \vartheta,
 X)P(W' | S, T, \theta, \nu) ( 1 - \alpha(\theta, \nu | W', X))d\nu
 \delta_\theta(\theta')\right] \\
-&:= d\theta' I_1(W, \theta', \theta, \vartheta) + \delta_\theta(\theta')I_2(W, \theta, \vartheta)
+&:= d\theta' I_1(W, \theta', \theta, \vartheta) + d\theta'\delta_\theta(\theta')I_2(W, \theta, \vartheta).
 \end{align*}
 We denote the transition density of $W$, $\sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')$, as $P(W' | W, \theta, \vartheta, \theta', X)$. So we have
 \begin{align*}
@@ -955,7 +955,7 @@ We denote the transition density of $W$, $\sum_{S,T} P(S, T | W, \theta, \varthe
 I_{2,\E_{\epsilon}}(W, \theta, \vartheta) &= \int_{\E_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu | W', X)) \\
 &\le \int_{\E_\epsilon}d\nu dW' q(\nu | \theta)
   P(W' | W, \theta, \vartheta, \nu, X)  [ 1 - (\alpha_I(\theta, \nu | X)-\epsilon)] \\
-&\le d\nu \int dW'  q(\nu | \theta)
+&\le   \int d\nu dW'  q(\nu | \theta)
   P(W' | W, \theta, \vartheta, \nu, X)
   [ 1 - (\alpha_I(\theta, \nu | X)-\epsilon)] \\
   &\le (1+\epsilon)  - \int  q(\nu | \theta) \alpha_I(\theta, \nu | X) d\nu, \\
