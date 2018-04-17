@@ -185,10 +185,9 @@ i) the set $\SM_M=\{\theta:\Omega(\theta)\le M \}$ is a $1$-small set for
 every
 $M$, i.e.\ there exists a probability measure $\phi$ and a constant
 $\kappa_1 > 0$ s.t.\ % $q(\nu | \theta) \alpha_I(\theta, \nu)
-$p_I(\theta'|\theta) \geq \kappa_1 \phi(\theta')$ for $\theta \in \SM_M$, \\
-\boqian{
-$\alpha_I(\theta', \theta; X) q(\theta' | \theta) \ge \kappa_1 \phi(\theta')$?
-}\\
+%$p_I(\theta'|\theta) \geq \kappa_1 \phi(\theta')$ for $\theta \in \SM_M$, \\
+$\alpha_I(\theta', \theta; X) q(\theta' | \theta) \ge \kappa_1 \phi(\theta')$
+ for $\theta \in \SM_M$, \\
 ii) for $M$ large enough, $\exists \rho < 1$ s.\ t.\
 $\int \Omega(\nu) p_I(\nu|\theta) d\nu
 \leq (1-\rho) \Omega(\theta)+C$, $\forall \theta \not\in \SM_M$.
@@ -502,7 +501,6 @@ By assumption \ref{asmp:ideal_geom}, we have the following inequality.
 P(W', \theta',\vartheta' | W, \theta, \vartheta)  &\ge \frac{\lb^2 }{\ub^2}\delta_1^{h}
 \exp(-M(t_{end}-t_{start}))\delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta')) \\
 & \alpha_I(\theta', \theta;X)q(\theta'|\theta)\\
-  &\boqian{? \text{assumption \ref{asmp:ideal_geom} should be stronger.}}\\
   & \geq \frac{\lb^2 }{\ub^2}\delta_1^{h}
 \exp(-M(t_{end}-t_{start}))\kappa_1\delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta') \\
   & \doteq \rho_1 \delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta')
@@ -546,31 +544,30 @@ sampler and the ideal sampler can be brought arbitrarily close
 outside an appropriate small set, so long as $\Omega(\theta)$ is larger
 than $\Omega(\theta')$ by a sufficient factor.
 
-\begin{lemma}
-%Consider two successive observations, separated by time $t_{diff}$, and
-Suppose $\theta$ and $\theta'$ satisfy $\frac{1}{K_0} \le \frac{\Omega(\theta)}{\Omega(\theta')} \leq K_0
-$ for some $K_0 > 0$ which satisfies $(1 + \frac{1}{K_0})k_1 > 2$. Write $\mW$ for the
-minimum number of grid points between two successive observations.
-%$\| \theta'  - \theta \| \leq h$
-For any $\epsilon > 0$, there exist  $w_{K_0}^\epsilon,  \theta_{6, K_0}^\epsilon > 0$ such that
-$|P(X| W, \theta, \theta') - P(X | \theta)| < \epsilon$
-for any $W$ with $\mW > w_{K_0}^\epsilon$ and $\theta $ satisfying $\| \theta \| > \theta_{6, K_0}^\epsilon > 0$.
-\label{lem:eigenvalue_lemma}
-\end{lemma}
-\begin{proof}
-Since $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$,
-%there is a one to one mapping between the eigen values of B and the
-it is easy to see that both $A(\theta)$ and $B(\theta,\theta')$ have
-the same stationary distribution, call this $P_{st}(s|\theta)$. Further,
-the eigenvalues of $A(\theta)$ and $B(\theta,\theta')$ satisfy
-$\lambda_B(\theta, \theta') = 1 - \frac{\lambda_A(\theta)}{\Omega(\theta,
-\theta')}$, in particular, the second eigenvalue
-$\lambda^2_B(\theta,\theta')$ of $B$ (which determines its mixing
-properties) equals $1 - \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')}$.
-
-\boqian{From lemma \ref{lem:eig_lemma}, for all $\theta, \theta'$ satisfying $\frac{1}{K_0} \le \frac{\Omega(\theta)}{\Omega(\theta')} \leq K_0$ for some $K_0 > 0$ which satisfies $(1 + \frac{1}{K_0})k_1 > 2$, the Markov chain with transition matrix $B(\theta, \theta')$ converges geometrically to its stationary distribution $\pi_\theta$ at rates uniformly bounded away from 0.
+  \begin{lemma}
+  %Consider two successive observations, separated by time $t_{diff}$, and
+  Suppose $\theta$ and $\theta'$ satisfy $\frac{1}{K_0} \le \frac{\Omega(\theta)}{\Omega(\theta')} \leq K_0
+  $ for some $K_0 > 0$ which satisfies $(1 + \frac{1}{K_0})k_1 > 2$. Write $\mW$ for the
+  minimum number of grid points between two successive observations.
+  %$\| \theta'  - \theta \| \leq h$
+  For any $\epsilon > 0$, there exist  $w_{K_0}^\epsilon,  \theta_{6, K_0}^\epsilon > 0$ such that
+  $|P(X| W, \theta, \theta') - P(X | \theta)| < \epsilon$
+  for any $W$ with $\mW > w_{K_0}^\epsilon$ and $\theta $ satisfying $\| \theta \| > \theta_{6, K_0}^\epsilon > 0$.
+  \label{lem:eigenvalue_lemma}
+  \end{lemma}
+  \begin{proof}
+% Since $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$,
+% %there is a one to one mapping between the eigen values of B and the
+% it is easy to see that both $A(\theta)$ and $B(\theta,\theta')$ have
+% the same stationary distribution, call this $P_{st}(s|\theta)$. Further,
+% the eigenvalues of $A(\theta)$ and $B(\theta,\theta')$ satisfy
+% $\lambda_B(\theta, \theta') = 1 - \frac{\lambda_A(\theta)}{\Omega(\theta,
+% \theta')}$, in particular, the second eigenvalue
+% $\lambda^2_B(\theta,\theta')$ of $B$ (which determines its mixing
+% properties) equals $1 - \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')}$.
+%
+{From lemma \ref{lem:eig_lemma}, for all $\theta, \theta'$ satisfying $\frac{1}{K_0} \le \frac{\Omega(\theta)}{\Omega(\theta')} \leq K_0$ for some $K_0 > 0$ which satisfies $(1 + \frac{1}{K_0})k_1 > 2$, the Markov chain with transition matrix $B(\theta, \theta')$ converges geometrically to its stationary distribution $\pi_\theta$ at rates uniformly bounded away from 0.
 }
-
 Our proof strategy is to show that for $\theta$ and $W$ large enough, the
 distribution over latent states for the continuous-time MJP and
 its discrete-time counterpart embedded in $W$ can be brought arbitrarily

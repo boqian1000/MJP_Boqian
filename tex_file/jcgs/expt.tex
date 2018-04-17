@@ -111,25 +111,25 @@ a user-specified variance.
 \noindent \textbf{Results:}
   \begin{figure}%[b]
   \centering
-  \begin{minipage}[!hp]{0.8\linewidth}
+  \begin{minipage}[!hp]{0.75\linewidth}
   \centering
     \includegraphics [width=0.45\textwidth, angle=0]{figures_new_apr12/exp_alpha_dim3_18apr12.pdf}
     \includegraphics [width=0.45\textwidth, angle=0]{figures_new_apr12/exp_beta_dim3_18apr12.pdf}
 %  \vspace{-1in}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.8\linewidth}
   \centering
     \includegraphics [width=0.45\textwidth, angle=0]{figures_new_apr12/exp_alpha_dim10_18apr12.pdf}
     \vspace{-0 in}
     \includegraphics [width=0.45\textwidth, angle=0]{figures_new_apr12/exp_beta_dim10_18apr12.pdf}
     \vspace{-0 in}
   \end{minipage}
+  \begin{minipage}[!hp]{0.24\linewidth}
     \caption{ESS/sec for the synthetic  model, the top row being dimension 3, and the bottom,
       dimension 10. The left column is for $\alpha$, and the 
     right is for $\beta$. Red, yellow, blue and black curves are the symmetrized MH,
   \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols correspond
 to different settings of the algorithms, see section~\ref{sec:expts}}
      \label{fig:ESS_EXP_D10}
+  \end{minipage}
   \end{figure}
   Figure~\ref{fig:ESS_EXP_D10} plots the ESS per unit time for the parameters 
   $\alpha$ (left) and $\beta$ (right) for the
@@ -282,16 +282,15 @@ degradation with interval length that is much milder than the other algorithms.
   \centering
   \begin{minipage}[!hp]{0.73\linewidth}
   \centering
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/ESS_vs_t_alpha_JC.pdf}
+    \includegraphics [width=0.43\textwidth, angle=0]{figs/ESS_vs_t_alpha_JC.pdf}
   \centering
     \includegraphics [width=0.45\textwidth, angle=0]{figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
   \end{minipage}
   \begin{minipage}[!hp]{0.25\linewidth}
-  \vspace{-.4in}
     \caption{Time Interval vs. ESS/sec. In the left plot, the number of 
     observations is fixed, in the right, this grows linearly with the
   interval length. Red, yellow and blue curves are the symmetrized MH,
-  \naive\ MH and Gibbs algorithm. }
+  \naive\ MH and Gibbs. }
 	\label{fig:jc_model_vs_t}
   \end{minipage}
   \end{figure}
@@ -322,7 +321,7 @@ the system moves from $i$ to $i - 1$ with rate $i\beta$.
 % \end{figure}
   \begin{figure}%[b]
   \centering
-  \begin{minipage}[hp]{0.82\linewidth}
+  \begin{minipage}[hp]{0.78\linewidth}
   \centering
     \includegraphics [width=0.48\textwidth, angle=0]{figures_new_apr12/Q_alpha_dim3_18apr12.pdf}
     \includegraphics [width=0.48\textwidth, angle=0]{figures_new_apr12/Q_beta_dim3_18apr12.pdf}
@@ -332,7 +331,7 @@ the system moves from $i$ to $i - 1$ with rate $i\beta$.
     \includegraphics [width=0.48\textwidth, angle=0]{figures_new_apr12/Q_beta_dim10_18apr12.pdf}
  %   \vspace{-0.5 in}
   \end{minipage}
-  \begin{minipage}[!hp]{0.17\linewidth}
+  \begin{minipage}[!hp]{0.21\linewidth}
     \caption{ESS/sec for the immigration model, the top row being dimension 3, and the bottom,
       dimension 10. The left column is for $\alpha$, and the 
     right is for $\beta$. Red, yellow, and blue curves are the symmetrized MH,
