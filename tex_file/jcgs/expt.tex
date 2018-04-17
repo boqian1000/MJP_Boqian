@@ -239,20 +239,18 @@ carrying out parameter inference.
   \subsection{The Jukes and Cantor (JC69) model}~
   \begin{figure}%[H]
   \centering
-  \begin{minipage}[!hp]{0.4\linewidth}
+  \begin{minipage}[!hp]{0.7\linewidth}
   \centering
-    \includegraphics [width=.8\textwidth, angle=0]{figs/jc_model.pdf}
-	\label{jc_model}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.4\linewidth}
-  \centering
-    \includegraphics [width=0.8\textwidth, angle=0]{figs/jc.pdf}
-    \vspace{-0.3in}
+    \includegraphics[width=.45\textwidth, angle=0]{figs/jc_model.pdf}
+    \includegraphics[width=0.45\textwidth, angle=0]{figs/jc.pdf}
+	%\label{jc_model}
      \label{fig:ESS_JC}
   \end{minipage}
+  \begin{minipage}[!hp]{0.28\linewidth}
   \caption{(a) Jukes-Cantor (JC69) model, (b)
     ESS/sec for the JC69 Model. Red, yellow and blue curves are the 
       symmetrized MH, \naive\ MH and Gibbs algorithm. }
+  \end{minipage}
   \end{figure}
   The Jukes and Cantor (JC69) model is a popular model of DNA nucleotide
   substitution.  We write its state space as $\{0, 1, 2, 3\}$, representing the 
@@ -284,20 +282,20 @@ degradation with interval length that is much milder than the other algorithms.
 %$\alpha | s_0,S,T$ is following $Gamma(\mu+ N,\lambda + 3(t_{end} - t_{start}))$\\
   \begin{figure}%[H]
   \centering
-  \begin{minipage}[!hp]{0.45\linewidth}
+  \begin{minipage}[!hp]{0.73\linewidth}
   \centering
-    \includegraphics [width=0.7\textwidth, angle=0]{figs/ESS_vs_t_alpha_JC.pdf}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.45\linewidth}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/ESS_vs_t_alpha_JC.pdf}
   \centering
-    \includegraphics [width=0.75\textwidth, angle=0]{figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
   \end{minipage}
+  \begin{minipage}[!hp]{0.25\linewidth}
   \vspace{-.4in}
     \caption{Time Interval vs. ESS/sec. In the left plot, the number of 
     observations is fixed, in the right, this grows linearly with the
   interval length. Red, yellow and blue curves are the symmetrized MH,
   \naive\ MH and Gibbs algorithm. }
 	\label{fig:jc_model_vs_t}
+  \end{minipage}
   \end{figure}
 
 
@@ -326,25 +324,23 @@ the system moves from $i$ to $i - 1$ with rate $i\beta$.
 % \end{figure}
   \begin{figure}%[b]
   \centering
-  \begin{minipage}[hp]{0.7\linewidth}
+  \begin{minipage}[hp]{0.82\linewidth}
   \centering
-    \includegraphics [width=0.45\textwidth, angle=0]{figures_new_apr12/Q_alpha_dim3_18apr12.pdf}
-    \hspace{.2in}
-    \includegraphics [width=0.45\textwidth, angle=0]{figures_new_apr12/Q_beta_dim3_18apr12.pdf}
+    \includegraphics [width=0.48\textwidth, angle=0]{figures_new_apr12/Q_alpha_dim3_18apr12.pdf}
+    \includegraphics [width=0.48\textwidth, angle=0]{figures_new_apr12/Q_beta_dim3_18apr12.pdf}
 %    \vspace{-1.0 in}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.7\linewidth}
   \centering
-    \includegraphics [width=0.45\textwidth, angle=0]{figures_new_apr12/Q_alpha_dim10_18apr12.pdf}
-    \hspace{.2in}
-    \includegraphics [width=0.45\textwidth, angle=0]{figures_new_apr12/Q_beta_dim10_18apr12.pdf}
+    \includegraphics [width=0.48\textwidth, angle=0]{figures_new_apr12/Q_alpha_dim10_18apr12.pdf}
+    \includegraphics [width=0.48\textwidth, angle=0]{figures_new_apr12/Q_beta_dim10_18apr12.pdf}
  %   \vspace{-0.5 in}
   \end{minipage}
+  \begin{minipage}[!hp]{0.17\linewidth}
     \caption{ESS/sec for the immigration model, the top row being dimension 3, and the bottom,
       dimension 10. The left column is for $\alpha$, and the 
     right is for $\beta$. Red, yellow, and blue curves are the symmetrized MH,
   \naive\ MH, Gibbs sampling and particle MCMC.}
      \label{fig:ESS_Q_D10}
+  \end{minipage}
   \end{figure}
 We follow the same setup as the first experiment:
 for $(\alpha_0,\alpha_1,\beta_0,\beta_1)$ equal to $(3,2,5,2)$,
@@ -444,43 +440,37 @@ of the Gibbs sampler.
  shifting the optimal setting of the proposal variance to smaller values.
   \begin{figure}%[b]
   \centering
-  \begin{minipage}[!hp]{0.75\linewidth}
+  \begin{minipage}[!hp]{0.8\linewidth}
   \centering
-    \includegraphics [width=0.42\textwidth, angle=0]{figures_new_apr12/CQ_alpha_dim3_18apr12.pdf}
-    \hspace{.2 in}
-    \includegraphics [width=0.42\textwidth, angle=0]{figures_new_apr12/CQ_beta_dim3_18apr12.pdf}
+    \includegraphics [width=0.48\textwidth, angle=0]{figures_new_apr12/CQ_alpha_dim3_18apr12.pdf}
+    \includegraphics [width=0.48\textwidth, angle=0]{figures_new_apr12/CQ_beta_dim3_18apr12.pdf}
 %    \vspace{-.81 in}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.75\linewidth}
   \centering
-    \includegraphics [width=0.420\textwidth, angle=0]{figures_new_apr12/CQ_alpha_dim10_18apr12.pdf}
-    \hspace{.2 in}
-    \includegraphics [width=0.420\textwidth, angle=0]{figures_new_apr12/CQ_beta_dim10_18apr12.pdf}
+    \includegraphics [width=0.480\textwidth, angle=0]{figures_new_apr12/CQ_alpha_dim10_18apr12.pdf}
+    \includegraphics [width=0.480\textwidth, angle=0]{figures_new_apr12/CQ_beta_dim10_18apr12.pdf}
 %    \vspace{-.5in}
   \end{minipage}
+  \begin{minipage}[!hp]{0.19\linewidth}
     \caption{ESS/sec for the time-inhomogeneous immigration model, the top row 
       being dimension 3, and the bottom,
       dimension 10. The left column is for $\alpha$, and the 
     right is for $\beta$. Red, yellow and blue curves are the symmetrized MH,
   \naive\ MH, and Gibbs algorithm.}
      \label{fig:ESS_pc_10}
+  \end{minipage}
   \end{figure}
+
   \subsection{Analysis of Chi site data for Escherichia coli}~
   We analyze the Escherichia coli data used in Fearhead. The data are for E. coli DNA and consist of the position (in bases) of Chi sites along the genome while the Chi site is a motif of eight base pairs: GCTGGTGG. The circular double-stranded DNA genome of E. coli has two strands which are the inner and outer rings. The molecular mechanisms of DNA replication differ between the two half-strands and they are termed leading and lagging. The E. coli genome is 4639675 bases long and each half is 2319.838 kilobases long. We model this discrete process as continuous process because of the length. Further, we model this using Markov-modulated Poisson process. Specifically, we analyze the inner lagging strand data by our Metropolis Hasting sampler compared with Gibbs sampler. A Markov-modulated Poisson process is a Poisson process whose intensity depends on the current hidden state of a continuous time Markov chain. Points from the Markov-modulated Poisson process are observed. We assume the hidden state space is  $\{1, 2\}$ and the corresponding Poisson-rates are $\lambda_1$ and $\lambda_2$. Transitions from state $1$ to state $2$ have rate $\alpha$ while transitions from state $2$ to state $1$ have rate $\beta$. Gamma priors are placed for these four parameters. Specifically, we use Gamma$(2,2)$, Gamma$(2,3)$, Gamma$(3,2)$, Gamma$(1,2)$ for $\alpha$, $\beta$, $\lambda_1$, $\lambda_2$ respectively.
   \begin{figure}%[b]
   \centering
-  \begin{minipage}[!hp]{0.7\linewidth}
+  \begin{minipage}[!hp]{0.99\linewidth}
   \centering
-    \includegraphics [width=0.42\textwidth, angle=0]{figs/ECOLI_alpha.pdf}
-    \hspace{.2 in}
-    \includegraphics [width=0.42\textwidth, angle=0]{figs/ECOLI_l1.pdf}
+    \includegraphics [width=0.33\textwidth, angle=0]{figs/ECOLI_alpha.pdf}
+    \includegraphics [width=0.33\textwidth, angle=0]{figs/ECOLI_l1.pdf}
 %    \vspace{-.81 in}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.7\linewidth}
-  \centering
-    \includegraphics [width=0.42\textwidth, angle=0]{figs/ECOLI_beta.pdf}
-    \hspace{.2 in}
-    \includegraphics [width=0.42\textwidth, angle=0]{figs/ECOLI_l2.pdf}
+ %   \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_beta.pdf}
+ %  \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_l2.pdf}
   %  \vspace{-.5in}
   \end{minipage}
     \vspace{-.2in}
