@@ -2,30 +2,31 @@
 \section{Introduction}
 \label{sec:intro}
 Markov jump processes (MJPs) are continuous-time stochastic processes 
-widely applied in fields like computational chemistry~\cite{gillespie97}, 
+widely used in fields like computational chemistry~\cite{gillespie97}, 
 population genetics~\cite{FearnSher2006}, mathematical finance~\cite{Elliott06}, 
 queuing theory~\cite{Breuer2003}, artificial intelligence~\cite{XuShe10} and
 social-network analysis~\cite{pan2016markov}. %The references above have
-MJPs have been used to model the state of a chemical reaction 
+The references above have used MJPs to model temporal evolution of the state of a 
+chemical reaction 
 or a queuing network, segmentation of a strand of DNA, user activity on social 
-media, among many others.
-
-MJPs model temporal evolution in continuous-time, resulting in 
+media, among many others,
+%MJPs model temporal evolution in continuous-time, 
+resulting in 
 realistic, mechanistic, and interpretable models. %, often amenable to mathematical analysis. 
-These same dynamics however raise computational
-challenges, where given noisy 
+These same continuous-time dynamics however raise computational
+challenges when, given noisy 
 measurements, one has to make inferences over the latent MJP 
-trajectory as well as any system parameters. 
-This is complicated by two facts: one cannot {\em a priori} 
-bound the number of state transitions, and the state-transition times themselves
-are continuous-valued. This is in contrast to the situation with
+trajectory as well as any parameters. 
+This stems from two facts: one cannot {\em a priori} 
+bound the number of state transitions, and the transition times themselves
+are continuous-valued. This is in contrast to 
 {\em discrete-time} hidden Markov models. %and trajectory inference for 
 %MJPs typically proceeds via Markov chain Monte Carlo. 
-The state-of-the-art inference method for MJPs is an auxiliary variable Gibbs sampler proposed 
-in~\cite{RaoTeh13}, we will refer to this as the {\algname} 
-algorithm. The {\algname} algorithm was designed to sample paths when the MJP parameters
-are known. Parameter inference is typically carried out by 
-incorporating it into an outer Gibbs sampler that also simulates
+The state-of-the-art inference method for MJPs is an auxiliary variable 
+Gibbs sampler from~\cite{RaoTeh13}, we will refer to this as the {\algname} 
+algorithm. This  algorithm was designed to sample paths when the MJP parameters
+are known. Parameter inference is carried out by 
+incorporating it into an Gibbs sampler that also simulates
 parameters given the currently sampled trajectory. 
 
 In many situations, the MJP trajectory and parameters exhibit 
@@ -41,21 +42,21 @@ particle Markov chain Monte Carlo~\cite{Andrieu10}.
 \section{Markov jump processes (MJPs)} 
 A Markov jump process~\cite{Cinlar1975} is a right-continuous 
 piecewise-constant stochastic process $S(t)$ taking values in a 
-usually finite state space $\cS$ (see Figure~\ref{fig:naive_mh}, top-left).
-We will assume $N$-states, with $\cS = \{1,\ldots,N\}$. Then, 
-an MJP is parameterized by two quantities, an $N$-component probability vector 
+usually finite state space $\cS$. % (see Figure~\ref{fig:naive_mh}, top-left).
+We assume $N$-states, with $\cS = \{1,\ldots,N\}$. Then, 
+the MJP is parameterized by two quantities, an $N$-component probability vector 
 $\pi_0$ and a rate-matrix $A$. The former gives the distribution over states at 
 the initial time (we assume this is $0$), while 
 the latter is an $N \times N$-matrix governing the dynamics of the system.  An 
-off-diagonal element $A_{ij}$, for some $i \neq j$ gives the rate at 
-which the system transitions from state $i$ to $j$. We write $A_i$ for the 
+off-diagonal element $A_{ij}$, for $i \neq j$ gives the rate 
+of transitioning from state $i$ to $j$. We write $A_i$ for the 
 negative of the $i$th diagonal element $A_{ii}$. For an MJP,
-$A_i = -A_{ii} = \sum_{j \neq i} A_{ij}$, so that the rows of $A$ sum to $0$.  
+$\sum_{j \neq i} A_{ij} = -A_{ii} := A_i$, so that the rows of $A$ sum to $0$.  
 $A_i$ gives the total rate at which the system leaves state $i$ for any other state.
-To simulate an MJP trajectory over an interval $[0,\cT]$, one follows 
+To simulate an MJP over an interval $[0,\cT]$, one follows 
 Gillespie's algorithm~\cite{gillespie97}: 
-first sample an initial state $s_0$ from the distribution $\pi$, and
-then defining $t_0 = t_{curr} = 0$ and $k = 0$, repeat the following two steps while
+first sample an initial state $s_0$ from $\pi_0$, and
+defining $t_0 = t_{curr} = 0$ and $k = 0$, repeat the following while
 $t_{curr} < \cT$:
 \begin{itemize}
   \item Sample a wait-time $\Delta t_k$ from an exponential distribution with rate 
