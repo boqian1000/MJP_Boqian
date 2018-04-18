@@ -24,7 +24,7 @@ Now make an MH proposal that swaps $\theta$ with $\vartheta$.
 Observe from
 symmetry that the Poisson skeleton $W$ has the same probability both
 before and after this proposal, so that unlike the previous scheme,
-the ratio $p(W|\theta^*)/p(W|\theta)$ equals $1$.  This simplifies 
+the ratio $p(W|\vartheta)/p(W|\theta)$ equals $1$.  This simplifies 
 computation, and significantly improves mixing.
 The acceptance probability 
 %depends only on the probability of the observations
@@ -32,12 +32,12 @@ The acceptance probability
 %to calculate this. Our acceptance probability 
 equals
 $ \text{acc} = 
-  \min\left(1, \frac{p(X,\theta^*)q(\theta|\theta^*)}
-   {p(X,\theta)q(\theta^*|\theta)}\right) = 
-  \min\left(1, \frac{p(X|\theta^*)p(\theta^*)q(\theta|\theta^*)}
-   {p(X|\theta)p(\theta)q(\theta^*|\theta)}\right).
+  \min\left(1, \frac{p(X,\vartheta)q(\theta|\vartheta)}
+   {p(X,\theta)q(\vartheta|\theta)}\right) = 
+  \min\left(1, \frac{p(X|\vartheta)p(\vartheta)q(\theta|\vartheta)}
+   {p(X|\theta)p(\theta)q(\vartheta|\theta)}\right).
    $
-   The terms $p(X|\theta^*)$ and  $p(X|\theta)$ can be calculated by 
+   The terms $p(X|\vartheta)$ and  $p(X|\theta)$ can be calculated by 
    running a forward pass of the forward-backward algorithm, and after
    accepting or rejecting the proposal, a new trajectory is sampled by
    completing the backward pass. Finally, the thinned events are
@@ -55,8 +55,9 @@ $ \text{acc} =
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
-      \State Sample $\theta^* \sim q(\cdot| \theta)$, and 
-      set $\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$. 
+      \State Sample $\vartheta \sim q(\cdot| \theta)$, and 
+      set %$\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$. 
+	\boqian{$\Omega = \Omega(\theta) + \Omega(\vartheta)$.}
       %In the case of uniformization, we
       %have a single $\Omega$ for all states, with $\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$.
       %, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
@@ -64,21 +65,23 @@ $ \text{acc} =
     piecewise-constant rate $R(t) = (\Omega - A_{S(t)}(\theta))$. 
     Set $W = T \cup U$ and discard MJP states.
     \State The current MCMC state-space is $(W,\theta,\vartheta)$. Propose swapping
-    $\theta$ and $\theta^*$, so that the new state-space is 
-    $(W, \vartheta, \theta)$. The acceptance probability is given by
+    $\theta$ and $\vartheta$, so that the new state-space is 
+   \boqian{ $(W, \theta, \vartheta)$.}
+%$(W, \theta, \vartheta)$    
+     The acceptance probability is given by
    % accept $\theta^*$ as $\tilde{\theta}$ with probability $\alpha$.
         \begin{align*}
-        \alpha %&=  1 \wedge \frac{P(W,(\theta^*, \theta)| y)}{P(W, (\theta, \theta^*)| y)}\\
-       % &=  1 \wedge \frac{P(y| W,\theta^*, \theta) P(W | (\theta^*, \theta))p((\theta^*, \theta))}{P(y| W,(\theta, \theta^*)) P(W | (\theta, \theta^*))p((\theta, \theta^*))}\\
-        &=  1 \wedge \frac{p(X| W,\theta^*)p(\theta^*)q(\theta|\theta^*)}
-        {p(X| W,\theta)p(\theta) q(\theta^*|\theta)}.
+        \alpha %&=  1 \wedge \frac{P(W,(\vartheta, \theta)| y)}{P(W, (\theta, \vartheta)| y)}\\
+       % &=  1 \wedge \frac{P(y| W,\vartheta, \theta) P(W | (\vartheta, \theta))p((\vartheta, \theta))}{P(y| W,(\theta, \vartheta)) P(W | (\theta, \vartheta))p((\theta, \vartheta))}\\
+        &=  1 \wedge \frac{p(X| W,\vartheta)p(\vartheta)q(\theta|\vartheta)}
+        {p(X| W,\theta)p(\theta) q(\vartheta|\theta)}.
         \end{align*}
     \State For both $\theta$ and $\theta^*$, make a forward pass through the 
     elements of $W$, sequentially updating the distribution over states at 
     $w \in W$ given observations upto $w$. At the end, we have calculated
     $p(X|W,\theta)$ and $p(X|W,\theta^*)$. Use these to accept or reject the
-    proposed swapping of $\theta$ and $\theta^*$. Write the new state space
-    as $(W,\theta',\vartheta')$.
+    proposed swapping of $\theta$ and $\vartheta$. Write the new state space
+    as $(W,\theta',\vartheta')$.\boqian{?}
     \State For the new parameter $\theta'$, make a backward pass through 
     the elements of
     $W$, sequentially assigning a state to each element of $W$.
