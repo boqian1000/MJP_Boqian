@@ -3,11 +3,11 @@ We derive conditions under which our proposed algorithm
 inherits mixing properties of an `ideal' sampler that operates without
 computational constraints. The latter proposes a new parameter $\vartheta$
 from distribution $q(\vartheta|\theta)$, and accepts with probability
-$\alpha_I(\vartheta,\theta) = 1 \wedge \frac{P(X , \vartheta)q(\theta| \vartheta)}
-      {P(X , \theta)q(\vartheta|\theta)}$. The resulting ideal
+$\alpha_I(\vartheta,\theta; X) = 1 \wedge \frac{P(X , \vartheta)q(\theta| \vartheta)p(\vartheta)}
+      {P(X , \theta)q(\vartheta|\theta)p(\theta)}$, \boqian{where $p(\theta)$ is the prior of the parameter.} The resulting ideal
 Markov chain has transition probability
-$p_I(\theta'|\theta) = q(\theta'|\theta)\alpha(\theta',\theta) + \left[1-\int d\vartheta
-q(\vartheta|\theta)\alpha_I(\vartheta,\theta)\right]\delta_\theta(\theta')$, the first
+$p_I(\theta'|\theta) = q(\theta'|\theta)\alpha(\theta',\theta;X) + \left[1-\int d\vartheta
+q(\vartheta|\theta)\alpha_I(\vartheta,\theta;X)\right]\delta_\theta(\theta')$, the first
 term corresponding to acceptance, and the second, rejection.
 
 Our main result is Theorem~\ref{thm:geom_erg}, which shows that if the ideal MCMC
@@ -68,8 +68,18 @@ The larger the second smallest eigenvalue, the faster the MJP converges to its
 stationary distribution $\pi_\theta$.
 Note that if the original MJP is reversible, then $R_A(\theta) = A(\theta)$.
 
+\boqian{
+\begin{definition}
+Let $P_{st}(X | \theta)$ be the stationary distribution of the observations 
+$X$, given the parameter $\theta$. Write $V_X$ for the states of the markov chain corresponding to the observations.
+\begin{align*}
+P_{st}(X | \theta) \doteq \sum_{V_X} P(X | V_X, \theta) \pi_\theta(V_X).
+\end{align*}
+\label{def:stationary_pst}
+\end{definition}
+}
 \begin{assumption}
-For the stationary distribution $\pi_\theta$, there exists $\pi_0 > 0$, such that $\inf_{\theta, s} \pi_{\theta}(s) > \pi_0$.
+For the stationary distribution $\pi_\theta$, there exists $\pi_\lb > 0$, such that $\inf_{\theta, s} \pi_{\theta}(s) > \pi_\lb$.
 \label{asmp:stationary_dist_lower_bound}
 \end{assumption}
 \begin{assumption}
@@ -178,6 +188,14 @@ geometric ergodicity, and the next assumption outlines them for the ideal
 sampler.
 % This combined with the
 %likelihood $p(X|s, \theta)$ being bounded  gives the result.
+\begin{definition}
+Let $\pi_\theta$ be the stationary distribution of the MJP with rate-matrix 
+$A(\theta)$, and define $D_\theta = \text{diag}(\pi_\theta)$. Define 
+$\tilde{A}(\theta) = D_\theta^{-1}A(\theta)D_\theta$, and the 
+{\em reversibilization} of $A(\theta)$ as $R_A(\theta) = 
+(A(\theta)+\tilde{A}(\theta))/2$. 
+\label{def:mjp_symm}
+\end{definition}
 
 \begin{assumption}
 For the ideal sampler with transition probability $p_I(\theta'|\theta)$: \\
@@ -671,7 +689,7 @@ inequality,
  %\alpha(\theta,\vartheta,W',X)| \le \epsilon $.
 %Write $q(W', \theta' | W, \theta, \vartheta)$ for the proposal
 %distribution of our MCMC sampler.
-Then, for any $\epsilon$, there exists $\theta_\epsilon > 0$ as well as a set $\E_\epsilon \subseteq \{(W', \theta'): |\alpha_I(\theta,\theta',X) - \alpha(\theta,\theta',W',X)| \le \epsilon\}$, such that for $\theta$ satisfying $\| \theta \| > \theta_\epsilon$ and any $\vartheta$, we have
+Then, for any $\epsilon$, there exists $\theta_\epsilon > 0$ as well as a set $\E_\epsilon \subseteq \{(W', \theta'): |\alpha_I(\theta,\theta';X) - \alpha(\theta,\theta';W',X)| \le \epsilon\}$, such that for $\theta$ satisfying $\| \theta \| > \theta_\epsilon$ and any $\vartheta$, we have
 %and $W_\epsilon > 0$, such that for
 %$\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
 %  $P(|W'| > W_\epsilon, \theta' > \theta_\epsilon  | W, \theta, \vartheta) \ge 1-\epsilon$.
@@ -896,9 +914,9 @@ Consider the transition probability over $(W',\theta')$:
   P(dW', d\theta'&| W, \theta, \vartheta)
 =d\theta' dW' \left[q(\theta' | \theta)
   \sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')
-\alpha(\theta, \theta' | W', X)\right. \\
+\alpha(\theta, \theta' ; W', X)\right. \\
 &\left.+ \int q(\nu | \theta) \sum_{S,T} P(S, T|W,\theta,\vartheta,
-    X)P(W' | S, T, \theta, \nu) ( 1 - {\alpha(\theta, \nu | W', X)})d\nu
+    X)P(W' | S, T, \theta, \nu) ( 1 - {\alpha(\theta, \nu ; W', X)})d\nu
     \delta_\theta(\theta')\right].
 \end{align*}
 Integrate out $W'$, then we get the following.
@@ -906,22 +924,22 @@ Integrate out $W'$, then we get the following.
   P(d\theta'| W, \theta, \vartheta) =d\theta' \int_{W'}dW'&
   \left[q(\theta' | \theta)
     \sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta,
-  \theta')\alpha(\theta, \theta' | W', X)\right.\\
+  \theta')\alpha(\theta, \theta' ; W', X)\right.\\
   &\hspace{-1.3in}\left.  + \int q(\nu | \theta) \sum_{S,T} P(S, T |  W, \theta, \vartheta,
-X)P(W' | S, T, \theta, \nu) ( 1 - \alpha(\theta, \nu | W', X))d\nu
+X)P(W' | S, T, \theta, \nu) ( 1 - \alpha(\theta, \nu ; W', X))d\nu
 \delta_\theta(\theta')\right] \\
-&:= d\theta' I_1(W, \theta', \theta, \vartheta) + d\theta'\delta_\theta(\theta')I_2(W, \theta, \vartheta).
+&\doteq d\theta' I_1(W, \theta', \theta, \vartheta) + d\theta'\delta_\theta(\theta')I_2(W, \theta, \vartheta).
 \end{align*}
 We denote the transition density of $W$, $\sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')$, as $P(W' | W, \theta, \vartheta, \theta', X)$. So we have
 \begin{align*}
-&I_1(W, \theta', \theta, \vartheta) = q(\theta' | \theta)\int dW'P(W' | W, \theta, \vartheta, \theta', X)\alpha(\theta, \theta' | W', X); \\
-&I_2(W, \theta, \vartheta) =\int d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu | W', X)).
+&I_1(W, \theta', \theta, \vartheta) = q(\theta' | \theta)\int dW'P(W' | W, \theta, \vartheta, \theta', X)\alpha(\theta, \theta' ; W', X); \\
+&I_2(W, \theta, \vartheta) =\int d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu ; W', X)).
 \end{align*}
 
 {Consider the second term $I_2$, involving an integral over $(\nu,W')$.
   From Proposition~\ref{prop:mix0}, for any positive $\epsilon$, there
   exists $\theta_\epsilon > 0$ such that the set $E_{\epsilon}$
-  (where $|\alpha(\theta, \nu | X,W') - \alpha_I(\theta, \nu | X)| \le
+  (where $|\alpha(\theta, \nu ; X,W') - \alpha_I(\theta, \nu ; X)| \le
   \epsilon$) has probability greater than $1-\epsilon$.
   Write $I_{2,\E_{\epsilon}}$ for the integral over this set, and
   $I_{2,\E_{\epsilon}^c}$ for that over the complement. Then,
@@ -949,15 +967,15 @@ We denote the transition density of $W$, $\sum_{S,T} P(S, T | W, \theta, \varthe
 %      \theta)\alpha_I(\theta, \nu) d\nu\right)\delta_\theta(\theta')\right]
 %      \numberthis \label{eq:nu1}
 \begin{align*}
-I_{2,\E_{\epsilon}}(W, \theta, \vartheta) &= \int_{\E_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu | W', X)) \\
+I_{2,\E_{\epsilon}}(W, \theta, \vartheta) &= \int_{\E_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu ; W', X)) \\
 &\le \int_{\E_\epsilon}d\nu dW' q(\nu | \theta)
-  P(W' | W, \theta, \vartheta, \nu, X)  [ 1 - (\alpha_I(\theta, \nu | X)-\epsilon)] \\
+  P(W' | W, \theta, \vartheta, \nu, X)  [ 1 - (\alpha_I(\theta, \nu ; X)-\epsilon)] \\
 &\le   \int d\nu dW'  q(\nu | \theta)
   P(W' | W, \theta, \vartheta, \nu, X)
-  [ 1 - (\alpha_I(\theta, \nu | X)-\epsilon)] \\
-  &\le (1+\epsilon)  - \int  q(\nu | \theta) \alpha_I(\theta, \nu | X) d\nu, \\
+  [ 1 - (\alpha_I(\theta, \nu ; X)-\epsilon)] \\
+  &\le (1+\epsilon)  - \int  q(\nu | \theta) \alpha_I(\theta, \nu ; X) d\nu, \\
  & \text{while bounding the acceptance rate by 1,} \\
-  I_{2,\E_{\epsilon}^c}(W, \theta, \vartheta)  &= \int_{\E^c_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu | W', X)) \\
+  I_{2,\E_{\epsilon}^c}(W, \theta, \vartheta)  &= \int_{\E^c_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu ; W', X)) \\
   &\le \int_{\E^c_{\epsilon}} d\nu dW'
   q(\nu | \theta) P(W' | W, \theta, \vartheta, \nu, X) \\
  &= \int_{\E^c_{\epsilon}} d\nu dW'
@@ -1031,8 +1049,8 @@ For the first term, by corollary \ref{corol:integ_bound}, and bounding
 the acceptance probability by $\alpha_I + \epsilon$ we get, for $\theta$ satisfying $ \| \theta \| > \theta_3$,
 \begin{align*}
 \int_{\E_\epsilon} d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta)  &
- \leq \int_{\E_\epsilon} \Omega(\theta')q(\theta' | \theta) (\alpha_I(\theta, \theta', X) + \epsilon) d\theta' \\
-& \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta', X) d\theta' + \eta_1 \epsilon \Omega(\theta)
+ \leq \int_{\E_\epsilon} \Omega(\theta')q(\theta' | \theta) (\alpha_I(\theta, \theta'; X) + \epsilon) d\theta' \\
+& \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta'; X) d\theta' + \eta_1 \epsilon \Omega(\theta)
 \end{align*}
 For $\int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta'$, from assumption \ref{asmp:integ_bound}, there exists $\eta_0 , \theta_2 > 0$ such that for $\theta$ satisfying $ \| \theta \| > \theta_2$, we have
 \begin{align*}
@@ -1058,6 +1076,9 @@ Then for $\theta$ satisfying $ \| \theta \| >\max(\theta_2, \theta_3, \theta_\ep
   &\sqrt{\eta_0}\Omega(\theta) \sqrt{\epsilon} +  \eta_1 \epsilon \Omega(\theta) + 2\epsilon \Omega(\theta)\\
   & \leq (1 - \rho) \Omega(\theta) + (\sqrt{\eta_0} \sqrt{\epsilon} +  \eta_1 \epsilon + 2\epsilon) \Omega(\theta)
 \end{align*}
+\boqian{
+We also need to specify the constant $M$ from assumption \ref{asmp:ideal_geom}.
+}
 For $\theta$ satisfying $ \| \theta \| >\max(\theta_2, \theta_3, \theta_\epsilon)$, we have %\boqian{need to change afterwards}
 \begin{align*}
 \mathbb{E}[\lambda_1 | W'| &+ \Omega(\theta')| W, \theta, \vartheta, X] \le \lambda_1(1 - \delta_1)|W| + \lambda_1 (t_{end} - t_{start}) (1 + \eta_1)\Omega(\theta) \\
