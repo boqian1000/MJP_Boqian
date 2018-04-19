@@ -64,7 +64,7 @@ $\tilde{A}(\theta) = D_\theta^{-1}A(\theta)D_\theta$, and the
 (A(\theta)+\tilde{A}(\theta))/2$. 
 \label{def:mjp_symm}
 \end{definition}
-This definition is from~\cite{fill1991}, who show that the matrix 
+This definition is from~\cite{fill1991}, which shows that the matrix 
 $R_A(\theta)$ is reversible with real eigenvalues, the smallest being $0$. 
 The larger the second smallest eigenvalue, the faster the MJP converges to its 
 stationary distribution $\pi_\theta$.
@@ -80,6 +80,7 @@ P_{st}(X | \theta) \doteq \sum_{V_X} P(X | V_X, \theta) \pi_\theta(V_X).
 \label{def:stationary_pst}
 \end{definition}
 }
+\boqian{$\inf \pi_\theta$ assumption}
 %\begin{assumption}
 %For the stationary distribution $\pi_\theta$, there exists $\pi_\lb > 0$, such that $\inf_{\theta, s} \pi_{\theta}(s) > \pi_\lb$.
 %\label{asmp:stationary_dist_lower_bound}
@@ -140,7 +141,7 @@ Define the reversibilization $R_B(\theta,\theta')$ from $B(\theta,\theta')$
 just as we did $R_A(\theta)$ from $A(\theta)$. 
 \begin{lemma}
   Suppose $\theta > \max (\theta_0, \theta_1)$ and $\theta'$ satisfies 
-$\frac{1}{K_0} \le \frac{\Omega(\theta)'}{\Omega(\theta)} \le K_0 $ for some $K_0 > 0$, which satisfies $(1 + \frac{1}{K_0})k_1 > 2$. 
+$\frac{1}{K_0} \le \frac{\Omega(\theta)'}{\Omega(\theta)} \le K_0 $ for some $K_0 > 1$, which satisfies $(1 + \frac{1}{K_0})k_1 \ge 2$. 
 For all such $(\theta,\theta')$, the Markov chain with transition matrix $B(\theta,\theta')$ converges geometrically to its stationary 
 distribution at rates uniformly bounded away from $0$.
 %The second largest eigenvalue $\lambda^2_B(\theta,\theta')$ of $R_B$ and  
@@ -157,19 +158,19 @@ follows that both $R_A$ and $R_B$ share the same eigenvectors, with
 eigenvalues satisfying 
 %and that 
 %the eigenvalues of $A(\theta)$ and $B(\theta,\theta')$ satisfy
-$\lambda_B(\theta, \theta') = 1 - \frac{\lambda_A(\theta)}{\Omega(\theta,
+$\lambda_{R_B}(\theta, \theta') = 1 - \frac{\lambda_{R_A}(\theta)}{\Omega(\theta,
 \theta')}$. In particular, the second largest eigenvalue 
-$\lambda^2_B(\theta,\theta')$ of $R_B$ and  
-second smallest eigenvalue $\lambda^2_A(\theta,\theta')$ of $R_A$ satisfy  
-$\lambda^2_B(\theta,\theta') = 1 - \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')}$.
-Then $1 - \lambda^2_B(\theta,\theta') = \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')} 
-\ge \frac{\lambda^2_A(\theta)}{(K_0+1)\Omega(\theta)} 
+$\lambda_2^{R_B}(\theta,\theta')$ of $R_B$ and  
+second smallest eigenvalue $\lambda^{R_A}_2(\theta,\theta')$ of $R_A$ satisfy  
+$\lambda^{R_B}_2(\theta,\theta') = 1 - \frac{\lambda^{R_A}_2(\theta)}{\Omega(\theta, \theta')}$.
+Then $1 - \lambda^{R_B}_2(\theta,\theta') = \frac{\lambda^{R_A}_2(\theta)}{\Omega(\theta, \theta')} 
+\ge \frac{\lambda^{R_A}_2(\theta)}{(K_0+1)\Omega(\theta)} 
 \ge \frac{\mu}{K_0+1} $. The last two inequalities follow from 
 assumptions~\ref{asmp:unif_rate} and~\ref{asmp:cond_num}. \\
 Also, we have
 \begin{align*}
 \Omega(\theta, \theta') &= \Omega(\theta) + \Omega(\theta') > (1 + \frac{1}{K_0})\Omega(\theta)\\
-& > (1 + \frac{1}{K_0})k_1\max_s |A_{ss}(\theta)| > 2\max_s |A_{ss}(\theta)| %\ge -2 A(\theta)_{s,s}.
+& > (1 + \frac{1}{K_0})k_1\max_s A_{s}(\theta) \ge 2\max_s A_{s}(\theta) %\ge -2 A(\theta)_{s,s}.
 \end{align*}
 So for any state $s$, the diagonal element $B(\theta, \theta')_{s,s} = 1 + \frac{A(\theta)_{s,s}}{\Omega(\theta, \theta')}> \frac{1}{2}$.
 Following~\cite{fill1991}, this bound on the eigenvalue gap of $R_B(\theta,\theta')$ gives the result.
@@ -191,14 +192,14 @@ geometric ergodicity, and the next assumption outlines them for the ideal
 sampler.
 % This combined with the
 %likelihood $p(X|s, \theta)$ being bounded  gives the result.
-\begin{definition}
-Let $\pi_\theta$ be the stationary distribution of the MJP with rate-matrix 
-$A(\theta)$, and define $D_\theta = \text{diag}(\pi_\theta)$. Define 
-$\tilde{A}(\theta) = D_\theta^{-1}A(\theta)D_\theta$, and the 
-{\em reversibilization} of $A(\theta)$ as $R_A(\theta) = 
-(A(\theta)+\tilde{A}(\theta))/2$. 
-\label{def:mjp_symm}
-\end{definition}
+%\begin{definition}
+%Let $\pi_\theta$ be the stationary distribution of the MJP with rate-matrix 
+%$A(\theta)$, and define $D_\theta = \text{diag}(\pi_\theta)$. Define 
+%$\tilde{A}(\theta) = D_\theta^{-1}A(\theta)D_\theta$, and the 
+%{\em reversibilization} of $A(\theta)$ as $R_A(\theta) = 
+%(A(\theta)+\tilde{A}(\theta))/2$. 
+%\label{def:mjp_symm}
+%\end{definition}
 
 \begin{assumption}
 For the ideal sampler with transition probability $p_I(\theta'|\theta)$: \\
