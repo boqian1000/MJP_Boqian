@@ -3,10 +3,10 @@ We derive conditions under which our proposed algorithm
 inherits mixing properties of an `ideal' sampler that operates without
 computational constraints. The latter proposes a new parameter $\vartheta$
 from distribution $q(\vartheta|\theta)$, and accepts with probability
-$\alpha_I(\vartheta,\theta; X) = 1 \wedge \frac{P(X , \vartheta)q(\theta| \vartheta)p(\vartheta)}
-      {P(X , \theta)q(\vartheta|\theta)p(\theta)}$, \boqian{where $p(\theta)$ is the prior of the parameter.} The resulting ideal
+$\alpha_I(\vartheta,\theta; X) = 1 \wedge \frac{p(X , \vartheta)q(\theta| \vartheta)}
+      {p(X , \theta)q(\vartheta|\theta)}$.  The resulting ideal
 Markov chain has transition probability
-$p_I(\theta'|\theta) = q(\theta'|\theta)\alpha(\theta',\theta;X) + \left[1-\int d\vartheta
+$p_I(\theta'|\theta) = q(\theta'|\theta)\alpha_I(\theta',\theta;X) + \left[1-\int d\vartheta
 q(\vartheta|\theta)\alpha_I(\vartheta,\theta;X)\right]\delta_\theta(\theta')$, the first
 term corresponding to acceptance, and the second, rejection.
 
@@ -29,7 +29,7 @@ of our proof.
 \begin{assumption}
 The uniformization-rate is set as $\Omega(\theta, \vartheta) = \Omega(\theta) + 
 \Omega(\vartheta)$, where %$A$ is the rate matrix of the Markov jump process and 
-$\Omega(\theta) = k_1 \max_s |A_{ss}(\theta)| + k_0$, for some 
+$\Omega(\theta) = k_1 \max_s A_{s}(\theta) + k_0$, for some 
 $k_1 > 1, k_0 > 0$.
 \label{asmp:unif_rate}
 \end{assumption}
@@ -37,21 +37,23 @@ $k_1 > 1, k_0 > 0$.
 % we can just set $\Omega(\theta) = \Mx{\theta} + \mx{\theta}$ so that
 % $m_2 = \frac{1}{1+\mu}$.}
 Although it is possible to specify broader conditions under which our 
-result holds, for clarity we focus on this case. This is also how we 
-setup our sampler in our experiments.
+result holds, for clarity we focus on this case. 
+We can drop the $k_0$ if $\inf_\theta \max_s A_s(\theta) > 0$
+%This is also how we setup our sampler in our experiments.
 
 \begin{assumption}
-  $\Omega(\theta)$ is not bounded, and there exists a positive constant $\theta_0$ such that $\forall$ $\theta_x, \theta_y$ satisfying
+  $\Omega(\theta)$ is not bounded, and there exists a positive constant $\theta_0$ such 
+  that for any $\theta_x, \theta_y$ satisfying
   $\| \theta_x \| \ge \| \theta_y \| > \theta_0$, we have $\Omega(\theta_x) \ge \Omega(\theta_y)$.  
 %  \begin{align*}
 %   \lim_{\|\theta\| \rightarrow +\infty} \Omega(\theta) = + \infty.
 %  \end{align*}
   \label{asmp:mono_tail}
 \end{assumption}
-\noindent Proving our result when $\Omega(\theta)$ is bounded is 
+\noindent We will see that proving our result when $\Omega(\theta)$ is bounded is 
 easy. %This assumption usually holds under suitable reparametrization,
 %and is not critical: we impose 
-When this is not the case, this assumption avoids book-keeping by making 
+When this is not so, this assumption avoids book-keeping by making 
 $\Omega(\theta)$ increase monotonically with $\theta$.
 
 \begin{definition}
@@ -78,19 +80,19 @@ P_{st}(X | \theta) \doteq \sum_{V_X} P(X | V_X, \theta) \pi_\theta(V_X).
 \label{def:stationary_pst}
 \end{definition}
 }
-\begin{assumption}
-For the stationary distribution $\pi_\theta$, there exists $\pi_\lb > 0$, such that $\inf_{\theta, s} \pi_{\theta}(s) > \pi_\lb$.
-\label{asmp:stationary_dist_lower_bound}
-\end{assumption}
+%\begin{assumption}
+%For the stationary distribution $\pi_\theta$, there exists $\pi_\lb > 0$, such that $\inf_{\theta, s} \pi_{\theta}(s) > \pi_\lb$.
+%\label{asmp:stationary_dist_lower_bound}
+%\end{assumption}
 \begin{assumption}
 %  The rate-matrix $A(\theta)$ is ergodic for all $\theta$ and satisfies
  % $\inf_\theta \frac{\mx{\theta}}{\Mx{\theta}} = \mu > 0$.
 %  $\forall \theta$ satisfying
 %  $|\theta| > |\hat{\theta}|$, we have $\Mx{\theta} \asymp
 %  \mx{\theta}$.
-	Writing $\lambda ^A_2(\theta)$ for the second smallest eigenvalue of
-    matrix  $R_A(\theta)$, there exist constants $\mu > 0$ and $\theta_1 > 0$
-    such that $ \lambda ^A_2(\theta) \geq \mu \Omega(\theta)$
+  Writing $\lambda^{R_A}_2(\theta)$ for the second smallest eigenvalue of
+    $R_A(\theta)$, there exist $\mu > 0$ and $\theta_1 > 0$
+    such that $ \lambda^{R_A}_2(\theta) \geq \mu \max A_s(\theta)$
    for all $\theta$ satisfying $ \| \theta \|> \theta_1$.
   \label{asmp:cond_num}
 \end{assumption} 
@@ -100,11 +102,12 @@ For the stationary distribution $\pi_\theta$, there exists $\pi_\lb > 0$, such t
 %Assumption~\ref{asmp:mono_tail} allows $\max |A_{ss}(\theta)|$ 
 %(and therefore $\Omega(\theta)$) to grow with $\|\theta\|$. Here, we 
 This is the strongest assumption we need, requiring that 
-$\lambda^A_2(\theta)$ (which determines the mixing rate of the MJP) grows 
-at least as fast as $\Omega(\theta)$. 
-This controls the relative stability of different MJP states, and is 
-satisfied when, for example, all elements of $A(\theta)$ grow with 
-$\theta$ at similar rates.
+$\lambda^{R_A}_2(\theta)$ (which determines the MJP mixing rate) grows 
+at least as fast as $\max A_s(\theta)$. 
+%This controls the relative stability of different MJP states, and 
+This is satisfied when, for example, all elements of $A(\theta)$ grow 
+with $\theta$ at similar rates, controlling the relative stability of 
+the least and most stable states.
 %rules 
 %out any state $s'$ such that 
 %$\frac{|A_{s's'}(\theta)}{\max_s A_{ss}(\theta)}| \rightarrow 0$ as $\theta$ increases.
@@ -130,8 +133,8 @@ considered. %One open question is whether this assumption is necessary.
 %MJP has mixed at the end of the interval. The earlier assumption ensures
 %this holds for all $\theta \ge \theta_0$.
 
-Let $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$
-be the transition matrix of the embedded Markov chain, and note that 
+Recall $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$
+is the transition matrix of the embedded Markov chain, and note that 
 it has the same stationary distribution $\pi_\theta$ as $A(\theta)$.
 Define the reversibilization $R_B(\theta,\theta')$ from $B(\theta,\theta')$ 
 just as we did $R_A(\theta)$ from $A(\theta)$. 
