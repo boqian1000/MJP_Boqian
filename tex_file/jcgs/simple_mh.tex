@@ -28,7 +28,7 @@ figure~\ref{fig:naive_mh} in the appendix sketch this out.
    \label{alg:MH_naive}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{Observations $X$}, 
-                       \text{the previous MJP path $S(t) = (S, T)$ and parameters $\theta$}.\\ 
+                       \text{the previous MJP path $S(t) = (S, T)$ and parameters $\theta$ \boqian{and  $\pi_0$}}.\\ 
                      & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
    \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (S', T')$, 
                             new MJP parameters $\theta'$}.\\
@@ -38,15 +38,15 @@ figure~\ref{fig:naive_mh} in the appendix sketch this out.
      \State Set $\Omega \boqian{\equiv} \Omega(\theta) > \max_s{A_s(\theta)}$ for
      some function $\Omega(\cdot)$ (e.g.\ $\Omega(\theta) = 
       2\max_s A_s(\theta))$.
-      \State Sample virtual jumps $U\subset[t_{start}, t_{end}]$ from a 
+      \State Sample virtual jumps $U\subset[t_{start}, t_{end}]$ \boqian{we used $[0, \tau]$ before?} from a 
       Poisson process with piecewise-constant rate 
       $R(t) = (\Omega - A_{S(t)})$. 
     Set $W = T \cup U$ and discard MJP state information.
       \State Propose $\vartheta \sim q(\cdot| \theta)$.
           The acceptance probability is given by 
           \begin{align*}
-          \alpha &=  1 \wedge \frac{p(W,\vartheta| y)}{p(W, \theta| y)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}
-          =  1 \wedge \frac{p(y| W,\vartheta) p(W | \vartheta)p(\vartheta)}{p(y|W, \theta)p(W | \theta)p(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
+          \alpha &=  1 \wedge \frac{p(W,\vartheta| X)}{p(W, \theta| X)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}
+          =  1 \wedge \frac{p(X| W,\vartheta) p(W | \vartheta)p(\vartheta)}{p(X|W, \theta)p(W | \theta)p(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
           \end{align*}
     \State For both $\theta$ and $\vartheta$, make a forward pass through the 
     elements of $W$, sequentially updating the distribution over states at 
@@ -54,8 +54,8 @@ figure~\ref{fig:naive_mh} in the appendix sketch this out.
     For any $\theta$, the Markov transition matrix 
     $B(\theta)$ equals $I + \frac{A(\theta)}{\Omega(\theta)}$ while the initial distribution
       over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
-      $ L_i(s) = p(Y_{[w_i, w_{i + 1})} | S(t) = s , t \in [w_i, w_{i + 1})) = 
-      \prod_{o: t_o \in [w_i, w_{i + 1})}p(y_{t_o} | s)$.
+      $ L_i(s) = p(X_{[w_i, w_{i + 1})} | S(t) = s , t \in [w_i, w_{i + 1})) = 
+      \prod_{o: t_o \in [w_i, w_{i + 1})}p(X_{t_o} | s)$.
     At the end, we have 
     $p(X|W,\theta)$ and $p(X|W,\vartheta)$. Use these, and the fact that 
     $p(W|\theta)$ is Poisson-distributed to accept or reject the

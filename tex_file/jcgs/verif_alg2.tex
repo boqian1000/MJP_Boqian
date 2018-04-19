@@ -87,16 +87,17 @@ $\kappa$ in our experiments.
 
 It is also possible to have non-additive settings for $\Omega(\theta,\vartheta)$.
 A simple option is to set it equal to 
-$\kappa \max( \max_i A_i(\theta), \max A_i(\vartheta)$ for some choice of $\kappa
+$\kappa \max( \max_i A_i(\theta), \max A_i(\vartheta))$ for some choice of $\kappa
 > 1$. We investigate this option as well.
 
 Our proposed algorithm is related to work on MCMC inference for doubly-intractable distributions.
-Algorithm like~\cite{Moller2006,murray2006,Andrieu09} all attempt to evaluate to evaluate an intractable
+Algorithm like~\cite{Moller2006,murray2006,Andrieu09} all attempt to evaluate an intractable
 likelihood under a proposed parameter $\theta^*$ by introducing auxiliary variables, however there
 the auxiliary variable is sampled independently under the proposed parameters. For MJP, this would
 involve proposing a new parameter $\theta^*$, generating a new uniformizing grid $U^*$, and then
 accepting or rejecting. This can complicate computations (with two sets of time points), and also
-reduce acceptance rates is the new parameter $\theta^*$ is incompatible with the old grid $U$ or
+reduce acceptance rates is \boqian{if}
+ the new parameter $\theta^*$ is incompatible with the old grid $U$ or
 vice versa. While~\cite{murray2006} suggest annealing schemes to try to address this issue, we exploit
 the structure of the Poisson process and provide a cleaner solution: generate a single set of
 auxiliary variables that depends symmetrically on both the new and old parameters. It is interesting

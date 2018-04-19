@@ -73,7 +73,7 @@ and then a new trajectory conditioned on the $W$.
                        \text{the previous path $S(t) = (S, T)$}.\\ 
                      & \text{A  parameter $\Omega > \max_i A_i$}, where
    $A = A(\theta)$ is the MJP rate-matrix.\\
-   \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$}.\\
+   \textbf{Output:  }& \text{A new MJP trajectory $S' (t) = (S', T')$}.\\
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
@@ -125,8 +125,8 @@ two steps from algorithm~\ref{alg:MJP_gibbs}:
    \label{alg:MJP_gibbs}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{A set of partial and noisy observations $X$}, \\
-                      & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$}.\\ 
-   \textbf{Output:  }& \text{A new MJP trajectory $\tilde{S} (t) = (\tilde{S}, \tilde{T})$, 
+                      & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$ \boqian{and $\pi_0$}}.\\ 
+   \textbf{Output:  }& \text{A new MJP trajectory $S' (t) = (S', T')$, 
                             new MJP parameters $\tilde{\theta}$}.\\
    \hline
    \end{tabular}
@@ -210,7 +210,7 @@ Markov chain}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{Observations $X$};
    proposal density $q(\vartheta|\ctheta)$; 
-   \text{previous parameters $\ctheta$}.\\
+   \text{previous parameters $\ctheta$ \boqian{and $\pi_0$}}.\\
    \textbf{Output:  }& \text{A new Markov chain parameter $\ntheta$}.\\
    \hline
    \end{tabular}
@@ -243,7 +243,7 @@ continuous-time paths between successive times. As
 shown in~\cite{RaoTeh13}, this approach is cubic rather than 
 quadratic in the 
 number of states, cannot exploit structure like sparsity in the 
-transition matrix, and can depend in not trivial ways on the exact 
+transition matrix, and can depend \boqian{on?}in not trivial ways on the exact 
 nature of the observation process.
 Also, the number of expensive matrix exponentiations scales
 with the number of observations rather than the number of transitions.

@@ -51,7 +51,7 @@ the latter is an $N \times N$-matrix governing the dynamics of the system.  An
 off-diagonal element $A_{ij}$, for $i \neq j$ gives the rate 
 of transitioning from state $i$ to $j$. We write $A_i$ for the 
 negative of the $i$th diagonal element $A_{ii}$. For an MJP,
-$\sum_{j \neq i} A_{ij} = -A_{ii} := A_i$, so that the rows of $A$ sum to $0$.  
+$\sum_{j \neq i} A_{ij} = -A_{ii} := A_i$, \boqian{which one should we use as definition $\doteq$ or $:=$?} so that the rows of $A$ sum to $0$.  
 $A_i$ gives the total rate at which the system leaves state $i$ for any other state.
 To simulate an MJP over an interval $[0,\cT]$, one follows 
 Gillespie's algorithm~\cite{gillespie97}: 
@@ -65,8 +65,8 @@ $t_{curr} < \cT$:
   \item Jump to a new state $s_{k+1} \neq s_k$ with 
     probability equal to $A_{s_ks_{k+1}}/A_{s_k}$. Set $k=k+1$.
 \end{itemize}
-The times $T=(t_0, \cdots, t_{|T| })$ and states 
-$S=(s_0, \cdots, s_{|T| })$ define the MJP path $S(t)$.
+The times $T=(t_0, \cdots, t_{|T|\boqian{|T| - 1} })$ and states 
+$S=(s_0, \cdots, s_{|T|\boqian{|T| - 1} })$ define the MJP path $S(t)$.
 
 \subsection{Structured rate matrices}
 While the rate matrix $A$ can have $N(N-1)$ independent elements,

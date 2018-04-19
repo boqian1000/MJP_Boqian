@@ -48,7 +48,7 @@ $ \text{acc} =
    \label{alg:MH_improved}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{The observations $X$,}
-                      \text{the previous MJP path $S(t) = (S, T)$ and parameters $\theta$}.\\ 
+                      \text{the previous MJP path $S(t) = (S, T)$ and parameters $\theta$ \boqian{and $\pi_0$}}.\\ 
                      & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
    \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (S', T')$, 
                             new MJP parameters $\theta'$}.\\
@@ -57,7 +57,7 @@ $ \text{acc} =
    \begin{algorithmic}[1]
       \State Sample $\vartheta \sim q(\cdot| \theta)$, and 
       set %$\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$. 
-	\boqian{$\Omega = \Omega(\theta) + \Omega(\vartheta)$.}
+	$\Omega \boqian{\equiv} = \Omega(\theta) + \Omega(\vartheta)$.
       %In the case of uniformization, we
       %have a single $\Omega$ for all states, with $\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$.
       %, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
@@ -66,7 +66,7 @@ $ \text{acc} =
     Set $W = T \cup U$ and discard MJP states.
     \State The current MCMC state-space is $(W,\theta,\vartheta)$. Propose swapping
     $\theta$ and $\vartheta$, so that the new state-space is 
-   \boqian{ $(W, \theta, \vartheta)$.}
+   \boqian{ $(W, \vartheta, \theta)$.}
 %$(W, \theta, \vartheta)$    
      The acceptance probability is given by
    % accept $\theta^*$ as $\tilde{\theta}$ with probability $\alpha$.
@@ -74,13 +74,14 @@ $ \text{acc} =
         \alpha %&=  1 \wedge \frac{P(W,(\vartheta, \theta)| y)}{P(W, (\theta, \vartheta)| y)}\\
        % &=  1 \wedge \frac{P(y| W,\vartheta, \theta) P(W | (\vartheta, \theta))p((\vartheta, \theta))}{P(y| W,(\theta, \vartheta)) P(W | (\theta, \vartheta))p((\theta, \vartheta))}\\
         &=  1 \wedge \frac{p(X| W,\vartheta)p(\vartheta)q(\theta|\vartheta)}
-        {p(X| W,\theta)p(\theta) q(\vartheta|\theta)}.
+        {p(X| W,\theta)p(\theta) q(\vartheta|\theta)}.\\
+        \boqian{P(X | W, \theta, \vartheta)?}
         \end{align*}
-    \State For both $\theta$ and $\theta^*$, make a forward pass through the 
+    \State For both $\theta$ and $\vartheta$, make a forward pass through the 
     elements of $W$, sequentially updating the distribution over states at 
     $w \in W$ given observations upto $w$. At the end, we have calculated
-    $p(X|W,\theta)$ and $p(X|W,\theta^*)$. Use these to accept or reject the
-    proposed swapping of $\theta$ and $\vartheta$. Write the new state space
+    $p(X|W,\theta)$ and $p(X|W,\vartheta)$. Use these to accept or reject the
+    proposed swapping of $\theta$ and $\vartheta$. Write the new state-space
     as $(W,\theta',\vartheta')$.\boqian{?}
     \State For the new parameter $\theta'$, make a backward pass through 
     the elements of
