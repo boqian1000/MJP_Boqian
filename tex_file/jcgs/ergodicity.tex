@@ -70,17 +70,17 @@ The larger the second smallest eigenvalue, the faster the MJP converges to its
 stationary distribution $\pi_\theta$.
 Note that if the original MJP is reversible, then $R_A(\theta) = A(\theta)$.
 
-\boqian{
-\begin{definition}
-Let $P_{st}(X | \theta)$ be the stationary distribution of the observations 
-$X$, given the parameter $\theta$. Write $V_X$ for the states of the markov chain corresponding to the observations.
-\begin{align*}
-P_{st}(X | \theta) \doteq \sum_{V_X} P(X | V_X, \theta) \pi_\theta(V_X).
-\end{align*}
-\label{def:stationary_pst}
-\end{definition}
-}
-\boqian{$\inf \pi_\theta$ assumption}
+%\boqian{
+%\begin{definition}
+%Let $P_{st}(X | \theta)$ be the stationary distribution of the observations 
+%$X$, given the parameter $\theta$. Write $V_X$ for the states of the markov chain corresponding to the observations.
+%\begin{align*}
+%P_{st}(X | \theta) \doteq \sum_{V_X} P(X | V_X, \theta) \pi_\theta(V_X).
+%\end{align*}
+%\label{def:stationary_pst}
+%\end{definition}
+%}
+\boqian{$\inf \pi_\theta$ assumption?}
 %\begin{assumption}
 %For the stationary distribution $\pi_\theta$, there exists $\pi_\lb > 0$, such that $\inf_{\theta, s} \pi_{\theta}(s) > \pi_\lb$.
 %\label{asmp:stationary_dist_lower_bound}
@@ -141,7 +141,7 @@ Define the reversibilization $R_B(\theta,\theta')$ from $B(\theta,\theta')$
 just as we did $R_A(\theta)$ from $A(\theta)$. 
 \begin{lemma}
   Suppose $\theta > \max (\theta_0, \theta_1)$ and $\theta'$ satisfies 
-$\frac{1}{K_0} \le \frac{\Omega(\theta)'}{\Omega(\theta)} \le K_0 $ for some $K_0 > 1$, which satisfies $(1 + \frac{1}{K_0})k_1 \ge 2$. 
+$\boqian{\frac{1}{K_0} \le} \frac{\Omega(\theta)'}{\Omega(\theta)} \le K_0 $ for some $K_0 > 1$, which satisfies $(1 + \frac{1}{K_0})k_1 \ge 2$. 
 For all such $(\theta,\theta')$, the Markov chain with transition matrix $B(\theta,\theta')$ converges geometrically to its stationary 
 distribution at rates uniformly bounded away from $0$.
 %The second largest eigenvalue $\lambda^2_B(\theta,\theta')$ of $R_B$ and  
@@ -178,7 +178,7 @@ Following~\cite{fill1991}, this bound on the eigenvalue gap of $R_B(\theta,\thet
 \end{proof}
 
 Our overall proof strategy is to show that for $\theta$ and $W$ large enough, 
-the condition $\Omega(\theta') \le K_0 \Omega(\theta)$ holds with 
+the condition $ \Omega(\theta') \le K_0 \Omega(\theta)$ holds with 
 high probability. Lemma~\ref{lem:eig_lemma} then allows the distribution 
 over latent states for the continuous-time MJP and its discrete-time 
 counterpart embedded in $W$ to be brought arbitrarily close to $\pi_\theta$ 
@@ -472,6 +472,7 @@ V_{i + 1} = v|W, \theta, \vartheta)}{P(X | W, \theta, \vartheta)}\\
 \alpha(\theta', \theta, W';X) \sum_{S,T} P(S,T | W, \theta, \vartheta, X)
 P(W'| S, T, \theta', \theta)
 \end{align*}
+\boqian{Suppose $(W, \theta, \vartheta) \in B_{h, M}$.}
 Here we use the fact that the proposal distribution $q(\nu|\theta)$
 and $P(W'|S,T,\theta',\theta,X)$ are independent of  $X$.
 We further bound the summation over $(S,T)$ by considering only the term
@@ -548,6 +549,7 @@ P(W', \theta',\vartheta' | W, \theta, \vartheta)  &\ge \frac{\lb^2 }{\ub^2}\delt
        \phi(\vartheta'')\delta_{\SM_{h,M}}(\vartheta'')\exp(-\Omega(\vartheta''))  \numberthis
        \label{eq:density_lowbound}
 \end{align*}
+\boqian{where $F_{Poiss(\Omega(\vartheta''))}$ is the Poisson CDF with rate $\Omega(\vartheta'')$.}
 We have
 \begin{align*}
 \int \phi(\vartheta'')\delta_{\SM_{h,M}}(\vartheta'')\exp(-\Omega(\vartheta'')) d\vartheta'' \le \int_{\SM_{h,M}}\phi(\vartheta'')d\vartheta'' < 1
@@ -624,7 +626,7 @@ Write $W_X$ for the indices of the grid $W$ containing observations, and write $
 for the states of the Markov chain at these times.
 Let $P_B(V_X | W, \theta, \theta')$ be the probability distribution over
 $V_X$ under the Markov chain with transition matrix $B$ given the grid $W$.
-Let $P_{st}(V_X|\theta)$ be the probability of the same vector, sampled
+Let $P_{st}(V_X|\theta)$ be the \boqian{stationary} probability of the same vector, sampled
 independently under the stationary distribution. So
 long as $\mW > w_{0}$ for large enough $w_0$,
 $P_B(V_X | W, \theta, \theta')$ and  $P_{st}(V_X | W, \theta)$ can be
