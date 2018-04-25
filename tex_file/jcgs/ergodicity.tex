@@ -141,7 +141,7 @@ Define the reversibilization $R_B(\theta,\theta')$ from $B(\theta,\theta')$
 just as we did $R_A(\theta)$ from $A(\theta)$. 
 \begin{lemma}
   Suppose $\theta > \max (\theta_0, \theta_1)$ and $\theta'$ satisfies 
-$\boqian{\frac{1}{K_0} \le} \frac{\Omega(\theta)'}{\Omega(\theta)} \le K_0 $ for some $K_0 > 1$, which satisfies $(1 + \frac{1}{K_0})k_1 \ge 2$. 
+$\frac{1}{K_0} \le \frac{\Omega(\theta)'}{\Omega(\theta)} \le K_0 $ for some $K_0 > 1$, which satisfies $(1 + \frac{1}{K_0})k_1 \ge 2$. 
 For all such $(\theta,\theta')$, the Markov chain with transition matrix $B(\theta,\theta')$ converges geometrically to its stationary 
 distribution at rates uniformly bounded away from $0$.
 %The second largest eigenvalue $\lambda^2_B(\theta,\theta')$ of $R_B$ and  
@@ -178,10 +178,10 @@ Following~\cite{fill1991}, this bound on the eigenvalue gap of $R_B(\theta,\thet
 \end{proof}
 
 Our overall proof strategy is to show that for $\theta$ and $W$ large enough, 
-the condition $ \Omega(\theta') \le K_0 \Omega(\theta)$ holds with 
+the condition $ \frac{1}{K_0} \le \Omega(\theta') \le K_0 \Omega(\theta)$ holds with 
 high probability. Lemma~\ref{lem:eig_lemma} then allows the distribution 
 over latent states for the continuous-time MJP and its discrete-time 
-counterpart embedded in $W$ to be brought arbitrarily close to $\pi_\theta$ 
+counterpart embedded in $W$ to be brought arbitrarily close to $\pi_\theta$ \boqian{the stationary distribution?} 
 (and thus to each other).
 This will allow our sampler 
 to inherit mixing properties of the ideal sampler. For the remaining 
@@ -286,7 +286,7 @@ $ \int_\Theta \Omega(\nu) q(\nu | \theta)d\nu \leq \eta_1 \Omega(\theta).$
 \end{corollary}
 \begin{proof}
 From assumption \ref{asmp:integ_bound},  $\exists \eta_0 > 0$, we have $ \int_\Theta \Omega(\mu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2$ for $\theta$ satisfying $\| \theta \|  > \theta_2$.
-For $\theta$ satisfying $\| \theta \|  > \theta_2$, by Cauchy–Schwarz inequality, we have
+For $\theta$ satisfying $\| \theta \|  > \theta_2$, by Cauchy-Schwarz inequality, we have
 \begin{align*}
 \left[ \int_\Theta \Omega(\nu) q(\nu | \theta) d\nu \right]^2 &\le \int_\Theta \Omega(\nu)^2 q(\nu | \theta) d\nu \cdot \int_\Theta q(\nu | \theta) d\nu \le \eta_0 \Omega(\theta)^2.
 \end{align*}
@@ -428,7 +428,7 @@ of the embedded Markov chain away from $0$.
 %\end{align*}
 %\end{proof}
 \begin{proposition}
-The a posteriori probability the embedded Markov chain makes a
+The a posteriori probability \boqian{that} the embedded Markov chain makes a
 self-transition,
 $P(V_i = V_{i + 1} | W, X, \theta, \vartheta) \ge \delta_1 > 0$,
 for %$i = 0, 1, 2, ..., |W|$ and
@@ -493,7 +493,7 @@ P(W' | S, T = \emptyset, \theta', \theta) & \geq P(W' \from
 \PP(\Omega(\theta')))
 P(\emptyset \from \PP(\Omega(\theta)-A_{s_0}(\theta) ))\\
   & \geq P(W' \from \PP(\Omega(\theta'))) P(\emptyset \from \PP(\Omega(\theta) ))\\
-& \geq P(W' \from \PP(\Omega(\theta'))) \exp(-\Omega(\theta)(t_{end} -
+& = P(W' \from \PP(\Omega(\theta'))) \exp(-\Omega(\theta)(t_{end} -
 t_{start}))\\
 & \geq P(W' \from \PP(\Omega(\theta'))) \exp(-M(t_{end}-t_{start}))
 \numberthis %\quad (\text{since }\theta\in B_M)
@@ -566,12 +566,12 @@ we first establish a necessary proposition next.
 This result states that the acceptance probabilities of our proposed
 sampler and the ideal sampler can be brought arbitrarily close
 outside an appropriate small set, so long as $\Omega(\theta)$ is larger
-than $\Omega(\theta')$ by a sufficient factor.
+than $\Omega(\theta')$ by a sufficient factor. \boqian{also has a lower bound}
 
   \begin{lemma}
   %Consider two successive observations, separated by time $t_{diff}$, and
   Suppose $\theta$ and $\theta'$ satisfy $\frac{1}{K_0} \le \frac{\Omega(\theta)}{\Omega(\theta')} \leq K_0
-  $ for some $K_0 > 0$ which satisfies $(1 + \frac{1}{K_0})k_1 > 2$. Write $\mW$ for the
+  $ for some $K_0 > 1$ which satisfies $(1 + \frac{1}{K_0})k_1 \ge 2$. Write $\mW$ for the
   minimum number of grid points between two successive observations.
   %$\| \theta'  - \theta \| \leq h$
   For any $\epsilon > 0$, there exist  $w_{K_0}^\epsilon,  \theta_{6, K_0}^\epsilon > 0$ such that
@@ -590,25 +590,25 @@ than $\Omega(\theta')$ by a sufficient factor.
 % $\lambda^2_B(\theta,\theta')$ of $B$ (which determines its mixing
 % properties) equals $1 - \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')}$.
 %
-{From lemma \ref{lem:eig_lemma}, for all $\theta, \theta'$ satisfying $\frac{1}{K_0} \le \frac{\Omega(\theta)}{\Omega(\theta')} \leq K_0$ for some $K_0 > 0$ which satisfies $(1 + \frac{1}{K_0})k_1 > 2$, the Markov chain with transition matrix $B(\theta, \theta')$ converges geometrically to its stationary distribution $\pi_\theta$ at rates uniformly bounded away from 0.
+{From lemma \ref{lem:eig_lemma}, for all $\theta, \theta'$ satisfying $\frac{1}{K_0} \le \frac{\Omega(\theta)}{\Omega(\theta')} \leq K_0$ for some $K_0 > 1$ which satisfies $(1 + \frac{1}{K_0})k_1 \ge 2$, the Markov chain with transition matrix $B(\theta, \theta')$ converges geometrically to its stationary distribution $\pi_\theta$ at rates uniformly bounded away from 0.
 }
-Our proof strategy is to show that for $\theta$ and $W$ large enough, the
+Our proof strategy is to show that for $\theta$ and $W$ large enough \boqian{for $\| \theta \|$ and $\mW$ large enough}, the
 distribution over latent states for the continuous-time MJP and
 its discrete-time counterpart embedded in $W$ can be brought arbitrarily
 close to $P_{st}$ (and thus to each other). This combined with the
-likelihood $p(X|s, \theta)$ being bounded  gives the result.
+likelihood $p(X|\boqian{S}, \theta)$ being bounded  gives the result.
 %\boqian{do we need to define $P_{st}$?}
 We start with the discrete-time system.
 %Write $P^{w}(\cdot | W, \theta, \theta' )$ for the $w$-step transition
 %probability (equal to $B^w(\theta, \theta')$).
-Assumption~\ref{asmp:cond_num} requires
+\boqian{Assumption~\ref{asmp:cond_num} requires
 %that $\lambda^A_2(\theta)$ satisfies
 $\lambda^A_2(\theta) \geq \mu \Omega(\theta)$.
 Together with the assumption $\Omega(\theta') \leq K_0 \Omega(\theta)$,
 this gives
 $\frac{\lambda^A_2(\theta)}{\Omega(\theta) + \Omega(\theta')} \geq
 \mu / (1 + K_0) $, implying that the second eigenvalue of
-$B(\theta, \theta')$ is bounded away from $1$.
+$B(\theta, \theta')$ is bounded away from $1$.}\boqian{remove?}
 Thus for all $(\theta,\theta')$ satisfying the assumptions of the lemma,
 and for any initial state, the distribution over states after $w_{0}$ steps
 can be brought arbitrarily close to the distribution under the
@@ -643,7 +643,7 @@ Then for any $W$ with $\mW > w_0$, we have
 |P(X|W , \theta, \theta') - P_{st}(X | \theta)| &= | \sum_{V_X} P(X|V_X, \theta)(P_B(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta))|\\
 & \leq \sum_{V_X} P(X | V_X, \theta)|P_B(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta)|\\
 & \leq \sum_{V_X} P(X | V_X, \theta){\epsilon'}\\
-& \leq N \| X \| \xi_1\epsilon' := \epsilon''
+& \leq N \| X \| \ub \epsilon' := \epsilon''
 \end{align*}
 %So for $W$ with $|W| > W_0$, we have  $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon / 4$. \\
 Using the same $w_{0}$ as before, we get a similar result for the
