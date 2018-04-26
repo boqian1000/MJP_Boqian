@@ -1055,7 +1055,7 @@ the acceptance probability by $\alpha_I + \epsilon$ we get, for $\theta$ satisfy
 \begin{align*}
 \int_{\E_\epsilon} d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta)  &
  \leq \int_{\E_\epsilon} \Omega(\theta')q(\theta' | \theta) (\alpha_I(\theta, \theta'; X) + \epsilon) d\theta' \\
-& \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta'; X) d\theta' + \eta_1 \epsilon \Omega(\theta)
+& \leq \int \Omega(\theta')q(\theta' | \theta) \alpha_I(\theta, \theta'; X) d\theta' + \eta_1 \epsilon \Omega(\theta)
 \end{align*}
 For $\int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta'$, from assumption \ref{asmp:integ_bound}, there exists $\eta_0 , \theta_2 > 0$ such that for $\theta$ satisfying $ \| \theta \| > \theta_2$, we have
 \begin{align*}
