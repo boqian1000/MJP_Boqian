@@ -38,7 +38,7 @@ figure~\ref{fig:naive_mh} in the appendix sketch this out.
      \State Set $\Omega \boqian{\equiv} \Omega(\theta) > \max_s{A_s(\theta)}$ for
      some function $\Omega(\cdot)$ (e.g.\ $\Omega(\theta) = 
       2\max_s A_s(\theta))$.
-      \State Sample virtual jumps $U\subset[t_{start}, t_{end}]$ \boqian{we used $[0, \tau]$ before?} from a 
+      \State Sample virtual jumps $U\subset[0, t_{end}]$ from a 
       Poisson process with piecewise-constant rate 
       $R(t) = (\Omega - A_{S(t)})$. 
     Set $W = T \cup U$ and discard MJP state information.
@@ -59,8 +59,8 @@ figure~\ref{fig:naive_mh} in the appendix sketch this out.
     At the end, we have 
     $p(X|W,\theta)$ and $p(X|W,\vartheta)$. Use these, and the fact that 
     $p(W|\theta)$ is Poisson-distributed to accept or reject the
-    proposed $\vartheta$. Write the new state space
-    as \boqian{$(W,\theta,\vartheta)$}.
+    proposed $\vartheta$. Write the new parameter as $\theta'$.
+    %as \boqian{$(W,\theta,\vartheta)$}.
     \State For the new parameter $\theta'$, make a backward pass through 
     the elements of
     $W$, sequentially assigning a state to each element of $W$. This

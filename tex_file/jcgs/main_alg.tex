@@ -65,24 +65,23 @@ $ \text{acc} =
     piecewise-constant rate $R(t) = (\Omega - A_{S(t)}(\theta))$. 
     Set $W = T \cup U$ and discard MJP states.
     \State The current MCMC state-space is $(W,\theta,\vartheta)$. Propose swapping
-    $\theta$ and $\vartheta$, so that the new state-space is 
-   \boqian{ $(W, \vartheta, \theta)$.}
+    $\theta$ and $\vartheta$/ %the new state-space is 
+   %\boqian{ $(W, \vartheta, \theta)$.}
 %$(W, \theta, \vartheta)$    
      The acceptance probability is given by
    % accept $\theta^*$ as $\tilde{\theta}$ with probability $\alpha$.
         \begin{align*}
         \alpha %&=  1 \wedge \frac{P(W,(\vartheta, \theta)| y)}{P(W, (\theta, \vartheta)| y)}\\
        % &=  1 \wedge \frac{P(y| W,\vartheta, \theta) P(W | (\vartheta, \theta))p((\vartheta, \theta))}{P(y| W,(\theta, \vartheta)) P(W | (\theta, \vartheta))p((\theta, \vartheta))}\\
-        &=  1 \wedge \frac{p(X| W,\vartheta)p(\vartheta)q(\theta|\vartheta)}
-        {p(X| W,\theta)p(\theta) q(\vartheta|\theta)}.\\
-        \boqian{P(X | W, \theta, \vartheta)?}
+        &=  1 \wedge \frac{p(X| W,\vartheta,\theta)p(\vartheta)q(\theta|\vartheta)}
+        {p(X| W,\theta, \vartheta)p(\theta) q(\vartheta|\theta)}.
         \end{align*}
     \State For both $\theta$ and $\vartheta$, make a forward pass through the 
     elements of $W$, sequentially updating the distribution over states at 
     $w \in W$ given observations upto $w$. At the end, we have calculated
     $p(X|W,\theta)$ and $p(X|W,\vartheta)$. Use these to accept or reject the
     proposed swapping of $\theta$ and $\vartheta$. Write the new state-space
-    as $(W,\theta',\vartheta')$.\boqian{?}
+    as $(W,\theta',\vartheta')$.
     \State For the new parameter $\theta'$, make a backward pass through 
     the elements of
     $W$, sequentially assigning a state to each element of $W$.
