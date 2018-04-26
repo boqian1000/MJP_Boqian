@@ -980,13 +980,12 @@ I_{2,\E_{\epsilon}}(W, \theta, \vartheta) &= \int_{\E_{\epsilon}} d\nu  dW'q(\nu
   P(W' | W, \theta, \vartheta, \nu, X)
   [ 1 - (\alpha_I(\theta, \nu ; X)-\epsilon)] \\
   &\le (1+\epsilon)  - \int  q(\nu | \theta) \alpha_I(\theta, \nu ; X) d\nu, \\
- & \text{while bounding the acceptance rate by 1,} \\
+ & \text{while bounding the acceptance \boqian{rejection} rate by 1,} \\
   I_{2,\E_{\epsilon}^c}(W, \theta, \vartheta)  &= \int_{\E^c_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu ; W', X)) \\
   &\le \int_{\E^c_{\epsilon}} d\nu dW'
-  q(\nu | \theta) P(W' | W, \theta, \vartheta, \nu, X) \\
- &= \int_{\E^c_{\epsilon}} d\nu dW'
- q(\nu | \theta) P(W' |  W, \theta, \nu, \vartheta, X)
-\le \epsilon
+  q(\nu | \theta) P(W' | W, \theta, \vartheta, \nu, X) \le \epsilon \\
+% &= \int_{\E^c_{\epsilon}} d\nu dW'
+% q(\nu | \theta) P(W' |  W, \theta, \nu, \vartheta, X)
 \end{align*}
 %\int_{W_1}dW' \int_S q(\nu | \theta) &\int \sum_S P(S, T | W, \theta, \vartheta,
 %X)P(W' | S, T, \theta, \nu)dT ( 1 - [\alpha_I(\theta, \nu |
