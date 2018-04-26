@@ -1061,17 +1061,17 @@ For $\int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\t
 \begin{align*}
 \int_\Theta \Omega(\nu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2.
 \end{align*}
-So, by Cauchy–Schwarz inequality and bounding the acceptance probability by one, we have
+So, by Cauchy-Schwarz inequality and bounding the acceptance probability by one, we have
 \begin{align*}
 \left[  \int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta' \right]^2
-& \le \left[  \int_{\E_\epsilon^c}  \Omega(\theta') q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \right]^2\\
-& \le \int_{\E_\epsilon^c}  \Omega(\theta')^2 q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \cdot \int_{\E_\epsilon^c} q(\theta' | \theta) P(W' | \theta, \vartheta, \theta')d\theta' \\
-& \le  \int  \Omega(\theta')^2 q(\theta' | \theta)d\theta' \cdot \epsilon \\
-& \le  \eta_0 \Omega(\theta)^2 \epsilon.
+& \le \left[  \int_{\E_\epsilon^c}  \Omega(\theta') q(\theta' | \theta) P(W' | W, \theta, \vartheta, \theta', X)d\theta' \right]^2\\
+& \le \int_{\E_\epsilon^c} q(\theta' | \theta) P(W' |W, \theta, \vartheta, \theta', X)d\theta'  \int_{\E_\epsilon^c}  \Omega(\theta')^2 q(\theta' | \theta) P(W' |W, \theta, \vartheta, \theta', X)d\theta'   \\
+& \le \epsilon \int  \Omega(\theta')^2 q(\theta' | \theta)d\theta' \\
+& \le \epsilon \eta_0 \Omega(\theta)^2 .
 \end{align*}
 So we have
 \begin{align*}
-\int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta' \le \sqrt{\eta_0}\Omega(\theta) \sqrt{\epsilon}.
+\int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta' \le \sqrt{\epsilon \eta_0 }\Omega(\theta) .
 \end{align*}
 Then for $\theta$ satisfying $ \| \theta \| >\max(\theta_2, \theta_3, \theta_\epsilon)$, we have the following.
 \begin{align*}
