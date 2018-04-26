@@ -574,9 +574,9 @@ than $\Omega(\theta')$ by a sufficient factor. \boqian{also has a lower bound}
   $ for some $K_0 > 1$ which satisfies $(1 + \frac{1}{K_0})k_1 \ge 2$. Write $\mW$ for the
   minimum number of grid points between two successive observations.
   %$\| \theta'  - \theta \| \leq h$
-  For any $\epsilon > 0$, there exist  $w_{K_0}^\epsilon,  \theta_{6, K_0}^\epsilon > 0$ such that
+  For any $\epsilon > 0$, there exist  $w^{K_0}_\epsilon,  \theta_{6, \epsilon}^{K_0} > 0$ such that
   $|P(X| W, \theta, \theta') - P(X | \theta)| < \epsilon$
-  for any $W$ with $\mW > w_{K_0}^\epsilon$ and $\theta $ satisfying $\| \theta \| > \theta_{6, K_0}^\epsilon > 0$.
+  for any $W$ with $\mW > w^{K_0}_\epsilon$ and $\theta $ satisfying $\| \theta \| > \theta_{6, \epsilon}^{K_0} > 0$.
   \label{lem:eigenvalue_lemma}
   \end{lemma}
   \begin{proof}
@@ -721,11 +721,11 @@ Define $E_1^\epsilon = \{\theta' s.t.\ \frac{q(\theta | \theta')p(\theta')}{q(\t
 %For $\epsilon / 4 > 0$,  from assumption \ref{asmp:prior}, there exists $\theta_2 > 0$ and $K_2 > 0$, such that for $\theta > \theta_2$, we have
 
 %For $\epsilon/4 > 0$,
-Next, let $E^K_2 = \{\theta' s.t.\ \frac{\Omega(\theta')}{\Omega(\theta)}\in [1/K, K] \}$. For $\epsilon$ and $K$ satisfying $(1 + \frac{1}{K})k_1 > 2$, from assumption \ref{asmp:omega}, we can find $\theta_{2, \epsilon}^K > 0$, such that for all $\theta$ satisfying $\| \theta \| > \theta_{2, \epsilon}^K$,
+Next, let $E^K_2 = \{\theta' s.t.\ \frac{\Omega(\theta')}{\Omega(\theta)}\in [1/K, K] \}$, for $K$ satisfying $K > 1$ and $(1 + \frac{1}{K})k_1 \ge 2$. For $\epsilon > 0$ , from assumption \ref{asmp:omega}, we can find $\theta_{2, \epsilon}^K > 0$, such that for all $\theta$ satisfying $\| \theta \| > \theta_{2, \epsilon}^K$,
 $P(E^K_2 | \theta) > 1 - \epsilon / 2$.
 
-On this set $E^K_2$, $\Omega(\theta') \le K_\epsilon \Omega(\theta)$ (and also
-$\Omega(\theta) \le K_\epsilon \Omega(\theta')$).  Lemma~\ref{lem:eigenvalue_lemma}
+On this set $E^K_2$, $\Omega(\theta') \le K \Omega(\theta)$ (and also
+$\Omega(\theta) \le K \Omega(\theta')$).  Lemma~\ref{lem:eigenvalue_lemma}
 ensures that %for $\epsilon$ and $K_3$ and $K_2$, given
 %$\frac{1}{K_3}  \leq \frac{\Omega(\theta')}{\Omega(\theta)}  \leq K_3 $,
 there exist $\theta_{3,\epsilon}^K > 0, w_\epsilon^K > 0$, such that for $\mW > w_\epsilon^K$,$\theta$ satisfying $ \| \theta \| > \theta_{3,\epsilon}^K$ and $\theta'$ satisfying $ \| \theta' \| > \theta_{3,\epsilon}^K$, we have
@@ -744,7 +744,7 @@ Define $E_{3, \epsilon}^K = \{\theta' s.t. \| \theta'\| > \tilde{\theta}_{3,\eps
 P(E_{4,\epsilon}^K | E_1^\epsilon E_2^K E_{3, \epsilon}^K) > 1 - \epsilon.
 \numberthis
 \end{align*}
-From assumption \ref{asmp:mono_tail}, there exists $\theta_0$, such that $\Omega(\theta)$ increases as $\| \theta \|$ increases.
+From assumption \ref{asmp:mono_tail}, there exists $\theta_0$, such that $\Omega(\theta)$ increases as $\| \theta \|$ increases, for $\theta$ satisfying $\| \theta \| > \theta_0$.
 Given current state $(W, \theta)$, set $\tilde{\theta}_\epsilon =\max(\theta_0, \theta_{1, \epsilon},\theta_{2, \epsilon}^K,\tilde{\theta}_{3, \epsilon}^K, \theta_{4, \epsilon}^K)$. \\ For $\theta$ satisfying $ \| \theta \| > \kappa \tilde{\theta}_\epsilon$,where $\kappa > 1$ we have 
 \begin{align*}
 P(E^K_2 E^\epsilon_1) \ge P(E^K_2) + P(E_1^\epsilon) - 1 \ge 1 - \epsilon.
