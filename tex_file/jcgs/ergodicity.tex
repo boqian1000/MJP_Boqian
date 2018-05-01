@@ -50,10 +50,11 @@ We can drop the $k_0$ if $\inf_\theta \max_s A_s(\theta) > 0$
 %  \end{align*}
   \label{asmp:mono_tail}
 \end{assumption}
-\noindent We will see that proving our result when $\Omega(\theta)$ is bounded is 
-easy. %This assumption usually holds under suitable reparametrization,
+\noindent %We will see that proving our result when $\Omega(\theta)$ is bounded is 
+%easy. %This assumption usually holds under suitable reparametrization,
 %and is not critical: we impose 
-When this is not so, this assumption avoids book-keeping by making 
+%When this is not so, 
+This assumption avoids book-keeping by making 
 $\Omega(\theta)$ increase monotonically with $\theta$.
 
 \begin{definition}
@@ -80,7 +81,6 @@ Note that if the original MJP is reversible, then $R_A(\theta) = A(\theta)$.
 %\label{def:stationary_pst}
 %\end{definition}
 %}
-\boqian{$\inf \pi_\theta$ assumption?}
 %\begin{assumption}
 %For the stationary distribution $\pi_\theta$, there exists $\pi_\lb > 0$, such that $\inf_{\theta, s} \pi_{\theta}(s) > \pi_\lb$.
 %\label{asmp:stationary_dist_lower_bound}
@@ -91,10 +91,11 @@ Note that if the original MJP is reversible, then $R_A(\theta) = A(\theta)$.
 %  $\forall \theta$ satisfying
 %  $|\theta| > |\hat{\theta}|$, we have $\Mx{\theta} \asymp
 %  \mx{\theta}$.
-  Writing $\lambda^{R_A}_2(\theta)$ for the second smallest eigenvalue of
-    $R_A(\theta)$, there exist $\mu > 0$ and $\theta_1 > 0$
-    such that $ \lambda^{R_A}_2(\theta) \geq \mu \max A_s(\theta)$
-   for all $\theta$ satisfying $ \| \theta \|> \theta_1$.
+  Write $\lambda^{R_A}_2(\theta)$ for the second smallest eigenvalue of
+    $R_A(\theta)$. There exist $\mu > 0$ and $\theta_1 > 0$
+    such that for all $\theta$ satisfying $ \| \theta \|> \theta_1$, 
+    $\min_s \pi_\theta(s) > 0$ and 
+    $ \lambda^{R_A}_2(\theta) \geq \mu \max_s A_s(\theta)$
   \label{asmp:cond_num}
 \end{assumption} 
 \noindent %This is the strongest assumption needed to prove our result;
@@ -102,8 +103,8 @@ Note that if the original MJP is reversible, then $R_A(\theta) = A(\theta)$.
 %large $\theta$. 
 %Assumption~\ref{asmp:mono_tail} allows $\max |A_{ss}(\theta)|$ 
 %(and therefore $\Omega(\theta)$) to grow with $\|\theta\|$. Here, we 
-This is the strongest assumption we need, requiring that 
-$\lambda^{R_A}_2(\theta)$ (which determines the MJP mixing rate) grows 
+The assumption on $\lambda^{R_a}_2$ is the strongest we need, requiring that 
+$\lambda^{R_A}_2(\theta)$ (which sets the MJP mixing rate) grows 
 at least as fast as $\max A_s(\theta)$. 
 %This controls the relative stability of different MJP states, and 
 This is satisfied when, for example, all elements of $A(\theta)$ grow 
@@ -134,16 +135,18 @@ considered. %One open question is whether this assumption is necessary.
 %MJP has mixed at the end of the interval. The earlier assumption ensures
 %this holds for all $\theta \ge \theta_0$.
 
-Recall $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$
+To understand this, recall $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$
 is the transition matrix of the embedded Markov chain, and note that 
 it has the same stationary distribution $\pi_\theta$ as $A(\theta)$.
 Define the reversibilization $R_B(\theta,\theta')$ from $B(\theta,\theta')$ 
 just as we did $R_A(\theta)$ from $A(\theta)$. 
 \begin{lemma}
-  Suppose $\theta > \max (\theta_0, \theta_1)$ and $\theta'$ satisfies 
-$\frac{1}{K_0} \le \frac{\Omega(\theta)'}{\Omega(\theta)} \le K_0 $ for some $K_0 > 1$, which satisfies $(1 + \frac{1}{K_0})k_1 \ge 2$. 
-For all such $(\theta,\theta')$, the Markov chain with transition matrix $B(\theta,\theta')$ converges geometrically to its stationary 
-distribution at rates uniformly bounded away from $0$.
+  Let $\theta > \max (\theta_0, \theta_1)$ and $\theta'$ satisfies 
+$\frac{1}{K_0} \le \frac{\Omega(\theta')}{\Omega(\theta)} \le K_0 $ for 
+some $K_0$ %> 1$, which 
+satisfying $(1 + \frac{1}{K_0})k_1 \ge 2$. 
+For such $(\theta,\theta')$, the Markov chain with transition matrix $B(\theta,\theta')$ converges geometrically to its stationary 
+distribution at rates uniformly bounded from $0$.
 %The second largest eigenvalue $\lambda^2_B(\theta,\theta')$ of $R_B$ and  
 %second smallest eigenvalue $\lambda^2_B(\theta,\theta')$ of $R_B$ satisfy  
 %$\lambda^2_B(\theta,\theta') = 1 - \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')}$.
@@ -166,30 +169,31 @@ $\lambda^{R_B}_2(\theta,\theta') = 1 - \frac{\lambda^{R_A}_2(\theta)}{\Omega(\th
 Then $1 - \lambda^{R_B}_2(\theta,\theta') = \frac{\lambda^{R_A}_2(\theta)}{\Omega(\theta, \theta')} 
 \ge \frac{\lambda^{R_A}_2(\theta)}{(K_0+1)\Omega(\theta)} 
 \ge \frac{\mu}{K_0+1} $. The last two inequalities follow from 
-assumptions~\ref{asmp:unif_rate} and~\ref{asmp:cond_num}. \\
-Also, we have
+assumptions~\ref{asmp:unif_rate} and~\ref{asmp:cond_num}. 
+Also, 
 \begin{align*}
-\Omega(\theta, \theta') &= \Omega(\theta) + \Omega(\theta') > (1 + \frac{1}{K_0})\Omega(\theta)\\
-& > (1 + \frac{1}{K_0})k_1\max_s A_{s}(\theta) \ge 2\max_s A_{s}(\theta) %\ge -2 A(\theta)_{s,s}.
+\Omega(\theta, \theta') &= \Omega(\theta) + \Omega(\theta') > (1 + \frac{1}{K_0})\Omega(\theta)
+ > (1 + \frac{1}{K_0})k_1\max_s A_{s}(\theta) \ge 2\max_s A_{s}(\theta). %\ge -2 A(\theta)_{s,s}.
 \end{align*}
-So for any state $s$, the diagonal element $B(\theta, \theta')_{s,s} = 1 + \frac{A(\theta)_{s,s}}{\Omega(\theta, \theta')}> \frac{1}{2}$.
+So for any state $s$, the diagonal element $B_s(\theta, \theta') = 1 - 
+\frac{A_s(\theta)}{\Omega(\theta, \theta')}> \frac{1}{2}$.
 Following~\cite{fill1991}, this bound on the eigenvalue gap of $R_B(\theta,\theta')$ gives the result.
 \qed
 \end{proof}
 
 Our overall proof strategy is to show that for $\theta$ and $W$ large enough, 
-the condition $ \frac{1}{K_0} \le \Omega(\theta') \le K_0 \Omega(\theta)$ holds with 
-high probability. Lemma~\ref{lem:eig_lemma} then allows the distribution 
+$ \frac{1}{K_0} \le \frac{\Omega(\theta')}{\Omega(\theta)} \le K_0 $ holds with 
+high probability. Lemma~\ref{lem:eig_lemma} then makes the distribution 
 over latent states for the continuous-time MJP and its discrete-time 
-counterpart embedded in $W$ to be brought arbitrarily close to $\pi_\theta$ \boqian{the stationary distribution?} 
+counterpart embedded in $W$ to be brought arbitrarily close to $\pi_\theta$ 
 (and thus to each other).
 This will allow our sampler 
 to inherit mixing properties of the ideal sampler. For the remaining 
 $\theta$ and $W$, we will exploit their boundedness to establish a 
 `small-set condition' where the MCMC algorithm forgets its state with 
 some probability. These two conditions will be sufficient for 
-geometric ergodicity, and the next assumption outlines them for the ideal 
-sampler.
+geometric ergodicity. The next assumption states corresponding conditions 
+for the ideal sampler.
 % This combined with the
 %likelihood $p(X|s, \theta)$ being bounded  gives the result.
 %\begin{definition}
