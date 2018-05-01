@@ -48,7 +48,7 @@ $ \text{acc} =
    \label{alg:MH_improved}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{The observations $X$,}
-                      \text{the previous MJP path $S(t) = (S, T)$ and parameters $\theta$ \boqian{and $\pi_0$}}.\\ 
+                      \text{the previous MJP path $S(t) = (S, T)$ and parameters $\theta$ }.\\ 
                      & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
    \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (S', T')$, 
                             new MJP parameters $\theta'$}.\\
@@ -57,7 +57,7 @@ $ \text{acc} =
    \begin{algorithmic}[1]
       \State Sample $\vartheta \sim q(\cdot| \theta)$, and 
       set %$\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$. 
-	$\Omega \boqian{\equiv} = \Omega(\theta) + \Omega(\vartheta)$.
+	$\Omega \assign \Omega(\theta) + \Omega(\vartheta)$.
       %In the case of uniformization, we
       %have a single $\Omega$ for all states, with $\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$.
       %, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.

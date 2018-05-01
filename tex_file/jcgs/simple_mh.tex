@@ -28,14 +28,14 @@ figure~\ref{fig:naive_mh} in the appendix sketch this out.
    \label{alg:MH_naive}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{Observations $X$}, 
-                       \text{the previous MJP path $S(t) = (S, T)$ and parameters $\theta$ \boqian{and  $\pi_0$}}.\\ 
+                       \text{the previous MJP path $S(t) = (S, T)$ and parameters $\theta$ }.\\ 
                      & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
    \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (S', T')$, 
                             new MJP parameters $\theta'$}.\\
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
-     \State Set $\Omega \boqian{\equiv} \Omega(\theta) > \max_s{A_s(\theta)}$ for
+     \State Set $\Omega \assign \Omega(\theta) > \max_s{A_s(\theta)}$ for
      some function $\Omega(\cdot)$ (e.g.\ $\Omega(\theta) = 
       2\max_s A_s(\theta))$.
       \State Sample virtual jumps $U\subset[0, t_{end}]$ from a 

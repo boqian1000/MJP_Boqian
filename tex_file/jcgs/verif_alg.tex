@@ -96,7 +96,7 @@ likelihood under a proposed parameter $\theta^*$ by introducing auxiliary variab
 the auxiliary variable is sampled independently under the proposed parameters. For MJP, this would
 involve proposing a new parameter $\theta^*$, generating a new uniformizing grid $U^*$, and then
 accepting or rejecting. This can complicate computations (with two sets of time points), and also
-reduce acceptance rates is \boqian{if}
+reduce acceptance rates if
  the new parameter $\theta^*$ is incompatible with the old grid $U$ or
 vice versa. While~\cite{murray2006} suggest annealing schemes to try to address this issue, we exploit
 the structure of the Poisson process and provide a cleaner solution: generate a single set of

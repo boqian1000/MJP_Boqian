@@ -428,7 +428,7 @@ of the embedded Markov chain away from $0$.
 %\end{align*}
 %\end{proof}
 \begin{proposition}
-The a posteriori probability \boqian{that} the embedded Markov chain makes a
+The a posteriori probability that the embedded Markov chain makes a
 self-transition,
 $P(V_i = V_{i + 1} | W, X, \theta, \vartheta) \ge \delta_1 > 0$,
 for %$i = 0, 1, 2, ..., |W|$ and
@@ -452,7 +452,7 @@ any $\theta,\vartheta, W$.
 V_{i + 1} = v|W, \theta, \vartheta)}{P(X | W, \theta, \vartheta)}\\
 & \geq \frac{\lb}{\ub}\sum_v P(V_i = V_{i + 1} = v | W, \theta, \vartheta)\\
 &=  \frac{\lb}{\ub} \sum_v P(V_{i + 1} = v | V_i = v, W, \theta,\vartheta)P(V_i = v | \theta, \vartheta) \\
-& \geq \frac{\lb}{\ub} (1-\frac{1}{k_0}) \doteq \delta_1 > 0
+& \geq \frac{\lb}{\ub} (1-\frac{1}{k_0}) \assign \delta_1 > 0
 \end{align*}
 \end{proof}
 
@@ -493,9 +493,8 @@ P(W' | S, T = \emptyset, \theta', \theta) & \geq P(W' \from
 \PP(\Omega(\theta')))
 P(\emptyset \from \PP(\Omega(\theta)-A_{s_0}(\theta) ))\\
   & \geq P(W' \from \PP(\Omega(\theta'))) P(\emptyset \from \PP(\Omega(\theta) ))\\
-& = P(W' \from \PP(\Omega(\theta'))) \exp(-\Omega(\theta)(t_{end} -
-t_{start}))\\
-& \geq P(W' \from \PP(\Omega(\theta'))) \exp(-M(t_{end}-t_{start}))
+& = P(W' \from \PP(\Omega(\theta'))) \exp(-\Omega(\theta)t_{end})\\
+& \geq P(W' \from \PP(\Omega(\theta'))) \exp(-M t_{end})
 \numberthis %\quad (\text{since }\theta\in B_M)
 \end{align*}
 Thus we have
@@ -503,7 +502,7 @@ Thus we have
   \sum_{S,T} P(S,T | W, \theta, \vartheta, X) &P(W'| S, T, \theta',
   \theta) \geq \sum_S P(S, T = \emptyset | W, \theta, \vartheta, X)
   P(W' | S, T=\emptyset,\theta', \theta)\\
-               &\geq \delta_1^{|W|} \exp(-M(t_{end}-t_{start}))
+               &\geq \delta_1^{|W|} \exp(-Mt_{end})
 P(W' \from \PP(\Omega(\theta'))) \numberthis
 \end{align*}
 Finally consider the acceptance rate:
@@ -522,11 +521,11 @@ q(\theta|\theta')p(\theta')}{P(X | \theta)q(\theta'|\theta)p(\theta)}\\
 By assumption \ref{asmp:ideal_geom}, we have the following inequality.
 \begin{align*}
 P(W', \theta',\vartheta' | W, \theta, \vartheta)  &\ge \frac{\lb^2 }{\ub^2}\delta_1^{h}
-\exp(-M(t_{end}-t_{start}))\delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta')) \\
+\exp(-M t_{end})\delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta')) \\
 & \alpha_I(\theta', \theta;X)q(\theta'|\theta)\\
   & \geq \frac{\lb^2 }{\ub^2}\delta_1^{h}
-\exp(-M(t_{end}-t_{start}))\kappa_1\delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta') \\
-  & \doteq \rho_1 \delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta')
+\exp(-M t_{end})\kappa_1\delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta') \\
+  & \assign \rho_1 \delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta')
   \intertext{The two-step transition probability is given by}
   P(W'', \theta'',\vartheta'' &| W, \theta, \vartheta)  =
   \int P(W'', \theta'',\vartheta'' | W', \theta', \vartheta')
@@ -683,7 +682,7 @@ inequality,
 %So for $\epsilon > 0$, and $K_0 > 0$, if $|W| > W_0$ and $\theta > \theta_0$ and $\Omega(\theta') \leq K_0 \Omega(\theta)$, we have
 \begin{align*}
 |P(X | \theta) - P(X | W, \theta, \theta')| &\leq |P(X | \theta) -P_{st}(X | \theta) | + | P_{st}(X | \theta) -  P(X | W, \theta, \theta')|\\
-       & \leq (\epsilon'' + \epsilon'') + \epsilon'' \doteq \epsilon
+       & \leq (\epsilon'' + \epsilon'') + \epsilon'' \assign \epsilon
 \end{align*}
 
 \end{proof}
@@ -754,7 +753,7 @@ By choosing $\kappa$ large enough, $\theta'$ satisfying $ \| \theta \| > \tilde{
 So \begin{align*}
 P(E_1^\epsilon E_2^K E_{3,\epsilon}^K E_{4,\epsilon}^K) > (1- \epsilon)^2.
 \end{align*} 
-Finally, let $E_\epsilon \doteq E_1^\epsilon \cap E_2^K \cap E_{3,\epsilon}^K \cap E_{4,\epsilon}^K$ , giving us our result.
+Finally, let $E_\epsilon \assign E_1^\epsilon \cap E_2^K \cap E_{3,\epsilon}^K \cap E_{4,\epsilon}^K$ , giving us our result.
 }
 Call this event $E_{3,K}^\epsilon$. Necessary for $E_3^{K}$ given $E_2^{K}$ is that
 $\mW > W^K_3$ for our choice of $K$. As before, we can find a $\theta_{4,\epsilon}$
@@ -787,7 +786,7 @@ greater than $1-\epsilon$, so that
 \begin{align*}
   P(E_1E_2E_3) > (1- \epsilon)^3.
 \end{align*}
-Finally, let $E_\epsilon \doteq E_1\cap E_2 \cap E_3$ , giving us our result.
+Finally, let $E_\epsilon \assign E_1\cap E_2 \cap E_3$ , giving us our result.
 %with probability greater than $1 - \epsilon$.
 
 %Also, the set
@@ -878,7 +877,7 @@ Finally, let $E_\epsilon \doteq E_1\cap E_2 \cap E_3$ , giving us our result.
 \begin{lemma}(drift condition) $\exists \delta_2 \in (0, 1), L > 0$
   s.t.
   $\mathbb{E}\left[\lambda_1|W'| + \Omega(\theta')  | W, \theta, \vartheta, X\right]
-  \leq (1 - \delta_2)\left(\lambda_1|W| + \Omega(\theta)   \right) + L$ %where $\lambda = \lceil \frac{(t_{end} - t_{start})k_2(\eta_0 + 1)}{(\eta_1^2 \kappa_1 \mathbb{P}_\phi(C)/\xi_1^2 - \eta_0)} \rceil.$
+  \leq (1 - \delta_2)\left(\lambda_1|W| + \Omega(\theta)   \right) + L$ %where $\lambda = \lceil \frac{(t_{end})k_2(\eta_0 + 1)}{(\eta_1^2 \kappa_1 \mathbb{P}_\phi(C)/\xi_1^2 - \eta_0)} \rceil.$
 \label{lem:drift}
 \end{lemma}
 \begin{proof}
@@ -898,11 +897,11 @@ By corollary \ref{corol:integ_bound}, there exists $\eta_1 , \theta_3 > 0$ such 
 So for $\theta$ satisfying $ \| \theta \| > \theta_3$, we have
 \begin{align*}
 \mathbb{E}[|U'| |W, \theta, \vartheta, X] &= \mathbb{E}_{S,T, \nu}\mathbb{E}[|U'| | S, T, W, \theta, \nu, X] = \mathbb{E}_{S,T, \nu}\mathbb{E}[|U'| | S, T, W, \theta, \nu] \\
-& \leq \mathbb{E}_{S,T, \nu} \left[(t_{end} - t_{start})\Omega(\theta, \nu)\right] = (t_{end} - t_{start})\int \Omega(\theta, \nu) q(\nu | \theta) d\nu\\
-& \leq (t_{end} - t_{start})\left[ \left(  \Omega(\theta) +
+& \leq \mathbb{E}_{S,T, \nu} \left[t_{end}\Omega(\theta, \nu)\right] = t_{end}\int \Omega(\theta, \nu) q(\nu | \theta) d\nu\\
+& \leq t_{end} \left[ \left(  \Omega(\theta) +
 \int_\Theta \Omega(\nu) q(\nu | \theta)d\nu \right) \right] \\
-& \leq (t_{end} - t_{start}) (\eta_1 + 1) \Omega(\theta) %\right]
-%\doteq a \Omega(\theta) + b.
+& \leq t_{end} (\eta_1 + 1) \Omega(\theta) %\right]
+%\assign a \Omega(\theta) + b.
 \end{align*}
 
 %Next, we note that $\vartheta'$ takes on value $\theta$ with
@@ -934,7 +933,7 @@ Integrate out $W'$, then we get the following.
   &\hspace{-1.3in}\left.  + \int q(\nu | \theta) \sum_{S,T} P(S, T |  W, \theta, \vartheta,
 X)P(W' | S, T, \theta, \nu) ( 1 - \alpha(\theta, \nu ; W', X))d\nu
 \delta_\theta(\theta')\right] \\
-&\doteq d\theta' I_1(W, \theta', \theta, \vartheta) + d\theta'\delta_\theta(\theta')I_2(W, \theta, \vartheta).
+&\assign d\theta' I_1(W, \theta', \theta, \vartheta) + d\theta'\delta_\theta(\theta')I_2(W, \theta, \vartheta).
 \end{align*}
 We denote the transition density of $W$, $\sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')$, as $P(W' | W, \theta, \vartheta, \theta', X)$. So we have
 \begin{align*}
@@ -1086,11 +1085,11 @@ We also need to specify the constant $M$ from assumption \ref{asmp:ideal_geom}.
 }
 For $\theta$ satisfying $ \| \theta \| >\max(\theta_2, \theta_3, \theta_\epsilon)$, we have %\boqian{need to change afterwards}
 \begin{align*}
-\mathbb{E}[\lambda_1 | W'| &+ \Omega(\theta')| W, \theta, \vartheta, X] \le \lambda_1(1 - \delta_1)|W| + \lambda_1 (t_{end} - t_{start}) (1 + \eta_1)\Omega(\theta) \\
+\mathbb{E}[\lambda_1 | W'| &+ \Omega(\theta')| W, \theta, \vartheta, X] \le \lambda_1(1 - \delta_1)|W| + \lambda_1 t_{end} (1 + \eta_1)\Omega(\theta) \\
 &+  (1 - \rho) \Omega(\theta) + (\sqrt{\eta_0} \sqrt{\epsilon} +  \eta_1 \epsilon + 2\epsilon) \Omega(\theta)\\
-& = (1 - \delta_1)\lambda_1 |W| + [1 - (\rho - \lambda_1 (t_{end} - t_{start}) (1 + \eta_1) - (2 + \eta_1)\epsilon - \sqrt{\eta_0} \sqrt{\epsilon})]\Omega(\theta)
+& = (1 - \delta_1)\lambda_1 |W| + [1 - (\rho - \lambda_1 t_{end} (1 + \eta_1) - (2 + \eta_1)\epsilon - \sqrt{\eta_0} \sqrt{\epsilon})]\Omega(\theta)
 \end{align*}
-There exists  $\tilde{\epsilon} > 0$ and $\tilde{\lambda}_1 >0 $ , such that $\rho >  \tilde{\lambda}_1 (t_{end} - t_{start}) (1 + \eta_1) + (2 + \eta_1)\tilde{\epsilon} + \sqrt{\eta_0} \sqrt{\tilde{\epsilon}}$, and denote $\rho_2  \doteq \rho - \tilde{\lambda}_1 (t_{end} - t_{start}) (1 + \eta_1) + (2 + \eta_1)\tilde{\epsilon} + \sqrt{\eta_0} \sqrt{\tilde{\epsilon}}
+There exists  $\tilde{\epsilon} > 0$ and $\tilde{\lambda}_1 >0 $ , such that $\rho >  \tilde{\lambda}_1 t_{end}  (1 + \eta_1) + (2 + \eta_1)\tilde{\epsilon} + \sqrt{\eta_0} \sqrt{\tilde{\epsilon}}$, and denote $\rho_2  \assign \rho - \tilde{\lambda}_1 t_{end}  (1 + \eta_1) + (2 + \eta_1)\tilde{\epsilon} + \sqrt{\eta_0} \sqrt{\tilde{\epsilon}}
  > 0$. Let $\tilde{\rho} = \min(\rho_2, \delta_1)$. So there exists a small set $C$ such that \begin{align*}
 \mathbb{E}[\tilde{\lambda}_1 | W'| + \Omega(\theta')| W, \theta, \vartheta, X] &\le (1 - \tilde{\rho}) [\tilde{\lambda}_1 | W| + \Omega(\theta)] +
 \mathbb{I}_{C} \sup_{(W, \theta)} \{ \mathbb{E}[\tilde{\lambda}_1 | W'| + \Omega(\theta')| W, \theta, \vartheta, X] \}.

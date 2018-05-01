@@ -51,13 +51,13 @@ the latter is an $N \times N$-matrix governing the dynamics of the system.  An
 off-diagonal element $A_{ij}$, for $i \neq j$ gives the rate 
 of transitioning from state $i$ to $j$. We write $A_i$ for the 
 negative of the $i$th diagonal element $A_{ii}$. For an MJP,
-$\sum_{j \neq i} A_{ij} = -A_{ii} := A_i$, \boqian{which one should we use as definition $\doteq$ or $:=$?} so that the rows of $A$ sum to $0$.  
+$\sum_{j \neq i} A_{ij} = -A_{ii} \assign A_i$, so that the rows of $A$ sum to $0$.  
 $A_i$ gives the total rate at which the system leaves state $i$ for any other state.
-To simulate an MJP over an interval $[0,\cT]$, one follows 
+To simulate an MJP over an interval $[0,t_{end}]$, one follows 
 Gillespie's algorithm~\cite{gillespie97}: 
 first sample an initial state $s_0$ from $\pi_0$, and
 defining $t_0 = t_{curr} = 0$ and $k = 0$, repeat the following while
-$t_{curr} < \cT$:
+$t_{curr} < t_{end}$:
 \begin{itemize}
   \item Sample a wait-time $\Delta t_k$ from an exponential distribution with rate 
     $A_{s_k}$.  Set $t_{k+1} = t_{curr} = t_{k} + \Delta t_k$.
@@ -65,8 +65,8 @@ $t_{curr} < \cT$:
   \item Jump to a new state $s_{k+1} \neq s_k$ with 
     probability equal to $A_{s_ks_{k+1}}/A_{s_k}$. Set $k=k+1$.
 \end{itemize}
-The times $T=(t_0, \cdots, t_{|T|\boqian{|T| - 1} })$ and states 
-$S=(s_0, \cdots, s_{|T|\boqian{|T| - 1} })$ define the MJP path $S(t)$.
+The times $T=(t_0, \cdots, t_{|T| - 1})$ and states 
+$S=(s_0, \cdots, s_{|T| - 1 })$ define the MJP path $S(t)$.
 
 \subsection{Structured rate matrices}
 While the rate matrix $A$ can have $N(N-1)$ independent elements,

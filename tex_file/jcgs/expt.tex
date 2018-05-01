@@ -206,13 +206,13 @@ claim one is uniformly superior to the other.
 %Our observation process was a Gaussian distribution with mean equal to the 
 %current state and variance equal to $1$. 
 In figure~\ref{fig:TSS}, we plot ESS per unit time as the observation 
-interval $\cT$ increases. We consider the three-state MJP, and as before there 
-are $19$ observations uniformly located over a time interval $(0,\cT)$. We 
-consider four settings, with $\cT$ equal to $10, 20, 50, 100$. For each, we 
+interval $t_{end}$ increases. We consider the three-state MJP, and as before there 
+are $19$ observations uniformly located over a time interval $(0,t_{end})$. We 
+consider four settings, with $t_{end}$ equal to $10, 20, 50, 100$. For each, we 
 compare our symmetrized MH sampler (with $\kappa$ set to $1$) with the Gibbs 
 sampler (with $\kappa$ set to $2$). While the performance of the Gibbs sampler 
 is comparable with our symmetrized algorithm for the smallest value of 
-$\cT$, its performance is considerably worse for longer time-intervals. This is 
+$t_{end}$, its performance is considerably worse for longer time-intervals. This is 
 because of the conditional nature of the updates of the Gibbs sampler, where MJP
 trajectories are sampled as intermediate objects to facilitate updating the
 parameters. Longer time intervals will then result in stronger coupling between 

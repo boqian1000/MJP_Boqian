@@ -35,9 +35,9 @@ Introduce a parameter $\Omega \ge \max_i A_i$;
 %state with probability $1-A_i/\Omega_i$. 
 Unlike the sequential wait-and-jump Gillespie algorithm, first simulate 
 a set $W$ of candidate
-transition-times over $[0,\cT]$ from a rate-$\Omega$ 
+transition-times over $[0,t_{end}]$ from a rate-$\Omega$ 
 Poisson process. $W$ %; these along with $0$ 
-defines a random grid on $[0,\cT]$.
+defines a random grid on $[0,t_{end}]$.
 Define $B = \left(I +\frac{1}{\Omega}A\right)$; observe that this is a
 stochastic matrix with positive elements, and rows adding up to $1$.
 Assign state-values to the elements in $0 \cup W$ according to a discrete-time 
@@ -125,7 +125,7 @@ two steps from algorithm~\ref{alg:MJP_gibbs}:
    \label{alg:MJP_gibbs}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{A set of partial and noisy observations $X$}, \\
-                      & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$ \boqian{and $\pi_0$}}.\\ 
+                      & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$}.\\ 
    \textbf{Output:  }& \text{A new MJP trajectory $S' (t) = (S', T')$, 
                             new MJP parameters $\theta'$}.\\
    \hline
@@ -210,7 +210,7 @@ Markov chain}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{Observations $X$};
    proposal density $q(\vartheta|\ctheta)$; 
-   \text{previous parameters $\ctheta$ \boqian{and $\pi_0$}}.\\
+   \text{previous parameters $\ctheta$ }.\\
    \textbf{Output:  }& \text{A new Markov chain parameter $\ntheta$}.\\
    \hline
    \end{tabular}
@@ -243,7 +243,7 @@ continuous-time paths between successive times. As
 shown in~\cite{RaoTeh13}, this approach is cubic rather than 
 quadratic in the 
 number of states, cannot exploit structure like sparsity in the 
-transition matrix, and can depend \boqian{on?}in not trivial ways on the exact 
+transition matrix, and can depend in not trivial ways on the exact 
 nature of the observation process.
 Also, the number of expensive matrix exponentiations scales
 with the number of observations rather than the number of transitions.
