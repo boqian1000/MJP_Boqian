@@ -70,7 +70,7 @@ The larger the second smallest eigenvalue, the faster the MJP converges to its
 stationary distribution $\pi_\theta$.
 Note that if the original MJP is reversible, then $R_A(\theta) = A(\theta)$.
 
-%\boqian{
+%{
 %\begin{definition}
 %Let $P_{st}(X | \theta)$ be the stationary distribution of the observations 
 %$X$, given the parameter $\theta$. Write $V_X$ for the states of the markov chain corresponding to the observations.
@@ -119,7 +119,7 @@ considered. %One open question is whether this assumption is necessary.
 %however we do not try to prove it here.
 %is not sufficient to ensure that $ $ is a 
 %stronger requirement, ensures
-%parameters of interest\boqian{?: the most
+%parameters of interest\{?: the most
 %unstable state cannot have a leaving rate that is larger than that of
 %the most stable state by an arbitrary factor.} This condition controls the
 %mixing behavior of the MJP (and the embedded Markov chain) for any
@@ -245,7 +245,7 @@ clarity.
   %\label{asmp:low_bnd}
 %\end{assumption}
 % \noindent
-% \boqian{
+% \{
 % Assumption~\ref{asmp:cond_num} allows us to easily ensure this is
 % satisfied by setting $\Omega(\theta) = \Mx{\theta} + \mx{\theta}+m_1$.
 % Another option is to set $\Omega(\theta) = \kappa\Mx{\theta} + m_1$ some
@@ -390,7 +390,7 @@ auxiliary variable, and $W$ is the Poisson grid). An MJP transition step
 updates this to $(\theta',\vartheta',W')$ by discarding $\vartheta$, 
 sampling $\vartheta'$ from $q$, sampling a new $W'$ given 
 $(\theta,\vartheta')$ and then proposing to swap $(\theta,\vartheta')$.
-% \boqian{?
+% \{?
 % We establish the drift condition via the Lyapunov-Foster function
 % $\cV(W,\theta,\vartheta) = \left. \lambda_1|W| + \lambda_2 \Omega(\theta) +
 % \Omega(\vartheta) +L \right. := \cV_W(W) + \cV_{\theta}(\theta) +
@@ -472,7 +472,7 @@ V_{i + 1} = v|W, \theta, \vartheta)}{P(X | W, \theta, \vartheta)}\\
 \alpha(\theta', \theta, W';X) \sum_{S,T} P(S,T | W, \theta, \vartheta, X)
 P(W'| S, T, \theta', \theta)
 \end{align*}
-\boqian{Suppose $(W, \theta, \vartheta) \in B_{h, M}$.}
+Suppose $(W, \theta, \vartheta) \in B_{h, M}$.
 Here we use the fact that the proposal distribution $q(\nu|\theta)$
 and $P(W'|S,T,\theta',\theta,X)$ are independent of  $X$.
 We further bound the summation over $(S,T)$ by considering only the term
@@ -596,7 +596,7 @@ distribution over latent states for the continuous-time MJP and
 its discrete-time counterpart embedded in $W$ can be brought arbitrarily
 close to $P_{st}$ (and thus to each other). This combined with the
 likelihood $p(X|\boqian{S}, \theta)$ being bounded  gives the result.
-%\boqian{do we need to define $P_{st}$?}
+%\do we need to define $P_{st}$?
 We start with the discrete-time system.
 %Write $P^{w}(\cdot | W, \theta, \theta' )$ for the $w$-step transition
 %probability (equal to $B^w(\theta, \theta')$).
@@ -762,7 +762,7 @@ such that for $\theta$ satisfying $ \| \theta \|  > \theta_{4,\epsilon}$, this p
 %P(|W'| > W_4 | W, \theta, \theta', \vartheta) > 1- \epsilon / 4.
 %\end{align*}
 
-%\boqian{
+%\{
 %There exists $\theta_6 > 0$, such that for $\theta > \theta_6$, we have
 %\begin{align*}
 %P(\theta' > \theta_4 | \theta) > 1 - \epsilon / 4.
@@ -979,7 +979,7 @@ I_{2,\E_{\epsilon}}(W, \theta, \vartheta) &= \int_{\E_{\epsilon}} d\nu  dW'q(\nu
   P(W' | W, \theta, \vartheta, \nu, X)
   [ 1 - (\alpha_I(\theta, \nu ; X)-\epsilon)] \\
   &\le (1+\epsilon)  - \int  q(\nu | \theta) \alpha_I(\theta, \nu ; X) d\nu, \\
- & \text{while bounding the acceptance \boqian{rejection} rate by 1,} \\
+ & \text{while bounding the acceptance rejection rate by 1,} \\
   I_{2,\E_{\epsilon}^c}(W, \theta, \vartheta)  &= \int_{\E^c_{\epsilon}} d\nu  dW'q(\nu | \theta)P(W' | W, \theta, \vartheta, \nu, X)(1 - \alpha(\theta, \nu ; W', X)) \\
   &\le \int_{\E^c_{\epsilon}} d\nu dW'
   q(\nu | \theta) P(W' | W, \theta, \vartheta, \nu, X) \le \epsilon \\
@@ -1036,7 +1036,7 @@ $\E^c_\epsilon$.
 %  & \leq  \Omega(\theta_0) \int_{\theta' > \theta_0}q(\theta' | \theta) d\theta' + \int_{\theta' > \theta_0} \Omega(\theta') q(\theta' | \theta) [ \sum_{w \le W_0}\frac{\tilde{\Omega}(\theta,\theta')^{w}}{w!}\exp(-\tilde{\Omega}(\theta,\theta')\tau)]d\theta'\\
 %  & \leq  \Omega(\theta) \epsilon + \int_{\Theta} \Omega(\theta') q(\theta' | \theta)\epsilon d\theta'\\
 %  &= \Omega(\theta) \epsilon (1 + \eta_0)
-%  \boqian{?}
+%  \{?}
 %  \end{align*}
 %  For $\epsilon > 0$, there exists $\theta_1 > 0$, such that for $\theta > \theta_1$ $\int_{\theta' > \theta_0}q(\theta' | \theta) d\theta' \le \epsilon$. There also exists $\theta_2 > 0$, such that for $\theta > \theta_2$ and any $\theta'$,  $\sum_{w \le W_0}\frac{\tilde{\Omega}(\theta,\theta')^{w}}{w!}\exp(-\tilde{\Omega}(\theta,\theta')\tau) < \epsilon$. For $\theta > \max(\theta_0, \theta_1, \theta_2)$, we have
 %\begin{align*}
@@ -1062,8 +1062,7 @@ For $\int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\t
 \end{align*}
 So, by Cauchy-Schwarz inequality and bounding the acceptance probability by one, we have
 \begin{align*}
-\left[  \int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta' \right]^2
-& \le \left[  \int_{\E_\epsilon^c}  \Omega(\theta') q(\theta' | \theta) P(W' | W, \theta, \vartheta, \theta', X)d\theta' \right]^2\\
+\left[  \int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta'  \right]^2 &\le \left[  \int_{\E_\epsilon^c}  \Omega(\theta') q(\theta' | \theta) P(W' | W, \theta, \vartheta, \theta', X)d\theta' \right]^2\\
 & \le \int_{\E_\epsilon^c} q(\theta' | \theta) P(W' |W, \theta, \vartheta, \theta', X)d\theta'  \int_{\E_\epsilon^c}  \Omega(\theta')^2 q(\theta' | \theta) P(W' |W, \theta, \vartheta, \theta', X)d\theta'   \\
 & \le \epsilon \int  \Omega(\theta')^2 q(\theta' | \theta)d\theta' \\
 & \le \epsilon \eta_0 \Omega(\theta)^2 .
