@@ -67,7 +67,7 @@ $\tilde{A}(\theta) = D_\theta^{-1}A(\theta)D_\theta$, and the
 \end{definition}
 This definition is from~\cite{fill1991}, which shows that the matrix 
 $R_A(\theta)$ is reversible with real eigenvalues, the smallest being $0$. 
-The larger the second smallest eigenvalue, the faster the MJP converges to its 
+The larger its second smallest eigenvalue, the faster the MJP converges to its 
 stationary distribution $\pi_\theta$.
 Note that if the original MJP is reversible, then $R_A(\theta) = A(\theta)$.
 
@@ -113,8 +113,9 @@ the least and most stable states.
 %rules 
 %out any state $s'$ such that 
 %$\frac{|A_{s's'}(\theta)}{\max_s A_{ss}(\theta)}| \rightarrow 0$ as $\theta$ increases.
-While not trivial, it holds for the examples we 
-considered. %One open question is whether this assumption is necessary.
+While not trivial, this is a reasonable assumption: the MCMC chain over MJPs 
+will mix if we can control the mixing of the MJP itself.
+%it holds for the examples we considered. %One open question is whether this assumption is necessary.
 %We suspect that assumption~\ref{asmp:ideal_geom}, which requires 
 %the ideal sampler to be geometrically ergodic, implies this condition,
 %however we do not try to prove it here.
@@ -134,19 +135,19 @@ considered. %One open question is whether this assumption is necessary.
 %for any interval $\Delta$, we can always find a $\theta_0$ such that the
 %MJP has mixed at the end of the interval. The earlier assumption ensures
 %this holds for all $\theta \ge \theta_0$.
-
-To understand this, recall $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$
-is the transition matrix of the embedded Markov chain, and note that 
+To better understand this, recall $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$
+is the transition matrix of the embedded Markov chain, and note 
 it has the same stationary distribution $\pi_\theta$ as $A(\theta)$.
 Define the reversibilization $R_B(\theta,\theta')$ from $B(\theta,\theta')$ 
 just as we did $R_A(\theta)$ from $A(\theta)$. 
 \begin{lemma}
-  Let $\theta > \max (\theta_0, \theta_1)$ and $\theta'$ satisfies 
+  Let $\theta > \max (\theta_0, \theta_1)$ and $\theta'$ satisfy 
 $\frac{1}{K_0} \le \frac{\Omega(\theta')}{\Omega(\theta)} \le K_0 $ for 
 some $K_0$ %> 1$, which 
 satisfying $(1 + \frac{1}{K_0})k_1 \ge 2$. 
-For such $(\theta,\theta')$, the Markov chain with transition matrix $B(\theta,\theta')$ converges geometrically to its stationary 
-distribution at rates uniformly bounded from $0$.
+For all such $(\theta,\theta')$, the Markov chain with transition matrix 
+$B(\theta,\theta')$ converges geometrically to stationarity at a rate 
+uniformly bounded away from $0$.
 %The second largest eigenvalue $\lambda^2_B(\theta,\theta')$ of $R_B$ and  
 %second smallest eigenvalue $\lambda^2_B(\theta,\theta')$ of $R_B$ satisfy  
 %$\lambda^2_B(\theta,\theta') = 1 - \frac{\lambda^2_A(\theta)}{\Omega(\theta, \theta')}$.
@@ -166,10 +167,11 @@ $\lambda_{R_B}(\theta, \theta') = 1 - \frac{\lambda_{R_A}(\theta)}{\Omega(\theta
 $\lambda_2^{R_B}(\theta,\theta')$ of $R_B$ and  
 second smallest eigenvalue $\lambda^{R_A}_2(\theta,\theta')$ of $R_A$ satisfy  
 $\lambda^{R_B}_2(\theta,\theta') = 1 - \frac{\lambda^{R_A}_2(\theta)}{\Omega(\theta, \theta')}$.
-Then $1 - \lambda^{R_B}_2(\theta,\theta') = \frac{\lambda^{R_A}_2(\theta)}{\Omega(\theta, \theta')} 
+Then, from assumptions~\ref{asmp:unif_rate} and~\ref{asmp:cond_num}, and 
+the lemma's assumptions, 
+$1 - \lambda^{R_B}_2(\theta,\theta') = \frac{\lambda^{R_A}_2(\theta)}{\Omega(\theta, \theta')} 
 \ge \frac{\lambda^{R_A}_2(\theta)}{(K_0+1)\Omega(\theta)} 
-\ge \frac{\mu}{K_0+1} $. The last two inequalities follow from 
-assumptions~\ref{asmp:unif_rate} and~\ref{asmp:cond_num}. 
+\ge \frac{\mu}{K_0+1} $. 
 Also, 
 \begin{align*}
 \Omega(\theta, \theta') &= \Omega(\theta) + \Omega(\theta') > (1 + \frac{1}{K_0})\Omega(\theta)
@@ -177,17 +179,17 @@ Also,
 \end{align*}
 So for any state $s$, the diagonal element $B_s(\theta, \theta') = 1 - 
 \frac{A_s(\theta)}{\Omega(\theta, \theta')}> \frac{1}{2}$.
-Following~\cite{fill1991}, this bound on the eigenvalue gap of $R_B(\theta,\theta')$ gives the result.
+Following~\cite{fill1991}, this diagonal property and the bound 
+on $1-\lambda_2^{R_B}(\theta,\theta')$ give the result.
 \qed
 \end{proof}
 
-Our overall proof strategy is to show that for $\theta$ and $W$ large enough, 
-$ \frac{1}{K_0} \le \frac{\Omega(\theta')}{\Omega(\theta)} \le K_0 $ holds with 
-high probability. Lemma~\ref{lem:eig_lemma} then makes the distribution 
-over latent states for the continuous-time MJP and its discrete-time 
-counterpart embedded in $W$ to be brought arbitrarily close to $\pi_\theta$ 
-(and thus to each other).
-This will allow our sampler 
+Our overall proof strategy is to show that for $\theta$ and $W$ large 
+enough, the conditions of Lemma~\ref{lem:eig_lemma} hold with 
+high probability. We show that Lemma~\ref{lem:eig_lemma} then allows the 
+distribution over latent states for the continuous-time MJP and its 
+discrete-time counterpart embedded in $W$ to be brought arbitrarily 
+close to $\pi_\theta$ (and thus to each other), allowing our sampler 
 to inherit mixing properties of the ideal sampler. For the remaining 
 $\theta$ and $W$, we will exploit their boundedness to establish a 
 `small-set condition' where the MCMC algorithm forgets its state with 
@@ -207,9 +209,8 @@ for the ideal sampler.
 
 \begin{assumption}
 For the ideal sampler with transition probability $p_I(\theta'|\theta)$: \\
-i) the set $\SM_M=\{\theta:\Omega(\theta)\le M \}$ is a $1$-small set for
-every
-$M$, i.e.\ there exists a probability measure $\phi$ and a constant
+i) the set $\SM_M=\{\theta:\Omega(\theta)\le M \}$ is a $1$-small set,
+i.e.\ for each $M$, there exists a probability measure $\phi$ and a constant
 $\kappa_1 > 0$ s.t.\ % $q(\nu | \theta) \alpha_I(\theta, \nu)
 %$p_I(\theta'|\theta) \geq \kappa_1 \phi(\theta')$ for $\theta \in \SM_M$, \\
 $\alpha_I(\theta', \theta; X) q(\theta' | \theta) \ge \kappa_1 \phi(\theta')$
@@ -279,9 +280,9 @@ such that for $\theta$ satisfying $\| \theta \|  > \theta_2$,
 $ \int_\Theta \Omega(\mu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2.$
 \label{asmp:integ_bound}
 \end{assumption}
-\noindent This mild requirement on the proposal distribution ensures it 
-does not attempt
-to explore large $\theta$'s too aggressively.
+\noindent This mild requirement can be satisfied by choosing a proposal 
+distribution $q$ that does not attempt to explore large $\theta$'s too 
+aggressively.
 \begin{corollary}
 Given the proposal density $q(\nu | \theta)$, $\exists \eta_1 > 0, \theta_2 > 0$ such that for $\theta$ 
 satisfying $\| \theta \|  > \theta_2$, 
@@ -320,7 +321,7 @@ the condition $q(\{\theta': \frac{p(\theta')q(\theta|\theta')}{p(\theta)q(\theta
 > 1 - \epsilon$ holds.
   \label{asmp:prior}
 \end{assumption}
-This holds in our experiments, where $p(\theta)$ is a gamma distribution,
+This holds, when e.g.\ $p(\theta)$ is a gamma distribution,
 and $q(\theta'|\theta)$, Gaussian.
 %\begin{proof}
 %From the assumptoin, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$.
@@ -349,7 +350,7 @@ $q(\{\theta':\frac{\Omega(\theta')}{\Omega(\theta)} \in
   \left[\frac{1}{K}, K\right]\} | \theta) > 1 - \epsilon$ holds.
   \label{asmp:omega}
 \end{assumption}
-This holds when $q(\theta'|\theta)$ is a centered on $\theta$ and has 
+This holds when e.g.\ $q(\theta'|\theta)$ is a centered on $\theta$ and has 
 finite variance.
 
 %\begin{proof}
@@ -387,9 +388,9 @@ geometrically ergodic.  \label{thm:geom_erg}
 \end{theorem}
 \begin{proof}
 \noindent This theorem follows from two lemmas we will prove,
-lemma~\ref{lem:small_set} showing the existence of a small set (within
+Lemma~\ref{lem:small_set} showing the existence of a small set (within
 which our sampler forgets its
-current state with some positive probability), and lemma~\ref{lem:drift}
+current state with some positive probability), and Lemma~\ref{lem:drift}
 showing that our sampler drifts towards this set whenever
 outside. Together, these two results immediately imply geometric
 ergodicity~\citep[Theorems 15.0.1 and Lemma 15.2.8]{meyn2009}.
@@ -400,7 +401,8 @@ We regard our sampler as operating on the space $(\theta,\vartheta,W)$
 auxiliary variable, and $W$ is the Poisson grid). An MJP transition step
 updates this to $(\theta',\vartheta',W')$ by discarding $\vartheta$, 
 sampling $\vartheta'$ from $q$, sampling a new $W'$ given 
-$(\theta,\vartheta')$ and then proposing to swap $(\theta,\vartheta')$.
+$(\theta,\vartheta')$, proposing to swap $(\theta,\vartheta')$ and then 
+accepting or rejecting.
 % \{?
 % We establish the drift condition via the Lyapunov-Foster function
 % $\cV(W,\theta,\vartheta) = \left. \lambda_1|W| + \lambda_2 \Omega(\theta) +
@@ -420,7 +422,8 @@ $(\theta,\vartheta')$ and then proposing to swap $(\theta,\vartheta')$.
 % where on acceptance $\vartheta'=\theta$, while on rejection, $\theta'=\theta$.
 
 We start with a proposition bounding the self-transition probabilities
-of the embedded Markov chain away from $0$.
+of the embedded Markov chain away from $0$. Proofs, if not included, can 
+be found in the appendix.
 %\begin{proposition}
 %The a priori probability the embedded Markov chain makes a self-transition,
 %$P(V_{i + 1}=s|V_i=s,\theta,\theta^*)$ is uniformly bounded away
@@ -446,28 +449,6 @@ for %$i = 0, 1, 2, ..., |W|$ and
 any $\theta,\vartheta, W$.
 \label{prop:self_tr}
 \end{proposition}
-\begin{proof}
-  We use $k_0$ from assumption~\ref{asmp:unif_rate}
-  to bound {\em a priori} self-transition probabilities:
-  \begin{align*}
-    P(V_{i + 1}=s|V_i=s,\theta,\vartheta) &= B_{ss}(\theta,\vartheta) =
-    1 - \frac{A_{s}(\theta)}{\Omega(\theta, \vartheta)}
-    \ge 1 - \frac{A_{s}(\theta)}{\Omega(\theta)} \ge 1-\frac{1}{k_0}.
-    \intertext{  We then have}
-%\mathbb{E}[\mathbb{I}_{\{V_i = V_{i + 1}\}} | W, X, \theta, \theta^*]
-  P(V_i = V_{i + 1} | W, X, \theta, \vartheta) &= \sum_v P(V_i = V_{i + 1}
-  = v | W, X, \theta, \vartheta)
- =\sum_v \frac{P(V_i = V_{i + 1} = v, X | W, \theta, \vartheta)}{P(X | W,
- \theta, \vartheta)} \\
-&=\sum_v \frac{P(X | V_i = V_{i + 1} = v, W, \theta, \vartheta)P( V_i =
-V_{i + 1} = v|W, \theta, \vartheta)}{P(X | W, \theta, \vartheta)}\\
-& \geq \frac{\lb}{\ub}\sum_v P(V_i = V_{i + 1} = v | W, \theta, \vartheta)\\
-&=  \frac{\lb}{\ub} \sum_v P(V_{i + 1} = v | V_i = v, W, \theta,\vartheta)P(V_i = v | \theta, \vartheta) \\
-& \geq \frac{\lb}{\ub} (1-\frac{1}{k_0}) \assign \delta_1 > 0.
-\end{align*}
-\qed
-\end{proof}
-
 
 \begin{lemma}
   For all $M,h > 0$, the set $B_{h,M} =
@@ -479,44 +460,47 @@ $P(W'', \theta'',\vartheta'' | W, \theta, \vartheta) \ge \rho_1
 independent of the initial state.
 \label{lem:small_set}
 \end{lemma}
-\begin{proof} Recall the definition of an $n$-small set from 
+\begin{proof} Recall the definition of $B_M$, and of an $n$-small set from 
   Assumption~\ref{asmp:ideal_geom}. The $1$-step transition probability of our MCMC algorithm
   consists of two terms, corresponding to the proposed parameter being
   accepted and rejected. Discarding the latter, we have %the bound
 \begin{align*}
   P(W',\theta',\vartheta'|W,\theta,\vartheta,X)&\geq
   \delta_\theta(\vartheta') q(\theta'|\theta)
- \sum_{S,T} P(W'| S, T, \theta', \theta)P(S,T | W, \theta, \vartheta, X)
-\alpha(\theta', \theta, W';X)
+ \sum_{S,T}  P(S,T | W, \theta, \vartheta, X) 
+             P(W'| S, T, \theta', \theta)
+             \alpha(\theta', \theta, W';X)
 \end{align*}
 %Suppose $(W, \theta, \vartheta) \in B_{h, M}$.
 Here we use the fact that the proposal distribution $q(\nu|\theta)$
 and $P(W'|S,T,\theta',\theta,X)$ are independent of  $X$.
-We further bound the summation over $(S,T)$ by considering only the term
-with $S$ a constant. This corresponds to $|W|$ self-transitions, so that
-\vinayak{check notation $[s_0]$}
+We further bound the summation over $(S,T)$ by considering only the terms
+with $S$ a constant. When this constant is  state $s^*$, we write this as 
+$(S=[s^*], T= \emptyset)$. This corresponds to $|W|$ self-transitions 
+after the starting state $(S_0=s^*)$, so that
 \begin{align*}
-P(S=[s_0], T = \emptyset | W, \theta, \vartheta, X) & =
-P(S_0=s_0|X,W, \theta, \vartheta)\prod_{i = 0}^{|W| - 1} P(V_{i + 1} = s_0 | V_i = s_0,X,W,\theta,\vartheta) \\ %\prod P(X_{[w_i, w_{i + 1})} | v_i = s_0, \theta)\\
-& \geq P(S_0=s_0|X,W, \theta, \vartheta)\delta_1^{|W|} %\numberthis %\eta_1
+P(S=[s^*], T = \emptyset | W, \theta, \vartheta, X) & =
+P(S_0=s^*|X,W, \theta, \vartheta)\prod_{i = 0}^{|W| - 1} 
+P(V_{i + 1} = s^* | V_i = s^*,X,W,\theta,\vartheta) \\ %\prod P(X_{[w_i, w_{i + 1})} | v_i = s_0, \theta)\\
+& \geq P(S_0=s^*|X,W, \theta, \vartheta)\delta_1^{|W|} %\numberthis %\eta_1
 \end{align*}
 Here $\delta_1$ is the lower bound from Proposition~\ref{prop:self_tr}.
-With $S(t)$ fixed at $s_0$, $W'$ is a Poisson process with rate
+With $S(t)$ fixed at $s^*$, $W'$ is a Poisson process with rate
 %$r(\theta', \theta, s_0) = 
-$\Omega(\theta') + \Omega(\theta) - A_{s_0}(\theta)$.
+$\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta)$.
 %$> \epsilon_1 > 0$.
 From the %fact that $\Omega(\theta',\theta) = \Omega(\theta') + \Omega(\theta)$,
 %we apply the 
-superposition theorem,
+Poisson superposition theorem,
 %$\PP(r(\theta, \nu, s_0)) = \PP(\Omega(\nu)) \cup \PP(r(\theta, \nu, s_0) - \Omega(\nu))$.
 \begin{align*}
   P(W' | S, &T = \emptyset, \theta', \theta)  \geq P(W' \from
 \PP(\Omega(\theta')))
-P(\emptyset \from \PP(\Omega(\theta)-A_{s_0}(\theta) ))\\
+P(\emptyset \from \PP(\Omega(\theta)-A_{s^*}(\theta) ))\\
   & \geq P(W' \from \PP(\Omega(\theta'))) P(\emptyset \from \PP(\Omega(\theta) ))\\
 %& = P(W' \from \PP(\Omega(\theta'))) \exp(-\Omega(\theta)t_{end})\\
   & \geq P(W' \from \PP(\Omega(\theta'))) \exp(-M t_{end}) 
-\qquad \text{(since $\Omega(\theta) \le M$)}.
+\quad \text{(since by assumption, $\Omega(\theta) \le M$)}.
 %\numberthis %\quad (\text{since }\theta\in B_M)
 \end{align*}
 Thus we have
@@ -528,7 +512,7 @@ Thus we have
 P(W' \from \PP(\Omega(\theta'))) \numberthis
 \label{eq:marg}
 \end{align*}
-Finally consider the acceptance rate:
+Finally we relate the acceptance rate to that of the ideal sampler:
 \begin{align*}
 \alpha(\theta', \theta, W'; X) &
 %= 1 \wedge \frac{P(X | W', \theta', \theta)
@@ -542,9 +526,8 @@ q(\theta|\theta')p(\theta')}{P(X | \theta)q(\theta'|\theta)p(\theta)}
 \numberthis
 \label{eq:acc}
 \end{align*}
-Using assumption \ref{asmp:ideal_geom} to bound $\alpha_I(\theta',\theta;X)$,
-and from equations~\eqref{eq:marg} and~\eqref{eq:acc}, 
-we then have
+Using assumption \ref{asmp:ideal_geom} to bound $q(\theta'|\theta)\alpha_I(\theta',\theta;X)$,
+and since by assumption, $|W| \le h$, %from equations~\eqref{eq:marg} and~\eqref{eq:acc}, 
 \begin{align*}
 P(W', \theta',\vartheta' | W, \theta, \vartheta)  
 %&\ge \frac{\lb^2 }{\ub^2}\delta_1^{h}
@@ -594,11 +577,12 @@ with $\phi_1(W'',\theta'',\vartheta'') \propto P(W'' \from
 \noindent We have established the small set condition: for any point 
 inside $B_{h,M}$ our MCMC algorithm forgets its state with nonzero 
 probability. We next establish a drift condition, showing that outside 
-this small set, the algorithm drifts back towards it.
+this small set, the algorithm drifts back towards it 
+(Lemma~\ref{lem:drift}).
 %Observe that if $\Omega(\theta)$ is bounded uniformly, then
 %the drift condition need not include $\theta$. To prove the drift
 %condition for the general case when $\Omega(\theta)$ is unbounded,
-We first establish a proposition needed when $\Mx{\theta}$ is unbounded 
+We first establish a result needed when $\Mx{\theta}$ is unbounded 
 as $\theta$ increases.
 This result states that the acceptance probabilities of our proposed
 sampler and the ideal sampler can be brought arbitrarily close
@@ -608,7 +592,8 @@ $\Omega(\theta')$ are sufficiently close.
   \begin{lemma}
   %Consider two successive observations, separated by time $t_{diff}$, and
   Suppose $\theta$ and $\theta'$ satisfy $\frac{1}{K_0} \le \frac{\Omega(\theta)}{\Omega(\theta')} \leq K_0
-  $ for $K_01$ satisfying $(1 + \frac{1}{K_0})k_1 \ge 2$. Write $\mW$ for the
+  $ for $K_0$ satisfying $(1 + \frac{1}{K_0})k_1 \ge 2$  
+  ($k_1$ is from Assumption~\ref{asmp:unif_rate}). Write $\mW$ for the
   minimum number of grid points between two successive observations.
   %$\| \theta'  - \theta \| \leq h$
   For any $\epsilon > 0$, there exist  $w^{K_0}_\epsilon,  \theta_{6, \epsilon}^{K_0} > 0$ such that
