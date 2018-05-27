@@ -6,35 +6,32 @@ widely used in fields like computational chemistry~\cite{gillespie97},
 population genetics~\cite{FearnSher2006}, mathematical finance~\cite{Elliott06}, 
 queuing theory~\cite{Breuer2003}, artificial intelligence~\cite{XuShe10} and
 social-network analysis~\cite{pan2016markov}. %The references above have
-The references above have used MJPs to model temporal evolution of the state of a 
-chemical reaction 
-or a queuing network, segmentation of a strand of DNA, user activity on social 
-media, among many others,
-%MJPs model temporal evolution in continuous-time, 
-resulting in 
+These references have used MJPs to model temporal evolution of the state 
+of a chemical reaction or a queuing network, segmentation of a strand of 
+DNA, user activity on social media, among many others, resulting in 
 realistic, mechanistic, and interpretable models. %, often amenable to mathematical analysis. 
 These same continuous-time dynamics however raise computational
 challenges when, given noisy 
 measurements, one has to make inferences over the latent MJP 
 trajectory as well as any parameters. 
-This stems from two facts: one cannot {\em a priori} 
-bound the number of state transitions, and the transition times themselves
-are continuous-valued. This is in contrast to 
-{\em discrete-time} hidden Markov models. %and trajectory inference for 
+In contrast to {discrete-time} hidden Markov models, one cannot 
+{\em a priori} bound the number of state transitions, and the transition 
+times themselves are continuous-valued. 
+%and trajectory inference for 
 %MJPs typically proceeds via Markov chain Monte Carlo. 
 The state-of-the-art inference method for MJPs is an auxiliary variable 
 Gibbs sampler from~\cite{RaoTeh13}, we will refer to this as the {\algname} 
 algorithm. This  algorithm was designed to sample paths when the MJP parameters
-are known. Parameter inference is carried out by 
-incorporating it into an Gibbs sampler that also simulates
+are known. Parameter inference is typically carried out by 
+incorporating it into a Gibbs sampler that also conditionally simulates
 parameters given the currently sampled trajectory. 
 
 In many situations, the MJP trajectory and parameters exhibit 
-strong coupling, so that a Gibbs sampler that alternately samples path given
-parameters, and parameters given path can mix poorly.  
-To address this issue, we propose a Metropolis-Hastings framework 
-that is simple and elegant, additionally,
-it ties up some of the loose ends in the Rao-Teh algorithm.
+strong coupling, so that alternately samples path given
+parameters, and parameters given path can result in poor mixing.  
+To address this issue, we propose a simple, elegant and efficient 
+Metropolis-Hastings framework, additionally, we tie up some of the loose 
+ends in the Rao-Teh algorithm.
 In our experiments, we demonstrate superior 
 performance over Gibbs sampling, as well as other approaches like 
 particle Markov chain Monte Carlo~\cite{Andrieu10}.
@@ -49,10 +46,10 @@ $\pi_0$ and a rate-matrix $A$. The former gives the distribution over states at
 the initial time (we assume this is $0$), while 
 the latter is an $N \times N$-matrix governing the dynamics of the system.  An 
 off-diagonal element $A_{ij}$, for $i \neq j$ gives the rate 
-of transitioning from state $i$ to $j$. We write $A_i$ for the 
-negative of the $i$th diagonal element $A_{ii}$. For an MJP,
-$\sum_{j \neq i} A_{ij} = -A_{ii} \assign A_i$, so that the rows of $A$ sum to $0$.  
-$A_i$ gives the total rate at which the system leaves state $i$ for any other state.
+of transitioning from state $i$ to $j$. 
+The rows of $A$ sum to $0$, so that $A_{ii}=-\sum_{j \neq i} A_{ij}  $. 
+We write $A_i$ for the negative of the $i$th diagonal element $A_{ii}$, 
+so that $A_i = -A_{ii}$ gives the total rate at which the system leaves state $i$ for any other state.
 To simulate an MJP over an interval $[0,t_{end}]$, one follows 
 Gillespie's algorithm~\cite{gillespie97}: 
 first sample an initial state $s_0$ from $\pi_0$, and
@@ -80,7 +77,7 @@ interpretable than the elements of $A$ and correspond directly to
 physical, biological or environmental parameters of interest. 
 For example:
 \begin{description}
-  \item[The immigration-death process] Here, $\theta = (\alpha,\beta)$
+  \item[Immigration-death processes] Here, $\theta = (\alpha,\beta)$
     with $\alpha$ the arrival rate and $\beta$ the death-rate.
     The state represents the size of a 
     population or queue. New individuals

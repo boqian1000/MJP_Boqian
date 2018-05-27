@@ -25,8 +25,8 @@ based on the idea of {\em uniformization}~\cite{Jen1953}.
 %Recall $A_i$ gives the 
 %rate at which the MJP leaves $i$ for any other state. The
 %parameters are set up so that self-transitions cannot occur. 
-Introduce a parameter $\Omega \ge \max_i A_i$;
-\cite{RaoTeh13} suggest $\Omega = 2 \max_i A_i$. 
+Uniformization simulates an MJP by introducing a parameter 
+$\Omega \ge \max_i A_i$; \cite{RaoTeh13} suggest $\Omega = 2 \max_i A_i$. 
 %Assuming the system is
 %in state $i$, we sample a {\em candidate} transition-time from an
 %exponential, now with rate $\Omega_i$. The system remains in state $i$
@@ -66,7 +66,7 @@ and then a new trajectory conditioned on the $W$.
 %can be carried out using standard techniques from the discrete-time
 %HMM literature.
 \begin{algorithm}[H]
-  \caption{The {\algname}~\cite{RaoTeh13} auxiliary variable sampler for MJP trajectories}
+  \caption{The {\algname}~\cite{RaoTeh13} auxiliary variable Gibbs sampler for MJP trajectories}
    \label{alg:Unif_gibbs}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{MJP parameters $\theta$ and $\pi_0$, observations $X$}, 
@@ -102,10 +102,10 @@ sample a new trajectory}:
     %and a term $\Omega_i\exp(-\Omega_i\Delta t)$,
     %the probability that the next candidate time occurs after a wait
     %$\Delta t$ under state $i$.
-    The end of the forward pass, gives a distribution over states at the
-    end time that accounts for all observation.
+    The end of the forward pass gives a distribution over states at the
+    end time that accounts for all observations.
     The algorithm then makes a backward pass through the times in $W$, 
-    sequentially sampling the state at any time given the state at the 
+    sequentially sampling the state at each time given the state at the 
     following time, and the distribution over states calculated during the
     forward pass. 
 \end{algorithmic}
