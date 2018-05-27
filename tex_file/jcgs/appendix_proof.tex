@@ -13,17 +13,25 @@ any $\theta,\vartheta, W$.
     P(V_{i + 1}=s|V_i=s,\theta,\vartheta) &= B_{ss}(\theta,\vartheta) =
     1 - \frac{A_{s}(\theta)}{\Omega(\theta, \vartheta)}
     \ge 1 - \frac{A_{s}(\theta)}{\Omega(\theta)} \ge 1-\frac{1}{k_0}.
+%     \intertext{  We then have}
+% %\mathbb{E}[\mathbb{I}_{\{V_i = V_{i + 1}\}} | W, X, \theta, \theta^*]
+%   P(V_{i + 1} =s|V_i=s, W, X, \theta, \vartheta) &
+%  = \frac{P( V_{i + 1} = s, X | V_i = s, W, \theta, \vartheta)}{P(X | W,
+%  \theta, \vartheta)} \\
+% &= \frac{P(X | V_i = V_{i + 1} = s, W, \theta, \vartheta)P( 
+% V_{i + 1} = s|V_i =s, W, \theta, \vartheta)}{P(X | W, \theta, \vartheta)}\\
+% & \geq \frac{\lb}{\ub} P( V_{i + 1} = s | V_i = s, W, \theta, \vartheta)\\
+% & \geq \frac{\lb}{\ub} (1-\frac{1}{k_0}) \assign \delta_1 > 0.
     \intertext{  We then have}
-%\mathbb{E}[\mathbb{I}_{\{V_i = V_{i + 1}\}} | W, X, \theta, \theta^*]
-  P(V_i = V_{i + 1} | W, X, \theta, \vartheta) &= \sum_v P(V_i = V_{i + 1}
-  = v | W, X, \theta, \vartheta)
- =\sum_v \frac{P(V_i = V_{i + 1} = v, X | W, \theta, \vartheta)}{P(X | W,
- \theta, \vartheta)} \\
-&=\sum_v \frac{P(X | V_i = V_{i + 1} = v, W, \theta, \vartheta)P( V_i =
-V_{i + 1} = v|W, \theta, \vartheta)}{P(X | W, \theta, \vartheta)}\\
-& \geq \frac{\lb}{\ub}\sum_v P(V_i = V_{i + 1} = v | W, \theta, \vartheta)\\
-&=  \frac{\lb}{\ub} \sum_v P(V_{i + 1} = v | V_i = v, W, \theta,\vartheta)P(V_i = v | \theta, \vartheta) \\
-& \geq \frac{\lb}{\ub} (1-\frac{1}{k_0}) \assign \delta_1 > 0.
+    P(V_i = V_{i + 1} | W, X, \theta, \vartheta) &= \sum_v P(V_i = V_{i + 1}
+    = v | W, X, \theta, \vartheta)
+   =\sum_v \frac{P(V_i = V_{i + 1} = v, X | W, \theta, \vartheta)}{P(X | W,
+   \theta, \vartheta)} \\
+  &=\sum_v \frac{P(X | V_i = V_{i + 1} = v, W, \theta, \vartheta)P( V_i =
+  V_{i + 1} = v|W, \theta, \vartheta)}{P(X | W, \theta, \vartheta)}\\
+  & \geq \frac{\lb}{\ub}\sum_v P(V_i = V_{i + 1} = v | W, \theta, \vartheta)\\
+  &=  \frac{\lb}{\ub} \sum_v P(V_{i + 1} = v | V_i = v, W, \theta,\vartheta)P(V_i = v | \theta, \vartheta) \\
+  & \geq \frac{\lb}{\ub} (1-\frac{1}{k_0}) \assign \delta_1 > 0.
 \end{align*}
 \qed
 \end{proof}
