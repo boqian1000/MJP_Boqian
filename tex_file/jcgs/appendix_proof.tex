@@ -63,24 +63,22 @@ ensures that there exist $\theta_{3,\epsilon}^K > 0, w_\epsilon^K > 0$,
 such that for $\mW > w_\epsilon^K$, 
 $ \| \theta \| > \theta_{3,\epsilon}^K$ and 
 $ \| \theta' \| > \theta_{3,\epsilon}^K$, we have
-$|P(X | W, \theta' , \theta) - P(X | \theta' , \theta)| < \epsilon$, and
-$|P(X | W, \theta , \theta') - P(X | \theta , \theta')| < \epsilon$.
+$|P(X | W, \theta' , \theta) - P(X | \theta' )| < \epsilon$, and
+$|P(X | W, \theta , \theta') - P(X | \theta )| < \epsilon$.
 Define      $E_{3, \epsilon}^K = \{\theta' s.t. \| \theta'\| > \tilde{\theta}_{3,\epsilon}^K \}$ 
     \item Define $E_{4, \epsilon}^K =\{W s.t.\ \mW >  \tilde{w}_{\epsilon}^K\}$.
-Set $\theta_{4,\epsilon}^K$, such that for $\| \theta \| > \theta_{4,\epsilon}^K$, we have 
-\begin{align*}
+Set $\theta_{4,\epsilon}^K$, so that for $\| \theta \| > \theta_{4,\epsilon}^K$, 
+$
 P(E_{4,\epsilon}^K ) > 1 - \epsilon.
 %P(E_{4,\epsilon}^K | E_1^\epsilon E_2^K E_{3, \epsilon}^K) > 1 - \epsilon.
-\numberthis
-\end{align*}
-
+$
     \item From assumption \ref{asmp:mono_tail}, there exists $\theta_0$, such that $\Omega(\theta)$ increases as $\| \theta \|$ increases, for $\theta$ satisfying $\| \theta \| > \theta_0$.
 Set $\tilde{\theta}_\epsilon =\max(\theta_0, \theta_{1, \epsilon},\theta_{2, \epsilon}^K,\tilde{\theta}_{3, \epsilon}^K, \theta_{4, \epsilon}^K)$. \\
   \end{itemize}
   Now consider the difference
 \begin{align*}
 |\alpha(\theta, \theta', W, X) - \alpha_I(\theta, \theta', X)| &= \ \mid 1 \wedge \frac{P(X | W, \theta' , \theta)q(\theta | \theta')p(\theta')}{P(X | W, \theta , \theta')q(\theta' | \theta)p(\theta)} - 1 \wedge \frac{P(X | \theta')q(\theta | \theta')p(\theta')}{P(X | \theta)q(\theta' | \theta)p(\theta)} \mid \\
-& \leq \ \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}\mid  \cdot  \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}\\
+& \leq \ \mid \frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - \frac{P(X | \theta')}{P(X | \theta)}\mid  \frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)}
 \end{align*}
 %From assumption \ref{asmp:prior}, for any $\epsilon$, we can find a
 %$\theta_{1,M}^\epsilon$  such that {for all } $\theta$ satisfying $ \| \theta \| > \theta_{1,M}^\epsilon$,
@@ -89,27 +87,30 @@ Set $\tilde{\theta}_\epsilon =\max(\theta_0, \theta_{1, \epsilon},\theta_{2, \ep
 %\end{align*}
 %the second term can be bounded with high probability. Also, given large $\theta$ and $\theta'$ which is close to $\theta$, the probability of $|W|$ being large is large.
 %For $\epsilon / 4 > 0$,  from assumption \ref{asmp:prior}, there exists $\theta_2 > 0$ and $K_2 > 0$, such that for $\theta > \theta_2$, we have
-
+%
 %For $\epsilon/4 > 0$,
-
-The fact that ${P(X | W, \theta , \theta')}$ and ${P(X | \theta)}$
-are lower-bounded by $\lb$, means that for any $\epsilon > 0$ we can 
-find a $K$ such that on $E^K_{3,\epsilon}$
+On $E^\epsilon_1$, $\frac{q(\theta | \theta')p(\theta')}{q(\theta' | \theta)p(\theta)} \le M_\epsilon$.
+Since ${P(X | W, \theta , \theta')}$ and ${P(X | \theta)}$
+are lower-bounded by $\lb$, for any $\epsilon > 0$ we can 
+find a $K$ such that on $E^K_2 \cap E^K_{3,\epsilon}$,
 %we can find a $\tilde{\theta}_{3,\epsilon}^K > 0, \tilde{w}_\epsilon^K > 0$ so that for $\mW > \tilde{w}_\epsilon^K$,
 %$\theta$ satisfying $ \| \theta \| > \tilde{\theta}_{3,\epsilon}^K$ and $\theta'$ satisfying $ \| \theta' \| > \tilde{\theta}_{3,\epsilon}^K$, we have
 \begin{align*}
 |\frac{P(X | W, \theta' , \theta)}{P(X | W, \theta , \theta')} - 
    \frac{P(X | \theta')}{P(X | \theta)}| < \epsilon / M_\epsilon.
 \end{align*}
-This means that on $E_2^K \cap E^K_{3,\epsilon}$,
+This means that on $E^\epsilon_1 \cap E_2^K \cap E^K_{3,\epsilon}$,
 $|\alpha(\theta, \theta', W, X) - \alpha_I(\theta, \theta', X)| < \epsilon$.\\
 %For $\theta$ satisfying $ \| \theta \| > \kappa \tilde{\theta}_\epsilon$,where $\kappa > 1$ we have 
- For $\theta$ satisfying $ \| \theta \| > \kappa \tilde{\theta}_\epsilon$, where $\kappa > 1$ we have 
-\begin{align*}
+For $\theta > \max (\theta_{1,\epsilon},\theta^K_{2,\epsilon})$ 
+%satisfying $ \| \theta \| > \kappa \tilde{\theta}_\epsilon$, where $\kappa > 1$ 
+we have 
+$
 P(E^K_2 E^\epsilon_1) \ge P(E^K_2) + P(E_1^\epsilon) - 1 \ge 1 - \epsilon.
-\end{align*}
+$\\
 When $E^K_2$ holds, $\Omega(\theta') \ge \Omega(\theta)/K$.
-By choosing $\kappa$ large enough, $\theta'$ satisfying $ \| \theta' \| > \tilde{\theta}^K_{3,\epsilon}$ with probability one, which means $P(E_{3,\epsilon}^K | E_2^K E_1^\epsilon) = 1$.\\
+For $\theta$ large enough, we can ensure $ \| \theta' \| > \tilde{\theta}^K_{3,\epsilon}$.
+%with probability one, which means $P(E_{3,\epsilon}^K | E_2^K E_1^\epsilon) = 1$.\\
 So \begin{align*}
 P(E_1^\epsilon E_2^K E_{3,\epsilon}^K E_{4,\epsilon}^K) > (1- \epsilon)^2.
 \end{align*} 
