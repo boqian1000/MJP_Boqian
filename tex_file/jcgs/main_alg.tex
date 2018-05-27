@@ -1,26 +1,28 @@
 
 \section{An improved Metropolis-Hasting algorithm}
-Our main idea is to symmetrize the probability of $W$ under the old and new 
-$\theta$, so that the term
-$p(W|\theta)$ disappears from the acceptance ratio. This will result
+\vspace{-.05in}
+Our main idea is to symmetrize the probability of $W$ under the old and 
+proposed parameters, so that 
+$p(W|\theta)$ disappears from the acceptance ratio. This results
 in a significantly more efficient, and also a simpler MCMC scheme.
 %This forms the main contribution of this paper.
 As before, the MCMC iteration begins with the pair $(S(t), \theta)$. 
 Instead of simulating the Poisson events $U$, we first generate a new 
 parameter $\vartheta$ from $q(\vartheta|\theta)$. Treat this as an 
 auxiliary variable, so that the augmented space now is the triplet 
-$(S(t), \theta,\vartheta)$. We pretend $S(t)$ was sampled by a 
-uniformization scheme where the dominating Poisson rate $\Omega$ equals 
+$(S(t), \theta,\vartheta)$. We pretend $S(t) \equiv (S,T)$ was sampled by  
+uniformization, where the dominating Poisson rate $\Omega$ equals 
 $(\Omega(\theta) + \Omega(\vartheta))$ instead of just $\Omega(\theta)$ 
-(recall any choice greater than $\max_i A_i$ is valid).
-Now follows the set of thinned events $U$ is piecewise-constant
+(recall any choice greater than $\max_s A_s$ is valid).
+Now the set of thinned events $U$ is piecewise-constant
 Poisson with intensity $\Omega(\theta) + \Omega(\vartheta) - 
-A_{S(t)}$. Following~\cite{RaoTeh13}, the set $W$, the union of these events 
-with the actual
-trajectory transition times $T$, is a homogeneous Poisson process with 
-rate $\Omega(\theta) + \Omega(\vartheta)$. Now discard all MJP 
-state information, so that the MCMC state space is $(W, \theta, \vartheta)$.
-Now make an MH proposal that swaps $\theta$ with $\vartheta$. 
+A_{S(t)}$. Following algorithm~\ref{alg:Unif_gibbs} or~\cite{RaoTeh13}, 
+the {\em a priori} probability of the reconstructed set $W = U \cup T$, 
+$p(W|\theta,\vartheta)$, is a homogeneous Poisson 
+%the union of $U$ with the actual trajectory transition times $T$, 
+process with rate $\Omega(\theta) + \Omega(\vartheta)$. Now discard all 
+MJP state information, so that the MCMC state space is $(W, \theta, \vartheta)$,
+and propose swapping $\theta$ with $\vartheta$. 
 Observe from
 symmetry that the Poisson skeleton $W$ has the same probability both
 before and after this proposal, so that unlike the previous scheme,
@@ -41,8 +43,8 @@ $ \text{acc} =
    running a forward pass of the forward-backward algorithm, and after
    accepting or rejecting the proposal, a new trajectory is sampled by
    completing the backward pass. Finally, the thinned events are
-   discarded. We sketch out our algorithm in 
-   figure~\ref{fig:MH_improved} and algorithm~\ref{alg:MH_improved}.
+   discarded. We sketch out our algorithm in algorithm~\ref{alg:MH_improved}
+   and figure~\ref{fig:MH_improved} in the appendix. 
 \begin{algorithm}[H]
    \caption{Improved MH for parameter inference for MJPs }
    \label{alg:MH_improved}
@@ -61,15 +63,16 @@ $ \text{acc} =
       %In the case of uniformization, we
       %have a single $\Omega$ for all states, with $\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$.
       %, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
-    \State Sample virtual jumps $U\subset[t_{start}, t_{end}]$ from a Poisson process with 
+    \State Sample virtual jumps $U\subset[0, t_{end}]$ from a Poisson process with 
     piecewise-constant rate $R(t) = (\Omega - A_{S(t)}(\theta))$. 
     Set $W = T \cup U$ and discard MJP states.
     \State The current MCMC state-space is $(W,\theta,\vartheta)$. Propose swapping
-    $\theta$ and $\vartheta$/ %the new state-space is 
+    $\theta$ and $\vartheta$. %the new state-space is 
    %\boqian{ $(W, \vartheta, \theta)$.}
 %$(W, \theta, \vartheta)$    
      The acceptance probability is given by
    % accept $\theta^*$ as $\tilde{\theta}$ with probability $\alpha$.
+     \vspace{-.15in}
         \begin{align*}
         \alpha %&=  1 \wedge \frac{P(W,(\vartheta, \theta)| y)}{P(W, (\theta, \vartheta)| y)}\\
        % &=  1 \wedge \frac{P(y| W,\vartheta, \theta) P(W | (\vartheta, \theta))p((\vartheta, \theta))}{P(y| W,(\theta, \vartheta)) P(W | (\theta, \vartheta))p((\theta, \vartheta))}\\

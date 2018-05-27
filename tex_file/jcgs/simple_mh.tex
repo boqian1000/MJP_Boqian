@@ -1,6 +1,7 @@
+\vspace{-.1in}
 \section{\Naive\ parameter inference via Metropolis-Hastings}
 The idea of the Rao-Teh algorithm~\cite{RaoTeh13} is to simplify
-computations by conditioning on the
+computation by conditioning on the
 random grid $W$.
 %by combining extant transition times $T$ with a set of 
 %thinned candidate transition times $U$, sampled from a rate-$(\Omega-A_{S(t)})$ 
@@ -13,15 +14,38 @@ algorithm~\ref{alg:disc_time_mh}.
 In particular, given $W$, discard all state information, and propose a 
 new parameter $\vartheta$ from $q(\vartheta|\theta)$. 
 %now conditioning on the set of times $W$.
-To calculate the MH-acceptance probability $\min\left(1,
+The MH-acceptance probability is then $\min\left(1,
 \frac{p(X|W,\vartheta)p(W|\vartheta)p(\vartheta)q(\theta|\vartheta)}
      {p(X|W,\theta)p(W|\theta)p(\theta)q(\vartheta|\theta)}\right)$, 
+     to calculate it,
 make a forward pass over $W$, and calculate 
 $p(X|W,\theta)$ and $p(X|W,\vartheta)$. % as in algorithm~\ref{alg:disc_time_mh}.
-After accepting or rejecting $\vartheta$, the new $\theta$ can be used in
+After accepting or rejecting $\vartheta$, the new parameter $\ntheta$ is used in
 a backward pass that samples a new trajectory. Then discard all 
 self-transitions and repeat; algorithm~\ref{alg:MH_naive}, and 
 figure~\ref{fig:naive_mh} in the appendix sketch this out.
+
+The resulting algorithm updates $\theta$ with the MJP trajectory integrated out, 
+and will mix more rapidly than simple Gibbs. 
+Note however that $\theta$ is updated {\em conditioned on
+$W$}, and that
+%determines not just the MJP trajectory $S(t)$.
+%, and with $S(t)$ 
+%marginalized out, the observations $X$. 
+the distribution of $W$ depends on $\theta$: 
+%These are the $p(W|\theta)$ terms
+%in the acceptance probability; under uniformization, 
+$W$ is a homogeneous
+Poisson process with rate $\Omega(\theta)$. %$ = 2 \max A(\theta)$. 
+%who probability can
+%calculated easily during the forward pass.
+The fact that the MH-acceptance probability involves a $p(X|\theta)$ term
+is inevitable, however we found that the $p(W|\theta)$
+terms significantly affects acceptance probabilities. 
+Any proposal that halves $\Omega$ will halve the
+mean and variance of the distribution of the number of events in $W$, 
+resulting in an extremely low acceptance probability.
+The next section describes a way around this.
 \vspace{-.1in}
 \begin{algorithm}[H]
    \caption{\Naive\  MH for parameter inference for MJPs }
@@ -44,18 +68,21 @@ figure~\ref{fig:naive_mh} in the appendix sketch this out.
     Set $W = T \cup U$ and discard MJP state information.
       \State Propose $\vartheta \sim q(\cdot| \theta)$.
           The acceptance probability is given by 
+          \vspace{-.05in}
           \begin{align*}
           \alpha &=  1 \wedge \frac{p(W,\vartheta| X)}{p(W, \theta| X)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}
           =  1 \wedge \frac{p(X| W,\vartheta) p(W | \vartheta)p(\vartheta)}{p(X|W, \theta)p(W | \theta)p(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
           \end{align*}
+          \vspace{-.1in}
     \State For both $\theta$ and $\vartheta$, make a forward pass through the 
     elements of $W$, sequentially updating the distribution over states at 
     $w \in W$ given observations upto $w$. 
-    For any $\theta$, the Markov transition matrix 
+    For any $\theta$, the transition matrix 
     $B(\theta)$ equals $I + \frac{A(\theta)}{\Omega(\theta)}$ while the initial distribution
       over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
-      $ L_i(s) = p(X_{[w_i, w_{i + 1})} | S(t) = s , t \in [w_i, w_{i + 1})) = 
-      \prod_{o: t_o \in [w_i, w_{i + 1})}p(X_{t_o} | s)$.
+      $ L_i(s) = p(X_{[w_i, w_{i + 1})} | S(t) = s , t \in [w_i, w_{i + 1})) 
+      $, where $X_{[w_i,w_{i+1})}$ is all observation lying in 
+      $[w_i,w_{i+1})$. %= \prod_{o: t_o \in [w_i, w_{i + 1})}p(X_{t_o} | s)$.
     At the end, we have 
     $p(X|W,\theta)$ and $p(X|W,\vartheta)$. Use these, and the fact that 
     $p(W|\theta)$ is Poisson-distributed to accept or reject the
@@ -68,26 +95,4 @@ figure~\ref{fig:naive_mh} in the appendix sketch this out.
     \State Let $T'$ be the set of times in $W$ when the Markov chain changes state. Define $S'$ as the corresponding set of state values. Return $(S', T', \theta')$.
 \end{algorithmic}
 \end{algorithm}
-\vspace{-.1in}
-The resulting algorithm updates $\theta$ with the MJP trajectory integrated out, 
-and will mix more rapidly than simple Gibbs. 
-Note however that $\theta$ is updated {\em conditioned on
-$W$}, and that
-%determines not just the MJP trajectory $S(t)$.
-%, and with $S(t)$ 
-%marginalized out, the observations $X$. 
-the distribution of $W$ depends on $\theta$: 
-%These are the $p(W|\theta)$ terms
-%in the acceptance probability; under uniformization, 
-$W$ is a homogeneous
-Poisson process with rate $\Omega(\theta) = 2 \max A(\theta)$. 
-%who probability can
-%calculated easily during the forward pass.
-The fact that the MH-acceptance probability involves a $p(X|\theta)$ term
-is inevitable, however in our experiments, we found that the $p(W|\theta)$
-terms significantly effect acceptance. 
-Any proposal that halves $\max A_s$ (and thus $\Omega$) will halve the
-mean and variance of the distribution of the number of events in $W$, 
-resulting in an extremely low acceptance probability.
-The next section describes a way around this.
-
+\vspace{-.32in}

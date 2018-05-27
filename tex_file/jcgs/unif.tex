@@ -132,22 +132,22 @@ two steps from algorithm~\ref{alg:MJP_gibbs}:
    \end{tabular}
    \begin{algorithmic}[1]
   \State  Sample a trajectory from the conditional 
-  $p(S_{new}(t)|X,S_{curr}(t),\theta_{curr})$ by 
+  $p(S'(t)|X,S(t),\theta)$ by 
   algorithm~\ref{alg:Unif_gibbs}.
   \State Sample a new $\theta$ from the conditional 
-    $p(\theta_{new}|X,S_{new}(t))$.
+    $p(\theta'|X,S'(t))$.
    \end{algorithmic}
-\end{algorithm}
-The distribution $p(\theta_{new}|X,S_{new}(t))$ depends on a set of sufficient statistics of the 
+\end{algorithm} 
+\vspace{-.1in}
+The distribution $p(\theta'|X,S(t))$ depends on a set of sufficient statistics of the 
 MJP trajectory: how
 much time is spent in each state, and the number of transitions
 between each pair of states. 
 %Given these, sample a new $\theta$ from the conditional $p(\theta|X,S(t))$. 
 In special circumstances, $\theta$ can be directly sampled from its 
 conditional distribution, otherwise, one has to use a Markov kernel like
-Metropolis-Hastings or Hamiltonian Monte Carlo to update $\theta_{new}$ 
-given $\theta_{curr}$. In any event, this introduces no new technical 
-challenges.
+Metropolis-Hastings or Hamiltonian Monte Carlo to update $\theta$ to 
+$\theta'$. In any event, this introduces no new technical challenges.
 %from the
 %conditional $p(\theta_{new}|X,S(t),\theta_{curr})$. 
   \begin{figure}%[b]
@@ -166,9 +166,9 @@ challenges.
   \begin{minipage}[hp]{0.55\linewidth}
     \vspace{-0.3 in}
   \caption{Prior distribution of an MJP parameter (the wide red density),
-  as well as two conditional distributions. Narrow green is the
+  as well as two conditional distributions. Narrow dotted-green is the
 density conditioned on both the observations as well as a simulated
-MJP posterior. The wider blue curve is density of interest: the
+MJP posterior. The wider dashed-blue curve is density of interest: the
 marginal distribution of the paramters conditioned on observations. These
 plots were produced from the experiment in section~\ref{sec:immig}.}
      \label{fig:hist}
@@ -179,10 +179,10 @@ plots were produced from the experiment in section~\ref{sec:immig}.}
   comes with a well-known limitation:
 coupling between path and parameters can result in a very sluggish
 exploration of parameter and path space. We illustrate this in figure~\ref{fig:hist},
-which shows the posterior distribution of an MJP parameter (in blue)
+which shows the posterior distribution of an MJP parameter (in dashed-blue)
 %(this is the distribution of interest, conditioned only on the observations) 
-is more concentrated than the distribution conditioned on both observations 
-as well the MJP trajectory (in green). 
+is less concentrated than the distribution conditioned on both observations 
+as well the MJP trajectory (dotted-green). 
 %We have also included the prior distribution in red. 
 %Observe that the latter is more concentrated than the former. 
 The coupling is strengthened as the trajectory grows longer, and
@@ -194,10 +194,11 @@ For the discrete-time case, this problem of parameter-trajectory
 coupling can be circumvented by marginalizing out the MJP trajectory 
 and directly sampling from the posterior over parameters $p(\theta|X)$.
 In its simplest form, this approach involves a Metropolis-Hastings
-scheme that proposes a new parameter $\vartheta$ from some proposal distribution 
-$q(\vartheta|\ctheta)$, accepting or rejecting according to the usual
+scheme that proposes a new parameter $\vartheta$ from some proposal 
+distribution 
+$q(\vartheta|\theta)$, accepting or rejecting according to the usual
 Metropolis-Hastings probability. The latter step requires calculating the 
-marginal probability of the observations $p(X|\theta)$, integrating out
+marginal probabilities $p(X|\theta)$ and $p(X|\theta')$, integrating out
 the exponential number of possible latent trajectories. Fortunately
 this marginal probability is a by-product of the forward-backward
 algorithm used to sample a new trajectory, so that no 
@@ -219,7 +220,7 @@ Markov chain}
   $q(\vartheta|\ctheta)$.
   \State Run the forward pass of the forward-backward algorithm to 
     obtain the marginal likelihood of the observations, $p(X|\vartheta)$.
-    \State Set $\theta_{new} = \vartheta$ with probability 
+    \State Set $\ntheta = \vartheta$ with probability 
     $\min(1,\frac{p(X,\vartheta)q(\ctheta|\vartheta)}{p(X,\ctheta)q(\vartheta|\ctheta)})$, else 
     $\ntheta = \ctheta$.
   \State Sample a new path with
@@ -228,6 +229,7 @@ Markov chain}
 \end{algorithmic}
 \end{algorithm}
 
+\vspace{-.35in}
 \subsection{A marginal sampler for MJP parameters} 
 Constructing a marginal sampler over the MJP parameters by
 integrating out the continuous-time trajectory is harder.
@@ -254,7 +256,7 @@ particle filtering to get an unbiased estimate of the marginal
 $p(X|\theta)$. Plugging this into the Metropolis-Hastings 
 acceptance probability results in an MCMC sampler that targets the 
 correct posterior, however %~\cite{Andrieu09}, 
-the resulting scheme resulting scheme does not exploit the structure 
+the resulting scheme does not exploit the structure 
 of the MJP, and we show that it is quite inefficient.
 
 \cite{RaoTeh13, RaoTeh12} demonstrated the advantage of
