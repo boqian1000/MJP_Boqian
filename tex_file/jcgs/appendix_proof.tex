@@ -2,15 +2,15 @@
 \begin{proposition}
 The a posteriori probability that the embedded Markov chain makes a
 self-transition,
-$P(V_{i + 1} = s| V_i = s, W, X, \theta, \vartheta) \ge \delta_1 > 0$,
+$P(V_{i + 1} = V_i| W, X, \theta, \vartheta) \ge \delta_1 > 0$,
 for %$i = 0, 1, 2, ..., |W|$ and
-any $s, \theta,\vartheta, W$.
+any $\theta,\vartheta, W$.
 \end{proposition}
 \begin{proof}
   We use $k_0$ from assumption~\ref{asmp:unif_rate}
   to bound {\em a priori} self-transition probabilities:
   \begin{align*}
-    P(V_{i + 1}=s|V_i=s,\theta,\vartheta) &= B_{ss}(\theta,\vartheta) =
+    P(V_{i + 1}=s|V_i=s, W, \theta,\vartheta) &= B_{ss}(\theta,\vartheta) =
     1 - \frac{A_{s}(\theta)}{\Omega(\theta, \vartheta)}
     \ge 1 - \frac{A_{s}(\theta)}{\Omega(\theta)} \ge 1-\frac{1}{k_0}.
     \intertext{  We then have}
