@@ -292,18 +292,19 @@ degradation with interval length that is much milder than the other algorithms.
     \includegraphics [width=0.45\textwidth, angle=0]{figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
   \end{minipage}
   \begin{minipage}[!hp]{0.25\linewidth}
-    \caption{Time Interval vs. ESS/sec. In the left plot, the number of 
+    \caption{Time Interval vs.\ ESS/sec for JC model. In the left plot, the number of 
     observations is fixed, in the right, this grows linearly with the
   interval length. Red, yellow and blue curves are the symmetrized MH,
   \naive\ MH and Gibbs. }
 	\label{fig:jc_model_vs_t}
   \end{minipage}
+  \vspace{-.4in}
   \end{figure}
 
-
+  \vspace{-.25in}
 \subsection{An immigration model with finite capacity}\label{sec:immig}~
-Finally, we consider an M/M/N/N queue. This is a stochastic 
-process whose state space is the set $\{0, 1, 2, 3, \cdots, N - 1\}$ with 
+Next, we consider an M/M/N/N queue. The state space of this is stochastic 
+process is $\{0, 1, 2, 3, \cdots, N - 1\}$ with 
 elements giving the number of customers/jobs/individuals in a system/population. 
 Arrivals follow a rate-$\alpha$ Poisson process, moving the process from state 
 $i$ to $i+1$ for $i<N$. The system has a capacity of $N$, so any arrivals when 
@@ -343,6 +344,7 @@ the system moves from $i$ to $i - 1$ with rate $i\beta$.
   \naive\ MH, Gibbs sampling and particle MCMC.}
      \label{fig:ESS_Q_D10}
   \end{minipage}
+  \vspace{-.4in}
   \end{figure}
 We follow the same setup as the first experiment:
 for $(\alpha_0,\alpha_1,\beta_0,\beta_1)$ equal to $(3,2,5,2)$,
@@ -365,7 +367,7 @@ steps included in the supplementary material.
   Again, our symmetrized  MH algorithm does best for dimensions
   $3$ and $5$, although now Gibbs sampling performs well for dimensionality $10$.
   This is partly because for the problem, the Gibbs conditionals over $\alpha$
-  and $\beta$ and conjugate, and have a very simple Gamma distribution
+  and $\beta$ are conjugate, and have a very simple Gamma distribution
   (this is also why the Gibbs sampler curves are straight lines: there is no
   proposal distribution involved here).
 % Figure~\ref{fig:hist} shows posterior distributions for 
@@ -391,16 +393,6 @@ steps included in the supplementary material.
 %   \caption{density.The left is for $\alpha$, and the right is for $\beta$.}
 %    \label{fig:dist}
 % \end{figure}
-\subsubsection{A time-inhomogeneous immigration model}~
-Here we extend the previous model to incorporate a known time-inhomogeneity. 
-The arrival and death rates are no longer constant, and are instead given by
- %$$A_i(t) =: A_{i,i}(t) = -(\alpha + i\beta)w(t), \; \; i =0,1,...,N$$ 
-$A_{i, i+1}(t) = \alpha w(t) \ (i =0,1,\cdots,N-1)$ respectively.
-While it is not difficult to work with sophisticated choices of $w(t)$,
-here we limit ourselves to a simple piecewise-constant choice of $w(t)$ 
-given by $w(t) = \left\lfloor \frac{t}{5} \right\rfloor$. Even such a simple
-change in the original model can dramatically affect the performance
-of the Gibbs sampler.
 % $w(t) = w_i, \; t \in [\l_i, l_{i + 1}), i = 1,2,3,..., K$.
 %\noindent Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, 
 %t_{N+1}(t_{end})]$, and y as observations.\\
@@ -428,6 +420,51 @@ of the Gibbs sampler.
 
 %\subsection{Experiments}
 
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[!hp]{0.6\linewidth}
+  \centering
+    \includegraphics [width=0.48\textwidth, angle=0]{figs/pc_3_alpha.pdf}
+    \includegraphics [width=0.48\textwidth, angle=0]{figs/pc_3_beta.pdf}
+%    \vspace{-.81 in}
+  \centering
+    \includegraphics [width=0.480\textwidth, angle=0]{figs/pc_10_alpha.pdf}
+    \includegraphics [width=0.480\textwidth, angle=0]{figs/pc_10_beta.pdf}
+    \vspace{-.3in}
+    \caption{ESS/sec for the time-inhomogeneous immigration model, the top row 
+      being dimension 3, and the bottom,
+      dimension 10. The left column is for $\alpha$, and the 
+    right is for $\beta$. Red, yellow and blue curves are the symmetrized MH,
+  \naive\ MH, and Gibbs algorithm.}
+     \label{fig:ESS_pc_10}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.04\linewidth}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.35\linewidth}
+  \centering
+  \vspace{-0.5in}
+    \includegraphics [width=0.89\textwidth, angle=0]{figs/ECOLI_alpha.pdf}
+    \includegraphics [width=0.89\textwidth, angle=0]{figs/ECOLI_l1.pdf}
+%    \vspace{-.81 in}
+ %   \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_beta.pdf}
+ %  \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_l2.pdf}
+  %  \vspace{-.5in}
+    \vspace{-.2in}
+    \caption{ESS/sec for the EColi data.}
+     \label{fig:ECOLI}
+  \end{minipage}
+    \vspace{-.2in}
+  \end{figure}
+\textbf{A time-inhomogeneous immigration model:}
+We extend the previous model to incorporate a known time-inhomogeneity. 
+The arrival and death rates are no longer constant, and are instead given by
+ %$$A_i(t) =: A_{i,i}(t) = -(\alpha + i\beta)w(t), \; \; i =0,1,...,N$$ 
+$A_{i, i+1}(t) = \alpha w(t) \ (i =0,1,\cdots,N-1)$ respectively.
+While it is not difficult to work with sophisticated choices of $w(t)$,
+we limit ourselves to a simple piecewise-constant 
+$w(t) = \left\lfloor \frac{t}{5} \right\rfloor$. Even such a simple
+change in the original model can dramatically affect the performance
+of the Gibbs sampler. \\
  The top row of figure~\ref{fig:ESS_pc_10} plots the ESS per unit time for the 
  parameters $\alpha$ (left) and $\beta$ (right) for the immigration model with 
  capacity $3$.  Now, the symmetrized MH algorithm is significantly 
@@ -440,43 +477,59 @@ of the Gibbs sampler.
  range of settings of the proposal variance. We note that increasing the
  dimensionality of the state space results in a more concentrated posterior,
  shifting the optimal setting of the proposal variance to smaller values.
-  \begin{figure}%[b]
-  \centering
-  \begin{minipage}[!hp]{0.55\linewidth}
-  \centering
-    \includegraphics [width=0.48\textwidth, angle=0]{figs/pc_3_alpha.pdf}
-    \includegraphics [width=0.48\textwidth, angle=0]{figs/pc_3_beta.pdf}
-%    \vspace{-.81 in}
-  \centering
-    \includegraphics [width=0.480\textwidth, angle=0]{figs/pc_10_alpha.pdf}
-    \includegraphics [width=0.480\textwidth, angle=0]{figs/pc_10_beta.pdf}
-%    \vspace{-.5in}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.30\linewidth}
-    \caption{ESS/sec for the time-inhomogeneous immigration model, the top row 
-      being dimension 3, and the bottom,
-      dimension 10. The left column is for $\alpha$, and the 
-    right is for $\beta$. Red, yellow and blue curves are the symmetrized MH,
-  \naive\ MH, and Gibbs algorithm.}
-     \label{fig:ESS_pc_10}
-  \end{minipage}
-  \end{figure}
 
+  \vspace{-.2in}
   \subsection{Analysis of Chi site data for Escherichia coli}~
-  We analyze the Escherichia coli data used in Fearhead. The data are for E. coli DNA and consist of the position (in bases) of Chi sites along the genome while the Chi site is a motif of eight base pairs: GCTGGTGG. The circular double-stranded DNA genome of E. coli has two strands which are the inner and outer rings. The molecular mechanisms of DNA replication differ between the two half-strands and they are termed leading and lagging. The E. coli genome is 4639675 bases long and each half is 2319.838 kilobases long. We model this discrete process as continuous process because of the length. Further, we model this using Markov-modulated Poisson process. Specifically, we analyze the inner lagging strand data by our Metropolis Hasting sampler compared with Gibbs sampler. A Markov-modulated Poisson process is a Poisson process whose intensity depends on the current hidden state of a continuous time Markov chain. Points from the Markov-modulated Poisson process are observed. We assume the hidden state space is  $\{1, 2\}$ and the corresponding Poisson-rates are $\lambda_1$ and $\lambda_2$. Transitions from state $1$ to state $2$ have rate $\alpha$ while transitions from state $2$ to state $1$ have rate $\beta$. Gamma priors are placed for these four parameters. Specifically, we use Gamma$(2,2)$, Gamma$(2,3)$, Gamma$(3,2)$, Gamma$(1,2)$ for $\alpha$, $\beta$, $\lambda_1$, $\lambda_2$ respectively.
-  \begin{figure}%[b]
-  \centering
-  \begin{minipage}[!hp]{0.99\linewidth}
-  \centering
-    \includegraphics [width=0.25\textwidth, angle=0]{figs/ECOLI_alpha.pdf}
-    \includegraphics [width=0.25\textwidth, angle=0]{figs/ECOLI_l1.pdf}
-%    \vspace{-.81 in}
- %   \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_beta.pdf}
- %  \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_l2.pdf}
-  %  \vspace{-.5in}
-  \end{minipage}
-    \vspace{-.2in}
-    \caption{ESS/sec for the EColi data.}
-     \label{fig:ECOLI}
-  \end{figure}
+  We consider a dataset of {\em E.\ coli} DNA used in~\cite{FearnSher2006}.
+  This consists of positions of Chi sites (motifs of eight base pairs, 
+  GCTGGTGG) along the inner (lagging) strand of the {\em E.\ coli} genome. 
+  %strands which are the inner and outer rings. The molecular mechanisms 
+  %of DNA replication differ between the two half-strands and they are 
+  %termed leading and lagging. The E. coli genome is 4639675 bases long and 
+  %each half is 2319.838 kilobases long. 
+  Following~\cite{FearnSher2006}, we wish to use this data to infer a 
+  two-state piecewise-constant segmentation of the DNA strand. We place a 
+  MJP prior over this segmentation, and indexing position along the 
+  strand with $t \in [0,19]$, we write this as $S(t)$. To state $i \in 
+  \{1,2\}$, we assign a rate $\lambda_i$, which together with $S(t)$, 
+  defines a piecewise-constant rate function $\lambda_{S(t)}$. We model 
+  the Chi-site positions as drawn from a Poisson process with rate 
+  $\lambda_{S(t)}$, resulting in a {Markov-modulated Poisson 
+  process}~\cite{scottmmpp03}. 
+  MJP transitions from state $1$ to state $2$ have rate $\alpha$ while 
+  transitions from state $2$ to state $1$ have rate $\beta$. We place 
+  gamma priors are placed for the four model parameters; specifically, 
+  we use Gamma$(2,2)$, Gamma$(2,3)$, Gamma$(3,2)$, Gamma$(1,2)$ for 
+  $\alpha$, $\beta$, $\lambda_1$, $\lambda_2$ respectively.
+
+  We use this setup to evaluate our proposed Metropolis-Hastings sampler 
+  along with Gibbs sampling. For our MH proposal distribution, we first 
+  run $500$ iterations of Gibbs sampling to estimate the covariance matrix 
+  of the vector $\theta = (\alpha,\beta,\lambda_1,\lambda_2)$, call this 
+  $\Sigma_\theta$. Our MH proposal distribution is then $q(\theta^*|\theta) = 
+  N(\theta^*|\theta, \kappa\Sigma_\theta)$ for different settings of 
+  $\kappa$ (the typical choice is $\kappa = 1$). Figure~\ref{fig:ECOLI} 
+  shows the results for the parameter $\alpha$, we include $\beta$ in 
+  the appendix. We see that for the typical setting of $\kappa=1$, our 
+  sampler ourperforms the Gibbs sampler, though Gibbs sampling does 
+  outperform our method for large or small $\kappa$. This is because now, 
+  the proposal variance is too large or too small, further, the Gibbs 
+  conditionals over the parameters are conjugate for this model. Again,
+  we expect the improvements our method offers to be more robust to the 
+  proposal distribution for more complex models without such conditional 
+  conjugacy.
+% \begin{figure}%[b]
+% \centering
+% \begin{minipage}[!hp]{0.99\linewidth}
+% \centering
+%   \includegraphics [width=0.25\textwidth, angle=0]{figs/ECOLI_alpha.pdf}
+%   \includegraphics [width=0.25\textwidth, angle=0]{figs/ECOLI_l1.pdf}
+%  %   \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_beta.pdf}
+%  %  \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_l2.pdf}
+% %  \vspace{-.5in}
+% \end{minipage}
+%   \vspace{-.2in}
+%   \caption{ESS/sec for the EColi data.}
+%    \label{fig:ECOLI}
+% \end{figure}
 
