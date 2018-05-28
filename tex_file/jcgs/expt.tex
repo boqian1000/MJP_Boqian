@@ -63,26 +63,21 @@ different samplers and different parameter settings.
 %  \end{algorithmic}
 %  \end{algorithm}
 
+    \vspace{-.2in}
 \subsection{A simple synthetic MJP}
-  \begin{figure}[H]
+\begin{wrapfigure}{r}{.4\textwidth}
+  \begin{minipage}[!hp]{.15\linewidth}
+    \hspace{.1in}
+  \end{minipage}
+  \begin{minipage}[!hp]{.8\linewidth}
   \centering
-  \begin{minipage}[!hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/exp_model.pdf}
-      \end{minipage}
-  \begin{minipage}[!hp]{0.45\linewidth}
+    \includegraphics [width=\textwidth, angle=0]{figs/exp_model.pdf}
     \caption{A 3-state MJP with exponentially decaying rates}
       \end{minipage}
     \label{fig:exp_model}
-  \end{figure}
-
-% \noindent Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, t_{N+1}(t_{end})]$, and y as observations.\\
-% We consider a specific structure of rate matrix $A$. $A_{ij} = \alpha f_{ij}(\beta), \; i \neq j$. $A_{ii} = -\sum_{j \neq i} A_{ij}$. $0 \leq f_{ij} \leq 1$. Denote $F_i(\beta) = \sum_{j \neq i} f_{ij}(\beta)$.\\
-% \begin{align*}
-% P(s_0, S, T | \alpha, \beta) &= \pi_0(s_0)\prod_{i = 1}^N A_{S_{i - 1}S_i} \exp(- \int_{t_{start}}^{t_{end}} |A_{S(t)}| dt)\\
-% &= \pi_0(s_0) \alpha^N \prod_{i = 1}^N f_{S_{i - 1}S_i} \exp(-\alpha  \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))\\
-% \end{align*} 
-\noindent Consider an MJP with two parameters $\alpha$ and $\beta$, 
+    \vspace{-.1in}
+  \end{wrapfigure}
+Consider an MJP with two parameters $\alpha$ and $\beta$, 
 transitions between states $i$ and $j$ having rate $\alpha \exp(-\beta/(i+j))$.
 We consider three settings: $3$ states (figure~\ref{fig:exp_model}),
 $5$ states, and $10$ states.
@@ -96,6 +91,38 @@ $[0, 20]$. Each observation is Gaussian distributed with mean equal to the state
 at that time, and variance equal to $1$.  For the Metropolis-Hastings proposal, 
 we used a lognormal distribution centered at the current parameter value, with 
 a user-specified variance.
+  \begin{figure}[H]
+    \vspace{-.2in}
+  \centering
+  \begin{minipage}[!hp]{0.7\linewidth}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_3_alpha.pdf}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_3_beta.pdf}
+  \end{minipage}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+   \vspace{-.3in}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_10_alpha.pdf}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_10_beta.pdf}
+  \end{minipage}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.24\linewidth}
+    \caption{ESS/sec for the synthetic  model, the top row being dimension 3, and the bottom,
+      dimension 10. The left column is for $\alpha$, and the 
+    right is for $\beta$. Red, yellow, blue and black curves are the symmetrized MH,
+  \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols correspond
+to different settings of the algorithms, see section~\ref{sec:expts}}
+     \label{fig:ESS_EXP_D10}
+  \end{minipage}
+  \vspace{-.3in}
+  \end{figure}
+% \noindent Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, t_{N+1}(t_{end})]$, and y as observations.\\
+% We consider a specific structure of rate matrix $A$. $A_{ij} = \alpha f_{ij}(\beta), \; i \neq j$. $A_{ii} = -\sum_{j \neq i} A_{ij}$. $0 \leq f_{ij} \leq 1$. Denote $F_i(\beta) = \sum_{j \neq i} f_{ij}(\beta)$.\\
+% \begin{align*}
+% P(s_0, S, T | \alpha, \beta) &= \pi_0(s_0)\prod_{i = 1}^N A_{S_{i - 1}S_i} \exp(- \int_{t_{start}}^{t_{end}} |A_{S(t)}| dt)\\
+% &= \pi_0(s_0) \alpha^N \prod_{i = 1}^N f_{S_{i - 1}S_i} \exp(-\alpha  \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i))\\
+% \end{align*} 
 %\vinayak{We studied our MH sampler, for three setting of $k$}.  
 % %\begin{align*}
 % %P(\alpha, \beta | s_0, S, T ) \propto \alpha^N \prod_{i = 1}^N f_{S_{i - 1}S_i} \exp(-\alpha  \sum_{i = 0}^{N} F_{S_i}(\beta)(t_{i + 1} - t_i)) p_1(\alpha)p_2(\beta)\\
@@ -111,28 +138,6 @@ a user-specified variance.
 % Such doubling might slow the mixing of the Markov chain. We can apply our Metropolis Hasting algorithm on this model.
 
 \noindent \textbf{Results:}
-  \begin{figure}%[b]
-  \centering
-  \begin{minipage}[!hp]{0.75\linewidth}
-  \centering
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_3_alpha.pdf}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_3_beta.pdf}
-%  \vspace{-1in}
-  \centering
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_10_alpha.pdf}
-    \vspace{-0 in}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_10_beta.pdf}
-    \vspace{-0 in}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.24\linewidth}
-    \caption{ESS/sec for the synthetic  model, the top row being dimension 3, and the bottom,
-      dimension 10. The left column is for $\alpha$, and the 
-    right is for $\beta$. Red, yellow, blue and black curves are the symmetrized MH,
-  \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols correspond
-to different settings of the algorithms, see section~\ref{sec:expts}}
-     \label{fig:ESS_EXP_D10}
-  \end{minipage}
-  \end{figure}
   Figure~\ref{fig:ESS_EXP_D10} plots the ESS per unit time for the parameters 
   $\alpha$ (left) and $\beta$ (right) for the
   case of $3$ states (top row) and $10$ states (bottom row) as we vary the scale-parameter $\sigma^2$ of the
@@ -175,7 +180,6 @@ show that for the parameter $\alpha$, the improvement that our proposed
 sampler affords is even more dramatic. For the parameter $\beta$ however,
 its performance is comparable to Gibbs, although it's not possible to
 claim one is uniformly superior to the other.
-
 
   \begin{figure}%[b]    
   \centering
@@ -271,17 +275,6 @@ sampling, the conditional parameter update is conjugate, and there is no
 proposal distribution involved (hence it's performance remains fixed along
 the x-axis). Particle MCMC performs worse
 than all the algorithms, and we do not include it in our plots.
-
-In figure~\ref{fig:jc_model_vs_t}, we plot the ESS per unit time for the
-different samplers as we increase the observation interval. In the left plot,
-we keep the number of observations fixed, in the right, these increase with
-the observation interval. Once again we see that our proposed algorithm
-1) performs best over all interval lengths, and 2) suffers a performance
-degradation with interval length that is much milder than the other algorithms.
-%$$p(\alpha) = \frac{\lambda^\mu}{\Gamma(\mu)}\alpha^{\mu -1}e^{-\lambda \alpha} $$.
-%Then we can get the posterior distribution $$f(\alpha | s_0,S,T)$$ as follows.
-%$$ f(\alpha| s_0,S,T) \propto \exp(-(\lambda + 3(t_{end} - t_{start}))\alpha) \alpha^{\mu + N -1} .$$
-%$\alpha | s_0,S,T$ is following $Gamma(\mu+ N,\lambda + 3(t_{end} - t_{start}))$\\
   \begin{figure}%[H]
   \centering
   \begin{minipage}[!hp]{0.73\linewidth}
@@ -300,6 +293,17 @@ degradation with interval length that is much milder than the other algorithms.
   \end{minipage}
   \vspace{-.4in}
   \end{figure}
+
+In figure~\ref{fig:jc_model_vs_t}, we plot the ESS per unit time for the
+different samplers as we increase the observation interval. In the left plot,
+we keep the number of observations fixed, in the right, these increase with
+the observation interval. Once again we see that our proposed algorithm
+1) performs best over all interval lengths, and 2) suffers a performance
+degradation with interval length that is much milder than the other algorithms.
+%$$p(\alpha) = \frac{\lambda^\mu}{\Gamma(\mu)}\alpha^{\mu -1}e^{-\lambda \alpha} $$.
+%Then we can get the posterior distribution $$f(\alpha | s_0,S,T)$$ as follows.
+%$$ f(\alpha| s_0,S,T) \propto \exp(-(\lambda + 3(t_{end} - t_{start}))\alpha) \alpha^{\mu + N -1} .$$
+%$\alpha | s_0,S,T$ is following $Gamma(\mu+ N,\lambda + 3(t_{end} - t_{start}))$\\
 
   \vspace{-.25in}
 \subsection{An immigration model with finite capacity}\label{sec:immig}~
@@ -430,6 +434,10 @@ steps included in the supplementary material.
   \centering
     \includegraphics [width=0.480\textwidth, angle=0]{figs/pc_10_alpha.pdf}
     \includegraphics [width=0.480\textwidth, angle=0]{figs/pc_10_beta.pdf}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.04\linewidth}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.35\linewidth}
     \vspace{-.3in}
     \caption{ESS/sec for the time-inhomogeneous immigration model, the top row 
       being dimension 3, and the bottom,
@@ -437,21 +445,6 @@ steps included in the supplementary material.
     right is for $\beta$. Red, yellow and blue curves are the symmetrized MH,
   \naive\ MH, and Gibbs algorithm.}
      \label{fig:ESS_pc_10}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.04\linewidth}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.35\linewidth}
-  \centering
-  \vspace{-0.5in}
-    \includegraphics [width=0.89\textwidth, angle=0]{figs/ECOLI_alpha.pdf}
-    \includegraphics [width=0.89\textwidth, angle=0]{figs/ECOLI_l1.pdf}
-%    \vspace{-.81 in}
- %   \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_beta.pdf}
- %  \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_l2.pdf}
-  %  \vspace{-.5in}
-    \vspace{-.2in}
-    \caption{ESS/sec for the EColi data.}
-     \label{fig:ECOLI}
   \end{minipage}
     \vspace{-.2in}
   \end{figure}
@@ -478,8 +471,27 @@ of the Gibbs sampler. \\
  dimensionality of the state space results in a more concentrated posterior,
  shifting the optimal setting of the proposal variance to smaller values.
 
-  \vspace{-.2in}
   \subsection{Analysis of Chi site data for Escherichia coli}~
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[!hp]{.2\linewidth}
+    \caption{ESS/sec for the EColi data.}
+     \label{fig:ECOLI}
+  \end{minipage}
+  \begin{minipage}[!hp]{.05\linewidth}
+    \hspace{.1in}
+  \end{minipage}
+  \begin{minipage}[!hp]{.7\linewidth}
+    \includegraphics [width=0.5\textwidth, angle=0]{figs/ECOLI_alpha.pdf}
+    \includegraphics [width=0.5\textwidth, angle=0]{figs/ECOLI_l1.pdf}
+%    \vspace{-.81 in}
+ %   \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_beta.pdf}
+ %  \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_l2.pdf}
+  %  \vspace{-.5in}
+    \vspace{-.2in}
+  \end{minipage}
+    \vspace{-.2in}
+  \end{figure}
   We consider a dataset of {\em E.\ coli} DNA used in~\cite{FearnSher2006}.
   This consists of positions of Chi sites (motifs of eight base pairs, 
   GCTGGTGG) along the inner (lagging) strand of the {\em E.\ coli} genome. 
