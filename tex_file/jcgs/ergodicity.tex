@@ -66,7 +66,7 @@ $\tilde{A}(\theta) = D_\theta^{-1}A(\theta)D_\theta$, and the
 (A(\theta)+\tilde{A}(\theta))/2$. 
 \label{def:mjp_symm}
 \end{definition}
-This definition is from~\cite{fill1991}, who show that the matrix 
+This definition is from~\cite{fill1991}, who show \boqian{shows} that the matrix 
 $R_A(\theta)$ is reversible with real eigenvalues, the smallest being $0$. 
 The larger its second smallest eigenvalue, the faster the MJP converges to its 
 stationary distribution $\pi_\theta$.
@@ -173,9 +173,10 @@ the lemma's assumptions,
 $1 - \lambda^{R_B}_2(\theta,\theta') = \frac{\lambda^{R_A}_2(\theta)}{\Omega(\theta, \theta')} 
 \ge \frac{\lambda^{R_A}_2(\theta)}{(K_0+1)\Omega(\theta)} 
 \ge \frac{\mu}{K_0+1} $. 
+\boqian{not consistent with the assumption 3, we need to assume $ \frac{\lambda^{R_A}_2(\theta)}{\Omega} \ge \mu$}
 Also, 
 \begin{align*}
-\Omega(\theta, \theta') &= \Omega(\theta) + \Omega(\theta') > (1 + \frac{1}{K_0})\Omega(\theta)
+\Omega(\theta, \theta') &= \Omega(\theta) + \Omega(\theta') \ge (1 + \frac{1}{K_0})\Omega(\theta)
  > (1 + \frac{1}{K_0})k_1\max_s A_{s}(\theta) \ge 2\max_s A_{s}(\theta). %\ge -2 A(\theta)_{s,s}.
 \end{align*}
 So for any state $s$, the diagonal element $B_s(\theta, \theta') = 1 - 
@@ -185,7 +186,7 @@ on $1-\lambda_2^{R_B}(\theta,\theta')$ give the result.
 \qed
 \end{proof}
 
-Our overall proof strategy is to show that for $\theta$ and $W$ large 
+Our overall proof strategy is to show that for $\theta$ \boqian{$\| \theta \|$} and $W$ large 
 enough, the conditions of Lemma~\ref{lem:eig_lemma} hold with 
 high probability. We show that Lemma~\ref{lem:eig_lemma} then allows the 
 distribution over latent states for the continuous-time MJP and its 
@@ -218,7 +219,7 @@ $\alpha_I(\theta', \theta; X) q(\theta' | \theta) \ge \kappa_1 \phi(\theta')$
  for $\theta \in \SM_M$, \\
 ii) for $M$ large enough, $\exists \rho < 1$ s.\ t.\
 $\int \Omega(\nu) p_I(\nu|\theta) d\nu
-\leq (1-\rho) \Omega(\theta)+L$, $\forall \theta \not\in \SM_M$.
+\leq (1-\rho) \Omega(\theta)+L\boqian{L_I}$, $\forall \theta \not\in \SM_M$.
   \label{asmp:ideal_geom}
 \end{assumption}
 \noindent %Here we specify the properties of the ideal sampler that we
@@ -278,7 +279,7 @@ dynamics, rather than the observation process.
 \begin{assumption}
 Given the proposal density $q(\nu | \theta)$, $\exists \eta_0 > 0, \theta_2 > 0$ 
 such that for $\theta$ satisfying $\| \theta \|  > \theta_2$, 
-$ \int_\Theta \Omega(\mu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2.$
+$ \int_\Theta \Omega(\nu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2.$
 \label{asmp:integ_bound}
 \end{assumption}
 \noindent This mild requirement can be satisfied by choosing a proposal 
@@ -291,7 +292,7 @@ $ \int_\Theta \Omega(\nu) q(\nu | \theta)d\nu \leq \eta_1 \Omega(\theta).$
 \label{corol:integ_bound}
 \end{corollary}
 \begin{proof}
-From assumption \ref{asmp:integ_bound},  we have $ \int_\Theta \Omega(\mu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2$ for $\theta$ satisfying $\| \theta \|  > \theta_2$.
+From assumption \ref{asmp:integ_bound},  we have $ \int_\Theta \Omega(\nu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2$ for $\theta$ satisfying $\| \theta \|  > \theta_2$.
 For such $\theta$, by the Cauchy-Schwarz inequality, we have
 \begin{align*}
 \left[ \int_\Theta \Omega(\nu) q(\nu | \theta) d\nu \right]^2 &\le \int_\Theta \Omega(\nu)^2 q(\nu | \theta) d\nu \cdot \int_\Theta q(\nu | \theta) d\nu \le \eta_0 \Omega(\theta)^2.
@@ -316,8 +317,8 @@ So for $\theta$ satisfying $\| \theta \|  > \theta_2$, we have $\int_\Theta \Ome
 
 We need two further assumptions on the proposal distribution $q(\theta'|\theta)$.
 \begin{assumption}
-For any $\epsilon>0$,  there exist finite $M_\epsilon$, $\theta_{4,\epsilon}$
-such that for $\theta$ satisfying $\| \theta \|  > \theta_{4,\epsilon}$,
+For any $\epsilon>0$,  there exist finite $M_\epsilon$, $\theta_{3,\epsilon}$
+such that for $\theta$ satisfying $\| \theta \|  > \theta_{3,\epsilon}$,
 the condition $q(\{\theta': \frac{p(\theta')q(\theta|\theta')}{p(\theta)q(\theta'|\theta)} \le M_\epsilon\}|\theta) 
 > 1 - \epsilon$ holds.
   \label{asmp:prior}
@@ -344,8 +345,8 @@ and $q(\theta'|\theta)$ is Gaussian.
 %\end{assumption}
 
 \begin{assumption}
-For any $\epsilon > 0$ and  $K > 1$, there exists $\theta_{5,\epsilon}^K$ such that 
-for $\theta$ satisfying $\| \theta \|  > \theta_{5,\epsilon}^K$, the 
+For any $\epsilon > 0$ and  $K > 1$, there exists $\theta_{4,\epsilon}^K$ such that 
+for $\theta$ satisfying $\| \theta \|  > \theta_{4,\epsilon}^K$, the 
 condition
 $q(\{\theta':\frac{\Omega(\theta')}{\Omega(\theta)} \in 
   \left[\frac{1}{K}, K\right]\} | \theta) > 1 - \epsilon$ holds.
@@ -473,7 +474,7 @@ any $\theta,\vartheta, W,s$.
 two-step transition probability satisfying 
 $P(W'', \theta'',\vartheta'' | W, \theta, \vartheta) \ge \rho_1 
 \phi_1(W{''}, \theta'',\vartheta'') $ for a constant $\rho_1$ and a 
-probability measure $\phi_1$ independent of the initial state.
+probability measure $\phi_1$ independent of the initial state \boqian{in $B_{h, M}$}.
 \label{lem:small_set}
 \end{lemma}
 \begin{proof} Recall the definition of $B_M$, and of an $n$-small set from 
@@ -511,7 +512,7 @@ From the %fact that $\Omega(\theta',\theta) = \Omega(\theta') + \Omega(\theta)$,
 Poisson superposition theorem,
 %$\PP(r(\theta, \nu, s_0)) = \PP(\Omega(\nu)) \cup \PP(r(\theta, \nu, s_0) - \Omega(\nu))$.
 \begin{align*}
-  P(W' | S, &T = \emptyset, \theta', \theta)  \geq P(W' \from
+  P(W' | S\boqian{=[s^*]}, &T = \emptyset, \theta', \theta)  \geq P(W' \from
 \PP(\Omega(\theta')))
 P(\emptyset \from \PP(\Omega(\theta)-A_{s^*}(\theta) ))\\
   & \geq P(W' \from \PP(\Omega(\theta'))) P(\emptyset \from \PP(\Omega(\theta) ))\\
@@ -523,8 +524,8 @@ P(\emptyset \from \PP(\Omega(\theta)-A_{s^*}(\theta) ))\\
 Thus we have
 \begin{align*}
   \sum_{S,T} P(S,T | W, \theta, \vartheta, X) &P(W'| S, T, \theta',
-  \theta) \geq \sum_S P(S, T = \emptyset | W, \theta, \vartheta, X)
-  P(W' | S, T=\emptyset,\theta', \theta)\\
+  \theta) \geq \sum_{S\boqian{s^*}} P(S\boqian{=[s^*]}, T = \emptyset | W, \theta, \vartheta, X)
+  P(W' | S\boqian{=[s^*]}, T=\emptyset,\theta', \theta)\\
                &\geq \delta_1^{|W|} \exp(-Mt_{end})
 P(W' \from \PP(\Omega(\theta'))) \numberthis
 \label{eq:marg}
@@ -693,7 +694,7 @@ brought $\epsilon'$ close.
 %  $$P_{st}(X | \theta) = \sum_{V_X} P(X | V_X, \theta) P_{st}(V_X | \theta).$$
 Then for any $W$ with $\mW > w_0$, we have
 \begin{align*}
-  |P(X|W , \theta, \theta') - P_{st}(X | \theta)| &= | \sum_{V_X} P(X|V_X, \theta)\{P_B(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta)\}|\\
+  |P(X|W , \theta, \theta') - P_{st}(X | \theta)| &= | \sum_{V_X} P(X|V_X, \theta)\{ \boqian{[}P_B(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta) \boqian{]} \}|\\
 & \leq \sum_{V_X} P(X | V_X, \theta)|P_B(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta)|\\
 & \leq \sum_{V_X} P(X | V_X, \theta){\epsilon'} \le \epsilon'' \quad (\text{from Assumption}~\ref{asmp:obs_bnd}).
 %& \leq N \| X \| \ub \epsilon' := \epsilon''
@@ -866,9 +867,9 @@ directly from proposition~\ref{prop:self_tr}:
   \mathbb{I}_{\{ V_{i + 1} \neq V_i \}}| W, \theta, \vartheta, X]
 \leq \sum_{i = 0}^{|W| - 1} (1 - \delta_1) = |W|(1 - \delta_1).
 \end{align*}
-By corollary \ref{corol:integ_bound}, there exist $\eta_1 , \theta_3$ such that for 
+By corollary \ref{corol:integ_bound}, there exist $\eta_1 , \theta_2$ such that for 
 %$\theta$  satisfying 
-$ \| \theta \| > \theta_3$, 
+$ \| \theta \| > \theta_2$, 
  $ \int \Omega(\nu) q(\nu | \theta)d\nu \leq \eta_1 \Omega(\theta) 
  $. Then,
 \begin{align*}
@@ -1030,13 +1031,13 @@ $
 %\int_{\E_\epsilon} d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta) +
 %\int_{\E_\epsilon^c} d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta).
 Over the first set $E_\epsilon$, by corollary \ref{corol:integ_bound}, and bounding
-the acceptance probability by $\alpha_I + \epsilon$ we get, for $\theta$ satisfying $ \| \theta \| > \theta_3$,
+the acceptance probability by $\alpha_I + \epsilon$ we get, for $\theta$ satisfying $ \| \theta \| > \theta_2$,
 \begin{align*}
 %\int_{\E_\epsilon} d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta)  &
   I_{1,\epsilon} & \leq \int_{\E_\epsilon} \Omega(\theta')q(\theta' | \theta) (\alpha_I(\theta, \theta'; X) + \epsilon) d\theta' 
  \leq \int \Omega(\theta')q(\theta' | \theta) \alpha_I(\theta, \theta'; X) d\theta' + \eta_1 \epsilon \Omega(\theta).
 \end{align*}
-For $\int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta'$, from assumption \ref{asmp:integ_bound}, there exists $\eta_0 , \theta_2 > 0$ such that for $\theta$ satisfying $ \| \theta \| > \theta_2$, we have
+For $\int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta'$, from assumption \ref{asmp:integ_bound}, there exists $\eta_0 , \theta_2 > 0$  \boqian{we can delete $\theta_2$ here} such that for $\theta$ satisfying $ \| \theta \| > \theta_2$, we have
 $\int_\Theta \Omega(\nu)^2 q(\nu | \theta)d\nu \leq \eta_0 \Omega(\theta)^2$.
 So, by Cauchy-Schwarz inequality and bounding the acceptance probability by one, we have
 \begin{align*}
@@ -1051,22 +1052,23 @@ $
 I_{1,\epsilon}^c  \le \sqrt{\epsilon \eta_0 }\Omega(\theta) .
 $
 Now for $\theta$ satisfying $ \| \theta \| >\max(\theta_2, \theta_3, 
-\theta_\epsilon, M)$ ($M$ is from Assumption~\ref{asmp:ideal_geom} on 
+\theta_\epsilon, M) \boqian{\max(\theta_2, \theta_\epsilon, M)}$ 
+($M$ is from Assumption~\ref{asmp:ideal_geom} on 
 the ideal sampler), we have 
 \begin{align*}
   \int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)
 %  &= \int_{\E_\epsilon} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta' + \int_{\E_\epsilon^c} I_1(W, \theta', \theta, \vartheta) \Omega(\theta') d\theta' \\ &+ I_{2,\E_{\epsilon}}(W, \theta, \vartheta) + I_{2,\E_{\epsilon}^c}(W, \theta, \vartheta) \\
   & \leq \int q(\theta' | \theta) \Omega(\theta')\alpha_I(\theta, \theta'| X) d\theta'  + \Omega(\theta)\int  q(\nu | \theta) (1 - \alpha_I(\theta, \nu | X)) d\nu+ \\
   &\sqrt{\eta_0}\Omega(\theta) \sqrt{\epsilon} +  \eta_1 \epsilon \Omega(\theta) + 2\epsilon \Omega(\theta)\\
-  & \leq (1 - \rho) \Omega(\theta) + (\sqrt{\eta_0} \sqrt{\epsilon} +  \eta_1 \epsilon + 2\epsilon) \Omega(\theta)
+  & \leq (1 - \rho) \Omega(\theta) + (\sqrt{\eta_0} \sqrt{\epsilon} +  \eta_1 \epsilon + 2\epsilon) \Omega(\theta) \boqian{+ L_I}
 \end{align*}
 %For $\theta$ satisfying $ \| \theta \| >\max(\theta_2, \theta_3, \theta_\epsilon)$, we have %\boqian{need to change afterwards}
 This gives
 \begin{align*}
-\mathbb{E}[\lambda_1 | W'| &+ \Omega(\theta')| W, \theta, \vartheta, X] \le \lambda_1(1 - \delta_1)|W| + \lambda_1 t_{end} (1 + \eta_1)\Omega(\theta) \\
-&+  (1 - \rho) \Omega(\theta) + (\sqrt{\eta_0} \sqrt{\epsilon} +  \eta_1 \epsilon + 2\epsilon) \Omega(\theta)\\
-& = (1 - \delta_1)\lambda_1 |W| + [1 - (\rho - \lambda_1 t_{end} (1 + \eta_1) - (2 + \eta_1)\epsilon - \sqrt{\eta_0} \sqrt{\epsilon})]\Omega(\theta) \\
-& \assign (1 - \delta_1)\lambda_1 |W| + (1 - \delta_2)\Omega(\theta)
+\mathbb{E}[\lambda_1 | W'| &+ \Omega(\theta')| W, \theta, \vartheta, X] \le \lambda_1(1 - \delta_1)|W| + \lambda_1 t_{end} (1 + \eta_1)\Omega(\theta)\\
+&+  (1 - \rho) \Omega(\theta) + (\sqrt{\eta_0} \sqrt{\epsilon} +  \eta_1 \epsilon + 2\epsilon) \Omega(\theta) \boqian{+ L_I}\\
+& = (1 - \delta_1)\lambda_1 |W| + [1 - (\rho - \lambda_1 t_{end} (1 + \eta_1) - (2 + \eta_1)\epsilon - \sqrt{\eta_0} \sqrt{\epsilon})]\Omega(\theta) \boqian{+ L_I}\\
+& \assign (1 - \delta_1)\lambda_1 |W| + (1 - \delta_2)\Omega(\theta) \boqian{+ L_I}
 \end{align*}
 For $\lambda_1$ and $\epsilon$ small enough, $\delta_2 \in (0,1)$. If we 
 fix $\lambda_1$ small enough, this holds outside some small set $C$.
