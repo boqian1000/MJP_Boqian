@@ -86,5 +86,29 @@ trajectory.}
       Run a forward pass to accept or reject this proposal, and use the accepted
     parameter to simulate a new trajectory. Step 6: Discard the thinned events.} 
    \label{fig:MH_improved}
+  \end{figure}
+
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[hp]{0.65\linewidth}
+  \centering
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/exp_5_alpha.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/exp_5_beta.pdf}
+    \caption{ESS/sec for the synthetic  model, dimension 5. The left column is for $\alpha$, and the 
+    right is for $\beta$. Red, yellow, blue and black curves are the symmetrized MH,
+  \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols correspond
+to different settings of the algorithms, see section~\ref{sec:expts}.}
+     \label{fig:ESS_EXP_D5}
+  \end{minipage}
+  \end{figure}
+
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[!hp]{0.65\linewidth}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/ECOLI_beta.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/ECOLI_l2.pdf}
+    \caption{ESS/sec for the EColi data}
+     \label{fig:ECOLI_beta_l2}
+  \end{minipage}
 
   \end{figure}
