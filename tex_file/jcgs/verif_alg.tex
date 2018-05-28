@@ -61,6 +61,7 @@ the posterior.
 % &= P((W, S^*, T^*, (\theta^*, \theta)) \rightarrow (W, S, T, (\theta, \theta^*))) P(S^*,T^*, (\theta^*, \theta) | W, y)
 % \end{align*} 
 % Therefore the stationary distribution of this MCMC sampler is $P(W, S, T, (\theta, \theta^*) | y)$. Thus the stationary distribution of $(S, T, \theta)$ is the corresponding marginal distribution $P(S, T, \theta | y)$.  
+\qed
 \end{proof}
 
 \subsection{Comments}\label{sec:comments}
@@ -85,10 +86,10 @@ for $\kappa > 1$.  These result in more thinned events, and therefore more
 computation, with the benefit of faster MCMC mixing. We study the effect of 
 $\kappa$ in our experiments.
 
-It is also possible to have non-additive settings for $\Omega(\theta,\vartheta)$.
-A simple option is to set it equal to 
+It is also possible to have non-additive settings for $\Omega(\theta,\vartheta)$,
+for example, setting $\Omega(\theta,\vartheta)$ to 
 $\kappa \max( \max_i A_i(\theta), \max A_i(\vartheta))$ for some choice of $\kappa
-> 1$. We investigate this option as well.
+> 1$. We investigate this as well.
 
 Our proposed algorithm is related to work on MCMC inference for doubly-intractable distributions.
 Algorithm like~\cite{Moller2006,murray2006,Andrieu09} all attempt to evaluate an intractable

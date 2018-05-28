@@ -1,12 +1,12 @@
-
+\vspace{-.2in}
 \section{Experiments}\label{sec:expts}~
 In the following, we evaluate Python implementations of our two proposed
 algorithms, the \naive\ MH algorithm (algorithm~\ref{alg:MH_naive}, which we
 plot in yellow) and its symmetrized improvement (algorithm~\ref{alg:MH_improved}, 
-which we call symmetrized MH and plot in red). We compare different variants of 
-these algorithms, corresponding to different uniformizing Poisson rates 
-(i.e.\ different choices of $\kappa$, see section~\ref{sec:comments}). For 
-\naive\ MH, %~\ref{alg:MH_naive}, 
+which we call symmetrized MH and plot in red). We compare 
+different variants of these algorithms, corresponding to different 
+uniformizing Poisson rates (i.e.\ different choices of $\kappa$, see 
+section~\ref{sec:comments}). For \naive\ MH, %~\ref{alg:MH_naive}, 
 we set $\Omega(\theta) = \kappa \max_s A_s(\theta) $ with $\kappa$  equal to 
 $1.5, 2$ and $3$, represented in our plots with circles, triangles and square
 symbols. For symmetrized MH, %algorithm~\ref{alg:MH_improved}, 
@@ -70,7 +70,9 @@ different samplers and different parameter settings.
   \centering
     \includegraphics [width=0.70\textwidth, angle=0]{figs/exp_model.pdf}
       \end{minipage}
+  \begin{minipage}[!hp]{0.45\linewidth}
     \caption{A 3-state MJP with exponentially decaying rates}
+      \end{minipage}
     \label{fig:exp_model}
   \end{figure}
 
@@ -171,8 +173,9 @@ down mixing. Particle MCMC has the worst performance for this task. The
 results in figure~\ref{fig:ESS_EXP_D10} for the 10-dimensional state space
 show that for the parameter $\alpha$, the improvement that our proposed
 sampler affords is even more dramatic. For the parameter $\beta$ however,
-it's performance is comparable to Gibbs, although it's not possible to
+its performance is comparable to Gibbs, although it's not possible to
 claim one is uniformly superior to the other.
+
 
   \begin{figure}%[b]    
   \centering
@@ -212,15 +215,14 @@ consider four settings, with $t_{end}$ equal to $10, 20, 50, 100$. For each, we
 compare our symmetrized MH sampler (with $\kappa$ set to $1$) with the Gibbs 
 sampler (with $\kappa$ set to $2$). While the performance of the Gibbs sampler 
 is comparable with our symmetrized algorithm for the smallest value of 
-$t_{end}$, its performance is considerably worse for longer time-intervals. This is 
-because of the conditional nature of the updates of the Gibbs sampler, where MJP
-trajectories are sampled as intermediate objects to facilitate updating the
-parameters. Longer time intervals will then result in stronger coupling between 
-MJP path and parameters, slowing down mixing. This effect disappears if we 
-integrate out the MJP trajectory. This experiment demonstrates that it
-is not sufficient just to integrate out the state values of the trajectory, 
-instead, we also have to get around the effect of the
-trajectory transition times. Our symmetrized MH-algorithm allows us to do
+$t_{end}$, its performance is considerably worse for longer time-intervals. 
+This is because the Gibbs sampler updates $\theta$ conditioned on the MJP
+trajectory, and longer time intervals result in stronger coupling 
+between MJP path and parameters, and thus poorer mixing. This effect 
+disappears if we integrate out the MJP trajectory. This experiment 
+demonstrates that it is not sufficient just to integrate out the state 
+values of the trajectory, we also have to get around the effect 
+of the trajectory transition times. Our symmetrized MH-algorithm allows 
 this. 
 %as a by-product, it also involves calculating a simpler 
 %MH acceptance probability.
@@ -236,6 +238,7 @@ degrading sharply for larger observation intervals. These two experiments
 illustrate the usefulness of our idea of integrating out the MJP path while 
 carrying out parameter inference.
 
+\vspace{-.23in}
   \subsection{The Jukes and Cantor (JC69) model}~
   \begin{figure}%[H]
   \begin{minipage}[!hp]{0.75\linewidth}
@@ -249,6 +252,7 @@ carrying out parameter inference.
     ESS/sec for the JC69 Model. Red, yellow and blue curves are the 
       symmetrized MH, \naive\ MH and Gibbs algorithm. }
   \end{minipage}
+\vspace{-.2in}
   \end{figure}
   The Jukes and Cantor (JC69) model is a popular model of DNA nucleotide
   substitution.  We write its state space as $\{0, 1, 2, 3\}$, representing the 
