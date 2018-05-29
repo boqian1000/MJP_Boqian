@@ -391,13 +391,16 @@ Under the above assumptions, our auxiliary variable MCMC sampler is
 geometrically ergodic.  \label{thm:geom_erg}
 \end{theorem}
 \begin{proof}
-\noindent This theorem follows from two lemmas we will prove,
-Lemma~\ref{lem:small_set} showing the existence of a small set (within
-which our sampler forgets its
-current state with some positive probability), and Lemma~\ref{lem:drift}
-showing that our sampler drifts towards this set whenever
-outside. Together, these two results immediately imply geometric
+\noindent This theorem follows from two lemmas we will prove.
+Lemma~\ref{lem:small_set} shows there exist small sets 
+$\{(W,\theta,\vartheta): \lambda_1|W| + \Omega(\theta) < M \}$ for 
+$\lambda_1 > 0$, within which our sampler forgets its current state with 
+some positive probability. Lemma~\ref{lem:drift}
+shows that for appropriate $(\lambda_1,M)$, our sampler drifts towards this set whenever
+outside. Together, these two results imply geometric
 ergodicity~\citep[Theorems 15.0.1 and Lemma 15.2.8]{meyn2009}.
+If $\sup_\theta \Omega(\theta) = M_\theta < \infty$, we just need 
+the small set $\{(W,\theta,\vartheta: |W| < M \}$ for some $M$.
 \qed
 \end{proof}
 For our proof, we modify the start and end of an MCMC iteration from 
@@ -1086,18 +1089,20 @@ the ideal sampler), we have
 & = (1 - \delta_1)\lambda_1 |W| + [1 - (\rho - \lambda_1 t_{end} (1 + \eta_1) - (2 + \eta_1)\epsilon - \sqrt{\eta_0 \epsilon})]\Omega(\theta) + L_I\\
 & \assign (1 - \delta_1)\lambda_1 |W| + (1 - \delta_2)\Omega(\theta) + L_I
 \end{align*}
-For $\lambda_1$ and $\epsilon$ small enough, $\delta_2 \in (0,1)$. If we 
-fix $\lambda_1$ small enough, this holds outside some small set $C$.
-Inside that compact set, define 
-$L = \sup_{(W, \theta)} \{ \mathbb{E}[\tilde{\lambda}_1 | W'| + 
-      \Omega(\theta')| W, \theta, \vartheta, X] \}$.
-%if we fix $\lambda_1$
-%There exists  $\tilde{\epsilon} > 0$ and $\tilde{\lambda}_1 >0 $ , such that $\rho >  \tilde{\lambda}_1 t_{end}  (1 + \eta_1) + (2 + \eta_1)\tilde{\epsilon} + \sqrt{\eta_0} \sqrt{\tilde{\epsilon}}$, and denote $\rho_2  \assign \rho - \tilde{\lambda}_1 t_{end}  (1 + \eta_1) + (2 + \eta_1)\tilde{\epsilon} + \sqrt{\eta_0} \sqrt{\tilde{\epsilon}}
-% > 0$. Let $\tilde{\rho} = \min(\rho_2, \delta_1)$. So there exists a small set $C$ such that \begin{align*}
-%\mathbb{E}[\tilde{\lambda}_1 | W'| + \Omega(\theta')| W, \theta, \vartheta, X] &\le (1 - \tilde{\rho}) [\tilde{\lambda}_1 | W| + \Omega(\theta)] +
-%\mathbb{I}_{C} \sup_{(W, \theta)} \{ \mathbb{E}[\tilde{\lambda}_1 | W'| + \Omega(\theta')| W, \theta, \vartheta, X] \}.
-%\end{align*}
-      Then the drift condition holds with $\delta = \min(\delta_1,\delta_2)$.
+For $(\lambda_1,\epsilon)$ small enough, $\delta_2 \in (0,1)$, 
+%If we 
+%fix $\lambda_1$ small enough, this holds outside some small set $C$.
+%Inside that compact set, define 
+%$L = \sup_{(W, \theta)} \{ \mathbb{E}[\tilde{\lambda}_1 | W'| + 
+%      \Omega(\theta')| W, \theta, \vartheta, X] \}$.
+  %if we fix $\lambda_1$
+  %There exists  $\tilde{\epsilon} > 0$ and $\tilde{\lambda}_1 >0 $ , such that $\rho >  \tilde{\lambda}_1 t_{end}  (1 + \eta_1) + (2 + \eta_1)\tilde{\epsilon} + \sqrt{\eta_0} \sqrt{\tilde{\epsilon}}$, and denote $\rho_2  \assign \rho - \tilde{\lambda}_1 t_{end}  (1 + \eta_1) + (2 + \eta_1)\tilde{\epsilon} + \sqrt{\eta_0} \sqrt{\tilde{\epsilon}}
+  % > 0$. Let $\tilde{\rho} = \min(\rho_2, \delta_1)$. So there exists a small set $C$ such that \begin{align*}
+  %\mathbb{E}[\tilde{\lambda}_1 | W'| + \Omega(\theta')| W, \theta, \vartheta, X] &\le (1 - \tilde{\rho}) [\tilde{\lambda}_1 | W| + \Omega(\theta)] +
+  %\mathbb{I}_{C} \sup_{(W, \theta)} \{ \mathbb{E}[\tilde{\lambda}_1 | W'| + \Omega(\theta')| W, \theta, \vartheta, X] \}.
+  %\end{align*}
+      and  $\delta = \min(\delta_1,\delta_2)$ gives the drift condition.
+      \qed
 % From equation~\eqref{eq:nu2} and assumption 2, we have for
 % $\Omega(\theta) > k\Omega(\vartheta)$
 % \begin{align*}
