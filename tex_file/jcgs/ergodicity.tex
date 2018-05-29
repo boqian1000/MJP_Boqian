@@ -5,11 +5,11 @@ We derive conditions under which our proposed algorithm
 inherits mixing properties of an `ideal' sampler that operates without
 computational constraints. The latter proposes a new parameter $\vartheta$
 from distribution $q(\vartheta|\theta)$, and accepts with probability
-$\alpha_I(\vartheta,\theta; X) = 1 \wedge \frac{P(X , \vartheta)q(\theta| \vartheta)}
+$\alpha_I(\theta,\vartheta; X) = 1 \wedge \frac{P(X , \vartheta)q(\theta| \vartheta)}
 {P(X , \theta)q(\vartheta|\theta)}$.  The resulting ideal (but intractable)
 Markov chain has transition probability
-$P_I(\theta'|\theta) = q(\theta'|\theta)\alpha_I(\theta',\theta;X) + \left[1-\int d\vartheta
-q(\vartheta|\theta)\alpha_I(\vartheta,\theta;X)\right]\delta_\theta(\theta')$, the first
+$P_I(\theta'|\theta) = q(\theta'|\theta)\alpha_I(\theta,\theta';X) + \left[1-\int d\vartheta
+q(\vartheta|\theta)\alpha_I(\theta,\vartheta;X)\right]\delta_\theta(\theta')$, the first
 term corresponding to acceptance, and the second, rejection.
 
 Our main result is Theorem~\ref{thm:geom_erg}, which shows that if the ideal MCMC
@@ -217,7 +217,7 @@ i) the set $\SM_M=\{\theta:\Omega(\theta)\le M \}$ is a $1$-small set,
 i.e.\ for each $M$, there exists a probability measure $\phi$ and a constant
 $\kappa_1 > 0$ s.t.\ % $q(\ptheta | \theta) \alpha_I(\theta, \ptheta)
 %$p_I(\theta'|\theta) \geq \kappa_1 \phi(\theta')$ for $\theta \in \SM_M$, \\
-$\alpha_I(\theta', \theta; X) q(\theta' | \theta) \ge \kappa_1 \phi(\theta')$
+$\alpha_I(\theta, \theta'; X) q(\theta' | \theta) \ge \kappa_1 \phi(\theta')$
  for $\theta \in \SM_M$, \\
 ii) for $M$ large enough, $\exists \rho < 1$ s.\ t.\
 $\int \Omega(\ptheta) p_I(\ptheta|\theta) d\ptheta
@@ -394,15 +394,16 @@ geometrically ergodic.  \label{thm:geom_erg}
 \noindent This theorem follows from two lemmas we will prove.
 Lemma~\ref{lem:small_set} shows there exist small sets 
 $\{(W,\theta,\vartheta): \lambda_1|W| + \Omega(\theta) < M \}$ for 
-$\lambda_1 > 0$, within which our sampler forgets its current state with 
+$\lambda_1, M > 0$, within which our sampler forgets its current state with 
 some positive probability. Lemma~\ref{lem:drift}
 shows that for appropriate $(\lambda_1,M)$, our sampler drifts towards this set whenever
 outside. Together, these two results imply geometric
 ergodicity~\citep[Theorems 15.0.1 and Lemma 15.2.8]{meyn2009}.
-If $\sup_\theta \Omega(\theta) = M_\theta < \infty$, we just need 
+If $\sup_\theta \Omega(\theta) < \infty$, we just need 
 the small set $\{(W,\theta,\vartheta: |W| < M \}$ for some $M$.
 \qed
 \end{proof}
+\vinayak{Add $(T,U)$}
 For our proof, we modify the start and end of an MCMC iteration from 
 Algorithm~\ref{alg:MH_improved}. We regard our sampler as operating on 
 the space $(\theta,\vartheta,W)$,  with $\theta$ the current MJP 
@@ -550,12 +551,12 @@ Finally we relate the acceptance rate to that of the ideal sampler:
 q(\theta|\theta')p(\theta')}{P(X | \theta)q(\theta'|\theta)p(\theta)}\\
 & \geq 1 \wedge \frac{\lb^2}{\ub^2} \cdot 	\frac{P(X | \theta')
 q(\theta|\theta')p(\theta')}{P(X | \theta)q(\theta'|\theta)p(\theta)}
- \geq \alpha_I(\theta', \theta;X)\frac{\lb^2}{\ub^2}.
+ \geq \alpha_I(\theta, \theta';X)\frac{\lb^2}{\ub^2}.
 \numberthis
 \label{eq:acc}
 \end{align*}
 Since by assumption $|W| \le h$, %from equations~\eqref{eq:marg} and~\eqref{eq:acc}, 
-and $q(\theta'|\theta)\alpha_I(\theta',\theta;X) \ge \kappa_1 \phi(\theta')$ 
+and $q(\theta'|\theta)\alpha_I(\theta,\theta';X) \ge \kappa_1 \phi(\theta')$ 
 (from assumption \ref{asmp:ideal_geom}),
 \begin{align*}
 P(W', \theta',\vartheta' | W, \theta, \vartheta)  
@@ -878,23 +879,25 @@ conditioned on the grid $W$). See the appendix for the proof.
 \begin{proof}
 Since $W'=T\cup U'$, we consider $\mathbb{E}[|T| |W,\theta,\vartheta,X]$
 and $\mathbb{E}[|U'| | W, \theta, \vartheta, X]$ separately.
-An upper bound of $\mathbb{E}[|T| | W,\theta,\vartheta]$ can be derived
+An upper bound of $\mathbb{E}[|T| | W,\theta,\vartheta, X]$ can be derived
 directly from proposition~\ref{prop:self_tr}:
 \begin{align*}
 \mathbb{E}[|T| |W,\theta,\vartheta,X] &= \mathbb{E}[\sum_{i = 0}^{|W|-1}
   \mathbb{I}_{\{ V_{i + 1} \neq V_i \}}| W, \theta, \vartheta, X]
 \leq \sum_{i = 0}^{|W| - 1} (1 - \delta_1) = |W|(1 - \delta_1).
 \end{align*}
-By corollary \ref{corol:integ_bound}, there exist $\eta_1 , \theta_2$ such that for 
+By corollary \ref{corol:integ_bound}, there exist $\eta_1 , \theta_2$ 
+such that for 
 %$\theta$  satisfying 
 $ \| \theta \| > \theta_2$, 
  $ \int \Omega(\ptheta) q(\ptheta | \theta)d\ptheta \leq \eta_1 \Omega(\theta) 
  $. Then,
 \begin{align*}
 %So for $\theta$ satisfying $ \| \theta \| > \theta_3$, we have
-\mathbb{E}[|U'| |W, \theta, \vartheta, X] &= \mathbb{E}_{S,T, \ptheta}\mathbb{E}[|U'| | S, T, W, \theta, \ptheta, X] = \mathbb{E}_{S,T, \ptheta}\mathbb{E}[|U'| | S, T, W, \theta, \ptheta] \\
+\mathbb{E}[|U'| |W, \theta, \vartheta, X] &= 
+\mathbb{E}_{S,T, \ptheta}\mathbb{E}[|U'| | S, T, W, \theta, \vartheta, \ptheta, X] = \mathbb{E}_{S,T, \ptheta}\mathbb{E}[|U'| | S, T, W, \theta, \ptheta] \\
 & \leq \mathbb{E}_{S,T, \ptheta} \left[t_{end}\Omega(\theta, \ptheta)\right] = t_{end}\int \Omega(\theta, \ptheta) q(\ptheta | \theta) d\ptheta\\
-& \leq t_{end} \left[ \left(  \Omega(\theta) +
+& = t_{end} \left[ \left(  \Omega(\theta) +
 \int_\Theta \Omega(\ptheta) q(\ptheta | \theta)d\ptheta \right) \right] 
  \leq t_{end} (\eta_1 + 1) \Omega(\theta) %\right]
 %\assign a \Omega(\theta) + b.
@@ -928,12 +931,14 @@ integrate out $W'$:
      P(W' | W, \theta, \vartheta, \theta', X) \alpha(\theta, \theta' ; W', X) + \right.\\
   &\left.  \int q(\ptheta | \theta)  P(W' |  W, \theta, \vartheta, \ptheta,
 X) ( 1 - \alpha(\theta, \ptheta ; W', X))d\ptheta
-\delta_\theta(\theta')\right] \\
-&\assign d\theta' I_1(W, \theta', \theta, \vartheta) + d\theta'\delta_\theta(\theta')I_2(W, \theta, \vartheta).
+\delta_\theta(\theta')\right] %\\
+%&\assign d\theta' I_1(W, \theta', \theta, \vartheta) + d\theta'\delta_\theta(\theta')I_2(W, \theta, \vartheta).
 \end{align*}
-%Let $\mathbb{E}\left[\Omega(\theta') | W, \theta, \vartheta, X\right]=
+%Then let  $\int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)
+%  = \int d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta) + \Omega(\theta) I_2(W, \theta, \vartheta) 
+%$, with
 Then let  $\int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)
-  = \int d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta) + \Omega(\theta) I_2(W, \theta, \vartheta) 
+  = I_1(W, \theta, \vartheta) + \Omega(\theta) I_2(W, \theta, \vartheta) 
 $, with
 \begin{align*}
   &I_1(W, \theta, \vartheta) = \int d\theta' \Omega(\theta') q(\theta' | \theta)\int dW'P(W' | W, \theta, \vartheta, \theta', X)\alpha(\theta, \theta' ; W', X), \\
@@ -1070,7 +1075,7 @@ giving
 $
 I_{1,E_\epsilon^c}  \le \sqrt{\epsilon \eta_0 }\Omega(\theta) .
 $
-Now for $\theta$ satisfying $ \| \theta \| >\max(\theta_2, \theta_3, 
+Now for $\theta$ satisfying $ \| \theta \| >\max(\theta_2, 
 \theta_\epsilon, M) $ 
 (where $M$ is from Assumption~\ref{asmp:ideal_geom} on 
 the ideal sampler), we have 

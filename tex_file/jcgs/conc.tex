@@ -8,14 +8,20 @@ distribution of this grid depends on the MJP parameters, significantly
 slowing down MCMC mixing. We propose a novel symmetrization scheme to get 
 around this dependency. In our experiments, we demonstrate the usefulness 
 of this scheme, which outperforms a number of competing baselines.
+We also derive conditions under which our sampler inherits geometric 
+ergodicity properties of an ideal MCMC sampler.
 
 There are a number of interesting directions for future research.
-Our focus was on Metropolis-Hastings algorithms for parameter inference,
-and though we briefly considered Hamiltonian Monte Carlo, it is interesting
-to more thoroughly investigate how our ideas extend to this, and other 
-schemes like slice sampling~\cite{Nea2003a}. Another direction is to develop
-and study similar schemes for more complicated hierarchical models like
-mixtures of MJPs or coupled MJPs. From a theoretical viewpoint, it is
-important is to complement our empirical studies with theoretical analyses 
-of the mixing properties of our proposed scheme. Finally, we are applying 
+Our focus was on Metropolis-Hastings algorithms for typical settings 
+where the parameters are low dimensional. It is interesting to 
+investigate how our ideas extend to schemes like Hamiltonian Monte 
+Carlo~\cite{Neal2010} suited for higher-dimensional settings. Another 
+direction is to develop and study similar schemes for more complicated 
+hierarchical models like mixtures of MJPs or coupled MJPs. It is also 
+important to investigate how similar ideas apply to deterministic 
+algorithms like variational Bayes~\cite{panzanrao17}. From a theoretical 
+viewpoint, our proof required the uniformization rate to satisfy 
+$\Omega(\theta) \ge k_1 \max_s A_s(\theta) + k_0$ for $k_1 > 1$. We 
+believe our result still holds for $k_1 = 1$, and for completeness, 
+it would be interesting to prove this.  Finally, we are applying 
 our ideas to other real-world applications from finance and genetics.
