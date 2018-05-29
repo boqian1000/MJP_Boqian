@@ -15,11 +15,11 @@ In particular, given $W$, discard all state information, and propose a
 new parameter $\vartheta$ from $q(\vartheta|\theta)$. 
 %now conditioning on the set of times $W$.
 The MH-acceptance probability is then $\min\left(1,
-\frac{p(X|W,\vartheta)p(W|\vartheta)p(\vartheta)q(\theta|\vartheta)}
-     {p(X|W,\theta)p(W|\theta)p(\theta)q(\vartheta|\theta)}\right)$, 
+\frac{P(X|W,\vartheta)P(W|\vartheta)p(\vartheta)q(\theta|\vartheta)}
+     {P(X|W,\theta)P(W|\theta)p(\theta)q(\vartheta|\theta)}\right)$, 
      to calculate it,
 make a forward pass over $W$, and calculate 
-$p(X|W,\theta)$ and $p(X|W,\vartheta)$. % as in algorithm~\ref{alg:disc_time_mh}.
+$P(X|W,\theta)$ and $P(X|W,\vartheta)$. % as in algorithm~\ref{alg:disc_time_mh}.
 After accepting or rejecting $\vartheta$, the new parameter $\ntheta$ is used in
 a backward pass that samples a new trajectory. Then discard all 
 self-transitions and repeat; algorithm~\ref{alg:MH_naive}, and 
@@ -39,8 +39,8 @@ $W$ is a homogeneous
 Poisson process with rate $\Omega(\theta)$. %$ = 2 \max A(\theta)$. 
 %who probability can
 %calculated easily during the forward pass.
-The fact that the MH-acceptance probability involves a $p(X|\theta)$ term
-is inevitable, however we found that the $p(W|\theta)$
+The fact that the MH-acceptance probability involves a $P(X|\theta)$ term
+is inevitable, however we found that the $P(W|\theta)$
 terms significantly affects acceptance probabilities. 
 Any proposal that halves $\Omega$ will halve the
 mean and variance of the distribution of the number of events in $W$, 
@@ -70,8 +70,9 @@ The next section describes a way around this.
           The acceptance probability is given by 
           \vspace{-.05in}
           \begin{align*}
-          \alpha &=  1 \wedge \frac{p(W,\vartheta| X)}{p(W, \theta| X)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}
-          =  1 \wedge \frac{p(X| W,\vartheta) p(W | \vartheta)p(\vartheta)}{p(X|W, \theta)p(W | \theta)p(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
+          \alpha &=  1 \wedge \frac{P(W,\vartheta| X)}{P(W, \theta| X)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}
+          =  1 \wedge \frac{P(X| W,\vartheta) P(W | \vartheta)p(\vartheta)}
+            {P(X|W, \theta)P(W | \theta)p(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
           \end{align*}
           \vspace{-.1in}
     \State For both $\theta$ and $\vartheta$, make a forward pass through the 
@@ -80,12 +81,12 @@ The next section describes a way around this.
     For any $\theta$, the transition matrix 
     $B(\theta)$ equals $I + \frac{A(\theta)}{\Omega(\theta)}$ while the initial distribution
       over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
-      $ L_i(s) = p(X_{[w_i, w_{i + 1})} | S(t) = s , t \in [w_i, w_{i + 1})) 
+      $ L_i(s) = P(X_{[w_i, w_{i + 1})} | S(t) = s , t \in [w_i, w_{i + 1})) 
       $, where $X_{[w_i,w_{i+1})}$ is all observation lying in 
       $[w_i,w_{i+1})$. %= \prod_{o: t_o \in [w_i, w_{i + 1})}p(X_{t_o} | s)$.
     At the end, we have 
-    $p(X|W,\theta)$ and $p(X|W,\vartheta)$. Use these, and the fact that 
-    $p(W|\theta)$ is Poisson-distributed to accept or reject the
+    $P(X|W,\theta)$ and $P(X|W,\vartheta)$. Use these, and the fact that 
+    $P(W|\theta)$ is Poisson-distributed to accept or reject the
     proposed $\vartheta$. Write the new parameter as $\theta'$.
     %as \boqian{$(W,\theta,\vartheta)$}.
     \State For the new parameter $\theta'$, make a backward pass through 

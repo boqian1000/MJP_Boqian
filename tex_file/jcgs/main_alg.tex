@@ -3,7 +3,7 @@
 \vspace{-.05in}
 Our main idea is to symmetrize the probability of $W$ under the old and 
 proposed parameters, so that 
-$p(W|\theta)$ disappears from the acceptance ratio. This results
+$P(W|\theta)$ disappears from the acceptance ratio. This results
 in a significantly more efficient, and also a simpler MCMC scheme.
 %This forms the main contribution of this paper.
 As before, the MCMC iteration begins with the pair $(S(t), \theta)$. 
@@ -18,7 +18,7 @@ Now the set of thinned events $U$ is piecewise-constant
 Poisson with intensity $\Omega(\theta) + \Omega(\vartheta) - 
 A_{S(t)}$. Following algorithm~\ref{alg:Unif_gibbs} or~\cite{RaoTeh13}, 
 the {\em a priori} probability of the reconstructed set $W = U \cup T$, 
-$p(W|\theta,\vartheta)$, is a homogeneous Poisson 
+$P(W|\theta,\vartheta)$, is a homogeneous Poisson 
 %the union of $U$ with the actual trajectory transition times $T$, 
 process with rate $\Omega(\theta) + \Omega(\vartheta)$. Now discard all 
 MJP state information, so that the MCMC state space is $(W, \theta, \vartheta)$,
@@ -26,7 +26,7 @@ and propose swapping $\theta$ with $\vartheta$.
 Observe from
 symmetry that the Poisson skeleton $W$ has the same probability both
 before and after this proposal, so that unlike the previous scheme,
-the ratio $p(W|\vartheta)/p(W|\theta)$ equals $1$.  This simplifies 
+the ratio $P(W|\vartheta)/P(W|\theta)$ equals $1$.  This simplifies 
 computation, and significantly improves mixing.
 The acceptance probability 
 %depends only on the probability of the observations
@@ -34,12 +34,12 @@ The acceptance probability
 %to calculate this. Our acceptance probability 
 equals
 $ \text{acc} = 
-  \min\left(1, \frac{p(X,\vartheta)q(\theta|\vartheta)}
-   {p(X,\theta)q(\vartheta|\theta)}\right) = 
-  \min\left(1, \frac{p(X|\vartheta)p(\vartheta)q(\theta|\vartheta)}
-   {p(X|\theta)p(\theta)q(\vartheta|\theta)}\right).
+  \min\left(1, \frac{P(X,\vartheta)q(\theta|\vartheta)}
+   {P(X,\theta)q(\vartheta|\theta)}\right) = 
+  \min\left(1, \frac{P(X|\vartheta)p(\vartheta)q(\theta|\vartheta)}
+   {P(X|\theta)p(\theta)q(\vartheta|\theta)}\right).
    $
-   The terms $p(X|\vartheta)$ and  $p(X|\theta)$ can be calculated by 
+   The terms $P(X|\vartheta)$ and  $P(X|\theta)$ can be calculated by 
    running a forward pass of the forward-backward algorithm, and after
    accepting or rejecting the proposal, a new trajectory is sampled by
    completing the backward pass. Finally, the thinned events are
@@ -76,13 +76,13 @@ $ \text{acc} =
         \begin{align*}
         \alpha %&=  1 \wedge \frac{P(W,(\vartheta, \theta)| y)}{P(W, (\theta, \vartheta)| y)}\\
        % &=  1 \wedge \frac{P(y| W,\vartheta, \theta) P(W | (\vartheta, \theta))p((\vartheta, \theta))}{P(y| W,(\theta, \vartheta)) P(W | (\theta, \vartheta))p((\theta, \vartheta))}\\
-        &=  1 \wedge \frac{p(X| W,\vartheta,\theta)p(\vartheta)q(\theta|\vartheta)}
-        {p(X| W,\theta, \vartheta)p(\theta) q(\vartheta|\theta)}.
+        &=  1 \wedge \frac{P(X| W,\vartheta,\theta)p(\vartheta)q(\theta|\vartheta)}
+        {P(X| W,\theta, \vartheta)p(\theta) q(\vartheta|\theta)}.
         \end{align*}
     \State For both $\theta$ and $\vartheta$, make a forward pass through the 
     elements of $W$, sequentially updating the distribution over states at 
     $w \in W$ given observations upto $w$. At the end, we have calculated
-    $p(X|W,\theta)$ and $p(X|W,\vartheta)$. Use these to accept or reject the
+    $P(X|W,\theta)$ and $P(X|W,\vartheta)$. Use these to accept or reject the
     proposed swapping of $\theta$ and $\vartheta$. Write the new state-space
     as $(W,\theta',\vartheta')$.
     \State For the new parameter $\theta'$, make a backward pass through 

@@ -42,7 +42,7 @@ Define $B = \left(I +\frac{1}{\Omega}A\right)$; observe that this is a
 stochastic matrix with positive elements, and rows adding up to $1$.
 Assign state-values to the elements in $0 \cup W$ according to a discrete-time 
 Markov chain with initial distribution $\pi_0$, and transition matrix $B$.
-Call these states $V$. Thus $v_0 \sim \pi_0$, while $p(v_{k+1}=j|v_k=i) = B_{ij}$
+Call these states $V$. Thus $v_0 \sim \pi_0$, while $P(v_{k+1}=j|v_k=i) = B_{ij}$
 for $k \in \{0,\cdots,|W|-1\}$.
 Note that $\Omega > \max_i A_i$ results in more
 candidate-times than actual MJP transitions; at the same time, unlike $A$, 
@@ -116,7 +116,7 @@ In practice, the MJP parameters themselves are unknown: often,
 these are the quantities of primary interest when studying a dynamical
 system. A Bayesian approach
 places a prior $p(\theta)$ over these, and the
-resulting posterior distribution $p(\theta|X)$ is approximated
+resulting posterior distribution $P(\theta|X)$ is approximated
 with samples drawn by Gibbs sampling. In particular, for an arbitrary 
 initialization of the parameters and the trajectory, one repeats the
 two steps from algorithm~\ref{alg:MJP_gibbs}:
@@ -132,14 +132,14 @@ two steps from algorithm~\ref{alg:MJP_gibbs}:
    \end{tabular}
    \begin{algorithmic}[1]
   \State  Sample a trajectory from the conditional 
-  $p(S'(t)|X,S(t),\theta)$ by 
+  $P(S'(t)|X,S(t),\theta)$ by 
   algorithm~\ref{alg:Unif_gibbs}.
   \State Sample a new $\theta$ from the conditional 
-    $p(\theta'|X,S'(t))$.
+    $P(\theta'|X,S'(t))$.
    \end{algorithmic}
 \end{algorithm} 
 \vspace{-.1in}
-The distribution $p(\theta'|X,S(t))$ depends on a set of sufficient statistics of the 
+The distribution $P(\theta'|X,S(t))$ depends on a set of sufficient statistics of the 
 MJP trajectory: how
 much time is spent in each state, and the number of transitions
 between each pair of states. 
@@ -192,13 +192,13 @@ sparse and only mildly informative about the parameters.
 
 For the discrete-time case, this problem of parameter-trajectory
 coupling can be circumvented by marginalizing out the MJP trajectory 
-and directly sampling from the posterior over parameters $p(\theta|X)$.
+and directly sampling from the posterior over parameters $P(\theta|X)$.
 In its simplest form, this approach involves a Metropolis-Hastings
 scheme that proposes a new parameter $\vartheta$ from some proposal 
 distribution 
 $q(\vartheta|\theta)$, accepting or rejecting according to the usual
 Metropolis-Hastings probability. The latter step requires calculating the 
-marginal probabilities $p(X|\theta)$ and $p(X|\theta')$, integrating out
+marginal probabilities $P(X|\theta)$ and $P(X|\theta')$, integrating out
 the exponential number of possible latent trajectories. Fortunately
 this marginal probability is a by-product of the forward-backward
 algorithm used to sample a new trajectory, so that no 
@@ -219,9 +219,9 @@ Markov chain}
   \State Propose a new parameter $\vartheta$ from the proposal distribution
   $q(\vartheta|\ctheta)$.
   \State Run the forward pass of the forward-backward algorithm to 
-    obtain the marginal likelihood of the observations, $p(X|\vartheta)$.
+    obtain the marginal likelihood of the observations, $P(X|\vartheta)$.
     \State Set $\ntheta = \vartheta$ with probability 
-    $\min(1,\frac{p(X,\vartheta)q(\ctheta|\vartheta)}{p(X,\ctheta)q(\vartheta|\ctheta)})$, else 
+    $\min(1,\frac{P(X,\vartheta)q(\ctheta|\vartheta)}{P(X,\ctheta)q(\vartheta|\ctheta)})$, else 
     $\ntheta = \ctheta$.
   \State Sample a new path with
     the backward pass of the forward-backward algorithm.
@@ -253,7 +253,7 @@ with the number of observations rather than the number of transitions.
 %
 A second approach, particle MCMC~\cite{Andrieu10}, uses 
 particle filtering to get an unbiased estimate of the marginal 
-$p(X|\theta)$. Plugging this into the Metropolis-Hastings 
+$P(X|\theta)$. Plugging this into the Metropolis-Hastings 
 acceptance probability results in an MCMC sampler that targets the 
 correct posterior, however %~\cite{Andrieu09}, 
 the resulting scheme does not exploit the structure 
