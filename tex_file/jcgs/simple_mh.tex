@@ -1,34 +1,34 @@
 \vspace{-.1in}
 \section{\Naive\ parameter inference via Metropolis-Hastings}
-The idea of the Rao-Teh algorithm~\cite{RaoTeh13} is to simplify
+The Rao-Teh algorithm~\cite{RaoTeh13} simplifies
 computation by conditioning on the
 random grid $W$.
 %by combining extant transition times $T$ with a set of 
 %thinned candidate transition times $U$, sampled from a rate-$(\Omega-A_{S(t)})$ 
 %Poisson process. 
 This suggests conditioning on $W$ to update
-the parameters as well, following discrete-time scheme from
-algorithm~\ref{alg:disc_time_mh}.
+the parameters as well, following the scheme from
+Algorithm~\ref{alg:disc_time_mh}.
 %The resulting scheme updates $\theta$ conditioned on the random 
 %grid, but with the trajectory integrated out 
 In particular, given $W$, discard all state information, and propose a 
 new parameter $\vartheta$ from $q(\vartheta|\theta)$. 
 %now conditioning on the set of times $W$.
-The MH-acceptance probability is then $\min\left(1,
+The MH-acceptance probability is $\min\left(1,
 \frac{P(X|W,\vartheta)P(W|\vartheta)p(\vartheta)q(\theta|\vartheta)}
-     {P(X|W,\theta)P(W|\theta)p(\theta)q(\vartheta|\theta)}\right)$, 
+     {P(X|W,\theta)P(W|\theta)p(\theta)q(\vartheta|\theta)}\right)$; 
      to calculate it,
 make a forward pass over $W$, and calculate 
 $P(X|W,\theta)$ and $P(X|W,\vartheta)$. % as in algorithm~\ref{alg:disc_time_mh}.
 After accepting or rejecting $\vartheta$, the new parameter $\ntheta$ is used in
 a backward pass that samples a new trajectory. Then discard all 
-self-transitions and repeat; algorithm~\ref{alg:MH_naive}, and 
+self-transitions and resample $W$; Algorithm~\ref{alg:MH_naive}, and 
 figure~\ref{fig:naive_mh} in the appendix sketch this out.
 
-The resulting algorithm updates $\theta$ with the MJP trajectory integrated out, 
-and will mix more rapidly than simple Gibbs. 
-Note however that $\theta$ is updated {\em conditioned on
-$W$}, and that
+The resulting algorithm updates $\theta$ with the MJP trajectory 
+integrated out, giving more rapid mixing.
+However $\theta$ is still updated {\em conditioned on
+$W$}, and 
 %determines not just the MJP trajectory $S(t)$.
 %, and with $S(t)$ 
 %marginalized out, the observations $X$. 
@@ -42,17 +42,18 @@ Poisson process with rate $\Omega(\theta)$. %$ = 2 \max A(\theta)$.
 The fact that the MH-acceptance probability involves a $P(X|\theta)$ term
 is inevitable, however we found that the $P(W|\theta)$
 terms significantly affects acceptance probabilities. 
-Any proposal that halves $\Omega$ will halve the
+Any proposal that halves $\Omega(\theta)$ will halve the
 mean and variance of the distribution of the number of events in $W$, 
 resulting in an extremely low acceptance probability.
-The next section describes a way around this.
+This will affect mixing.
+The next section describes an algorithm to get around this.
 \vspace{-.1in}
 \begin{algorithm}[H]
    \caption{\Naive\  MH for parameter inference for MJPs }
    \label{alg:MH_naive}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{Observations $X$}, 
-                       \text{the previous MJP path $S(t) = (S, T)$ and parameters $\theta$ }.\\ 
+                       \text{the MJP path $S(t) = (S, T)$, the  parameters $\theta$ }and $\pi_0$.\\ 
                      & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
    \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (S', T')$, 
                             new MJP parameters $\theta'$}.\\

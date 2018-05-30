@@ -6,11 +6,13 @@
 %1) what is the underlying trajectory? and 2%)
 %  what are the MJP parameters?
 %%\end{itemize}
-%  \vspace{-.1in}
+  \vspace{-.1in}
 \subsection{Trajectory inference given MJP parameters}
-This was addressed in~\cite{RaoTeh13}, and extended to a broader class of 
+This was addressed in~\cite{RaoTeh13}  
+and extended to a broader class of 
 jump processes %(like semi-Markov processes) 
-in~\cite{RaoTeh12}. %Both center on alternate approaches to 
+in~\cite{RaoTeh12} (also see~\cite{FearnSher2006, 
+Hobolth09, El_hay_gibbssampling}). %Both center on alternate approaches to 
 % Gillespie's algorithm, 
 Both introduce auxiliary 
 {\em candidate} jump times that are later {\em thinned}.  We focus on 
@@ -54,7 +56,7 @@ each other, and trajectories sampled this way for any $\Omega \ge \max_i A_i$
 have the same distribution as trajectories
 sampled by Gillespie's algorithm~\cite{Jen1953,RaoTeh13}.
 Introducing the thinned variables allowed~\cite{RaoTeh13} to develop
-a novel and efficient MCMC sampler. At a 
+a novel, simple and efficient MCMC sampler. At a 
 high-level, each MCMC iteration 
 samples a new grid $W$ conditioned on the trajectory $S(t)$, 
 and then a new trajectory conditioned on the $W$. 
@@ -65,11 +67,12 @@ and then a new trajectory conditioned on the $W$.
 %The latter
 %can be carried out using standard techniques from the discrete-time
 %HMM literature.
+  \vspace{-.12in}
 \begin{algorithm}[H]
   \caption{The {\algname}~\cite{RaoTeh13} auxiliary variable Gibbs sampler for MJP trajectories}
    \label{alg:Unif_gibbs}
   \begin{tabular}{l l}
-   \textbf{Input:  } & \text{MJP parameters $\theta$ and $\pi_0$, observations $X$}, 
+   \textbf{Input:  } & \text{MJP parameters $\theta$, $\pi_0$, observations $X$}, 
                        \text{the previous path $S(t) = (S, T)$}.\\ 
                      & \text{A  parameter $\Omega > \max_i A_i$}, where
    $A = A(\theta)$ is the MJP rate-matrix.\\
@@ -77,14 +80,14 @@ and then a new trajectory conditioned on the $W$.
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
-\State \textbf{Given the MJP trajectory $(S,T)$, sample a new set of thinned 
+\State \textbf{Given the MJP path $(S,T)$, sample a new set of thinned 
 candidate times $U$}: %\cite{RaoTeh12} show that 
 These are distributed as an inhomogeneous Poisson process with intensity 
-$\Omega-A_{S(t)}$. Since the intensity is piecewise-constant, simulating it 
-is straightforward.
-\State \textbf{Given the thinned and actual transition times $W = (T \cup U)$
+$\Omega-A_{S(t)}$. Since the intensity is piecewise-constant, simulating 
+this is straightforward.
+\State \textbf{Given the thinned and actual transition times $W = T \cup U$
 from the previous iteration (after discarding state information $S$), 
-sample a new trajectory}:
+sample a new path $V$}:
     Conditioned on the skeleton $W$, the set of candidate jump
     times is fixed, and trajectory inference reduces to inference for
     a discrete-time hidden Markov model (HMM) with initial distribution
@@ -96,8 +99,8 @@ sample a new trajectory}:
     %at each time accounting for all observations in the previous interval. 
     Between any two consecutive elements of $W$,
     %separated by an interval $\Delta w$, 
-    the system remain in a fixed state, with the likelihood for a state $i$ equal
-    to the likelihood under state $i$ of all observations 
+    the system remain in a fixed state, with the likelihood for a state $s$ equal
+    to the likelihood under state $s$ of all observations 
     in that interval. 
     %and a term $\Omega_i\exp(-\Omega_i\Delta t)$,
     %the probability that the next candidate time occurs after a wait
@@ -105,8 +108,10 @@ sample a new trajectory}:
     The end of the forward pass gives a distribution over states at the
     end time that accounts for all observations.
     The algorithm then makes a backward pass through the times in $W$, 
-    sequentially sampling the state at each time given the state at the 
-    following time, and the distribution over states calculated during the
+    sequentially sampling the state $v_i$ at time $w_i$ given state 
+    $v_{i+1}$  at 
+    time $w_{i+1}$ and the corresponding distribution over states 
+    at $w_i$ calculated during the
     forward pass. 
 \end{algorithmic}
 \end{algorithm}
@@ -134,7 +139,7 @@ two steps from algorithm~\ref{alg:MJP_gibbs}:
   \State  Sample a trajectory from the conditional 
   $P(S'(t)|X,S(t),\theta)$ by 
   algorithm~\ref{alg:Unif_gibbs}.
-  \State Sample a new $\theta$ from the conditional 
+  \State Sample a new parameter $\theta'$ from the conditional 
     $P(\theta'|X,S'(t))$.
    \end{algorithmic}
 \end{algorithm} 
@@ -175,7 +180,7 @@ plots were produced from the experiment in section~\ref{sec:immig}.}
   \end{minipage}
     \vspace{-0.6 in}
   \end{figure}
-  However, the Gibbs sampling approach %of algorithm~\ref{alg:MJP_gibbs} 
+  However, Gibbs sampling approach %of algorithm~\ref{alg:MJP_gibbs} 
   comes with a well-known limitation:
 coupling between path and parameters can result in a very sluggish
 exploration of parameter and path space. We illustrate this in figure~\ref{fig:hist},
@@ -193,9 +198,9 @@ sparse and only mildly informative about the parameters.
 For the discrete-time case, this problem of parameter-trajectory
 coupling can be circumvented by marginalizing out the MJP trajectory 
 and directly sampling from the posterior over parameters $P(\theta|X)$.
-In its simplest form, this approach involves a Metropolis-Hastings
-scheme that proposes a new parameter $\vartheta$ from some proposal 
-distribution 
+In its simplest form (Algorithm~\ref{alg:disc_time_mh}), this 
+involves a Metropolis-Hastings scheme that proposes a new parameter 
+$\vartheta$ from some proposal distribution 
 $q(\vartheta|\theta)$, accepting or rejecting according to the usual
 Metropolis-Hastings probability. The latter step requires calculating the 
 marginal probabilities $P(X|\theta)$ and $P(X|\theta')$, integrating out
@@ -247,8 +252,8 @@ quadratic in the
 number of states, cannot exploit structure like sparsity in the 
 transition matrix, and can depend in not trivial ways on the exact 
 nature of the observation process.
-Also, the number of expensive matrix exponentiations scales
-with the number of observations rather than the number of transitions.
+Also, the number of expensive matrix exponentiations depends on
+the number of observations rather than the number of transitions.
 %
 %
 A second approach, particle MCMC~\cite{Andrieu10}, uses 
@@ -265,6 +270,7 @@ algorithms like FFBS for efficient inference.
 %be brought to playthe thinning-based approach over matrix exponential and particle-MCMC
 %approaches for trajectory inference. 
 In the next section, we outline a \naive\  first attempt at extending this 
-approach to parameter inference.
+approach to 
+parameter inference.
 We describe why this approach is not adequate, and then describe our
 final algorithm. % in the section after. 
