@@ -273,7 +273,7 @@ Part of the reason why the difference is so dramatic here is because the
 transition matrix is no longer sparse in this example, implying a stronger
 coupling between MJP path and parameter $\alpha$. We point out that for Gibbs
 sampling, the conditional parameter update is conjugate, and there is no
-proposal distribution involved (hence it's performance remains fixed along
+proposal distribution involved (hence its performance remains fixed along
 the x-axis). Particle MCMC performs worse
 than all the algorithms, and we do not include it in our plots.
   \begin{figure}%[H]
@@ -476,11 +476,13 @@ of the Gibbs sampler. \\
   \begin{figure}%[b]
     \vspace{-.2in}
   \centering
-  \begin{minipage}[!hp]{.2\linewidth}
-    \caption{ESS/sec for the EColi data.}
+  \begin{minipage}[!hp]{.24\linewidth}
+    \caption{ESS/sec for the EColi data. The circles (in blue) are our 
+      proposed sampler as we vary the variance of the proposal distribution. 
+      The straight line is the Gibbs sampler. }
      \label{fig:ECOLI}
   \end{minipage}
-  \begin{minipage}[!hp]{.05\linewidth}
+  \begin{minipage}[!hp]{.01\linewidth}
     \hspace{.1in}
   \end{minipage}
   \begin{minipage}[!hp]{.7\linewidth}
@@ -521,10 +523,11 @@ of the Gibbs sampler. \\
   Gibbs sampling (other algorithms perform much worse). For our MH proposal distribution, we first 
   run $500$ iterations of Gibbs sampling to estimate the posterior 
   covariance of the vector $\theta = (\alpha,\beta,\lambda_1,\lambda_2)$, call this 
-  $\Sigma_\theta$. Our MH proposal distribution is then $q(\theta^*|\theta) = 
-  N(\theta^*|\theta, \kappa\Sigma_\theta)$ for different settings of 
+  $\Sigma_\theta$. Our MH proposal distribution is then $q(\nu|\theta) = 
+  N(\nu|\theta, \kappa\Sigma_\theta)$ for different settings of 
   $\kappa$ (the typical choice is $\kappa = 1$). Figure~\ref{fig:ECOLI} 
-  shows the results for the parameter $\alpha$, we include $\beta$ in 
+  shows the results for parameters $(\alpha, \lambda_1)$, we include 
+  $(\beta, \lambda_2)$ in 
   the appendix. We see that for the typical setting of $\kappa=1$, our 
   sampler ourperforms the Gibbs sampler, though Gibbs sampling does 
   outperform our method for large or small $\kappa$. This is because a) 

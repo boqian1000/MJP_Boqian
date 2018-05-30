@@ -214,12 +214,13 @@ for the ideal sampler.
 
 \begin{assumption}
 For the ideal sampler with transition probability $p_I(\theta'|\theta)$: \\
-i) the set $\SM_M=\{\theta:\Omega(\theta)\le M \}$ is a $1$-small set,
-i.e.\ for each $M$, there exists a probability measure $\phi$ and a constant
+i) for each $M$, for the set $\SM_M=\{\theta:\Omega(\theta)\le M \}$,
+there exists a probability measure $\phi$ and a constant
 $\kappa_1 > 0$ s.t.\ % $q(\ptheta | \theta) \alpha_I(\theta, \ptheta)
 %$p_I(\theta'|\theta) \geq \kappa_1 \phi(\theta')$ for $\theta \in \SM_M$, \\
 $\alpha_I(\theta, \theta'; X) q(\theta' | \theta) \ge \kappa_1 \phi(\theta')$
- for $\theta \in \SM_M$, \\
+ for $\theta \in \SM_M$. 
+Thus $B_M$ is a $1$-small set. \\
 ii) for $M$ large enough, $\exists \rho < 1$ s.\ t.\
 $\int \Omega(\ptheta) p_I(\ptheta|\theta) d\ptheta
 \leq (1-\rho) \Omega(\theta)+L_I$, $\forall \theta \not\in \SM_M$.

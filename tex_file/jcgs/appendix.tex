@@ -31,7 +31,7 @@
     \includegraphics [width=0.70\textwidth, angle=0]{figs/plotn5.pdf}
     \vspace{-0 in}
   \end{minipage}
-  \caption{\Naive\ MH-algorithm. Step 0 to 2: sample thinned events
+  \caption{\Naive\ MH-algorithm: Step 0 to 2: sample thinned events
   and discard state information to get a random grid. Step 3: 
 propose a new parameter $\theta'$, and accept or reject by making
 a forward pass on the grid. Steps 4 to 5: make a backward pass using
@@ -76,7 +76,7 @@ trajectory.}
   \centering
     \includegraphics [width=0.70\textwidth, angle=0]{figs/plot6.pdf}
   \end{minipage}
-    \caption{Steps 0-3: Starting with a trajectory and parameter $\theta$,
+    \caption{Improved MH algorithm: Steps 0-3: Starting with a trajectory and parameter $\theta$,
       simulate an auxiliary parameter $\theta^*$, and then the thinned events
       $U$ from a rate $\Omega(\theta) + \Omega(\theta^*) - A_{S(t)}$ Poisson
       process. Step 4: Propose swapping $\theta$ and $\theta^*$. Step 5:
@@ -86,7 +86,7 @@ trajectory.}
   \end{figure}
 
 \subsection{Additional results}
-  \begin{figure}%[b]
+  \begin{figure}[H]
   \centering
   \begin{minipage}[h!]{0.65\linewidth}
   \centering
@@ -100,9 +100,6 @@ trajectory.}
 to different settings of the algorithms, see section~\ref{sec:expts}.}
      \label{fig:ESS_EXP_D5}
   \end{minipage}
-  \end{figure}
-
-  \begin{figure}%[b]
   \centering
   \begin{minipage}[hp]{0.65\linewidth}
   \centering
@@ -115,16 +112,11 @@ to different settings of the algorithms, see section~\ref{sec:expts}.}
   \naive\ MH, Gibbs sampling and particle MCMC.}
      \label{fig:ESS_Q_D5}
   \end{minipage}
-  \end{figure}
-
-  \begin{figure}%[b]
   \centering
   \begin{minipage}[!hp]{0.65\linewidth}
   \centering
     \includegraphics [width=0.44\textwidth, angle=0]{figs/pc_5_alpha.pdf}
     \includegraphics [width=0.44\textwidth, angle=0]{figs/pc_5_beta.pdf}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.03\linewidth}
   \end{minipage}
   \begin{minipage}[!hp]{0.33\linewidth}
     \caption{ESS/sec for the time-inhomogeneous immigration model, the top row 
@@ -133,8 +125,6 @@ to different settings of the algorithms, see section~\ref{sec:expts}.}
   \naive\ MH, and Gibbs algorithm.}
      \label{fig:ESS_pc_5}
   \end{minipage}
-  \end{figure}
-  \begin{figure}%[b]
   \centering
   \begin{minipage}[!hp]{0.64\linewidth}
     \includegraphics [width=0.44\textwidth, angle=0]{figs/ECOLI_beta.pdf}

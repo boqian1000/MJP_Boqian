@@ -42,7 +42,7 @@ Poisson process. $W$ %; these along with $0$
 defines a random grid on $[0,t_{end}]$.
 Define $B = \left(I +\frac{1}{\Omega}A\right)$; observe that this is a
 stochastic matrix with positive elements, and rows adding up to $1$.
-Assign state-values to the elements in $0 \cup W$ according to a discrete-time 
+Assign state-values to the elements in $\{0\} \cup W$ according to a discrete-time 
 Markov chain with initial distribution $\pi_0$, and transition matrix $B$.
 Call these states $V$. Thus $v_0 \sim \pi_0$, while $P(v_{k+1}=j|v_k=i) = B_{ij}$
 for $k \in \{0,\cdots,|W|-1\}$.
@@ -214,9 +214,9 @@ additional computational burden is involved.
 Markov chain}
    \label{alg:disc_time_mh}
   \begin{tabular}{l l}
-   \textbf{Input:  } & \text{Observations $X$};
-   proposal density $q(\vartheta|\ctheta)$; 
-   \text{previous parameters $\ctheta$ }.\\
+   \textbf{Input:  } & \text{Observations $X$},
+   proposal density $q(\vartheta|\ctheta)$, and 
+   \text{previous parameters $\ctheta$}.\\
    \textbf{Output:  }& \text{A new Markov chain parameter $\ntheta$}.\\
    \hline
    \end{tabular}

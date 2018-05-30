@@ -63,7 +63,7 @@ The next section describes an algorithm to get around this.
      \State Set $\Omega \assign \Omega(\theta) > \max_s{A_s(\theta)}$ for
      some function $\Omega(\cdot)$ (e.g.\ $\Omega(\theta) = 
       2\max_s A_s(\theta))$.
-      \State Sample virtual jumps $U\subset[0, t_{end}]$ from a 
+      \State Sample thinned jumps $U\subset[0, t_{end}]$ from a 
       Poisson process with piecewise-constant rate 
       $R(t) = (\Omega - A_{S(t)})$. 
     Set $W = T \cup U$ and discard MJP state information.
@@ -78,7 +78,7 @@ The next section describes an algorithm to get around this.
           \vspace{-.1in}
     \State For both $\theta$ and $\vartheta$, make a forward pass through the 
     elements of $W$, sequentially updating the distribution over states at 
-    $w \in W$ given observations upto $w$. 
+    $w \in W$ given observations up to $w$. 
     For any $\theta$, the transition matrix 
     $B(\theta)$ equals $I + \frac{A(\theta)}{\Omega(\theta)}$ while the initial distribution
       over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 

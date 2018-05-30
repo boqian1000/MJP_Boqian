@@ -64,7 +64,7 @@ $ \text{acc} =
       %In the case of uniformization, we
       %have a single $\Omega$ for all states, with $\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$.
       %, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
-    \State Sample virtual jumps $U\subset[0, t_{end}]$ from a Poisson process with 
+    \State Sample thinned jumps $U\subset[0, t_{end}]$ from a Poisson process with 
     piecewise-constant rate $R(t) = (\Omega - A_{S(t)}(\theta))$. 
     Set $W = T \cup U$ and discard MJP states.
     \State The current MCMC state-space is $(W,\theta,\vartheta)$. Propose swapping
@@ -82,8 +82,8 @@ $ \text{acc} =
         \end{align*}
     \State For both $\theta$ and $\vartheta$, make a forward pass through the 
     elements of $W$, sequentially updating the distribution over states at 
-    $w \in W$ given observations upto $w$. At the end, we have calculated
-    $P(X|W,\theta)$ and $P(X|W,\vartheta)$. Use these to accept or reject the
+    $w \in W$ given observations up to $w$. At the end, we have calculated
+    $P(X|W,\theta, \vartheta)$ and $P(X|W,\vartheta, \theta)$. Use these to accept or reject the
     proposed swapping of $\theta$ and $\vartheta$. Write the new state-space
     as $(W,\theta',\vartheta')$.
     \State For the new parameter $\theta'$, make a backward pass through 
