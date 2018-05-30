@@ -1,5 +1,24 @@
 \subsection{Proofs}
+\boqian{Firstly, we explain some definitions with the help of an example MJP path with noisy observations. Assume the MJP starts at time $0$ and ends at time $t_{end}$. Call the path as $(V, W)$, while $V =[v_0, v_1, v_2, v_3, v_4, v_5, v_6, v_7]$ and $W = [w_1, w_2, w_3, w_4, w_5, w_6, w_7]$.  The crosses are observations. The grids $W$ comprises $T$ and $U$, which are true jump times and virtual jump times. In this example, $T = [w_2, w_4, w_7]$ and $U = [w_1, w_3,  w_5, w_6]$. The black circles represent $W_X$, which are the starting points of grids containing observations. $V_X$ are the states corresponding to $W_X$. In this example, $W_X = [w_2, w_5,w_7] \cup {\{0\}}$ and $V_X = [v_2, v_5, v_7] \cup {\{v_0\}}$. We call $\mW$ for the minimum number of elements of grid $W$ between any successive pairs of observations. In this example, we have $\mW = 2$. \\
+We call $P(X|\theta)$ as the probability of the observations under the rate-$A(\theta)$ MJP, which represents the marginal observation probability. Let $P_B(V | W, \theta, \theta')$ be the probability distribution over states given the Markov chain with transition matrix $B(\theta, \theta')$ on the grids $W$. Denote $P(X | W, \theta, \theta')$ as the conditional distribution of observations given the grids $W$ and the Markov transition matrix $B(\theta, \theta')$. In fact, we can think it as the conditional marginal distribution over the observations $X$, after we integrate out the state information $V$. We use $P_{st}(X|\theta)$ to represent the the probability of the observations under the rate-$A(\theta)$ MJP, when the underlying MJP trajectory is sampled using the stationary distribution $P_{st}(v | \theta)$. \\
+\begin{align*}
+P(X | W, \theta, \theta') &= \sum_{V_X} P(X|V_X, \theta)P_B(V_X|W, \theta, \theta'),\\
+P(X | \theta) &=  \int_W P(X | W, \theta, \theta') P(W|\theta, \theta')dW,\\
+P_{st}(X | \theta) &= \sum_{V_X}P(X | V_X, \theta) P_{st}(V_X|\theta).
+\end{align*} 
+} 
 \setcounter{theorem}{3}
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[h!]{0.65\linewidth}
+  \centering
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/VX.pdf}
+
+  \end{minipage}
+     \label{fig:vx}
+\caption{an example MJP path}
+  \end{figure}
+
 \begin{proposition}
 The a posteriori probability that the embedded Markov chain makes a
 self-transition,
