@@ -24,8 +24,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.6873716"
-     inkscape:cx="417.21693"
-     inkscape:cy="199.0802"
+     inkscape:cx="331.28447"
+     inkscape:cy="151.66919"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -108,7 +108,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -118,8 +118,8 @@
      id="layer1"
      transform="translate(1022.8571,161.20922)">
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
-       d="m -1022.8571,206.64792 874.28567,0"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5.00000048;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -1004.8559,206.64792 758.72133,0"
        id="path4138"
        inkscape:connector-curvature="0" />
     <circle
@@ -185,7 +185,7 @@
        xml:space="preserve"
        id="flowRoot4223"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(-894.84735,138.07281)"><flowRegion
+       transform="translate(-891.88416,-76.237521)"><flowRegion
          id="flowRegion4225"><rect
            id="rect4227"
            width="45.040462"
@@ -196,7 +196,7 @@
        xml:space="preserve"
        id="flowRoot4231"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(-1059.2301,140.44336)"><flowRegion
+       transform="translate(-1055.2301,24.44336)"><flowRegion
          id="flowRegion4233"><rect
            id="rect4235"
            width="43.26255"
@@ -207,7 +207,7 @@
        xml:space="preserve"
        id="flowRoot4239"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(-893.06944,143.40655)"><flowRegion
+       transform="translate(-893.06944,-32.593451)"><flowRegion
          id="flowRegion4241"><rect
            id="rect4243"
            width="23.705507"
@@ -218,7 +218,7 @@
        xml:space="preserve"
        id="flowRoot4247"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(-763.28178,125.62742)"><flowRegion
+       transform="translate(-763.28178,101.62742)"><flowRegion
          id="flowRegion4249"><rect
            id="rect4251"
            width="26.076057"
