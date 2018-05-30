@@ -1,8 +1,8 @@
 \vspace{-.2in}
 \section{Experiments}\label{sec:expts}~
 In the following, we evaluate Python implementations of our two proposed
-algorithms, the \naive\ MH algorithm (algorithm~\ref{alg:MH_naive}, which we
-plot in yellow) and its symmetrized improvement (algorithm~\ref{alg:MH_improved}, 
+algorithms, the \naive\ MH algorithm (Algorithm~\ref{alg:MH_naive}, which we
+plot in yellow) and its symmetrized improvement (Algorithm~\ref{alg:MH_improved}, 
 which we call symmetrized MH and plot in red). We compare 
 different variants of these algorithms, corresponding to different 
 uniformizing Poisson rates (i.e.\ different choices of $\kappa$, see 
@@ -16,7 +16,7 @@ on both the current and proposed parameter, we consider two settings
  ($\kappa = 1$ and $1.5$, plotted with {triangles} and {squares}), and 
 $\Omega(\theta, \vartheta) = \kappa \max(\max A(\theta), \max A(\vartheta))$
 ($\kappa=1.5$, plotted with {circles}).  We compare these
-algorithms against two baselines: Gibbs sampling (algorithm~\ref{alg:MJP_gibbs},
+algorithms against two baselines: Gibbs sampling (Algorithm~\ref{alg:MJP_gibbs},
 plotted in blue), and particle MCMC~\cite{Andrieu10}, plotted in black. Gibbs
 sampling involves a uniformization step to update the MJP trajectory, and for this
 we used three settings, $\kappa=1.5,2,3$, plotted with circles, {triangles}
@@ -73,8 +73,8 @@ different samplers and different parameter settings.
   \centering
     \includegraphics [width=\textwidth, angle=0]{figs/exp_model.pdf}
     \caption{A 3-state MJP with exponentially decaying rates}
-      \end{minipage}
     \label{fig:exp_model}
+      \end{minipage}
     \vspace{-.1in}
   \end{wrapfigure}
 Consider an MJP with two parameters $\alpha$ and $\beta$, 
@@ -89,8 +89,8 @@ distribution over states at time $0$, simulate an MJP trajectory.
 We simulate observations uniformly at integer values on the time interval 
 $[0, 20]$. Each observation is Gaussian distributed with mean equal to the state
 at that time, and variance equal to $1$.  For the Metropolis-Hastings proposal, 
-we used a lognormal distribution centered at the current parameter value, with 
-a user-specified variance.
+we used a lognormal distribution centered at the current parameter value, 
+with variance $\sigma^2$ that we vary.
   \begin{figure}[H]
     \vspace{-.2in}
   \centering
@@ -142,7 +142,7 @@ to different settings of the algorithms, see section~\ref{sec:expts}}
   $\alpha$ (left) and $\beta$ (right) for the
   case of $3$ states (top row) and $10$ states (bottom row) as we vary the scale-parameter $\sigma^2$ of the
   log-normal proposal distribution. We include results for $5$ states in the 
-  supplementary material, the conclusions are the same. 
+  appendix, the conclusions are the same. 
   %as we change the variance of the
   %proposal kernel, for different methods and different scaling parameters.
   %($\kappa =
@@ -166,7 +166,7 @@ than the baselines over a wide range of choices of $\sigma^2$,
 (including the natural choice of $1$).
 Among the three setting of our algorithm, the simple additive setting
  ({triangles}) does best, though it is only slightly better than 
- the {max-of-max} setting (circles). {A possible reason for this improvement is 
+ the {max-of-max} setting (circles). {A reason for this improvement is 
   that the additive setting is more stable than the max-of-max setting, when the 
 proposal variance can be large. The {additive setting with a multiplicative factor 
 of $1.5$} (squares) does worse than both {additive choice with smaller multiplicative
@@ -178,7 +178,7 @@ down mixing. Particle MCMC has the worst performance for this task. The
 results in figure~\ref{fig:ESS_EXP_D10} for the 10-dimensional state space
 show that for the parameter $\alpha$, the improvement that our proposed
 sampler affords is even more dramatic. For the parameter $\beta$ however,
-its performance is comparable to Gibbs, although it's not possible to
+performance is comparable to Gibbs, although it is not possible to
 claim one is uniformly superior to the other.
 
   \begin{figure}%[b]    
@@ -205,7 +205,8 @@ claim one is uniformly superior to the other.
 %    \caption{Time Interval vs. ESS / sec}
     \caption{Time Interval vs. ESS/sec. In the left two plots, the number of 
     observations is fixed, in the right two, this grows linearly with the
-  interval length. Red, yellow and blue curves are the symmetrized MH,
+    interval length. Red (square), yellow (triangle) and blue (circle) 
+    curves are the symmetrized MH,
   \naive\ MH and Gibbs algorithm.}
      \label{fig:TSS}
   \end{figure}
@@ -232,14 +233,14 @@ this.
 %MH acceptance probability.
 
 
-In figure~\ref{fig:TSS}, we plot results from a similar experiment. Now,
+To the right of figure~\ref{fig:TSS}, we plot results from a similar experiment. Now,
 instead of keeping the number of measurements fixed as we increase the 
 observation interval, we keep the observation rate fixed at one observation 
 every unit interval of time, so that longer observation intervals have larger 
 number of observations. The results are similar to the previous case: Gibbs 
 sampling performs well for small observation intervals, with performance 
-degrading sharply for larger observation intervals. These two experiments 
-illustrate the usefulness of our idea of integrating out the MJP path while 
+degrading sharply for larger intervals. These two experiments 
+illustrate the importance of integrating out the MJP path while 
 carrying out parameter inference.
 
 \vspace{-.23in}
@@ -249,12 +250,12 @@ carrying out parameter inference.
     \includegraphics[width=0.45\textwidth, angle=0]{figs/jc_model.pdf}
     \includegraphics[width=0.48\textwidth, angle=0]{figs/jc.pdf}
 	%\label{jc_model}
-     \label{fig:ESS_JC}
   \end{minipage}
   \begin{minipage}[!hp]{0.23\linewidth}
   \caption{(a) Jukes-Cantor (JC69) model, (b)
     ESS/sec for the JC69 Model. Red, yellow and blue curves are the 
       symmetrized MH, \naive\ MH and Gibbs algorithm. }
+     \label{fig:ESS_JC}
   \end{minipage}
 \vspace{-.2in}
   \end{figure}
@@ -358,7 +359,7 @@ matrices $A$, which, along with a uniform distribution over initial states,
 are used to generate MJP trajectories. We observe these at integer-valued
 times according to a Gaussian observation process.
 We consider three settings: $3, 5$ and $10$ states, with results from $5$ 
-steps included in the supplementary material. 
+steps included in the appendix. 
 
   %\subsection{Experiments}
   Figure~\ref{fig:ESS_Q_D10} plots the ESS 
@@ -366,11 +367,11 @@ steps included in the supplementary material.
   change the variance of the proposal kernel, for different settings of
   different algorithms. The top row shows results for a state-space
   of dimension $3$, and the bottom row, results for a dimension
-  $10$ (we include the case of dimension $5$ in the supplementary material).
+  $10$.
   %Colors and types are the same as the previous experiment.
   Again, our symmetrized  MH algorithm does best for dimensions
   $3$ and $5$, although now Gibbs sampling performs well for dimensionality $10$.
-  This is partly because for the problem, the Gibbs conditionals over $\alpha$
+  This is partly because for this problem, the Gibbs conditionals over $\alpha$
   and $\beta$ are conjugate, and have a very simple Gamma distribution
   (this is also why the Gibbs sampler curves are straight lines: there is no
   proposal distribution involved here).
@@ -471,7 +472,7 @@ of the Gibbs sampler. \\
  dimensionality of the state space results in a more concentrated posterior,
  shifting the optimal setting of the proposal variance to smaller values.
 
-  \subsection{Analysis of Chi site data for Escherichia coli}~
+  \subsection{Chi-site data for Escherichia coli}~
   \begin{figure}%[b]
     \vspace{-.2in}
   \centering
@@ -503,7 +504,8 @@ of the Gibbs sampler. \\
   Following~\cite{FearnSher2006}, we wish to use this data to infer a 
   two-state piecewise-constant segmentation of the DNA strand. We place a 
   MJP prior over this segmentation, and indexing position along the 
-  strand with $t \in [0,19]$, we write this as $S(t)$. To state $i \in 
+  strand with $t$, we write this as $S(t)$ ($t \in [0,20]$ after rescaling 
+  nucleotide indices). To state $i \in 
   \{1,2\}$, we assign a rate $\lambda_i$, which together with $S(t)$, 
   defines a piecewise-constant rate function $\lambda_{S(t)}$. We model 
   the Chi-site positions as drawn from a Poisson process with rate 
@@ -515,18 +517,19 @@ of the Gibbs sampler. \\
   we use Gamma$(2,2)$, Gamma$(2,3)$, Gamma$(3,2)$, Gamma$(1,2)$ for 
   $\alpha$, $\beta$, $\lambda_1$, $\lambda_2$ respectively.
 
-  We use this setup to evaluate our proposed Metropolis-Hastings sampler 
-  along with Gibbs sampling. For our MH proposal distribution, we first 
-  run $500$ iterations of Gibbs sampling to estimate the covariance matrix 
-  of the vector $\theta = (\alpha,\beta,\lambda_1,\lambda_2)$, call this 
+  We use this setup to evaluate our symmetrized MH sampler along with 
+  Gibbs sampling (other algorithms perform much worse). For our MH proposal distribution, we first 
+  run $500$ iterations of Gibbs sampling to estimate the posterior 
+  covariance of the vector $\theta = (\alpha,\beta,\lambda_1,\lambda_2)$, call this 
   $\Sigma_\theta$. Our MH proposal distribution is then $q(\theta^*|\theta) = 
   N(\theta^*|\theta, \kappa\Sigma_\theta)$ for different settings of 
   $\kappa$ (the typical choice is $\kappa = 1$). Figure~\ref{fig:ECOLI} 
   shows the results for the parameter $\alpha$, we include $\beta$ in 
   the appendix. We see that for the typical setting of $\kappa=1$, our 
   sampler ourperforms the Gibbs sampler, though Gibbs sampling does 
-  outperform our method for large or small $\kappa$. This is because now, 
-  the proposal variance is too large or too small, further, the Gibbs 
+  outperform our method for large or small $\kappa$. This is because a) 
+  large or small $\kappa$ mean the proposal variance is too large or too 
+  small, and b) the Gibbs 
   conditionals over the parameters are conjugate for this model. Again,
   we expect the improvements our method offers to be more robust to the 
   proposal distribution for more complex models without such conditional 

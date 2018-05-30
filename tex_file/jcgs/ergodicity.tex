@@ -1,7 +1,8 @@
 \vspace{-.1in}
 \section{Geometric ergodicity}
 \vspace{-.05in}
-We derive conditions under which our proposed algorithm
+Finally, we derive conditions under which our symmetrized 
+MH algorithm
 inherits mixing properties of an `ideal' sampler that operates without
 computational constraints. The latter proposes a new parameter $\vartheta$
 from distribution $q(\vartheta|\theta)$, and accepts with probability
@@ -29,7 +30,7 @@ proofs.
 %where $A$ is the rate matrix of the Markov jump process and $\Omega(\theta) \doteq k \max_s |A_{ss}(\theta)|$,
 %for some $k > 1$.
 \begin{assumption}
-The uniformization-rate is set as $\Omega(\theta, \vartheta) = \Omega(\theta) + 
+The uniformization rate is set as $\Omega(\theta, \vartheta) = \Omega(\theta) + 
 \Omega(\vartheta)$, where %$A$ is the rate matrix of the Markov jump process and 
 $\Omega(\theta) = k_1 \max_s A_{s}(\theta) + k_0$, for some 
 $k_1 > 1, k_0 > 0$.
@@ -119,7 +120,7 @@ the least and most stable states.
 %out any state $s'$ such that 
 %$\frac{|A_{s's'}(\theta)}{\max_s A_{ss}(\theta)}| \rightarrow 0$ as $\theta$ increases.
 While not trivial, this is a reasonable assumption: the MCMC chain over MJPs 
-will mix if we can control the mixing of the MJP itself.
+will mix well if we can control the mixing of the MJP itself.
 %it holds for the examples we considered. %One open question is whether this assumption is necessary.
 %We suspect that assumption~\ref{asmp:ideal_geom}, which requires 
 %the ideal sampler to be geometrically ergodic, implies this condition,
@@ -198,7 +199,7 @@ to inherit mixing properties of the ideal sampler. For the remaining
 $\theta$ and $W$, we will exploit their boundedness to establish a 
 `small-set condition' where the MCMC algorithm forgets its state with 
 some probability. These two conditions will be sufficient for 
-geometric ergodicity. The next assumption states corresponding conditions 
+geometric ergodicity. The next assumption states these small-set conditions 
 for the ideal sampler.
 % This combined with the
 %likelihood $p(X|s, \theta)$ being bounded  gives the result.
@@ -403,20 +404,24 @@ If $\sup_\theta \Omega(\theta) < \infty$, we just need
 the small set $\{(W,\theta,\vartheta: |W| < M \}$ for some $M$.
 \qed
 \end{proof}
-\vinayak{Add $(T,U)$}
-For our proof, we modify the start and end of an MCMC iteration from 
-Algorithm~\ref{alg:MH_improved}. We regard our sampler as operating on 
-the space $(\theta,\vartheta,W)$,  with $\theta$ the current MJP 
+For easier comparison with the ideal sampler, we begin an MCMC 
+iteration from step 5 in
+Algorithm~\ref{alg:MH_improved}. Thus, our sampler operates on 
+$(\theta,\vartheta,W)$,  with $\theta$ the current 
 parameter, $\vartheta$ the auxiliary variable, and $W$ the Poisson grid. 
-An MCMC transition step updates this to $(\theta',\vartheta',W')$ by 
-1) sampling $(S,T)$ given $(\theta,\vartheta)$ with a backward pass, 
-2) discarding $\vartheta$, 3) sampling $\ptheta$ from $q(\ptheta|\theta)$, 
-4) sampling a new $W'$ given $(\theta,\ptheta)$, 5) proposing to swap 
-$(\theta,\ptheta)$ and then 6) accepting or rejecting with a forward pass. 
+An MCMC iteration updates this to $(\theta',\vartheta',W')$ by 
+(a) sampling states $V$ (or $(S,T)$)  with a backward pass, 
+(b) discarding $\vartheta$, (c) sampling $\ptheta$ from $q(\ptheta|\theta)$, 
+(d) sampling a new $W'$ given $(\theta,\ptheta)$, (e) proposing to swap 
+$(\theta,\ptheta)$ and then (f) accepting or rejecting with a forward pass. 
 On acceptance, $\theta' = \ptheta$ and
 $\vartheta' = \theta$, whereas on rejection, $\theta'=\theta$ and 
 $\vartheta'=\ptheta$. We write $(\theta'',\vartheta'',W'')$ for the 
 MCMC state after two iterations.
+Recall that step (a) actually assigns states $V$ to $W$. $T$ are 
+the elements of $W$ where $V$ changes value, and $S$ are the 
+corresponding elements of $V$. The remaining elements $U$ are the elements 
+of $W$ corresponding to self-transitions.
 % \{?
 % We establish the drift condition via the Lyapunov-Foster function
 % $\cV(W,\theta,\vartheta) = \left. \lambda_1|W| + \lambda_2 \Omega(\theta) +
