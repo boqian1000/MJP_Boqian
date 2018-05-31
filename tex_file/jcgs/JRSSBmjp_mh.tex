@@ -41,14 +41,15 @@
 \begin{abstract}
 Markov jump processes (MJPs) are continuous-time stochastic processes 
 widely used in a variety of applied disciplines. Inference for MJPs typically
-proceeds via Markov chain Monte Carlo, the state-of-the-art being an auxiliary
-variable Gibbs sampler from~\cite{RaoTeh13}. This algorithm was
+proceeds via Markov chain Monte Carlo, the state-of-the-art being a 
+uniformization-based auxiliary
+variable Gibbs sampler. This was
 designed for situations where the MJP parameters are known, and Bayesian
 inference over unknown parameters is typically carried out by incorporating
-this into a larger Gibbs sampler.
+it into a larger Gibbs sampler.
 %In many situations, the MJP trajectory and parameters can exhibit
 %strong coupling, and
-This strategy of alternately sampling parameters given path, and
+This strategy of sampling parameters given path, and
 path given parameters can result in poor Markov chain mixing. In this
 work, we propose a simple and elegant algorithm to address this
 problem. Our scheme brings Metropolis-Hastings approaches
@@ -58,7 +59,7 @@ resulting in %is
  a complete and clean recipe for
 parameter and path inference in MJPs. In our experiments, we
 demonstrate superior performance over Gibbs sampling, as well as
-another popular approach, particle MCMC~\cite{Andrieu10}.
+another popular approach, particle MCMC.
 We also show our sampler inherits geometric mixing from an `ideal' 
 sampler that operates without computational constraints.
 \end{abstract}
