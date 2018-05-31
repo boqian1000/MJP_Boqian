@@ -36,12 +36,13 @@
       $W_X$. In this example, $W_X = [w_2, w_5,w_7] \cup {\{0\}}$ and 
       $V_X = [v_2, v_5, v_7] \cup {\{v_0\}}$. 
     \item We write $\mW$ for the minimum number of elements of $W$ between 
-      successive pairs of observations (including end points $0$ and 
-      and $t_{end}$). In this example, $\mW = 2$. 
+      successive pairs of observations (including start time $0$). 
+      In this example, $\mW = \min (3,3,2)= 2$. 
     \item $P(X | W, \theta, \theta')$ is the marginal distribution of 
       $X$ on $W$ under a Markov chain with 
       transition matrix $B(\theta, \theta')$ (after integrating out the 
-      state information $V$). 
+      state information $V$). Recall that the LHS does not depend 
+      on $\theta'$ because of uniformization.
     \item $P(X|\theta)$ is the marginal probability of the 
       observations under the rate-$A(\theta)$ MJP. 
 $P(X | \theta) =  \int_W P(X | W, \theta, \theta') P(W|\theta, \theta')dW$.

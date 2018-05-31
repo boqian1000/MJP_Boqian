@@ -500,12 +500,12 @@ probability measure $\phi_1$ independent of the initial state.
   P(W',\theta',\vartheta'|W,\theta,\vartheta,X)&\geq
   \delta_\theta(\vartheta') q(\theta'|\theta)
  \sum_{S,T}  P(S,T | W, \theta, \vartheta, X) 
-             P(W'| S, T, \theta', \theta)
-             \alpha(\theta', \theta, W';X)
+             P(W'| S, T, \theta, \theta')
+             \alpha(\theta, \theta', W';X)
 \end{align*}
 %Suppose $(W, \theta, \vartheta) \in B_{h, M}$.
 Here we use the fact that given $(S,T)$,
-$P(W'|S,T,\theta',\theta,X)$ is independent of  $X$.
+$P(W'|S,T,\theta,\theta',X)$ is independent of  $X$.
 We further bound the summation over $(S,T)$ by considering only the terms
 with $S$ a constant. When this constant is  state $s^*$, we write this as 
 $(S=[s^*], T= \emptyset)$. This corresponds to $|W|$ self-transitions 
@@ -549,7 +549,7 @@ P(W' \from \PP(\Omega(\theta'))) \numberthis
 \end{align*}
 Finally we relate the acceptance rate to that of the ideal sampler:
 \begin{align*}
-\alpha(\theta', \theta, W'; X) &
+\alpha(\theta, \theta', W'; X) &
 %= 1 \wedge \frac{P(X | W', \theta', \theta)
 %q(\theta|\theta')p(\theta')}{P(X | W', \theta, \theta')q(\theta'|\theta)p(\theta)}
 = 1 \wedge \frac{P(X|W', \theta', \theta) / P(X|\theta')}{P(X|W', \theta,
@@ -771,22 +771,8 @@ inequality,
 \end{proof}
 
 \begin{proposition}
-%Write $P(W', \theta' | W, \theta, \vartheta)$ for the transition kernel of our MCMC sampler given the observations. For any positive $\epsilon$, there exist $\theta_\epsilon > 0$ and corresponding $W_\epsilon > 0$, such that for any $\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
-Let $(W, \theta, \vartheta)$ be the current state of the sampler, and 
-define $\E_\epsilon = \{(W', \theta'): 
-|\alpha_I(\theta,\theta';X) - \alpha(\theta,\theta';W',X)| \le \epsilon\}$,
- %Given this, let $E$ be the event that $| \alpha_I(\theta,\vartheta,X) -
- %\alpha(\theta,\vartheta,W',X)| \le \epsilon $.
-%Write $q(W', \theta' | W, \theta, \vartheta)$ for the proposal
-%distribution of our MCMC sampler.
-Then, for any $\epsilon$, there exists $\theta_\epsilon > 0$ 
- such that for $\theta$ satisfying $\| \theta \| > \theta_\epsilon$ and any $\vartheta$, we have
-%and $W_\epsilon > 0$, such that for
-%$\theta \ge \theta_\epsilon$, and any $\vartheta$, we have
-%  $P(|W'| > W_\epsilon, \theta' > \theta_\epsilon  | W, \theta, \vartheta) \ge 1-\epsilon$.
-%  $| \alpha_I(\theta,\vartheta,X) - \alpha(\theta,\vartheta,W',X)|
-%  \le \epsilon $ for any $(W', \theta')$ with $|W'| > W_\epsilon$ and $\theta' > \theta_\epsilon$.
-  %$(\theta,\theta^*)$ satisfying
+  Let $(W, \theta, \vartheta)$ be the current state of the sampler.
+Then, for any $\epsilon$, there exists $\theta_\epsilon > 0$ as well as a set $\E_\epsilon \subseteq \{(W', \theta'): |\alpha_I(\theta,\theta';X) - \alpha(\theta,\theta';W',X)| \le \epsilon\}$, such that for $\theta$ satisfying $\| \theta \| > \theta_\epsilon$ and any $\vartheta$, we have
 $P(E_\epsilon|W,\theta,\vartheta) > 1-\epsilon$.
 \label{prop:mix0}
 \end{proposition}
@@ -876,10 +862,11 @@ conditioned on the grid $W$). See the appendix for the proof.
 %\end{align*}
 %\end{proof}
 
-\begin{lemma}(drift condition) $\exists \delta_2 \in (0, 1), L > 0$
-  s.t.
+\begin{lemma}(drift condition) There exist $\delta_2 \in (0, 1), \lambda_1 > 0$ and $L > 0$
+  such that
   $\mathbb{E}\left[\lambda_1|W'| + \Omega(\theta')  | W, \theta, \vartheta, X\right]
-  \leq (1 - \delta_2)\left(\lambda_1|W| + \Omega(\theta)   \right) + L$ %where $\lambda = \lceil \frac{(t_{end})k_2(\eta_0 + 1)}{(\eta_1^2 \kappa_1 \mathbb{P}_\phi(C)/\xi_1^2 - \eta_0)} \rceil.$
+  \leq (1 - \delta_2)\left(\lambda_1|W| + \Omega(\theta)   \right) + L$.
+  %where $\lambda = \lceil \frac{(t_{end})k_2(\eta_0 + 1)}{(\eta_1^2 \kappa_1 \mathbb{P}_\phi(C)/\xi_1^2 - \eta_0)} \rceil.$
 \label{lem:drift}
 \end{lemma}
 \begin{proof}
@@ -933,8 +920,8 @@ With $P(W' | W, \theta, \vartheta, \theta', X) =
 integrate out $W'$:
 \begin{align*}
   P(d\theta'| W, \theta, \vartheta) &=d\theta' \int_{W'}dW'
-  \left[q(\theta' | \theta)
-     P(W' | W, \theta, \vartheta, \theta', X) \alpha(\theta, \theta' ; W', X) + \right.\\
+  \bigg[q(\theta' | \theta)
+     P(W' | W, \theta, \vartheta, \theta', X) \alpha(\theta, \theta' ; W', X) + \\
   &\left.  \int q(\ptheta | \theta)  P(W' |  W, \theta, \vartheta, \ptheta,
 X) ( 1 - \alpha(\theta, \ptheta ; W', X))d\ptheta
 \delta_\theta(\theta')\right] %\\
