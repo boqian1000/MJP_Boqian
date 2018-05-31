@@ -79,13 +79,12 @@ scheme to be valid, $\Omega(\theta,\vartheta)$ must be greater than both
 $\max_i A_i(\theta)$ and $\max_i A_i(\vartheta)$. The smallest and simplest such
 choice is $\Omega(\theta,\vartheta) = \max A_i(\theta) + \max A_i(\vartheta)$.
 For a fixed $\theta$, this reduces to $\Omega = 2\max A_i$, providing
-an intuitive motivation for the approach in~\cite{RaoTeh13}.
+an principled motivation for the approach in~\cite{RaoTeh13}.
 Larger alternatives include 
 $\Omega(\theta,\vartheta) = \kappa(\max A_i(\theta) + \max A_i(\vartheta))$
-for $\kappa > 1$.  These result in more thinned events, and therefore more 
+for $\kappa > 1$.  These result in more thinned events, and so more 
 computation, with the benefit of faster MCMC mixing. We study the effect of 
 $\kappa$ in our experiments.
-
 It is also possible to have non-additive settings for $\Omega(\theta,\vartheta)$,
 for example, setting $\Omega(\theta,\vartheta)$ to 
 $\kappa \max( \max_i A_i(\theta), \max A_i(\vartheta))$ for some choice of $\kappa

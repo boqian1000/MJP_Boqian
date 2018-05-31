@@ -22,7 +22,7 @@ make a forward pass over $W$, and calculate
 $P(X|W,\theta)$ and $P(X|W,\vartheta)$. % as in algorithm~\ref{alg:disc_time_mh}.
 After accepting or rejecting $\vartheta$, the new parameter $\ntheta$ is used in
 a backward pass that samples a new trajectory. Then discard all 
-self-transitions and resample $W$; Algorithm~\ref{alg:MH_naive}, and 
+self-transitions, resample $W$ and repeat. Algorithm~\ref{alg:MH_naive}, and 
 figure~\ref{fig:naive_mh} in the appendix sketch this out.
 
 The resulting algorithm updates $\theta$ with the MJP trajectory 
@@ -44,7 +44,7 @@ is inevitable, however we found that the $P(W|\theta)$
 terms significantly affects acceptance probabilities. 
 Any proposal that halves $\Omega(\theta)$ will halve the
 mean and variance of the distribution of the number of events in $W$, 
-resulting in an extremely low acceptance probability.
+resulting in a low acceptance probability.
 This will affect mixing.
 The next section describes an algorithm to get around this.
 \vspace{-.1in}
@@ -71,7 +71,7 @@ The next section describes an algorithm to get around this.
           The acceptance probability is given by 
           \vspace{-.05in}
           \begin{align*}
-          \alpha &=  1 \wedge \frac{P(W,\vartheta| X)}{P(W, \theta| X)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}
+          \alpha &=  1 \wedge \frac{P(\vartheta|W, X)}{P(\theta|W, X)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}
           =  1 \wedge \frac{P(X| W,\vartheta) P(W | \vartheta)p(\vartheta)}
             {P(X|W, \theta)P(W | \theta)p(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
           \end{align*}

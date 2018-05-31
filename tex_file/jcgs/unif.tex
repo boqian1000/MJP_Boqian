@@ -14,10 +14,10 @@ jump processes %(like semi-Markov processes)
 in~\cite{RaoTeh12} (also see~\cite{FearnSher2006, 
 Hobolth09, El_hay_gibbssampling}). %Both center on alternate approaches to 
 % Gillespie's algorithm, 
-Both introduce auxiliary 
+Both involve MJP path representations with auxiliary 
 {\em candidate} jump times that are later {\em thinned}.  We focus on 
 the simpler, more popular {\algname} algorithm~\cite{RaoTeh13},
-based on the idea of {\em uniformization}~\cite{Jen1953}. 
+based on the idea of simulating an MJP through {\em uniformization}~\cite{Jen1953}. 
 %We refer to this as the Rao-Teh algorithm. % and describe it next.
 %while in~\cite{RaoTeh12}, this was extended to a more general dependent thinning approach. 
 %We outline
@@ -27,7 +27,7 @@ based on the idea of {\em uniformization}~\cite{Jen1953}.
 %Recall $A_i$ gives the 
 %rate at which the MJP leaves $i$ for any other state. The
 %parameters are set up so that self-transitions cannot occur. 
-Uniformization simulates an MJP by introducing a parameter 
+Uniformization involves a parameter 
 $\Omega \ge \max_i A_i$; \cite{RaoTeh13} suggest $\Omega = 2 \max_i A_i$. 
 %Assuming the system is
 %in state $i$, we sample a {\em candidate} transition-time from an
@@ -40,21 +40,23 @@ a set $W$ of candidate
 transition-times over $[0,t_{end}]$ from a rate-$\Omega$ 
 Poisson process. $W$ %; these along with $0$ 
 defines a random grid on $[0,t_{end}]$.
-Define $B = \left(I +\frac{1}{\Omega}A\right)$; observe that this is a
+Define $B = \left(I +\frac{1}{\Omega}A\right)$; this is a
 stochastic matrix with positive elements, and rows adding up to $1$.
 Assign state-values to the elements in $\{0\} \cup W$ according to a discrete-time 
 Markov chain with initial distribution $\pi_0$, and transition matrix $B$.
 Call these states $V$. Thus $v_0 \sim \pi_0$, while $P(v_{k+1}=j|v_k=i) = B_{ij}$
 for $k \in \{0,\cdots,|W|-1\}$.
-Note that $\Omega > \max_i A_i$ results in more
+$\Omega > \max_i A_i$ results in more
 candidate-times than actual MJP transitions; at the same time, unlike $A$, 
-the matrix $B$ allows self-transitions. These two effects cancel
-each other, and trajectories sampled this way for any $\Omega \ge \max_i A_i$
+the matrix $B$ can thin these through self-transitions. Write $U$ for 
+the elements $W$ with self-transitions, and $T$ for the rest.
+Define $S=\{v_i \in V \text{ s.t.\ } v_i \neq v_{i-1}\}$
+as the elements in $V$ corresponding to $T$, then $(S,T)$
+sampled this way for any $\Omega \ge \max_i A_i$
 %These self-transitions correct for the extra candidate transition times
 %produced by the higher rate $\Omega_i$, and~\cite{RaoTeh12} show that
 %trajectories sampled this way 
-have the same distribution as trajectories
-sampled by Gillespie's algorithm~\cite{Jen1953,RaoTeh13}.
+has the same distribution as Gillespie's algorithm~\cite{Jen1953,RaoTeh13}.
 Introducing the thinned variables allowed~\cite{RaoTeh13} to develop
 a novel, simple and efficient MCMC sampler. At a 
 high-level, each MCMC iteration 
@@ -63,7 +65,8 @@ and then a new trajectory conditioned on the $W$.
     ~\cite{RaoTeh13} show that the resulting Markov chain targets
     the desired posterior distribution over trajectories, and is 
     ergodic for any choice of $\Omega$ strictly greater than all the
-    $A_i$'s. As mentioned earlier, \cite{RaoTeh13} suggest setting $\Omega = 2\max_i A_i$.
+    $A_i$'s. 
+   % As mentioned earlier, \cite{RaoTeh13} suggest setting $\Omega = 2\max_i A_i$.
 %The latter
 %can be carried out using standard techniques from the discrete-time
 %HMM literature.
@@ -121,7 +124,7 @@ In practice, the MJP parameters themselves are unknown: often,
 these are the quantities of primary interest when studying a dynamical
 system. A Bayesian approach
 places a prior $p(\theta)$ over these, and the
-resulting posterior distribution $P(\theta|X)$ is approximated
+resulting posterior $P(\theta|X)$ is typically approximated
 with samples drawn by Gibbs sampling. In particular, for an arbitrary 
 initialization of the parameters and the trajectory, one repeats the
 two steps from algorithm~\ref{alg:MJP_gibbs}:
@@ -180,7 +183,7 @@ plots were produced from the experiment in section~\ref{sec:immig}.}
   \end{minipage}
     \vspace{-0.6 in}
   \end{figure}
-  However, Gibbs sampling approach %of algorithm~\ref{alg:MJP_gibbs} 
+  However, the Gibbs sampling approach %of algorithm~\ref{alg:MJP_gibbs} 
   comes with a well-known limitation:
 coupling between path and parameters can result in a very sluggish
 exploration of parameter and path space. We illustrate this in figure~\ref{fig:hist},
@@ -204,7 +207,7 @@ $\vartheta$ from some proposal distribution
 $q(\vartheta|\theta)$, accepting or rejecting according to the usual
 Metropolis-Hastings probability. The latter step requires calculating the 
 marginal probabilities $P(X|\theta)$ and $P(X|\theta')$, integrating out
-the exponential number of possible latent trajectories. Fortunately
+the exponential number of possible latent trajectories. Fortunately,
 this marginal probability is a by-product of the forward-backward
 algorithm used to sample a new trajectory, so that no 
 additional computational burden is involved. 
@@ -266,7 +269,7 @@ of the MJP, and we show that it is quite inefficient.
 
 \cite{RaoTeh13, RaoTeh12} demonstrated the advantage of
 introducing the thinned events $U$: this allows exploiting discrete-time 
-algorithms like FFBS for efficient inference.
+algorithms like FFBS for path sampling.
 %be brought to playthe thinning-based approach over matrix exponential and particle-MCMC
 %approaches for trajectory inference. 
 In the next section, we outline a \naive\  first attempt at extending this 
