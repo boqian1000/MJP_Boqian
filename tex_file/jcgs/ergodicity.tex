@@ -119,7 +119,7 @@ the least and most stable states.
 %rules 
 %out any state $s'$ such that 
 %$\frac{|A_{s's'}(\theta)}{\max_s A_{ss}(\theta)}| \rightarrow 0$ as $\theta$ increases.
-While not trivial, this is a reasonable assumption: the MCMC chain over MJPs 
+While not trivial, this is a reasonable assumption: the MCMC chain over MJP paths 
 will mix well if we can control the mixing of the MJP itself.
 %it holds for the examples we considered. %One open question is whether this assumption is necessary.
 %We suspect that assumption~\ref{asmp:ideal_geom}, which requires 
@@ -413,16 +413,17 @@ parameter, $\vartheta$ the auxiliary variable, and $W$ the Poisson grid.
 An MCMC iteration updates this to $(\theta',\vartheta',W')$ by 
 (a) sampling states $V$ (or $(S,T)$)  with a backward pass, 
 (b) discarding $\vartheta$, (c) sampling $\ptheta$ from $q(\ptheta|\theta)$, 
-(d) sampling a new $W'$ given $(\theta,\ptheta)$, (e) proposing to swap 
+(d) sampling $U'$ given $(\theta,\ptheta)$ and setting $W' = T \cup U'$, (e) proposing to swap 
 $(\theta,\ptheta)$ and then (f) accepting or rejecting with a forward pass. 
 On acceptance, $\theta' = \ptheta$ and
-$\vartheta' = \theta$, whereas on rejection, $\theta'=\theta$ and 
+$\vartheta' = \theta$, and on rejection, $\theta'=\theta$ and 
 $\vartheta'=\ptheta$. We write $(\theta'',\vartheta'',W'')$ for the 
 MCMC state after two iterations.
 Recall that step (a) actually assigns states $V$ to $W$. $T$ are 
 the elements of $W$ where $V$ changes value, and $S$ are the 
 corresponding elements of $V$. The remaining elements $U$ are the elements 
-of $W$ corresponding to self-transitions.
+of $W$ corresponding to self-transitions. For reference, we repeat some of 
+our notation in the appendix.
 % \{?
 % We establish the drift condition via the Lyapunov-Foster function
 % $\cV(W,\theta,\vartheta) = \left. \lambda_1|W| + \lambda_2 \Omega(\theta) +
@@ -689,10 +690,11 @@ close to $\pi_\theta$.
 %From the assumption \ref{asmp:obs_bnd}, we have %$\exists \ \xi_1 > \eta_1 > 0$, such that,
 %$0 < \eta_1 \leq P(X | V=v, \theta) \leq \xi_1$, so that
 %the following. Assume the state space has $N$ elements.
-Write $W_X$ for the indices of the grid $W$ containing observations, and write $V_X$
-for the states of the Markov chain at these times.
+Write $W_X$ for the indices of the grid $W$ containing observations, 
+and $V_X$ for the Markov chain state at these times (illustrated 
+in Section~\ref{sec:notation} in the appendix).
 Let $P_B(V_X | W, \theta, \theta')$ be the probability distribution over
-$V_X$ under the Markov chain with transition matrix $B$ given the grid 
+$V_X$ under the Markov chain with transition matrix $B$ given 
 $W$ and $P_{st}(V_X|\theta)$ be the probability of $V_X$ sampled
 independently under the stationary distribution. 
 Let $P(X | W, \theta, \theta')$ be the marginal probability of the 
@@ -718,12 +720,12 @@ Then for any $W$ with $\mW > w_0$, we have
 %& \leq \sum_{V_X} P(X | V_X, \theta){\epsilon'} \le \epsilon'' \quad (\text{from Assumption}~\ref{asmp:obs_bnd}).
 %& \leq N \| X \| \ub \epsilon' := \epsilon''
 \end{align*}
-using $P(X|V_X,\theta) \le \lb$ 
+using $P(X|V_X,\theta) \le \ub$ 
 (Assumption~\ref{asmp:obs_bnd}), and 
 $\sum_{V_X} |P_B(V_X | W, \theta, \theta') -  P_{st}(V_X | \theta)| < \epsilon$.
 %So for $W$ with $|W| > W_0$, we have  $|P(X| W, \theta, \theta') - P_{st}(X | \theta)| < \epsilon / 4$. \\
 For large $\theta$, we prove a similar result in the continuous 
-case. For any $\theta'$, by uniformization, 
+case by uniformization. For any $\theta'$,
 \begin{align*}
 P(X | \theta) %&= \int_W dW P(X , W | \theta, \theta')\\
 = \int dW P(X | W, \theta, \theta') P(W | \theta, \theta') %+ \int_{\mW \leq w_0}dW P(X | W, \theta, \theta') P(W | \theta, \theta').
@@ -754,11 +756,11 @@ P(X | \theta) %&= \int_W dW P(X , W | \theta, \theta')\\
 % &+ |P_{st}(X | \theta)P(|W| \leq W_0 | \theta, \theta')|\\
 % &\leq \epsilon / 4 + \epsilon / 4 + \epsilon / 4 = 3\epsilon/4
 % \end{align*}
-We split this integral into two, one over the set $\{\mW > w_0\}$, and 
+We split this integral into two parts, one over the set $\{\mW > w_0\}$, and 
 the second over its complement. On the former, for $w_0$ large enough, 
 $|P(X |W, \theta, \theta')-P_{st}(X|\theta)|
 \le \epsilon''$. %Since, under uniformization, $W$ comes from a 
-By choosing $\theta$ large enough, $\{\mW > w_0\}$ occurs
+For $\theta$ large enough, $\{\mW > w_0\}$ occurs
 with arbitrarily high probability for any $\theta'$. Since the likelihood is bounded, the
 integral over the second set can be made arbitrarily small (say, $\epsilon''$ again). 
 Finally, from the triangle
@@ -1068,7 +1070,7 @@ giving
 $
 I_{1,E_\epsilon^c}  \le \sqrt{\epsilon \eta_0 }\Omega(\theta) .
 $
-Now for $\theta$ satisfying $ \| \theta \| >\max(\theta_2, 
+Putting these four results together, for $\theta$ satisfying $ \| \theta \| >\max(\theta_2, 
 \theta_\epsilon, M) $ 
 (where $M$ is from Assumption~\ref{asmp:ideal_geom} on 
 the ideal sampler), we have 
