@@ -120,13 +120,15 @@ sample a new path $V$}:
 \end{algorithm}
 
 \subsection{Parameter inference for MJPs}
-In practice, the MJP parameters themselves are unknown: often,
-these are the quantities of primary interest when studying a dynamical
+For known parameters, the efficiency of the Rao-Teh algorithm has been 
+established, both empirically~\cite{RaoTeh13} and theoretically~\cite{miasojedow2017}.
+In practice, the parameters are typically unknown: often,
+these are of primary interest when studying a dynamical
 system. A Bayesian approach
 places a prior $p(\theta)$ over these, and the
 resulting posterior $P(\theta|X)$ is typically approximated
 with samples drawn by Gibbs sampling. In particular, for an arbitrary 
-initialization of the parameters and the trajectory, one repeats the
+initialization of path and  parameters, one repeats the
 two steps from algorithm~\ref{alg:MJP_gibbs}:
 \begin{algorithm}[H]
   \caption{Gibbs sampling for parameter inference for MJPs}
@@ -163,8 +165,8 @@ $\theta'$. In any event, this introduces no new technical challenges.
   \begin{minipage}[hp]{0.44\linewidth}
   \centering
     \vspace{-0 in}
-    \includegraphics [width=0.7\textwidth, angle=0]{figs/dist_beta.pdf}
-    \vspace{0.1 in}
+    \includegraphics [width=0.6\textwidth, angle=0]{figs/dist_beta.pdf}
+    \vspace{0.2 in}
   \end{minipage}
 % \begin{minipage}[!hp]{0.4\linewidth}
 % \centering
