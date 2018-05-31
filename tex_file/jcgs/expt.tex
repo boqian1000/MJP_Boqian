@@ -477,7 +477,7 @@ of the Gibbs sampler. \\
     \vspace{-.2in}
   \centering
   \begin{minipage}[!hp]{.24\linewidth}
-    \caption{ESS/sec for $(\alpha,\beta)$ for the E.\ Coli data. The circles (in blue) are our 
+    \caption{ESS/sec for $(\alpha,\lambda_1)$ for the E.\ Coli data. The circles (in blue) are our 
       proposed sampler as we vary the variance of the proposal distribution. 
       The straight line is the Gibbs sampler. }
      \label{fig:ECOLI}
@@ -487,7 +487,7 @@ of the Gibbs sampler. \\
   \end{minipage}
   \begin{minipage}[!hp]{.7\linewidth}
     \includegraphics [width=0.5\textwidth, angle=0]{figs/ECOLI_alpha.pdf}
-    \includegraphics [width=0.5\textwidth, angle=0]{figs/ECOLI_beta.pdf}
+    \includegraphics [width=0.5\textwidth, angle=0]{figs/ECOLI_l1.pdf}
 %    \vspace{-.81 in}
  %   \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_beta.pdf}
  %  \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_l2.pdf}
@@ -526,7 +526,7 @@ of the Gibbs sampler. \\
   $\Sigma_\theta$. Our MH proposal distribution is then $q(\nu|\theta) = 
   N(\nu|\theta, \kappa\Sigma_\theta)$ for different settings of 
   $\kappa$ (the typical choice is $\kappa = 1$). Figure~\ref{fig:ECOLI} 
-  shows the results for parameters $(\alpha, \beta)$. 
+  shows the results for parameters $(\alpha, \lambda_1)$. 
  % we include $(\lambda_1, \lambda_2)$ in the appendix. 
   We see that for the typical setting of $\kappa=1$, our 
   sampler ourperforms the Gibbs sampler, though Gibbs sampling does 
