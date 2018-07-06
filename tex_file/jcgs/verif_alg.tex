@@ -90,7 +90,11 @@ for example, setting $\Omega(\theta,\vartheta)$ to
 $\kappa \max( \max_i A_i(\theta), \max A_i(\vartheta))$ for some choice of $\kappa
 > 1$. We investigate this as well.
 
-Our proposed algorithm is related to work on MCMC inference for doubly-intractable distributions.
+Our proposed algorithm is related to the framework 
+from~\cite{Neal04Drag}, although we exploit the structure of the 
+Poisson and Markov jump processes to simplify matters considerably, 
+avoiding the need for any tempered transitions. Our algorithm is also related to work 
+on MCMC for doubly-intractable distributions.
 Algorithms like~\cite{Moller2006,murray2006,Andrieu09} all attempt to evaluate an intractable
 likelihood under a proposed parameter $\vartheta$ by introducing auxiliary variables, however there
 the auxiliary variable is sampled independently under the proposed parameters. For MJP, this would
