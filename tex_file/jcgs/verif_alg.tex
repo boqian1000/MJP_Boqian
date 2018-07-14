@@ -17,7 +17,6 @@
   information results in a triplet $(W,\theta,\vartheta)$ with probability
   proportional to $p(\theta)q(\vartheta|\theta)P(W|\theta,\vartheta)
   P(X|W,\theta,\vartheta)$.
-
 Next we propose swapping $\theta$ and $\vartheta$. Since this
 is a deterministic proposal, the MH-acceptance probability is given by
 $$\alpha = 1 \wedge \frac{p(\vartheta)q(\theta|\vartheta)P(W|\vartheta,\theta)
@@ -61,7 +60,7 @@ the posterior distribution.
 % &= P((W, S^*, T^*, (\theta^*, \theta)) \rightarrow (W, S, T, (\theta, \theta^*))) P(S^*,T^*, (\theta^*, \theta) | W, y)
 % \end{align*} 
 % Therefore the stationary distribution of this MCMC sampler is $P(W, S, T, (\theta, \theta^*) | y)$. Thus the stationary distribution of $(S, T, \theta)$ is the corresponding marginal distribution $P(S, T, \theta | y)$.  
-\qed
+%\qed
 \end{proof}
 
 \subsection{Comments}\label{sec:comments}

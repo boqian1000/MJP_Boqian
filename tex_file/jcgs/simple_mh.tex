@@ -1,4 +1,4 @@
-\vspace{-.1in}
+%\vspace{-.1in}
 \section{\Naive\ parameter inference via Metropolis-Hastings}
 The Rao-Teh algorithm~\cite{RaoTeh13} simplifies
 computation by conditioning on the
@@ -24,6 +24,55 @@ After accepting or rejecting $\vartheta$, the new parameter $\ntheta$ is used in
 a backward pass that samples a new trajectory. Then discard all 
 self-transitions, resample $W$ and repeat. Algorithm~\ref{alg:MH_naive}, and 
 figure~\ref{fig:naive_mh} in the appendix sketch this out.
+\begin{algorithm}[H]
+   \caption{\Naive\  MH for parameter inference for MJPs }
+   \label{alg:MH_naive}
+  \begin{tabular}{l l}
+   \textbf{Input:  } & \text{Observations $X$}, 
+                       \text{the MJP path $S(t) = (S, T)$, the  parameters $\theta$ }and $\pi_0$.\\ 
+                     & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
+   \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (S', T')$, 
+                            new MJP parameters $\theta'$}.\\
+   \hline
+   \end{tabular}
+   \begin{algorithmic}[1]
+     \State Set $\Omega \assign \Omega(\theta) > \max_s{A_s(\theta)}$ for
+     some function $\Omega(\cdot)$ (e.g.\ $\Omega(\theta) = 
+      2\max_s A_s(\theta))$.
+      \State Sample thinned jumps $U\subset[0, t_{end}]$ from a 
+      Poisson process with piecewise-constant rate 
+      $R(t) = (\Omega - A_{S(t)})$. 
+    Set $W = T \cup U$ and discard MJP state information.
+      \State Propose $\vartheta \sim q(\cdot| \theta)$.
+          The acceptance probability is given by 
+%         \vspace{-.05in}
+          \begin{align*}
+          \alpha &=  1 \wedge \frac{P(\vartheta|W, X)}{P(\theta|W, X)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}
+          =  1 \wedge \frac{P(X| W,\vartheta) P(W | \vartheta)p(\vartheta)}
+            {P(X|W, \theta)P(W | \theta)p(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
+          \end{align*}
+%         \vspace{-.1in}
+    \State For both $\theta$ and $\vartheta$, make a forward pass through the 
+    elements of $W$, sequentially updating the distribution over states at 
+    $w \in W$ given observations up to $w$. 
+    For any $\theta$, the transition matrix 
+    $B(\theta)$ equals $I + \frac{A(\theta)}{\Omega(\theta)}$ while the initial distribution
+      over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
+      $ L_i(s) = P(X_{[w_i, w_{i + 1})} | S(t) = s , t \in [w_i, w_{i + 1})) 
+      $, where $X_{[w_i,w_{i+1})}$ is all observation lying in 
+      $[w_i,w_{i+1})$. %= \prod_{o: t_o \in [w_i, w_{i + 1})}p(X_{t_o} | s)$.
+    At the end, we have 
+    $P(X|W,\theta)$ and $P(X|W,\vartheta)$. Use these, and the fact that 
+    $P(W|\theta)$ is Poisson-distributed to accept or reject the
+    proposed $\vartheta$. Write the new parameter as $\theta'$.
+    %as \boqian{$(W,\theta,\vartheta)$}.
+    \State For the new parameter $\theta'$, make a backward pass through 
+    the elements of
+    $W$, sequentially assigning a state to each element of $W$. This
+    completes the FFBS algorithm.
+    \State Let $T'$ be the set of times in $W$ when the Markov chain changes state. Define $S'$ as the corresponding set of state values. Return $(S', T', \theta')$.
+\end{algorithmic}
+\end{algorithm}
 
 The resulting algorithm updates $\theta$ with the MJP trajectory 
 integrated out, giving more rapid mixing.
@@ -47,54 +96,5 @@ mean and variance of the distribution of the number of events in $W$,
 resulting in a low acceptance probability.
 This will affect mixing.
 The next section describes an algorithm to get around this.
-\vspace{-.1in}
-\begin{algorithm}[H]
-   \caption{\Naive\  MH for parameter inference for MJPs }
-   \label{alg:MH_naive}
-  \begin{tabular}{l l}
-   \textbf{Input:  } & \text{Observations $X$}, 
-                       \text{the MJP path $S(t) = (S, T)$, the  parameters $\theta$ }and $\pi_0$.\\ 
-                     & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
-   \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (S', T')$, 
-                            new MJP parameters $\theta'$}.\\
-   \hline
-   \end{tabular}
-   \begin{algorithmic}[1]
-     \State Set $\Omega \assign \Omega(\theta) > \max_s{A_s(\theta)}$ for
-     some function $\Omega(\cdot)$ (e.g.\ $\Omega(\theta) = 
-      2\max_s A_s(\theta))$.
-      \State Sample thinned jumps $U\subset[0, t_{end}]$ from a 
-      Poisson process with piecewise-constant rate 
-      $R(t) = (\Omega - A_{S(t)})$. 
-    Set $W = T \cup U$ and discard MJP state information.
-      \State Propose $\vartheta \sim q(\cdot| \theta)$.
-          The acceptance probability is given by 
-          \vspace{-.05in}
-          \begin{align*}
-          \alpha &=  1 \wedge \frac{P(\vartheta|W, X)}{P(\theta|W, X)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}
-          =  1 \wedge \frac{P(X| W,\vartheta) P(W | \vartheta)p(\vartheta)}
-            {P(X|W, \theta)P(W | \theta)p(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
-          \end{align*}
-          \vspace{-.1in}
-    \State For both $\theta$ and $\vartheta$, make a forward pass through the 
-    elements of $W$, sequentially updating the distribution over states at 
-    $w \in W$ given observations up to $w$. 
-    For any $\theta$, the transition matrix 
-    $B(\theta)$ equals $I + \frac{A(\theta)}{\Omega(\theta)}$ while the initial distribution
-      over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
-      $ L_i(s) = P(X_{[w_i, w_{i + 1})} | S(t) = s , t \in [w_i, w_{i + 1})) 
-      $, where $X_{[w_i,w_{i+1})}$ is all observation lying in 
-      $[w_i,w_{i+1})$. %= \prod_{o: t_o \in [w_i, w_{i + 1})}p(X_{t_o} | s)$.
-    At the end, we have 
-    $P(X|W,\theta)$ and $P(X|W,\vartheta)$. Use these, and the fact that 
-    $P(W|\theta)$ is Poisson-distributed to accept or reject the
-    proposed $\vartheta$. Write the new parameter as $\theta'$.
-    %as \boqian{$(W,\theta,\vartheta)$}.
-    \State For the new parameter $\theta'$, make a backward pass through 
-    the elements of
-    $W$, sequentially assigning a state to each element of $W$. This
-    completes the FFBS algorithm.
-    \State Let $T'$ be the set of times in $W$ when the Markov chain changes state. Define $S'$ as the corresponding set of state values. Return $(S', T', \theta')$.
-\end{algorithmic}
-\end{algorithm}
-\vspace{-.32in}
+%\vspace{-.1in}
+%\vspace{-.32in}

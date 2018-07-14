@@ -1,6 +1,6 @@
 
 \section{An improved Metropolis-Hasting algorithm}
-\vspace{-.05in}
+%\vspace{-.05in}
 Our main idea is to symmetrize the probability of $W$ under the old and 
 proposed parameters, so that 
 $P(W|\theta)$ disappears from the acceptance ratio. This results
@@ -43,8 +43,8 @@ $
    running a forward pass of the forward-backward algorithm, and after
    accepting or rejecting the proposal, a new trajectory is sampled by
    completing the backward pass. Finally, the thinned events are
-   discarded. We sketch out our algorithm in Algorithm~\ref{alg:MH_improved}
-   and figure~\ref{fig:MH_improved} in the appendix. 
+   discarded. See Algorithm~\ref{alg:MH_improved} and 
+   figure~\ref{fig:MH_improved} in the appendix. % for details. 
 \begin{algorithm}[H]
    \caption{Symmetrized MH for parameter inference for MJPs }
    \label{alg:MH_improved}
@@ -69,17 +69,14 @@ $
     Set $W = T \cup U$ and discard MJP states.
     \State The current MCMC state-space is $(W,\theta,\vartheta)$. Propose swapping
     $\theta$ and $\vartheta$. %the new state-space is 
-   %\boqian{ $(W, \vartheta, \theta)$.}
-%$(W, \theta, \vartheta)$    
      The acceptance probability is given by
-   % accept $\theta^*$ as $\tilde{\theta}$ with probability $\alpha$.
-     \vspace{-.15in}
-        \begin{align*}
-        \alpha %&=  1 \wedge \frac{P(W,(\vartheta, \theta)| y)}{P(W, (\theta, \vartheta)| y)}\\
-       % &=  1 \wedge \frac{P(y| W,\vartheta, \theta) P(W | (\vartheta, \theta))p((\vartheta, \theta))}{P(y| W,(\theta, \vartheta)) P(W | (\theta, \vartheta))p((\theta, \vartheta))}\\
-        &=  1 \wedge \frac{P(X| W,\vartheta,\theta)p(\vartheta)q(\theta|\vartheta)}
+        %\begin{align*}
+     $
+        \alpha 
+        =  1 \wedge \frac{P(X| W,\vartheta,\theta)p(\vartheta)q(\theta|\vartheta)}
         {P(X| W,\theta, \vartheta)p(\theta) q(\vartheta|\theta)}.
-        \end{align*}
+        $
+        %\end{align*}
     \State For both $\theta$ and $\vartheta$, make a forward pass through the 
     elements of $W$, sequentially updating the distribution over states at 
     $w \in W$ given observations up to $w$. At the end, we have calculated

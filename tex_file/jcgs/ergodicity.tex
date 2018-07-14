@@ -1,6 +1,6 @@
-\vspace{-.1in}
+%\vspace{-.1in}
 \section{Geometric ergodicity}
-\vspace{-.05in}
+%\vspace{-.05in}
 Finally, we derive conditions under which our symmetrized 
 MH algorithm
 inherits mixing properties of an `ideal' sampler that operates without
@@ -39,7 +39,7 @@ $k_1 > 1, k_0 > 0$.
 %If $\inf_\theta \Mx{\theta} > 0$ (as is often the case),
 % we can just set $\Omega(\theta) = \Mx{\theta} + \mx{\theta}$ so that
 % $m_2 = \frac{1}{1+\mu}$.}
-Although it is possible to specify broader conditions under which our 
+\noindent Although it is possible to specify broader conditions under which our 
 result holds, for clarity we focus on this case. 
 We can drop the $k_0$ if $\inf_\theta \max_s A_s(\theta) > 0$
 %This is also how we setup our sampler in our experiments.
@@ -69,7 +69,7 @@ $\tilde{A}(\theta) = D_\theta^{-1}A(\theta)D_\theta$, and the
 (A(\theta)+\tilde{A}(\theta))/2$. 
 \label{def:mjp_symm}
 \end{definition}
-This definition is from~\cite{fill1991}, who show that the matrix 
+\noindent This definition is from~\cite{fill1991}, who show that the matrix 
 $R_A(\theta)$ is reversible with real eigenvalues, the smallest being $0$. 
 The larger its second smallest eigenvalue, the faster the MJP converges to its 
 stationary distribution $\pi_\theta$.
@@ -186,7 +186,7 @@ So for any state $s$, the diagonal element $B_s(\theta, \theta') = 1 -
 \frac{A_s(\theta)}{\Omega(\theta, \theta')}> \frac{1}{2}$.
 From~\cite{fill1991}, this diagonal property and the bound 
 on $1-\lambda_2^{R_B}(\theta,\theta')$ give the result.
-\qed
+%\qed
 \end{proof}
 
 Our overall proof strategy is to show that for {$\| \theta \|$} and $W$ large 
@@ -302,7 +302,7 @@ For such $\theta$, by the Cauchy-Schwarz inequality, we have
 \left[ \int_\Theta \Omega(\ptheta) q(\ptheta | \theta) d\ptheta \right]^2 &\le \int_\Theta \Omega(\ptheta)^2 q(\ptheta | \theta) d\ptheta \cdot \int_\Theta q(\ptheta | \theta) d\ptheta \le \eta_0 \Omega(\theta)^2.
 \end{align*}
 So for $\theta$ satisfying $\| \theta \|  > \theta_2$, we have $\int_\Theta \Omega(\ptheta) q(\ptheta | \theta) d\ptheta \le \sqrt{\eta_0} \Omega(\theta).$
-\qed
+%\qed
 \end{proof}
 %\begin{assumption}
 %For any positive $\epsilon > 0$ and $K_0 > 1$, there exists $\theta_2$, such that for $\theta > \theta_2$, $P(\mid \frac{q(\theta | \theta')p(\theta')}{q(\theta | \theta')p(\theta)}\mid \leq K_0 | \theta) \geq 1 - \epsilon$, where $\theta' \sim q(\cdot | \theta)$.
@@ -327,7 +327,7 @@ the condition $q(\{\theta': \frac{p(\theta')q(\theta|\theta')}{p(\theta)q(\theta
 > 1 - \epsilon$ holds.
   \label{asmp:prior}
 \end{assumption}
-This holds, when e.g.\ $p(\theta)$ is a gamma distribution,
+\noindent This holds, when e.g.\ $p(\theta)$ is a gamma distribution,
 and $q(\theta'|\theta)$ is Gaussian.
 %\begin{proof}
 %From the assumptoin, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$.
@@ -356,7 +356,7 @@ $q(\{\theta':\frac{\Omega(\theta')}{\Omega(\theta)} \in
   \left[\frac{1}{K}, K\right]\} | \theta) > 1 - \epsilon$ holds.
   \label{asmp:omega}
 \end{assumption}
-This holds when e.g.\ $q(\theta'|\theta)$ is a centered on $\theta$ and has 
+\noindent This holds when e.g.\ $q(\theta'|\theta)$ is a centered on $\theta$ and has 
 finite variance.
 
 %\begin{proof}
@@ -403,7 +403,7 @@ outside. Together, these two results imply geometric
 ergodicity~\citep[Theorems 15.0.1 and Lemma 15.2.8]{meyn2009}.
 If $\sup_\theta \Omega(\theta) < \infty$, we just need 
 the small set $\{(W,\theta,\vartheta: |W| < M \}$ for some $M$.
-\qed
+%\qed
 \end{proof}
 For easier comparison with the ideal sampler, we begin an MCMC 
 iteration from step 5 in
@@ -470,7 +470,7 @@ for %$i = 0, 1, 2, ..., |W|$ and
 any $\theta,\vartheta, W$.
 \label{prop:self_tr}
 \end{proposition}
-The proof (in the appendix) exploits the bounded likelihood from 
+\noindent The proof (in the appendix) exploits the bounded likelihood from 
 assumption~\ref{asmp:obs_bnd}. A simple by-product of the proof is
 the following corollary:
 \begin{corollary}
@@ -511,7 +511,7 @@ We further bound the summation over $(S,T)$ by considering only the terms
 with $S$ a constant. When this constant is  state $s^*$, we write this as 
 $(S=[s^*], T= \emptyset)$. This corresponds to $|W|$ self-transitions 
 after the starting state $S_0=s^*$, so that
-\vspace{-.1in}
+%\vspace{-.1in}
 \begin{align*}
   P(S=[s^*], T = \emptyset | W, \theta, &\vartheta, X) =
 P(S_0=s^*|X,W, \theta, \vartheta)\prod_{i = 0}^{|W| - 1} 
@@ -538,7 +538,7 @@ P(\emptyset \from \PP(\Omega(\theta)-A_{s^*}(\theta) ))\\
 \quad \text{(since for $\theta \in B_M$, $\Omega(\theta) \le M$)}.
 %\numberthis %\quad (\text{since }\theta\in B_M)
 \end{align*}
-\vspace{-.05in}
+%\vspace{-.05in}
 Thus we have
 \begin{align*}
   \sum_{S,T} P(S,T,W' | W, \theta, \vartheta, X) & 
@@ -609,7 +609,7 @@ and gives our result,
 with $\phi_1(W'',\theta'',\vartheta'') \propto P(W'' \from
   \PP(\Omega(\theta''))\phi(\theta'') \phi(\vartheta'')
   \delta_{\SM_{h,M}}(\vartheta'')\exp(-\Omega(\vartheta''))  $.
-\qed
+%\qed
 \end{proof}
 \noindent We have established the small set condition: for any point 
 inside $B_{h,M}$ our sampler forgets its state with nonzero 
@@ -778,7 +778,7 @@ Then, for any $\epsilon$, there exists $\theta_\epsilon > 0$ as well as a set $\
 $P(E_\epsilon|W,\theta,\vartheta) > 1-\epsilon$.
 \label{prop:mix0}
 \end{proposition}
-The previous lemma bounded the difference in probability of observations 
+\noindent The previous lemma bounded the difference in probability of observations 
 under the discrete-time and continuous-time processes. This result 
 uses this to bound the acceptance probabilities of the ideal sampler, 
 and our proposed sampler (where acceptace probabilities are calculated 
@@ -865,7 +865,7 @@ conditioned on the grid $W$). See the appendix for the proof.
 %\end{proof}
 
 \begin{lemma}(drift condition) There exist $\delta_2 \in (0, 1), \lambda_1 > 0$ and $L > 0$
-  such that
+  such that \\
   $\mathbb{E}\left[\lambda_1|W'| + \Omega(\theta')  | W, \theta, \vartheta, X\right]
   \leq (1 - \delta_2)\left(\lambda_1|W| + \Omega(\theta)   \right) + L$.
   %where $\lambda = \lceil \frac{(t_{end})k_2(\eta_0 + 1)}{(\eta_1^2 \kappa_1 \mathbb{P}_\phi(C)/\xi_1^2 - \eta_0)} \rceil.$
@@ -944,10 +944,10 @@ $, with
   exists $\theta_\epsilon > 0$ such that the set $E_{\epsilon}$
   (where $|\alpha(\theta, \ptheta ; X,W') - \alpha_I(\theta, \ptheta ; X)| \le
   \epsilon$) has probability greater than $1-\epsilon$.
-  Write $I_{2,\E_{\epsilon}}$ for the integral restricted to this set, and
-  $I_{2,\E_{\epsilon}^c}$ for that over the complement, so that
+  Write $I_{2,\E_{\epsilon}}$ for the integral restricted to this set, 
+  and $I_{2,\E_{\epsilon}^c}$ for that over the complement, so that
  $I_{2}= I_{2,\E_{\epsilon}}+I_{2,\E_{\epsilon}^c}$.
- Then for $\theta > \theta_\epsilon$,
+ Then for $\theta > \theta_\epsilon$,}
 % such that for $\theta > \theta_0$, we have $P(\theta' > \theta_0, |W'| >
 % W_0 |\theta, \vartheta, W) > 1 - \epsilon$. Defining $\E_{\epsilon} =
 % \{ (\theta', W') | \theta' > \theta_0, |W'| > W_0\}$, we can divide the
@@ -958,7 +958,7 @@ $, with
 %$I_{2,\E_{\epsilon}^c}$ respectively.
 %For $\theta > \theta_0$, the second term has probability less than $\epsilon$, and using the bound
 %$1-\alpha \le 1$, we have
-}
+%}
 %use $\alpha(\theta, \theta' | W', X)\le 1$ and $q(\theta'|\theta) < \epsilon$
 %to get}
 %%and equation~\eqref{eq:acc} to get}
@@ -1082,7 +1082,7 @@ the ideal sampler), we have
   & \leq (1 - \rho) \Omega(\theta) + (\sqrt{\eta_0\epsilon} +  \eta_1 \epsilon + 2\epsilon) \Omega(\theta) + L_I, \quad \text{giving}
 \end{align*}
 %For $\theta$ satisfying $ \| \theta \| >\max(\theta_2, \theta_3, \theta_\epsilon)$, we have %\boqian{need to change afterwards}
-\vspace{-.3in}
+%\vspace{-.3in}
 \begin{align*}
 \mathbb{E}[\lambda_1 | W'| &+ \Omega(\theta')| W, \theta, \vartheta, X] \le \lambda_1(1 - \delta_1)|W| + \lambda_1 t_{end} (1 + \eta_1)\Omega(\theta)\\
 &+  (1 - \rho) \Omega(\theta) + (\sqrt{\eta_0} \sqrt{\epsilon} +  \eta_1 \epsilon + 2\epsilon) \Omega(\theta) + L_I\\
@@ -1102,7 +1102,6 @@ For $(\lambda_1,\epsilon)$ small enough, $\delta_2 \in (0,1)$,
   %\mathbb{I}_{C} \sup_{(W, \theta)} \{ \mathbb{E}[\tilde{\lambda}_1 | W'| + \Omega(\theta')| W, \theta, \vartheta, X] \}.
   %\end{align*}
       and  $\delta = \min(\delta_1,\delta_2)$ gives the drift condition.
-      \qed
 % From equation~\eqref{eq:nu2} and assumption 2, we have for
 % $\Omega(\theta) > k\Omega(\vartheta)$
 % \begin{align*}
@@ -1127,7 +1126,7 @@ For $(\lambda_1,\epsilon)$ small enough, $\delta_2 \in (0,1)$,
 %   \int_{B_\alpha^c} d\theta'\Omega(\theta')  \epsilon_{\theta'} q(\theta'|\theta) \\
 %   &\le \alpha + \epsilon_\theta \eta_0 \Omega(\theta)+1
 % \end{align*}
-
+%
 % From these equations, we have for $\Omega(\theta) > k \Omega(\vartheta)$,
 % \begin{align*}
 %   \mathbb{E}[\lambda |W'| &+ \lambda_2 \Omega(\vartheta') + \Omega(\theta')|
@@ -1146,4 +1145,5 @@ For $(\lambda_1,\epsilon)$ small enough, $\delta_2 \in (0,1)$,
 %     &= (1-\delta_1)\lambda|W| + \frac{(\eta_0 + 1)}{k\lambda_2} \lambda_2\Omega(\vartheta)+
 %     (\lambda + \lambda_2(1+\eta_0))a\Omega(\theta)
 % \end{align*}
+%     \qed
 \end{proof}
