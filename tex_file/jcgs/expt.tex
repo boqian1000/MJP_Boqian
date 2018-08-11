@@ -475,7 +475,7 @@ of the Gibbs sampler. \\
  dimensionality of the state space results in a more concentrated posterior,
  shifting the optimal setting of the proposal variance to smaller values.
 
-  \subsection{Chi-site data for Escherichia coli}~
+  \subsection{Chi site data for Escherichia coli}~
   \begin{figure}%[b]
 %    \vspace{-.2in}
   \centering
@@ -498,15 +498,20 @@ of the Gibbs sampler. \\
   \end{minipage}
 %   \vspace{-.3in}
   \end{figure}
-  We consider a dataset of {\em E.\ coli} DNA used in~\cite{FearnSher2006}.
-  This consists of positions of Chi sites (motifs of eight base pairs, 
-  GCTGGTGG) along the inner (lagging) strand of the {\em E.\ coli} genome. 
+  We consider a dataset recording positions of a particular DNA motif 
+  on the {\em E.\ coli} genome. Used in~\cite{FearnSher2006}, these 
+  motifs consist of eight base pairs GCTGGTGG, and are called Chi sites.
+  The rates of occurence of Chi sites provide information about genome 
+  segmentation, allowing the identification of regions with high 
+  mutation or recombination rates.
   %strands which are the inner and outer rings. The molecular mechanisms 
   %of DNA replication differ between the two half-strands and they are 
   %termed leading and lagging. The E. coli genome is 4639675 bases long and 
   %each half is 2319.838 kilobases long. 
   Following~\cite{FearnSher2006}, we wish to use this data to infer a 
-  two-state piecewise-constant segmentation of the DNA strand. We place a 
+  two-state piecewise-constant segmentation of the DNA strand. 
+  We focus on Chi sites along the inner (lagging) strand of the 
+  {\em E.\ coli} genome.  We place a 
   MJP prior over this segmentation, and indexing position along the 
   strand with $t$, we write this as $S(t)$ ($t \in [0,20]$ after rescaling 
   nucleotide indices). To state $i \in 

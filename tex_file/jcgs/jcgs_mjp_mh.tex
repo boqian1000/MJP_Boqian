@@ -1,0 +1,128 @@
+%&latex
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{graphicx,psfrag,epsf}
+\usepackage{enumerate}
+\usepackage{natbib}
+\usepackage{url} % not crucial - just used below for the URL 
+\usepackage{amsfonts}
+%\let\proof\relax
+%\let\endproof\relax
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+%\usepackage{amssymb,mathabx}
+\usepackage{algorithm, algpseudocode}
+%\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}%[theorem]
+\newtheorem{assumption}{Assumption}
+\newtheorem{lemma}[theorem]{Lemma}
+%\theoremstyle{definition}
+\newtheorem{definition}{Definition}%[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\input{mymacros.tex}
+
+
+%\pdfminorversion=4
+% NOTE: To produce blinded version, replace "0" with "1" below.
+\newcommand{\blind}{0}
+
+% DON'T change margins - should be 1 inch all around.
+\addtolength{\oddsidemargin}{-.5in}%
+\addtolength{\evensidemargin}{-.5in}%
+\addtolength{\textwidth}{1in}%
+\addtolength{\textheight}{1.3in}%
+\addtolength{\topmargin}{-.8in}%
+
+
+\begin{document}
+
+%\bibliographystyle{natbib}
+
+\def\spacingset#1{\renewcommand{\baselinestretch}%
+{#1}\small\normalsize} \spacingset{1}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\if0\blind
+{
+  \title{\bf Efficient Parameter Sampling for Markov Jump Processes}
+  \author{Boqian Zhang and Vinayak Rao, \\
+          Department of Statistics, Purdue University, USA \\
+          email: \texttt{zhan1977@purdue.edu, varao@purdue.edu}
+  }
+  \maketitle
+} \fi
+
+\if1\blind
+{
+  \bigskip
+  \bigskip
+  \bigskip
+  \begin{center}
+    {\LARGE\bf Efficient parameter sampling for Markov jump processes}
+\end{center}
+  \medskip
+} \fi
+
+\bigskip
+\begin{abstract}
+Markov jump processes  are continuous-time stochastic processes 
+widely used in a variety of applied disciplines. Inference typically
+proceeds via Markov chain Monte Carlo, the state-of-the-art being a 
+uniformization-based auxiliary
+variable Gibbs sampler. This was
+designed for situations where the process parameters are known, and Bayesian
+inference over unknown parameters is typically carried out by incorporating
+it into a larger Gibbs sampler.
+%In many situations, the MJP trajectory and parameters can exhibit
+%strong coupling, and
+This strategy of sampling parameters given path, and
+path given parameters can result in poor Markov chain mixing. In this
+work, we propose a simple and elegant algorithm to address this
+problem. Our scheme brings Metropolis-Hastings approaches
+for discrete-time hidden Markov models to the continuous-time
+setting, %and also also ties up some of the loose ends in~\cite{RaoTeh13}. 
+resulting in %is
+ a complete and clean recipe for
+parameter and path inference in Markov jump processes. In our experiments, we
+demonstrate superior performance over Gibbs sampling, as well as
+another popular approach, particle Markov chain Monte Carlo.
+We also show our sampler inherits geometric mixing from an `ideal' 
+sampler that operates without computational constraints.
+\end{abstract}
+
+\noindent%
+{\it Keywords:}  Continuous-time Markov chain, Markov chain Monte Carlo, 
+Metropolis-Hasting, Uniformization, Geometric Ergodicity 
+\vfill
+
+\newpage
+\spacingset{1.45} % DON'T change the spacing!
+
+\input{intro.tex}
+ \input{unif.tex}
+ \input{simple_mh.tex}
+ \input{main_alg.tex}
+ \input{verif_alg.tex}
+ \input{expt.tex}
+ \input{ergodicity.tex}
+ \input{conc.tex}
+
+\newpage
+\bigskip
+\begin{center}
+{\large\bf SUPPLEMENTARY MATERIAL}
+\end{center}
+
+\input{appendix_proof.tex}
+\input{appendix.tex}
+
+\bibliographystyle{plain}
+\bibliography{bibfile}
+\end{document}

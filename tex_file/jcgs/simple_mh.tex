@@ -24,6 +24,31 @@ After accepting or rejecting $\vartheta$, the new parameter $\ntheta$ is used in
 a backward pass that samples a new trajectory. Then discard all 
 self-transitions, resample $W$ and repeat. Algorithm~\ref{alg:MH_naive}, and 
 figure~\ref{fig:naive_mh} in the appendix sketch this out.
+
+The resulting algorithm updates $\theta$ with the MJP trajectory 
+integrated out, giving more rapid mixing.
+However $\theta$ is still updated {\em conditioned on
+$W$}, and 
+%determines not just the MJP trajectory $S(t)$.
+%, and with $S(t)$ 
+%marginalized out, the observations $X$. 
+the distribution of $W$ depends on $\theta$: 
+%These are the $p(W|\theta)$ terms
+%in the acceptance probability; under uniformization, 
+$W$ is a homogeneous
+Poisson process with rate $\Omega(\theta)$. %$ = 2 \max A(\theta)$. 
+%who probability can
+%calculated easily during the forward pass.
+The fact that the MH-acceptance probability involves a $P(X|\theta)$ term
+is inevitable, however we found that the $P(W|\theta)$
+terms significantly affects acceptance probabilities. 
+Any proposal that halves $\Omega(\theta)$ will halve the
+mean and variance of the distribution of the number of events in $W$, 
+resulting in a low acceptance probability.
+This will affect mixing.
+The next section describes an algorithm to get around this.
+%\vspace{-.1in}
+%\vspace{-.32in}
 \begin{algorithm}[H]
    \caption{\Naive\  MH for parameter inference for MJPs }
    \label{alg:MH_naive}
@@ -73,28 +98,3 @@ figure~\ref{fig:naive_mh} in the appendix sketch this out.
     \State Let $T'$ be the set of times in $W$ when the Markov chain changes state. Define $S'$ as the corresponding set of state values. Return $(S', T', \theta')$.
 \end{algorithmic}
 \end{algorithm}
-
-The resulting algorithm updates $\theta$ with the MJP trajectory 
-integrated out, giving more rapid mixing.
-However $\theta$ is still updated {\em conditioned on
-$W$}, and 
-%determines not just the MJP trajectory $S(t)$.
-%, and with $S(t)$ 
-%marginalized out, the observations $X$. 
-the distribution of $W$ depends on $\theta$: 
-%These are the $p(W|\theta)$ terms
-%in the acceptance probability; under uniformization, 
-$W$ is a homogeneous
-Poisson process with rate $\Omega(\theta)$. %$ = 2 \max A(\theta)$. 
-%who probability can
-%calculated easily during the forward pass.
-The fact that the MH-acceptance probability involves a $P(X|\theta)$ term
-is inevitable, however we found that the $P(W|\theta)$
-terms significantly affects acceptance probabilities. 
-Any proposal that halves $\Omega(\theta)$ will halve the
-mean and variance of the distribution of the number of events in $W$, 
-resulting in a low acceptance probability.
-This will affect mixing.
-The next section describes an algorithm to get around this.
-%\vspace{-.1in}
-%\vspace{-.32in}
