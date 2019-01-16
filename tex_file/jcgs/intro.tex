@@ -2,10 +2,10 @@
 \section{Introduction}
 \label{sec:intro}
 Markov jump processes (MJPs) are continuous-time stochastic processes 
-widely used in fields like computational chemistry~\cite{gillespie97}, 
-molecular genetics~\cite{FearnSher2006}, mathematical finance~\cite{Elliott06}, 
-queuing theory~\cite{Breuer2003}, artificial intelligence~\cite{XuShe10} and
-social-network analysis~\cite{pan2016markov}. %The references above have
+widely used in fields like computational chemistry~\citep{gillespie97}, 
+molecular genetics~\citep{FearnSher2006}, mathematical finance~\citep{Elliott06}, 
+queuing theory~\citep{Breuer2003}, artificial intelligence~\citep{XuShe10} and
+social-network analysis~\citep{pan2016markov}. %The references above have
 These references have used MJPs to model temporal evolution of the state 
 of a chemical reaction or queuing network, segmentation of a strand of 
 DNA, user activity on social media, among many others, resulting in 
@@ -33,13 +33,13 @@ Metropolis-Hastings framework.
 %additionally, we tie up some of the loose ends in the Rao-Teh algorithm.
 In our experiments, we demonstrate superior 
 performance over Gibbs sampling, as well as other approaches like 
-particle Markov chain Monte Carlo~\cite{Andrieu10}. We also prove 
+particle Markov chain Monte Carlo~\citep{Andrieu10}. We also prove 
 that under relatively mild conditions, our sampler inherits geometric 
 ergodicity from an `ideal' sampler that operates without any computational 
 constraints.
 
 \section{Markov jump processes (MJPs)} 
-A Markov jump process~\cite{Cinlar1975} is a right-continuous 
+A Markov jump process~\citep{Cinlar1975} is a right-continuous 
 piecewise-constant stochastic process $S(t)$ taking values in a 
 usually finite state space $\cS$. % (see Figure~\ref{fig:naive_mh}, top-left).
 We assume $N$-states, with $\cS = \{1,\ldots,N\}$. Then, 
@@ -53,7 +53,7 @@ The rows of $A$ sum to $0$, so that $A_{ii}=-\sum_{j \neq i} A_{ij}  $.
 We write $A_i$ for the negative of the $i$th diagonal element $A_{ii}$, 
 so that $A_i = -A_{ii}$ gives the total rate at which the system leaves state $i$ for any other state.
 To simulate an MJP over an interval $[0,t_{end}]$, one follows 
-Gillespie's algorithm~\cite{gillespie97}: 
+Gillespie's algorithm~\citep{gillespie97}: 
 first sample an initial state $s_0$ from $\pi_0$, and
 defining $t_0 = t_{curr} = 0$ and $k = 0$, repeat the following while
 $t_{curr} < t_{end}$:
@@ -100,7 +100,7 @@ For example:
     characterize transitions between codons at a 
     DNA locus % on a DNA or RNA molecule 
     over evolutionary time. In the simplest case,
-    all transitions have the same rate~\cite{jukescantor69}, 
+    all transitions have the same rate~\citep{jukescantor69}, 
     %requiring just a single parameter. 
     Other models group transitions 
     into, e.g., `synonymous' and `nonsynonymous' transitions, 
@@ -110,7 +110,7 @@ For example:
     These have their own rates, and as 
     there are $61$ codons, this gives a 
     $61\times 61$ matrix determined by 2 parameters. More refined 
-    models~\cite{goldman1994codon} introduce additional parameters. 
+    models~\citep{goldman1994codon} introduce additional parameters. 
     %however the 
     %number of parameters is still significantly smaller than the general case.
 \end{description}

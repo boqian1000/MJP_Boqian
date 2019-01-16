@@ -12,12 +12,12 @@ This was addressed in~\cite{RaoTeh13}
 and extended to a broader class of 
 jump processes %(like semi-Markov processes) 
 in~\cite{RaoTeh12} (also see~\cite{FearnSher2006, 
-Hobolth09, El_hay_gibbssampling}). %Both center on alternate approaches to 
+Hobolth09, Elhaygibbssampling}). %Both center on alternate approaches to 
 % Gillespie's algorithm, 
 Both involve MJP path representations with auxiliary 
 {\em candidate} jump times that are later {\em thinned}.  We focus on 
-the simpler, more popular {\algname} algorithm~\cite{RaoTeh13},
-based on the idea of simulating an MJP through {\em uniformization}~\cite{Jen1953}. 
+the simpler, more popular algorithm from~\cite{RaoTeh13},
+based on the idea of simulating an MJP through {\em uniformization}~\citep{Jen1953}. 
 %We refer to this as the Rao-Teh algorithm. % and describe it next.
 %while in~\cite{RaoTeh12}, this was extended to a more general dependent thinning approach. 
 %We outline
@@ -56,7 +56,7 @@ sampled this way for any $\Omega \ge \max_i A_i$
 %These self-transitions correct for the extra candidate transition times
 %produced by the higher rate $\Omega_i$, and~\cite{RaoTeh12} show that
 %trajectories sampled this way 
-has the same distribution as Gillespie's algorithm~\cite{Jen1953,RaoTeh13}.
+has the same distribution as Gillespie's algorithm~\citep{Jen1953,RaoTeh13}.
 Introducing the thinned variables allowed~\cite{RaoTeh13} to develop
 a novel, simple and efficient MCMC sampler. We detail this in algorithm~\ref{alg:Unif_gibbs}. At a 
 high-level, each MCMC iteration 
@@ -72,7 +72,7 @@ and then a new trajectory conditioned on the $W$.
 %HMM literature.
 % \vspace{-.12in}
 \begin{algorithm}[H]
-  \caption{The {\algname}~\cite{RaoTeh13} auxiliary variable Gibbs sampler for MJP trajectories}
+  \caption{The~\cite{RaoTeh13} auxiliary variable Gibbs sampler for MJP trajectories}
    \label{alg:Unif_gibbs}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{MJP parameters $\theta$, $\pi_0$, observations $X$}, 
@@ -121,7 +121,7 @@ sample a new path $V$}:
 
 \subsection{Parameter inference for MJPs}
 For known parameters, the efficiency of the Rao-Teh algorithm has been 
-established, both empirically~\cite{RaoTeh13} and theoretically~\cite{miasojedow2017}.
+established, both empirically~\citep{RaoTeh13} and theoretically~\citep{miasojedow2017}.
 In practice, the parameters are typically unknown: often,
 these are of primary interest when studying a dynamical
 system. A Bayesian approach
@@ -248,7 +248,7 @@ integrating out the continuous-time trajectory is harder.
 %Naively calculating this marginal probability for the continuous-time
 %case is not straightforward, as there is no finite set of candidate
 %times to make a pass over. 
-One approach~\cite{FearnSher2006} makes a sequential 
+One approach~\citep{FearnSher2006} makes a sequential 
 forward pass through all {\em observations} $X$, using matrix exponentiation
 to marginalize out all
 continuous-time paths between successive times. As
@@ -261,7 +261,7 @@ Also, the number of expensive matrix exponentiations depends on
 the number of observations rather than the number of transitions.
 %
 %
-A second approach, particle MCMC~\cite{Andrieu10}, uses 
+A second approach, particle MCMC~\citep{Andrieu10}, uses 
 particle filtering to get an unbiased estimate of the marginal 
 $P(X|\theta)$. Plugging this into the Metropolis-Hastings 
 acceptance probability results in an MCMC sampler that targets the 

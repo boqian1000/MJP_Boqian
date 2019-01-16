@@ -17,7 +17,7 @@ on both the current and proposed parameter, we consider two settings
 $\Omega(\theta, \vartheta) = \kappa \max(\max A(\theta), \max A(\vartheta))$
 ($\kappa=1.5$, plotted with {circles}).  We compare these
 algorithms against two baselines: Gibbs sampling (Algorithm~\ref{alg:MJP_gibbs},
-plotted in blue), and particle MCMC~\cite{Andrieu10}, plotted in black. Gibbs
+plotted in blue), and particle MCMC~\citep{Andrieu10}, plotted in black. Gibbs
 sampling involves a uniformization step to update the MJP trajectory, and for this
 we used three settings, $\kappa=1.5,2,3$, plotted with circles, {triangles}
 and {squares}.  Unless specified, our results were
@@ -37,7 +37,7 @@ run to $3000$ iterations, the number of particles being $5, 10$ and $20$
 
 For each run of each MCMC algorithm, we calculated the effective sample size 
 (ESS) of the posterior samples of the MJP parameters using the R package 
-\texttt{rcoda}~\cite{Rcoda2006}. This estimates the number of independent 
+\texttt{rcoda}~\citep{Rcoda2006}. This estimates the number of independent 
 samples returned by the MCMC algorithm, and dividing this by the runtime of a 
 simulation gives the ESS per unit time. We used this measure to compare 
 different samplers and different parameter settings.
@@ -159,7 +159,7 @@ with neither uniformly superior to the other.
   \begin{figure}[H]
 %    \vspace{-.2in}
   \centering
-  \begin{minipage}[!hp]{0.7\linewidth}
+  \begin{minipage}[!hp]{0.99\linewidth}
   \centering
   \begin{minipage}[!hp]{0.99\linewidth}
     \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_3_alpha.pdf}
@@ -172,15 +172,14 @@ with neither uniformly superior to the other.
     \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_10_beta.pdf}
   \end{minipage}
   \end{minipage}
-  \begin{minipage}[!hp]{0.29\linewidth}
+%  \begin{minipage}[!hp]{0.99\linewidth}
     \caption{ESS/sec for the synthetic  model, the top row being dimension 3, and the bottom,
       dimension 10. The left column is for $\alpha$, and the 
     right is for $\beta$. Red, yellow, blue and black curves are the symmetrized MH,
   \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols correspond
 to different settings of the algorithms, see section~\ref{sec:expts}}
      \label{fig:ESS_EXP_D10}
-  \end{minipage}
-  \vspace{-.2in}
+%  \end{minipage}
   \end{figure}
 
   \begin{figure}%[b]    
@@ -261,7 +260,7 @@ carrying out parameter inference.
   \end{minipage}
 %\vspace{-.2in}
   \end{figure}
-  The Jukes and Cantor (JC69) model~\cite{jukescantor69} is a popular model of DNA nucleotide
+  The Jukes and Cantor (JC69) model~\citep{jukescantor69} is a popular model of DNA nucleotide
   substitution.  We write its state space as $\{0, 1, 2, 3\}$, representing the 
   four nucleotides $\{A, T, C, G\}$.  The model has a single parameter $\alpha$, 
   representing the rate at which the system transitions between any pair of 
@@ -310,7 +309,7 @@ degradation with interval length that is much milder than the other algorithms.
 
 %  \vspace{-.25in}
 \subsection{An immigration model with finite capacity}\label{sec:immig}~
-Next, we consider an M/M/N/N queue~\cite{gross2011fundamentals}. The state space of this is stochastic 
+Next, we consider an M/M/N/N queue~\citep{gross2011fundamentals}. The state space of this is stochastic 
 process is $\{0, 1, 2, 3, \cdots, N - 1\}$ with 
 elements giving the number of customers/jobs/individuals in a system/population. 
 Arrivals follow a rate-$\alpha$ Poisson process, moving the process from state 
@@ -342,7 +341,7 @@ the system moves from $i$ to $i - 1$ with rate $i\beta$.
   \centering
     \includegraphics [width=0.41\textwidth, angle=0]{figs/q_10_alpha.pdf}
     \includegraphics [width=0.41\textwidth, angle=0]{figs/q_10_beta.pdf}
-    \vspace{-0.3 in}
+    \vspace{-0.1 in}
   \end{minipage}
   \begin{minipage}[!hp]{0.33\linewidth}
     \caption{ESS/sec for the immigration model, the top row being dimension 3, and the bottom,
@@ -519,7 +518,7 @@ of the Gibbs sampler. \\
   defines a piecewise-constant rate function $\lambda_{S(t)}$. We model 
   the Chi-site positions as drawn from a Poisson process with rate 
   $\lambda_{S(t)}$, resulting in a {Markov-modulated Poisson 
-  process}~\cite{scottmmpp03}. 
+  process}~\citep{scottmmpp03}. 
   MJP transitions from state $1$ to state $2$ have rate $\alpha$ while 
   transitions from state $2$ to state $1$ have rate $\beta$. We place 
   gamma priors are placed for the four model parameters; specifically, 
