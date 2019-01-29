@@ -182,6 +182,87 @@ to different settings of the algorithms, see section~\ref{sec:expts}}
 %  \end{minipage}
   \end{figure}
 
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/acc/EXP_D3alpha_k2.pdf}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/acc/EXP_D3beta_k2.pdf}
+  \end{minipage}
+  \centering
+%   \vspace{-.3in}
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/acc/EXP_D10alpha_k2.pdf}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/acc/EXP_D10beta_k2.pdf}
+  \end{minipage}
+  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{Acceptance Rate for the synthetic  model, the top row being dimension 3, and the bottom,
+      dimension 10. The left column is for $\alpha$, and the 
+    right is for $\beta$. Red, yellow and blue curves are the Gibbs, symmetrized MH,
+ and \naive\ MH  algorithm. The multiplicative factor is $2$. }
+     \label{fig:ACC_EXP}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_hist_7_05_3_.pdf}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_hist_44_05_10_.pdf}
+  \end{minipage}
+
+  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{Histograms for the posterior samples of the synthetic model, the left being dimension 3 and the right being dimension 10. The red and blue curves are the Gibbs and symmetrized MH}
+     \label{fig:HIST_EXP}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_trace_7_05_3_.pdf}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_trace_44_05_10_.pdf}
+  \end{minipage}
+
+  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{Trace plots for the posterior samples of the synthetic model, the left being dimension 3 and the right being dimension 10. The red and blue points are the Gibbs and symmetrized MH}
+     \label{fig:TRACE_EXP}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_gbsacf_7_05_3_.pdf}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_mhacf_7_05_3_.pdf}
+  \end{minipage}
+	\centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_gbsacf_44_05_10_.pdf}
+    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_mhacf_44_05_10_.pdf}
+  \end{minipage}
+
+  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{ACFs for the posterior samples of the synthetic model, the top row being dimension 3, and the bottom, dimension 10. The left column is for Gibbs, and the right is for symmetrized MH.}
+     \label{fig:ACF_EXP}
+%  \end{minipage}
+  \end{figure}
+
   \begin{figure}%[b]    
   \centering
   \begin{minipage}[hp]{0.24\linewidth}
@@ -247,17 +328,18 @@ carrying out parameter inference.
 %\vspace{-.23in}
   \subsection{The Jukes and Cantor (JC69) model}~
   \begin{figure}%[H]
-  \begin{minipage}[!hp]{0.7\linewidth}
+%  \begin{minipage}[!hp]{0.7\linewidth}
+  \begin{minipage}[!hp]{0.99\linewidth}
     \includegraphics[width=0.43\textwidth, angle=0]{figs/jc_model.pdf}
     \includegraphics[width=0.48\textwidth, angle=0]{figs/jc.pdf}
 	%\label{jc_model}
   \end{minipage}
-  \begin{minipage}[!hp]{0.28\linewidth}
+%  \begin{minipage}[!hp]{0.28\linewidth}
   \caption{(a) Jukes-Cantor (JC69) model, (b)
     ESS/sec for the JC69 Model. Red, yellow and blue curves are the 
       symmetrized MH, \naive\ MH and Gibbs algorithm. }
      \label{fig:ESS_JC}
-  \end{minipage}
+ % \end{minipage}
 %\vspace{-.2in}
   \end{figure}
   The Jukes and Cantor (JC69) model~\citep{jukescantor69} is a popular model of DNA nucleotide
@@ -279,20 +361,21 @@ the x-axis). Particle MCMC performs worse
 than all the algorithms, and we do not include it in our plots.
   \begin{figure}%[H]
   \centering
-  \begin{minipage}[!hp]{0.58\linewidth}
+%  \begin{minipage}[!hp]{0.58\linewidth}
+  \begin{minipage}[!hp]{0.99\linewidth}
   \centering
     \includegraphics [width=0.49\textwidth, angle=0]{figs/ESS_vs_t_alpha_JC.pdf}
 %	\vspace{.3in}
   \centering
     \includegraphics [width=0.49\textwidth, angle=0]{figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
   \end{minipage}
-  \begin{minipage}[!hp]{0.4\linewidth}
+%  \begin{minipage}[!hp]{0.4\linewidth}
     \caption{Time Interval vs.\ ESS/sec for JC model. In the left plot, the number of 
     observations is fixed, in the right, this grows linearly with the
   interval length. Red, yellow and blue curves are the symmetrized MH,
   \naive\ MH and Gibbs. }
 	\label{fig:jc_model_vs_t}
-  \end{minipage}
+%  \end{minipage}
 %  \vspace{-.4in}
   \end{figure}
 
@@ -333,7 +416,8 @@ the system moves from $i$ to $i - 1$ with rate $i\beta$.
 % \end{figure}
   \begin{figure}%[b]
   \centering
-  \begin{minipage}[hp]{0.65\linewidth}
+  \begin{minipage}[hp]{0.99\linewidth}
+%  \begin{minipage}[hp]{0.65\linewidth}
   \centering
     \includegraphics [width=0.41\textwidth, angle=0]{figs/q_3_alpha.pdf}
     \includegraphics [width=0.41\textwidth, angle=0]{figs/q_3_beta.pdf}
@@ -343,13 +427,13 @@ the system moves from $i$ to $i - 1$ with rate $i\beta$.
     \includegraphics [width=0.41\textwidth, angle=0]{figs/q_10_beta.pdf}
     \vspace{-0.1 in}
   \end{minipage}
-  \begin{minipage}[!hp]{0.33\linewidth}
+%  \begin{minipage}[!hp]{0.33\linewidth}
     \caption{ESS/sec for the immigration model, the top row being dimension 3, and the bottom,
       dimension 10. The left column is for $\alpha$, and the 
     right is for $\beta$. Red, yellow, and blue curves are the symmetrized MH,
   \naive\ MH, Gibbs sampling and particle MCMC.}
      \label{fig:ESS_Q_D10}
-  \end{minipage}
+%  \end{minipage}
 %  \vspace{-.4in}
   \end{figure}
 We follow the same setup as the first experiment:
@@ -428,7 +512,8 @@ steps included in the appendix.
 
   \begin{figure}%[b]
   \centering
-  \begin{minipage}[!hp]{0.6\linewidth}
+%  \begin{minipage}[!hp]{0.6\linewidth}
+  \begin{minipage}[!hp]{0.99\linewidth}
   \centering
     \includegraphics [width=0.42\textwidth, angle=0]{figs/pc_3_alpha.pdf}
     \includegraphics [width=0.42\textwidth, angle=0]{figs/pc_3_beta.pdf}
@@ -440,7 +525,7 @@ steps included in the appendix.
   \end{minipage}
   \begin{minipage}[!hp]{0.04\linewidth}
   \end{minipage}
-  \begin{minipage}[!hp]{0.35\linewidth}
+%  \begin{minipage}[!hp]{0.35\linewidth}
 %    \vspace{-.3in}
     \caption{ESS/sec for the time-inhomogeneous immigration model, the top row 
       being dimension 3, and the bottom,
@@ -448,7 +533,7 @@ steps included in the appendix.
     right is for $\beta$. Red, yellow and blue curves are the symmetrized MH,
   \naive\ MH, and Gibbs algorithm.}
      \label{fig:ESS_pc_10}
-  \end{minipage}
+  %\end{minipage}
 %    \vspace{-.2in}
   \end{figure}
 \textbf{A time-inhomogeneous immigration model:}
@@ -478,23 +563,29 @@ of the Gibbs sampler. \\
   \begin{figure}%[b]
 %    \vspace{-.2in}
   \centering
-  \begin{minipage}[!hp]{.32\linewidth}
-    \caption{ESS/sec for $(\alpha,\lambda_1)$ for the E.\ Coli data. The circles (in blue) are our 
-      proposed sampler as we vary the variance of the proposal distribution. 
-      The straight line is the Gibbs sampler. }
-     \label{fig:ECOLI}
-  \end{minipage}
+%  \begin{minipage}[!hp]{.32\linewidth}
+%    \caption{ESS/sec for $(\alpha,\lambda_1)$ for the E.\ Coli data. The circles (in blue) are our 
+%      proposed sampler as we vary the variance of the proposal distribution. 
+ %     The straight line is the Gibbs sampler. }
+  %   \label{fig:ECOLI}
+%  \end{minipage}
   \begin{minipage}[!hp]{.01\linewidth}
     \hspace{.1in}
   \end{minipage}
-  \begin{minipage}[!hp]{.65\linewidth}
+%  \begin{minipage}[!hp]{.65\linewidth}
+  \begin{minipage}[!hp]{.98\linewidth}
     \includegraphics [width=0.48\textwidth, angle=0]{figs/ECOLI_alpha.pdf}
     \includegraphics [width=0.48\textwidth, angle=0]{figs/ECOLI_l1.pdf}
 %    \vspace{-.81 in}
  %   \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_beta.pdf}
  %  \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_l2.pdf}
 %    \vspace{-.2in}
-  \end{minipage}
+  \end{minipage}  
+    \caption{ESS/sec for $(\alpha,\lambda_1)$ for the E.\ Coli data. The circles (in blue) are our 
+      proposed sampler as we vary the variance of the proposal distribution. 
+      The straight line is the Gibbs sampler. }
+     \label{fig:ECOLI}
+
 %   \vspace{-.3in}
   \end{figure}
   We consider a dataset recording positions of a particular DNA motif 
