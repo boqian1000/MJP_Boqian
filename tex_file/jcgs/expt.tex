@@ -185,58 +185,50 @@ to different settings of the algorithms, see section~\ref{sec:expts}}
   \begin{figure}[H]
 %    \vspace{-.2in}
   \centering
+
   \begin{minipage}[!hp]{0.99\linewidth}
-  \centering
-  \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/acc/EXP_D3alpha_k2.pdf}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/acc/EXP_D3beta_k2.pdf}
-  \end{minipage}
-  \centering
-%   \vspace{-.3in}
-  \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/acc/EXP_D10alpha_k2.pdf}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/acc/EXP_D10beta_k2.pdf}
-  \end{minipage}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/EXP_D3beta_k2.pdf}
+	\hspace{.5in}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/EXP_D10beta_k2.pdf}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{Acceptance Rate for the synthetic  model, the top row being dimension 3, and the bottom,
-      dimension 10. The left column is for $\alpha$, and the 
-    right is for $\beta$. Red, yellow and blue curves are the Gibbs, symmetrized MH,
+    \caption{Acceptance Rate for $\beta$ in the synthetic model, the left row being dimension 3, and the right,dimension 10.  Red, yellow and blue curves are the Gibbs, symmetrized MH,
  and \naive\ MH  algorithm. The multiplicative factor is $2$. }
      \label{fig:ACC_EXP}
 %  \end{minipage}
   \end{figure}
 
-  \begin{figure}[H]
+%  \begin{figure}[H]
 %    \vspace{-.2in}
-  \centering
-  \begin{minipage}[!hp]{0.99\linewidth}
-  \centering
-  \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_hist_7_05_3_.pdf}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_hist_44_05_10_.pdf}
-  \end{minipage}
+%  \centering
+ % \begin{minipage}[!hp]{0.99\linewidth}
+%  \centering
+ % \begin{minipage}[!hp]{0.99\linewidth}
+   % \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_hist_7_05_3_.pdf}
+    %\includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_hist_44_05_10_.pdf}
+  %\end{minipage}
 
-  \end{minipage}
-%  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{Histograms for the posterior samples of the synthetic model, the left being dimension 3 and the right being dimension 10. The red and blue curves are the Gibbs and symmetrized MH}
-     \label{fig:HIST_EXP}
 %  \end{minipage}
-  \end{figure}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    %\caption{Histograms for the posterior samples of the synthetic model, the left being dimension 3 and the right being dimension 10. The red and blue curves are the Gibbs and symmetrized MH}
+%     \label{fig:HIST_EXP}
+%  \end{minipage}
+%  \end{figure}
 
   \begin{figure}[H]
 %    \vspace{-.2in}
   \centering
-  \begin{minipage}[!hp]{0.99\linewidth}
-  \centering
-  \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_trace_7_05_3_.pdf}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_trace_44_05_10_.pdf}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+ % \centering
+  \begin{minipage}[!hp]{0.97\linewidth}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/EXP_ks/exp_hist_44_05_10_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/EXP_ks/exp_traceGBS_44_05_10_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/EXP_ks/exp_traceMH_44_05_10_.pdf}
   \end{minipage}
 
-  \end{minipage}
+%  \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{Trace plots for the posterior samples of the synthetic model, the left being dimension 3 and the right being dimension 10. The red and blue points are the Gibbs and symmetrized MH}
+    \caption{The left is histogram for the posterior samples($\alpha$) of the synthetic model, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $0.5085$. The middle and the right are trace plots for the posterior samples of the synthetic model with dimension 10, the middle is for Gibbs and the right is for symmetrized MH}
      \label{fig:TRACE_EXP}
 %  \end{minipage}
   \end{figure}
@@ -245,20 +237,13 @@ to different settings of the algorithms, see section~\ref{sec:expts}}
 %    \vspace{-.2in}
   \centering
   \begin{minipage}[!hp]{0.99\linewidth}
-  \centering
-  \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_gbsacf_7_05_3_.pdf}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_mhacf_7_05_3_.pdf}
-  \end{minipage}
-	\centering
-  \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_gbsacf_44_05_10_.pdf}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/EXP_ks/exp_mhacf_44_05_10_.pdf}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/EXP_ks/exp_gbsacf_44_05_10_.pdf}
+	\hspace{.5in}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/EXP_ks/exp_mhacf_44_05_10_.pdf}
   \end{minipage}
 
-  \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{ACFs for the posterior samples of the synthetic model, the top row being dimension 3, and the bottom, dimension 10. The left column is for Gibbs, and the right is for symmetrized MH.}
+    \caption{ACFs for the posterior samples $\alpha$ of the synthetic model with dimension 10. The left is for Gibbs, and the right is for symmetrized MH.}
      \label{fig:ACF_EXP}
 %  \end{minipage}
   \end{figure}
@@ -330,8 +315,9 @@ carrying out parameter inference.
   \begin{figure}%[H]
 %  \begin{minipage}[!hp]{0.7\linewidth}
   \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics[width=0.43\textwidth, angle=0]{figs/jc_model.pdf}
-    \includegraphics[width=0.48\textwidth, angle=0]{figs/jc.pdf}
+    \includegraphics[width=0.40\textwidth, angle=0]{figs/jc_model.pdf}
+	\hspace{.5in}
+    \includegraphics[width=0.40\textwidth, angle=0]{figs/jc.pdf}
 	%\label{jc_model}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.28\linewidth}
@@ -364,10 +350,10 @@ than all the algorithms, and we do not include it in our plots.
 %  \begin{minipage}[!hp]{0.58\linewidth}
   \begin{minipage}[!hp]{0.99\linewidth}
   \centering
-    \includegraphics [width=0.49\textwidth, angle=0]{figs/ESS_vs_t_alpha_JC.pdf}
-%	\vspace{.3in}
-  \centering
-    \includegraphics [width=0.49\textwidth, angle=0]{figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/ESS_vs_t_alpha_JC.pdf}
+	\hspace{.5in}
+  \centering 
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.4\linewidth}
     \caption{Time Interval vs.\ ESS/sec for JC model. In the left plot, the number of 
@@ -377,6 +363,54 @@ than all the algorithms, and we do not include it in our plots.
 	\label{fig:jc_model_vs_t}
 %  \end{minipage}
 %  \vspace{-.4in}
+  \end{figure}
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+
+  \begin{minipage}[!hp]{0.99\linewidth}
+  	\centering
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/JCalpha_k2.pdf}
+	\hspace{.5in}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/JC_ks/jc_hist_44_05_3_.pdf}
+  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{The left represents the acceptance rate for $\alpha$ in the JC69 model.  Yellow and blue curves represent symmetrized MH,and \naive\ MH  algorithm. The multiplicative factor is $2$.The right is histogram for the posterior samples($\alpha$ ) of the JC69 model, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.97$.  }
+     \label{fig:ACC_JC}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+%  \begin{minipage}[!hp]{0.99\linewidth}
+ % \centering
+  \begin{minipage}[!hp]{0.97\linewidth}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/JC_ks/jc_traceGBS_44_05_3_.pdf}
+	\hspace{.5in}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/JC_ks/jc_traceMH_44_05_3_.pdf}
+  \end{minipage}
+
+%  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{Trace plots for the posterior samples of the JC69 mode, the left is for Gibbs and the right is for symmetrized MH}
+     \label{fig:TRACE_JC}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/JC_ks/jc_gbsacf_44_05_3_.pdf}
+	\hspace{.5in}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/JC_ks/jc_mhacf_44_05_3_.pdf}
+  \end{minipage}
+
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{ACFs for the posterior samples $\alpha$ of the JC69 model. The left is for Gibbs, and the right is for symmetrized MH.}
+     \label{fig:ACF_JC}
+%  \end{minipage}
   \end{figure}
 
 In figure~\ref{fig:jc_model_vs_t}, we plot the ESS per unit time for the
@@ -436,6 +470,56 @@ the system moves from $i$ to $i - 1$ with rate $i\beta$.
 %  \end{minipage}
 %  \vspace{-.4in}
   \end{figure}
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/Q_D3alpha_k2.pdf}
+	\hspace{.5in}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/Q_D10alpha_k2.pdf}
+  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{Acceptance Rate for $\alpha$ in the synthetic model, the left row being dimension 3, and the right,dimension 10.  Yellow and blue curves represent symmetrized MH,
+ and \naive\ MH  algorithm. The multiplicative factor is $2$. }
+     \label{fig:ACC_Q}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+%  \begin{minipage}[!hp]{0.99\linewidth}
+ % \centering
+  \begin{minipage}[!hp]{0.97\linewidth}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/Q_ks/q_hist_20_03_3_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/Q_ks/q_traceGBS_20_03_3_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/Q_ks/q_traceMH_20_03_3_.pdf}
+  \end{minipage}
+
+%  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{The left is histogram for the posterior samples($\alpha$) of the immigration model with dimension 3, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.978$. The middle and the right are trace plots for the posterior samples of the immigration model with dimension 3, the middle is for Gibbs and the right is for symmetrized MH}
+     \label{fig:TRACE_Q}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/Q_ks/q_gbsacf_20_03_3_.pdf}
+	\hspace{.5in}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/Q_ks/q_mhacf_20_03_3_.pdf}
+  \end{minipage}
+
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{ACFs for the posterior samples $\alpha$ of the immigration model with dimension 3. The left is for Gibbs, and the right is for symmetrized MH.}
+     \label{fig:ACF_Q}
+%  \end{minipage}
+  \end{figure}
+
+
 We follow the same setup as the first experiment:
 for $(\alpha_0,\alpha_1,\beta_0,\beta_1)$ equal to $(3,2,5,2)$,
 we place Gamma$(\alpha_0,\alpha_1)$, and Gamma$(\beta_0, \beta_1)$ priors on 
@@ -536,6 +620,56 @@ steps included in the appendix.
   %\end{minipage}
 %    \vspace{-.2in}
   \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/CQ_D3alpha_k2.pdf}
+	\hspace{.5in}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/CQ_D10alpha_k2.pdf}
+  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{Acceptance Rate for $\alpha$ in the time-inhomogeneous immigration model, the left row being dimension 3, and the right,dimension 10.  Yellow and blue curves represent symmetrized MH,
+ and \naive\ MH  algorithm. The multiplicative factor is $2$. }
+     \label{fig:ACC_CQ}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+%  \begin{minipage}[!hp]{0.99\linewidth}
+ % \centering
+  \begin{minipage}[!hp]{0.97\linewidth}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/QC_ks/qc_hist_4_03_10_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/QC_ks/qc_traceGBS_4_03_10_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/QC_ks/qc_traceMH_4_03_10_.pdf}
+  \end{minipage}
+
+%  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{The left is histogram for the posterior samples($\alpha$) of the time-inhomogeneous immigration model with dimension 10, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.7212$. The middle and the right are trace plots for the posterior samples of the time-inhomogeneous immigration model with dimension 10, the middle is for Gibbs and the right is for symmetrized MH}
+     \label{fig:TRACE_CQ}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/QC_ks/qc_gbsacf_4_03_10_.pdf}
+	\hspace{.5in}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/QC_ks/qc_mhacf_4_03_10_.pdf}
+  \end{minipage}
+
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{ACFs for the posterior samples $\alpha$ of the time-inhomogeneous immigration model with dimension 10. The left is for Gibbs, and the right is for symmetrized MH.}
+     \label{fig:ACF_CQ}
+%  \end{minipage}
+  \end{figure}
+
 \textbf{A time-inhomogeneous immigration model:}
 We extend the previous model to incorporate a known time-inhomogeneity. 
 The arrival and death rates are no longer constant, and are instead given by
@@ -588,6 +722,87 @@ of the Gibbs sampler. \\
 
 %   \vspace{-.3in}
   \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+
+  \begin{minipage}[!hp]{0.99\linewidth}
+	\centering
+    \includegraphics [width=0.50\textwidth, angle=0]{figs/acc/ecolialpha_k2.pdf}
+  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{Acceptance Rate of $\alpha$ generated by the symmetrized MH algorithm for the E.\ Coli data . The multiplicative factor is $2$. }
+     \label{fig:ACC_ECOLI}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+%  \begin{minipage}[!hp]{0.99\linewidth}
+ % \centering
+  \begin{minipage}[!hp]{0.97\linewidth}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphahist_31_3_0_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphatraceGBS_31_3_0_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphatraceMH_31_3_0_.pdf}
+  \end{minipage}
+
+%  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{The left is histogram for the posterior samples($\alpha$) for the E.\ Coli data.The red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.1641$. The middle and the right are trace plots for the posterior samples for the E.\ Coli data, the middle is for Gibbs and the right is for symmetrized MH}
+     \label{fig:TRACE_ECOLI}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphagbsacf_31_3_0_.pdf}
+	\hspace{.5in}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphamhacf_31_3_0_.pdf}
+  \end{minipage}
+
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{ACFs for the posterior samples $\alpha$ for the E.\ Coli data The left is for Gibbs, and the right is for symmetrized MH.}
+     \label{fig:ACF_ECOLI}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+%  \begin{minipage}[!hp]{0.99\linewidth}
+ % \centering
+  \begin{minipage}[!hp]{0.97\linewidth}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1hist_31_3_0_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1traceGBS_31_3_0_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1traceMH_31_3_0_.pdf}
+  \end{minipage}
+
+%  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{The left is histogram for the posterior samples($\lambda_1$) for the E.\ Coli data.The red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.4658$. The middle and the right are trace plots for the posterior samples for the E.\ Coli data, the middle is for Gibbs and the right is for symmetrized MH}
+     \label{fig:TRACE_ECOLI_l1}
+%  \end{minipage}
+  \end{figure}
+
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1gbsacf_31_3_0_.pdf}
+	\hspace{.5in}
+    \includegraphics [width=0.40\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1mhacf_31_3_0_.pdf}
+  \end{minipage}
+
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{ACFs for the posterior samples $\lambda_1$ for the E.\ Coli data The left is for Gibbs, and the right is for symmetrized MH.}
+     \label{fig:ACF_ECOLI_l1}
+%  \end{minipage}
+  \end{figure}
+
   We consider a dataset recording positions of a particular DNA motif 
   on the {\em E.\ coli} genome. Used in~\cite{FearnSher2006}, these 
   motifs consist of eight base pairs GCTGGTGG, and are called Chi sites.
@@ -603,8 +818,8 @@ of the Gibbs sampler. \\
   We focus on Chi sites along the inner (lagging) strand of the 
   {\em E.\ coli} genome.  We place a 
   MJP prior over this segmentation, and indexing position along the 
-  strand with $t$, we write this as $S(t)$ ($t \in [0,20]$ after rescaling 
-  nucleotide indices). To state $i \in 
+  strand with $t$, we write this as $S(t)$ (\sout{$t \in [0,20]$ after rescaling 
+  nucleotide indices} \boqian{$t \in [0,2319.838]$} ). To state $i \in 
   \{1,2\}$, we assign a rate $\lambda_i$, which together with $S(t)$, 
   defines a piecewise-constant rate function $\lambda_{S(t)}$. We model 
   the Chi-site positions as drawn from a Poisson process with rate 
@@ -618,11 +833,11 @@ of the Gibbs sampler. \\
 
   We use this setup to evaluate our symmetrized MH sampler along with 
   Gibbs sampling (other algorithms perform much worse). For our MH proposal distribution, we first 
-  run $500$ iterations of Gibbs sampling to estimate the posterior 
+  run \sout{$500$} \boqian{2000} iterations of Gibbs sampling to estimate the posterior 
   covariance of the vector $\theta = (\alpha,\beta,\lambda_1,\lambda_2)$, call this 
   $\Sigma_\theta$. Our MH proposal distribution is then $q(\nu|\theta) = 
   N(\nu|\theta, \kappa\Sigma_\theta)$ for different settings of 
-  $\kappa$ (the typical choice is $\kappa = 1$). Figure~\ref{fig:ECOLI} 
+  $\kappa$ (the typical choice is $\kappa = 1$)\boqian{, with the multiplicative factor $2$}. Figure~\ref{fig:ECOLI} 
   shows the results for parameters $(\alpha, \lambda_1)$, which are both 
   very similar. 
  % we include $(\lambda_1, \lambda_2)$ in the appendix. 
