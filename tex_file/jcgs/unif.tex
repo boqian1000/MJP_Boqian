@@ -1,4 +1,4 @@
-\section{Bayesian inference for MJPs}
+\section{Bayesian modeling and inference for MJPs}
 %In practical situations, an MJP is noisily observed at
 %a finite set of times. %with the observations themselves noisy. 
 %This raises two questions: 
@@ -7,39 +7,53 @@
 %  what are the MJP parameters?
 %%\end{itemize}
 %  \vspace{-.1in}
-\textbf{Trajectory inference given MJP parameters:}
-This was addressed in~\cite{RaoTeh13}  
-and extended to a broader class of 
-jump processes %(like semi-Markov processes) 
-in~\cite{RaoTeh12} (also see~\cite{FearnSher2006, 
-Hobolth09, Elhaygibbssampling}). %Both center on alternate approaches to 
-% Gillespie's algorithm, 
-Both involve MJP path representations with auxiliary 
-{\em candidate} jump times that are later {\em thinned}.  We focus on 
-the simpler, more popular algorithm from~\cite{RaoTeh13},
-based on the idea of simulating an MJP through {\em uniformization}~\citep{Jen1953}. 
-%We refer to this as the Rao-Teh algorithm. % and describe it next.
-%while in~\cite{RaoTeh12}, this was extended to a more general dependent thinning approach. 
-%We outline
-%the latter below: it is more general, and we are not aware of any work
-%before~\cite{RaoTeh12} that describes it.
+%\textbf{Bayesian model:}
+We first set up our Bayesian model of the data generation process. 
+We model a latent piecewise-constant path $S(t)$ as an $N$-state MJP with rate matrix $A(\theta)$ and prior $\pi_0$ over $S(0)$, the state at time $0$. 
+The parameter $\theta$ is unknown, and we place a prior $\prior(\theta)$ over this. 
+For clarity, since $\pi_0$ does not govern the trajectory dynamics, we will assume it is known (or we set $\pi$ to a uniform distribution over the $N$ states). 
+In settings with multiple trajectory realizations, we would place a Dirichlet prior over $\pi_0$. 
+We have noisy measurements $X$ of $S(t)$, with likelihood $P(X|S(t),\ t \in [0,T])$.
+Again, for clarity we ignore any unknown parameters in the likelihood.
+We assume the following structure on the observation process: for any partition $W = \{w_0 = 0, w_1, \dotsc, w_{|U|}=T\}$ of the interval $[0,T]$, there exist easy to compute functions $\ell_i$ such that the likelihood factors as:
+\begin{align}
+  \label{eq:lik_factor}
+  P(X|S(t),\ t \in [0,T]) = \prod_{i=1}^{|G|-1} \ell_i(S(t),\ t \in [w_{i-1},w_i])
+\end{align}
+A common example where this holds is when we have observations $X$ at a finite set of times $T^X = \{t^X_1,\cdots, t^X_{|X|}\}$, each observation depending on the state of the MJP at that time:
+\begin{align}
+  \label{eq:lik_factor}
+  P(X|S(t),\ t \in [0,T]) = \prod_{i=1}^{|X|} P(x_i|S(t^X_i)).
+\end{align}
+Other examples include settings when the observations form an inhomogeneous Poisson process~\citep{FearnSher2006}, renewal process~\citep{rao2011gaussian} or even another MJP~\citep{Nodelman+al:UAI02,RaoTeh13}, modulated by $S(t)$.
+The first, called a Markov modulated Poisson process (MMPP)~\citep{scottmmpp03}, associates a positive rate $\lambda_s$ with each state $s$, with $\ell_i(S(t),\ t \in [w_{i-1},w_i])$ equal to the likelihood of the Poisson events within $[w_{i-1},w_i]$ under an inhomogeneous Poisson process with piecewise-constant rate $\lambda_{S(t)},\ t \in [w_{i-1},w_i]$.
 
-%Recall $A_i$ gives the 
-%rate at which the MJP leaves $i$ for any other state. The
-%parameters are set up so that self-transitions cannot occur. 
-Uniformization involves a parameter 
-$\Omega \ge \max_i A_i$; \cite{RaoTeh13} suggest $\Omega = 2 \max_i A_i$. 
+With $A(\cdot)$ and $\pi$ assumed known, the overall Bayesian model is then 
+\begin{align}
+  \label{eq:bayes_model}
+  \theta \sim P(\theta), \quad S(t) \sim \text{MJP}(A(\theta), \pi_0), \quad X \sim P(X|S(t)).
+\end{align}
+Given observations $X$, one is now interested in the posterior distribution over the latent quantities, $(\theta,S(t))$. 
+
+\subsection{Trajectory inference given the MJP parameters $\theta$}
+This was addressed in~\cite{RaoTeh13}  and extended to a broader class of jump processes in~\cite{RaoTeh12} (also see~\cite{FearnSher2006, Hobolth09, Elhaygibbssampling}). 
+%Both center on alternate approaches to Gillespie's algorithm, 
+Both involve MJP path representations with auxiliary {\em candidate} jump times that are later {\em thinned}.  
+We focus on the simpler, more popular algorithm from~\cite{RaoTeh13}, based on the idea of simulating an MJP through {\em uniformization}~\citep{Jen1953}. 
+%We refer to this as the Rao-Teh algorithm. % and describe it next.  while in~\cite{RaoTeh12}, this was extended to a more general dependent thinning approach. 
+%We outline the latter below: it is more general, and we are not aware of any work before~\cite{RaoTeh12} that describes it.
+
+%Recall $A_i$ gives the rate at which the MJP leaves $i$ for any other state. The parameters are set up so that self-transitions cannot occur. 
+Since $\theta$ is known, we drop dependency of $A(\theta)$ on $\theta$, and write it just as $A$. 
+Uniformization involves a parameter $\Omega \ge \max_i A_i$; \cite{RaoTeh13} suggest $\Omega = 2 \max_i A_i$. 
 %Assuming the system is
 %in state $i$, we sample a {\em candidate} transition-time from an
 %exponential, now with rate $\Omega_i$. The system remains in state $i$
 %until this time, after which it moves to state $j \neq i$ with probability
 %$B_{ij} = A_{ij}/\Omega_i$. The system continues to remain in its current 
 %state with probability $1-A_i/\Omega_i$. 
-Unlike the sequential wait-and-jump Gillespie algorithm, first simulate 
-a set $W$ of candidate
-transition-times over $[0,t_{end}]$ from a rate-$\Omega$ 
-Poisson process. $W$ %; these along with $0$ 
-defines a random grid on $[0,t_{end}]$.
+Unlike the sequential wait-and-jump Gillespie algorithm, we first simulate a set $W$ of candidate transition-times over $[0,t_{end}]$ from a rate-$\Omega$ Poisson process. 
+$W$ defines a random grid on $[0,t_{end}]$.
 Define $B = \left(I +\frac{1}{\Omega}A\right)$; this is a
 stochastic matrix with positive elements, and rows adding up to $1$.
 Assign state-values to the elements in $\{0\} \cup W$ according to a discrete-time 
@@ -72,7 +86,7 @@ and then a new trajectory conditioned on the $W$.
 %HMM literature.
 % \vspace{-.12in}
 \begin{algorithm}[H]
-  \caption{The~\cite{RaoTeh13} auxiliary variable Gibbs sampler for MJP trajectories}
+  \caption{The~\cite{RaoTeh13} MCMC sampler for MJP trajectories}
    \label{alg:Unif_gibbs}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{MJP parameters $\theta$, $\pi_0$, observations $X$}, 
@@ -84,47 +98,38 @@ and then a new trajectory conditioned on the $W$.
    \end{tabular}
    \begin{algorithmic}[1]
 \State \textbf{Given the MJP path $(S,T)$, sample a new set of thinned 
-candidate times $U$}: %\cite{RaoTeh12} show that 
-These are distributed as an inhomogeneous Poisson process with intensity 
-$\Omega-A_{S(t)}$. Since the intensity is piecewise-constant, simulating 
-this is straightforward.
-\State \textbf{Given the thinned and actual transition times $W = T \cup U$
-from the previous iteration (after discarding state information $S$), 
-sample a new path $V$}:
-    Conditioned on the skeleton $W$, the set of candidate jump
-    times is fixed, and trajectory inference reduces to inference for
-    a discrete-time hidden Markov model (HMM) with initial distribution
-    $\pi_0$, and transition matrix $B$. \cite{RaoTeh13} use the forward-filtering
-    backward-sampling (FFBS) algorithm, an efficient dynamic 
-    programming algorithm that makes a forward pass through the
-    finite set of times $W$, sequentially updating the 
-    distribution over states at each time $w \in W$. 
-    %at each time accounting for all observations in the previous interval. 
-    Between any two consecutive elements of $W$,
-    %separated by an interval $\Delta w$, 
-    the system remain in a fixed state, with the likelihood for a state $s$ equal
-    to the likelihood under state $s$ of all observations 
-    in that interval. 
+candidate times $U$}: 
+These are distributed as an inhomogeneous Poisson process with intensity $\Omega-A_{S(t)}$: 
+\begin{align*}
+  U \sim \text{PoissProc}(\Omega - A_{S(t)}) 
+\end{align*}
+Since the intensity is piecewise-constant, simulating this is straightforward: over a segment $(t_{i},t_{i+1})$ where $S(t)$ has value $s_i$, sample a positive integer $n$ from a Poisson distribution with mean $(\Omega-A_{s_i})$, and simulate $n$ events uniformly over $(t_i, t_{i+1})$.
+\State \textbf{Given the thinned and actual transition times $W = T \cup U$ from the previous iteration, discard state information $S$ and simulate
+a new path $V$}:
+Conditioned on the skeleton $W$, the set of candidate jump times is fixed, and trajectory inference reduces to inference for a discrete-time hidden Markov model (HMM) with initial distribution $\pi_0$, and transition matrix $B$. 
+\cite{RaoTeh13} use the forward-filtering backward-sampling (FFBS) algorithm~\citep{dsfs}. This dynamic programming algorithm for HMMs involves two steps:
+\begin{description}
+  \item[Forward pass:] We sequentially update $\alpha_i$, the distribution over states at time $w_i \in W$ given $\alpha_{i-1}$. 
+    Between two consecutive elements of $W$, the system remain in a fixed state, and from equation~\eqref{eq:lik_factor}, the likelihood of state $s$ equals $\ell_i(S(t) = s,\ t \in [w_i,w_{i+1}])$ for some known function $\ell_i(\cdot)$. Write this likelihood as $\ell(s)$. Then, 
+    $$\alpha_i(s) = \sum_{s' \in S} \ell(s) \cdot \alpha_{i-1}(s')\cdot B_{ss'}, \quad \forall s' \in S. $$
+    Here, $\alpha_0 = \pi_0$.
     %and a term $\Omega_i\exp(-\Omega_i\Delta t)$,
     %the probability that the next candidate time occurs after a wait
     %$\Delta t$ under state $i$.
-    The end of the forward pass gives a distribution over states at the
-    end time that accounts for all observations.
-    The algorithm then makes a backward pass through the times in $W$, 
-    sequentially sampling the state $v_i$ at time $w_i$ given state 
-    $v_{i+1}$  at 
-    time $w_{i+1}$ and the corresponding distribution over states 
-    at $w_i$ calculated during the
-    forward pass. 
+  \item[Backward pass:]
+    This stage uses the $\alpha_i(\cdot)$s to sequentially sample the state $v_i$ at time $w_i$ given state $v_{i+1}$  at 
+    time $w_{i+1}$:
+    $$ v_t \sim \beta_t(\cdot),\quad \text{where } 
+    \beta_t(s) = \alpha_t(s)\cdot B_{sv_{t+1}} \cdot \ell(s) \quad \forall s \in S.$$
+    Here, $\beta_T = \alpha_T$.
+\end{description}
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Parameter inference for MJPs}
-For known parameters, the efficiency of the Rao-Teh algorithm has been 
-established, both empirically~\citep{RaoTeh13} and theoretically~\citep{miasojedow2017}.
-In practice, the parameters are typically unknown: often,
-these are of primary interest when studying a dynamical
-system. A Bayesian approach
+\subsection{Joint inference over MJP path $S(t)$ and parameters $\theta$}
+For fixed parameters, the efficiency of the Rao-Teh algorithm has been established, both empirically~\citep{RaoTeh13} and theoretically~\citep{miasojedow2017}.
+In practice, the parameters are typically unknown: often, these are of primary interest when studying a dynamical system. 
+A Bayesian approach
 places a prior $p(\theta)$ over these, and the
 resulting posterior $P(\theta|X)$ is typically approximated
 with samples drawn by Gibbs sampling. In particular, for an arbitrary 
