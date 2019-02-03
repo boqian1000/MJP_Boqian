@@ -64,29 +64,37 @@ $
       %In the case of uniformization, we
       %have a single $\Omega$ for all states, with $\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$.
       %, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
-    \State Sample thinned jumps $U\subset[0, t_{end}]$ from a Poisson process with 
-    piecewise-constant rate $R(t) = (\Omega - A_{S(t)}(\theta))$. 
-    Set $W = T \cup U$ and discard MJP states.
-    \State The current MCMC state-space is $(W,\theta,\vartheta)$. Propose swapping
-    $\theta$ and $\vartheta$. %the new state-space is 
-     The acceptance probability is given by
-        %\begin{align*}
+      \State { Simulate the thinned times $U$ } from a rate-$(\Omega-A_{S(t)})$ Poisson process : 
+\begin{align*}
+  U \sim \text{PoissProc}(\Omega - A_{S(t)}) 
+\end{align*}
+    \State Set $W = T \cup U$ and discard MJP states.
+    \State The current MCMC state-space is $(W,\theta,\vartheta)$. 
+    Propose swapping $\theta$ and $\vartheta$, so the new state-space is $(W,\vartheta,\theta)$. 
+     Accept this with probability 
      $
-        \alpha 
-        =  1 \wedge \frac{P(X| W,\vartheta,\theta)p(\vartheta)q(\theta|\vartheta)}
-        {P(X| W,\theta, \vartheta)p(\theta) q(\vartheta|\theta)}.
+     \text{acc} 
+        =  1 \wedge \frac{P(X| W,\vartheta,\theta)P(\vartheta)q(\theta|\vartheta)}
+        {P(X| W,\theta, \vartheta)P(\theta) q(\vartheta|\theta)}.
         $
-        %\end{align*}
-    \State For both $\theta$ and $\vartheta$, make a forward pass through the 
-    elements of $W$, sequentially updating the distribution over states at 
-    $w \in W$ given observations up to $w$. At the end, we have calculated
-    $P(X|W,\theta, \vartheta)$ and $P(X|W,\vartheta, \theta)$. Use these to accept or reject the
-    proposed swapping of $\theta$ and $\vartheta$. Write the new state-space
-    as $(W,\theta',\vartheta')$.
-    \State For the new transition matrix $B(\theta',\vartheta')$, make a backward pass through 
-    the elements of
-    $W$, sequentially assigning a state to each element $w_i \in W$ given 
-    $w_{i+1}$.
+    \State Set $B(\theta,\vartheta) = I + \frac{A(\theta)}{\Omega(\theta, \vartheta)}$ and $\alpha^{\theta, \vartheta}_0(\cdot) = \pi_0$.
+    Sequentially update $\alpha^{\theta,\vartheta}_i(\cdot)$ at $w_i \in W$ as: 
+    $$\alpha^{\theta,\vartheta}_i(s) = \sum_{s' \in \cS} \ell_i(s) \cdot \alpha^{\theta,\vartheta}_{i-1}(s')\cdot B_{ss'}(\theta,\vartheta), \quad \forall s' \in S. $$
+    Similarly, for $B(\vartheta,\theta) = I + \frac{A(\vartheta)}{\Omega(\vartheta, \theta)}$, calculate $\alpha^{\vartheta,\theta}_i(\cdot)$ for all $w_i \in W$.
+    \State The current MCMC state-space is $(W,\theta,\vartheta)$. 
+    Propose swapping $\theta$ and $\vartheta$, so the new state-space is $(W,\vartheta,\theta)$. 
+     Accept this with probability 
+     $
+     \text{acc} 
+        =  1 \wedge \frac{P(X| W,\vartheta,\theta)P(\vartheta)q(\theta|\vartheta)}
+        {P(X| W,\theta, \vartheta)P(\theta) q(\vartheta|\theta)}.
+        $
+        Here, $P(X|W,\theta,\vartheta) = \sum_{s \in \cS} \alpha^{\theta,\vartheta}_{|W|}(s)$, and $P(X|W,\vartheta,\theta) = \sum_{s \in \cS} \alpha^{\vartheta,\theta}_{|W|}(s)$.
+    \State Write the new state-space as $(W,\theta',\vartheta')$.
+    For the new transition matrix $B(\theta',\vartheta')$,     sequentially simulate $v_i$ at time $w_i$ given state $v_{i+1}$  at time $w_{i+1}$:
+    $$ v_t \sim \beta_t(\cdot),\quad \text{where } 
+    \beta_i(s) = \alpha_i(s)\cdot B^{\theta',\vartheta'}_{sv_{t+1}} \cdot \ell_i(s) \quad \forall s \in S.$$
+    Here, $\beta_{|W|}(\cdot) = \alpha_{|W|}(\cdot)$.
 %    Sample a path $\tilde{V}$, from a discret-time Markov chain with $|W| + 1$ steps, using FFBS algorithm. The transition matrix of the Markov chain is $B = (I + \frac{A(\tilde{\theta})}{\Omega})$ while the initial distribution over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
 %    $$ L_i(s) = P(Y_{[w_i, w_{i + 1})} | S(t) = s \; for\; t \in [w_i, w_{i + 1})) = \prod_{j: t_j \in [w_i, w_{i + 1})}p(y_{t_j} | S(t_j) = s).$$\\
 %%(i.e. $V(i) \sim P(V |  \theta(i), W(i - 1), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\

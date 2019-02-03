@@ -13,17 +13,17 @@ We model a latent piecewise-constant path $S(t)$ as an $N$-state MJP with rate m
 The parameter $\theta$ is unknown, and we place a prior $\prior(\theta)$ over this. 
 For clarity, since $\pi_0$ does not govern the trajectory dynamics, we will assume it is known (or we set $\pi$ to a uniform distribution over the $N$ states). 
 In settings with multiple trajectory realizations, we would place a Dirichlet prior over $\pi_0$. 
-We have noisy measurements $X$ of $S(t)$, with likelihood $P(X|S(t),\ t \in [0,T])$.
+We have noisy measurements $X$ of $S(t)$, with likelihood $P(X|S(t),\ t \in [0,t_{end}])$.
 Again, for clarity we ignore any unknown parameters in the likelihood.
-We assume the following structure on the observation process: for any partition $W = \{w_0 = 0, w_1, \dotsc, w_{|U|}=T\}$ of the interval $[0,T]$, there exist easy to compute functions $\ell_i$ such that the likelihood factors as:
+We assume the following structure on the observation process: for any partition $W = \{w_0 = 0, w_1, \dotsc, w_{|U|}=t_{end}\}$ of the interval $[0,t_{end}]$, there exist easy to compute functions $\ell_i$ such that the likelihood factors as:
 \begin{align}
   \label{eq:lik_factor}
-  P(X|S(t),\ t \in [0,T]) = \prod_{i=1}^{|G|-1} \ell_i(S(t),\ t \in [w_{i-1},w_i])
+  P(X|S(t),\ t \in [0,t_{end}]) = \prod_{i=1}^{|G|-1} \ell_i(S(t),\ t \in [w_{i-1},w_i])
 \end{align}
 A common example where this holds is when we have observations $X$ at a finite set of times $T^X = \{t^X_1,\cdots, t^X_{|X|}\}$, each observation depending on the state of the MJP at that time:
 \begin{align}
   \label{eq:lik_factor}
-  P(X|S(t),\ t \in [0,T]) = \prod_{i=1}^{|X|} P(x_i|S(t^X_i)).
+  P(X|S(t),\ t \in [0,t_{end}]) = \prod_{i=1}^{|X|} P(x_i|S(t^X_i)).
 \end{align}
 Other examples include settings when the observations form an inhomogeneous Poisson process~\citep{FearnSher2006}, renewal process~\citep{rao2011gaussian} or even another MJP~\citep{Nodelman+al:UAI02,RaoTeh13}, modulated by $S(t)$.
 The first, called a Markov modulated Poisson process (MMPP)~\citep{scottmmpp03}, associates a positive rate $\lambda_s$ with each state $s$, with $\ell_i(S(t),\ t \in [w_{i-1},w_i])$ equal to the likelihood of the Poisson events within $[w_{i-1},w_i]$ under an inhomogeneous Poisson process with piecewise-constant rate $\lambda_{S(t)},\ t \in [w_{i-1},w_i]$.
@@ -97,44 +97,46 @@ and then a new trajectory conditioned on the $W$.
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
-\State \textbf{Given the MJP path $(S,T)$, sample a new set of thinned 
-candidate times $U$}: 
+\State \textbf{ Simulate a set of thinned candidate times $U$ given the MJP path $(S,T)$ 
+}: 
 These are distributed as an inhomogeneous Poisson process with intensity $\Omega-A_{S(t)}$: 
 \begin{align*}
   U \sim \text{PoissProc}(\Omega - A_{S(t)}) 
 \end{align*}
-Since the intensity is piecewise-constant, simulating this is straightforward: over a segment $(t_{i},t_{i+1})$ where $S(t)$ has value $s_i$, sample a positive integer $n$ from a Poisson distribution with mean $(\Omega-A_{s_i})$, and simulate $n$ events uniformly over $(t_i, t_{i+1})$.
-\State \textbf{Given the thinned and actual transition times $W = T \cup U$ from the previous iteration, discard state information $S$ and simulate
-a new path $V$}:
-Conditioned on the skeleton $W$, the set of candidate jump times is fixed, and trajectory inference reduces to inference for a discrete-time hidden Markov model (HMM) with initial distribution $\pi_0$, and transition matrix $B$. 
-\cite{RaoTeh13} use the forward-filtering backward-sampling (FFBS) algorithm~\citep{dsfs}. This dynamic programming algorithm for HMMs involves two steps:
+Since the intensity is piecewise-constant, simulating this is straightforward to do. %: over a segment $(t_{i},t_{i+1})$ where $S(t)$ has value $s_i$, sample a positive integer $n$ from a Poisson distribution with mean $(\Omega-A_{s_i})$, and simulate $n$ events uniformly over $(t_i, t_{i+1})$.
+\State \textbf{
+  Discard state information $S$, and simulate new state values $V$ on the thinned and actual transition times $W = T \cup U$ 
+}:
+
+\noindent This is equivalent to simulating a path from a discrete-time hidden Markov model (HMM) on the times $W$, with initial distribution $\pi_0$ and transition matrix $B$.
+Between two consecutive elements of $W$, the state remains fixed, and from equation~\eqref{eq:lik_factor}, the likelihood of state $s$ at time $w_i$ equals $\ell_i(S(t) = s,\ t \in [w_i,w_{i+1}])$ for a known $\ell_i(\cdot)$. 
+Write this as $\ell_i(s)$. 
+To simulate the path,~\cite{RaoTeh13} use the forward-filtering backward-sampling (FFBS) algorithm~\citep{dsfs}, which involves two steps:
 \begin{description}
-  \item[Forward pass:] We sequentially update $\alpha_i$, the distribution over states at time $w_i \in W$ given $\alpha_{i-1}$. 
-    Between two consecutive elements of $W$, the system remain in a fixed state, and from equation~\eqref{eq:lik_factor}, the likelihood of state $s$ equals $\ell_i(S(t) = s,\ t \in [w_i,w_{i+1}])$ for some known function $\ell_i(\cdot)$. Write this likelihood as $\ell(s)$. Then, 
-    $$\alpha_i(s) = \sum_{s' \in S} \ell(s) \cdot \alpha_{i-1}(s')\cdot B_{ss'}, \quad \forall s' \in S. $$
-    Here, $\alpha_0 = \pi_0$.
+  \item[Forward pass:] 
+    Set $\alpha_0(\cdot) = \pi_0$.
+    Sequentially update $\alpha_i(\cdot)$ at time $w_i \in W$ given $\alpha_{i-1}$: 
+    $$\alpha_i(s) = \sum_{s' \in \cS} \ell_i(s) \cdot \alpha_{i-1}(s')\cdot B_{ss'}, \quad \forall s' \in \cS. $$
     %and a term $\Omega_i\exp(-\Omega_i\Delta t)$,
     %the probability that the next candidate time occurs after a wait
     %$\Delta t$ under state $i$.
   \item[Backward pass:]
-    This stage uses the $\alpha_i(\cdot)$s to sequentially sample the state $v_i$ at time $w_i$ given state $v_{i+1}$  at 
+    Sequentially simulate $v_i$ at time $w_i$ given state $v_{i+1}$  at 
     time $w_{i+1}$:
     $$ v_t \sim \beta_t(\cdot),\quad \text{where } 
-    \beta_t(s) = \alpha_t(s)\cdot B_{sv_{t+1}} \cdot \ell(s) \quad \forall s \in S.$$
-    Here, $\beta_T = \alpha_T$.
+    \beta_i(s) = \alpha_i(s)\cdot B_{sv_{t+1}} \cdot \ell_i(s) \quad \forall s \in S.$$
+    Here, $\beta_{|W|}(\cdot) = \alpha_{|W|}(\cdot)$.
 \end{description}
+    \State Let $T'$ be the set of times in $W$ when the Markov chain changes state. Define $S'$ as the corresponding set of state values. Return $(S', T')$.
 \end{algorithmic}
 \end{algorithm}
 
 \subsection{Joint inference over MJP path $S(t)$ and parameters $\theta$}
-For fixed parameters, the efficiency of the Rao-Teh algorithm has been established, both empirically~\citep{RaoTeh13} and theoretically~\citep{miasojedow2017}.
+For fixed parameters $\theta$, the efficiency of the Rao-Teh algorithm has been established, both empirically~\citep{RaoTeh13} and theoretically~\citep{miasojedow2017}.
 In practice, the parameters are typically unknown: often, these are of primary interest when studying a dynamical system. 
-A Bayesian approach
-places a prior $p(\theta)$ over these, and the
-resulting posterior $P(\theta|X)$ is typically approximated
-with samples drawn by Gibbs sampling. In particular, for an arbitrary 
-initialization of path and  parameters, one repeats the
-two steps from algorithm~\ref{alg:MJP_gibbs}:
+One then has to characterize the complete posterior $P(\theta, S(t)|X)$ of the Bayesian model of equation~\eqref{eq:bayes_model}. 
+This is typically carried out by incorporating the previous algorithm into a Gibbs sampler. 
+In particular, for an arbitrary initialization of path and  parameters, one repeats the two steps of algorithm~\ref{alg:MJP_gibbs}:
 \begin{algorithm}[H]
   \caption{Gibbs sampling for parameter inference for MJPs}
    \label{alg:MJP_gibbs}
@@ -150,14 +152,17 @@ two steps from algorithm~\ref{alg:MJP_gibbs}:
   $P(S'(t)|X,S(t),\theta)$ by 
   algorithm~\ref{alg:Unif_gibbs}.
   \State Sample a new parameter $\theta'$ from the conditional 
-    $P(\theta'|X,S'(t))$.
+  $P(\theta'|X,S'(t))$ (see equation~\eqref{eq:param_cond}).
    \end{algorithmic}
 \end{algorithm} 
 %\vspace{-.1in}
-The distribution $P(\theta'|X,S(t))$ depends on a set of sufficient statistics of the 
-MJP trajectory: how
-much time is spent in each state, and the number of transitions
-between each pair of states. 
+The distribution $P(\theta'|X,S(t))$ depends on %a set of sufficient statistics of the MJP trajectory: 
+the amount of time $T_s$ spent in each state $s$, and the number of transitions $c_{ss'}$ between each pair of states $s,s'$: 
+\begin{align}
+  \label{eq:param_cond}
+  P(\theta|X,S'(t)) \propto P(\theta) \prod_{s \in \cS} \exp(-A_s(\theta)T_s) 
+  \prod_{s' \in \cS} \left(\frac{A_{ss'}(\theta)}{A_s(\theta)}\right)^{c_{ss'}}.
+\end{align}
 %Given these, sample a new $\theta$ from the conditional $p(\theta|X,S(t))$. 
 In special circumstances, $\theta$ can be directly sampled from its 
 conditional distribution, otherwise, one has to use a Markov kernel like
@@ -205,82 +210,82 @@ the Gibbs sampler can mix very poorly for situations with
 long observation periods, even if the observations themselves are
 sparse and only mildly informative about the parameters.
 
-For the discrete-time case, this problem of parameter-trajectory
-coupling can be circumvented by marginalizing out the MJP trajectory 
-and directly sampling from the posterior over parameters $P(\theta|X)$.
-In its simplest form (Algorithm~\ref{alg:disc_time_mh}), this 
-involves a Metropolis-Hastings scheme that proposes a new parameter 
-$\vartheta$ from some proposal distribution 
-$q(\vartheta|\theta)$, accepting or rejecting according to the usual
-Metropolis-Hastings probability. The latter step requires calculating the 
-marginal probabilities $P(X|\theta)$ and $P(X|\theta')$, integrating out
-the exponential number of possible latent trajectories. Fortunately,
-this marginal probability is a by-product of the forward-backward
-algorithm used to sample a new trajectory, so that no 
-additional computational burden is involved. 
-%The overall algorithm then is:
-\begin{algorithm}[H]
-  \caption{Metropolis-Hastings parameter inference for a discrete-time 
-Markov chain}
-   \label{alg:disc_time_mh}
-  \begin{tabular}{l l}
-   \textbf{Input:  } & \text{Observations $X$},
-   proposal density $q(\vartheta|\ctheta)$, and 
-   \text{previous parameters $\ctheta$}.\\
-   \textbf{Output:  }& \text{A new Markov chain parameter $\ntheta$}.\\
-   \hline
-   \end{tabular}
-   \begin{algorithmic}[1]
-  \State Propose a new parameter $\vartheta$ from the proposal distribution
-  $q(\vartheta|\ctheta)$.
-  \State Run the forward pass of the forward-backward algorithm to 
-    obtain the marginal likelihood of the observations, $P(X|\vartheta)$.
-    \State Set $\ntheta = \vartheta$ with probability 
-    $\min(1,\frac{P(X,\vartheta)q(\ctheta|\vartheta)}{P(X,\ctheta)q(\vartheta|\ctheta)})$, else 
-    $\ntheta = \ctheta$.
-  \State Sample a new path with
-    the backward pass of the forward-backward algorithm.
-    %for the chosen parameter.
-\end{algorithmic}
-\end{algorithm}
+% \subsection{A marginal sampler for MJP parameters} 
+% For the discrete-time case, this problem of parameter-trajectory
+% coupling can be circumvented by marginalizing out the MJP trajectory 
+% and directly sampling from the posterior over parameters $P(\theta|X)$.
+% In its simplest form (Algorithm~\ref{alg:disc_time_mh}), this 
+% involves a Metropolis-Hastings scheme that proposes a new parameter 
+% $\vartheta$ from some proposal distribution 
+% $q(\vartheta|\theta)$, accepting or rejecting according to the usual
+% Metropolis-Hastings probability. The latter step requires calculating the 
+% marginal probabilities $P(X|\theta)$ and $P(X|\theta')$, integrating out
+% the exponential number of possible latent trajectories. Fortunately,
+% this marginal probability is a by-product of the forward-backward
+% algorithm used to sample a new trajectory, so that no 
+% additional computational burden is involved. 
+% %The overall algorithm then is:
+% \begin{algorithm}[H]
+%   \caption{Metropolis-Hastings parameter inference for a discrete-time 
+% Markov chain}
+%    \label{alg:disc_time_mh}
+%   \begin{tabular}{l l}
+%    \textbf{Input:  } & \text{Observations $X$},
+%    proposal density $q(\vartheta|\ctheta)$, and 
+%    \text{previous parameters $\ctheta$}.\\
+%    \textbf{Output:  }& \text{A new Markov chain parameter $\ntheta$}.\\
+%    \hline
+%    \end{tabular}
+%    \begin{algorithmic}[1]
+%   \State Propose a new parameter $\vartheta$ from the proposal distribution
+%   $q(\vartheta|\ctheta)$.
+%   \State Run the forward pass of the forward-backward algorithm to 
+%     obtain the marginal likelihood of the observations, $P(X|\vartheta)$.
+%     \State Set $\ntheta = \vartheta$ with probability 
+%     $\min(1,\frac{P(X,\vartheta)q(\ctheta|\vartheta)}{P(X,\ctheta)q(\vartheta|\ctheta)})$, else 
+%     $\ntheta = \ctheta$.
+%   \State Sample a new path with
+%     the backward pass of the forward-backward algorithm.
+%     %for the chosen parameter.
+% \end{algorithmic}
+% \end{algorithm}
 
-%\vspace{-.35in}
-\subsection{A marginal sampler for MJP parameters} 
-Constructing a marginal sampler over the MJP parameters by
-integrating out the continuous-time trajectory is harder.
-%the set of transition times is unbounded, with individual elements
-%unconstrained over the observation interval $[0,\cT]$.
-%Naively calculating this marginal probability for the continuous-time
-%case is not straightforward, as there is no finite set of candidate
-%times to make a pass over. 
-One approach~\citep{FearnSher2006} makes a sequential 
-forward pass through all {\em observations} $X$, using matrix exponentiation
-to marginalize out all
-continuous-time paths between successive times. As
-shown in~\cite{RaoTeh13}, this approach is cubic rather than 
-quadratic in the 
-number of states, cannot exploit structure like sparsity in the 
-transition matrix, and can depend in not trivial ways on the exact 
-nature of the observation process.
-Also, the number of expensive matrix exponentiations depends on
-the number of observations rather than the number of transitions.
-%
-%
-A second approach, particle MCMC~\citep{Andrieu10}, uses 
-particle filtering to get an unbiased estimate of the marginal 
-$P(X|\theta)$. Plugging this into the Metropolis-Hastings 
-acceptance probability results in an MCMC sampler that targets the 
-correct posterior, however %~\cite{Andrieu09}, 
-the resulting scheme does not exploit the structure 
-of the MJP, and we show that it is quite inefficient.
+% %\vspace{-.35in}
+% Constructing a marginal sampler over the MJP parameters by
+% integrating out the continuous-time trajectory is harder.
+% %the set of transition times is unbounded, with individual elements
+% %unconstrained over the observation interval $[0,\cT]$.
+% %Naively calculating this marginal probability for the continuous-time
+% %case is not straightforward, as there is no finite set of candidate
+% %times to make a pass over. 
+% One approach~\citep{FearnSher2006} makes a sequential 
+% forward pass through all {\em observations} $X$, using matrix exponentiation
+% to marginalize out all
+% continuous-time paths between successive times. As
+% shown in~\cite{RaoTeh13}, this approach is cubic rather than 
+% quadratic in the 
+% number of states, cannot exploit structure like sparsity in the 
+% transition matrix, and can depend in not trivial ways on the exact 
+% nature of the observation process.
+% Also, the number of expensive matrix exponentiations depends on
+% the number of observations rather than the number of transitions.
+% %
+% %
+% A second approach, particle MCMC~\citep{Andrieu10}, uses 
+% particle filtering to get an unbiased estimate of the marginal 
+% $P(X|\theta)$. Plugging this into the Metropolis-Hastings 
+% acceptance probability results in an MCMC sampler that targets the 
+% correct posterior, however %~\cite{Andrieu09}, 
+% the resulting scheme does not exploit the structure 
+% of the MJP, and we show that it is quite inefficient.
 
-The advantage of introducing the thinned events $U$ was demonstrated in 
-\cite{RaoTeh13, RaoTeh12} : this allows exploiting discrete-time 
-algorithms like FFBS for path sampling.
-%be brought to playthe thinning-based approach over matrix exponential and particle-MCMC
-%approaches for trajectory inference. 
-In the next section, we outline a \naive\  first attempt at extending this 
-approach to 
-parameter inference.
-We describe why this approach is not adequate, and then describe our
-final algorithm. % in the section after. 
+% The advantage of introducing the thinned events $U$ was demonstrated in 
+% \cite{RaoTeh13, RaoTeh12} : this allows exploiting discrete-time 
+% algorithms like FFBS for path sampling.
+% %be brought to playthe thinning-based approach over matrix exponential and particle-MCMC
+% %approaches for trajectory inference. 
+% In the next section, we outline a \naive\  first attempt at extending this 
+% approach to 
+% parameter inference.
+% We describe why this approach is not adequate, and then describe our
+% final algorithm. % in the section after. 

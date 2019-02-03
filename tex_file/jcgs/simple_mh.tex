@@ -1,14 +1,16 @@
 %\vspace{-.1in}
 \section{\Naive\ parameter inference via Metropolis-Hastings}
-The algorithm of~\cite{RaoTeh13} simplifies
-computation by conditioning on the
-random grid $W$.
+A natural approach to reduce the coupling in the Gibbs sampler is to reduce ?Bayesian fraction of missing information?. 
+For the case discrete-time HMMs, the parameter-trajectory coupling can be circumvented by marginalizing out the Markov trajectory, 
+and directly sampling from the posterior over parameters $P(\theta|X)$.
+In its simplest form, this involves a Metropolis-Hastings scheme that proposes a new parameter $\vartheta$ from some proposal distribution 
+$q(\vartheta|\theta)$, accepting or rejecting according to the usual
+Metropolis-Hastings probability.
 %by combining extant transition times $T$ with a set of 
 %thinned candidate transition times $U$, sampled from a rate-$(\Omega-A_{S(t)})$ 
 %Poisson process. 
-This suggests conditioning on $W$ to update
-the parameters as well, following the scheme from
-Algorithm~\ref{alg:disc_time_mh}.
+This suggests conditioning on $W$ to update the parameters as well
+%, following the scheme from Algorithm~\ref{alg:disc_time_mh}.
 %The resulting scheme updates $\theta$ conditioned on the random 
 %grid, but with the trajectory integrated out 
 In particular, given $W$, discard all state information, and propose a 
@@ -26,7 +28,7 @@ self-transitions, resample $W$ and repeat. Algorithm~\ref{alg:MH_naive}, and
 figure~\ref{fig:naive_mh} in the appendix sketch this out.
 
 The resulting algorithm updates $\theta$ with the MJP trajectory 
-integrated out, giving more rapid mixing.
+integrated out, giving better mixing.
 However $\theta$ is still updated {\em conditioned on
 $W$}, and 
 %determines not just the MJP trajectory $S(t)$.
@@ -64,37 +66,37 @@ The next section describes an algorithm to get around this.
      \State Set $\Omega \assign \Omega(\theta) > \max_s{A_s(\theta)}$ for
      some function $\Omega(\cdot)$ (e.g.\ $\Omega(\theta) = 
       2\max_s A_s(\theta))$.
-      \State Sample thinned jumps $U\subset[0, t_{end}]$ from a 
-      Poisson process with piecewise-constant rate 
-      $R(t) = (\Omega - A_{S(t)})$. 
-    Set $W = T \cup U$ and discard MJP state information.
+      \State { Simulate the thinned times $U$ } from a rate-$(\Omega-A_{S(t)})$ Poisson process : 
+\begin{align*}
+  U \sim \text{PoissProc}(\Omega - A_{S(t)}) 
+\end{align*}
+      \State 
+    Set $W = T \cup U$ and discard $S$, the MJP state information.
+    \State 
+    Set $B(\theta) = I + \frac{A(\theta)}{\Omega(\theta)}$ and
+    $\alpha^\theta_0(\cdot) = \pi_0$.
+    Sequentially update $\alpha^\theta_i(\cdot)$ at time $w_i \in W$ as: 
+    $$\alpha^{\theta}_i(s) = \sum_{s' \in \cS} \ell_i(s) \cdot \alpha^{\theta}_{i-1}(s')\cdot B_{ss'}(\theta), \quad \forall s' \in S. $$
       \State Propose $\vartheta \sim q(\cdot| \theta)$.
-          The acceptance probability is given by 
+      For all $w_i \in W$, calculate $\alpha^\vartheta_i(\cdot)$ similar to above.
+      \State With probability $\text{acc}(\theta\rightarrow\vartheta)$, set the new parameter $\theta'$ to $\vartheta$, else set it to $\theta$. Here 
+      %The acceptance probability for $\vartheta$ is given by 
 %         \vspace{-.05in}
           \begin{align*}
-          \alpha &=  1 \wedge \frac{P(\vartheta|W, X)}{P(\theta|W, X)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}
-          =  1 \wedge \frac{P(X| W,\vartheta) P(W | \vartheta)p(\vartheta)}
-            {P(X|W, \theta)P(W | \theta)p(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
+            \text{acc}(\theta \rightarrow \vartheta) &=  1 \wedge \frac{P(\vartheta|W, X)}{P(\theta|W, X)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}
+          =  1 \wedge \frac{P(X| W,\vartheta) P(W | \vartheta)P(\vartheta)}
+            {P(X|W, \theta)P(W | \theta)P(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
           \end{align*}
 %         \vspace{-.1in}
-    \State For both $\theta$ and $\vartheta$, make a forward pass through the 
-    elements of $W$, sequentially updating the distribution over states at 
-    $w \in W$ given observations up to $w$. 
-    For any $\theta$, the transition matrix 
-    $B(\theta)$ equals $I + \frac{A(\theta)}{\Omega(\theta)}$ while the initial distribution
-      over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
-      $ L_i(s) = P(X_{[w_i, w_{i + 1})} | S(t) = s , t \in [w_i, w_{i + 1})) 
-      $, where $X_{[w_i,w_{i+1})}$ is all observation lying in 
-      $[w_i,w_{i+1})$. %= \prod_{o: t_o \in [w_i, w_{i + 1})}p(X_{t_o} | s)$.
-    At the end, we have 
-    $P(X|W,\theta)$ and $P(X|W,\vartheta)$. Use these, and the fact that 
-    $P(W|\theta)$ is Poisson-distributed to accept or reject the
-    proposed $\vartheta$. Write the new parameter as $\theta'$.
+          Here $P(X|W,\theta) = \sum_{s \in \cS} \alpha_{|W|}^\theta(s) $ and $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, with similar expressions for $\vartheta$. 
+          %$P(X|W,\vartheta) = \sum_{s \in \cS} \alpha_{|W|}^\vartheta(s) $. Use these, and the fact that $P(W|\theta)$ is Poisson-distributed to accept or reject the proposed $\vartheta$. Write the new parameter as $\theta'$.
     %as \boqian{$(W,\theta,\vartheta)$}.
-    \State For the new parameter $\theta'$, make a backward pass through 
-    the elements of
-    $W$, sequentially assigning a state to each element of $W$. This
-    completes the FFBS algorithm.
+    \State For the new parameter $\theta'$, sequentially simulate $v_i$ at time $w_i$ given $v_{i+1}$  at 
+    time $w_{i+1}$:
+    $$ v_t \sim \beta^{\theta'}_t(\cdot),\quad \text{where } 
+    \beta^{\theta'}_i(s) = \alpha^{\theta'}_i(s)\cdot B^{\theta'}_{sv_{t+1}} \cdot \ell_i(s) \quad \forall s \in S.$$
+    Here, $\beta^{\theta'}_{|W|}(\cdot) = \alpha^{\theta'}_{|W|}(\cdot)$.
+    This completes the FFBS algorithm.
     \State Let $T'$ be the set of times in $W$ when the Markov chain changes state. Define $S'$ as the corresponding set of state values. Return $(S', T', \theta')$.
 \end{algorithmic}
 \end{algorithm}
