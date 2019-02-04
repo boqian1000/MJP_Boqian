@@ -40,51 +40,6 @@ trajectory.}
    \label{fig:naive_mh}
   \end{figure}
 
-\setlength{\unitlength}{0.8cm}
-  \begin{figure}[h!]
-  \centering
-  \begin{minipage}[!hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/plot0.pdf}
-      \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/plot1.pdf}
-    \vspace{-0 in}
-  \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/plot2.pdf}
-    \vspace{-0 in}
-  \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/plot3.pdf}
-    \vspace{-0 in}
-  \end{minipage}
-% \begin{minipage}[hp]{0.45\linewidth}
-% \centering
-%   \includegraphics [width=0.70\textwidth, angle=0]{figs/plot4.pdf}
-%   \vspace{-0 in}
-% \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/plot5.pdf}
-    \vspace{-0 in}
-  \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
-  \centering
-    \includegraphics [width=0.70\textwidth, angle=0]{figs/plot6.pdf}
-  \end{minipage}
-    \caption{Improved MH algorithm: Steps 0-3: Starting with a trajectory and parameter $\theta$,
-      simulate an auxiliary parameter $\theta^*$, and then the thinned events
-      $U$ from a rate $\Omega(\theta) + \Omega(\theta^*) - A_{S(t)}$ Poisson
-      process. Step 4: Propose swapping $\theta$ and $\theta^*$. Step 5:
-      Run a forward pass to accept or reject this proposal, and use the accepted
-    parameter to simulate a new trajectory. Step 6: Discard the thinned events.} 
-   \label{fig:MH_improved}
-  \end{figure}
-
 \subsection{Additional results}
 \vspace{-.4in}
   \begin{figure}[H]

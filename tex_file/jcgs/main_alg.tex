@@ -64,6 +64,51 @@ This results in a significantly more efficient, and also a simpler MCMC scheme.
 \end{algorithmic}
 \end{algorithm}
 
+
+\setlength{\unitlength}{0.8cm}
+  \begin{figure}[h!]
+  \centering
+  \begin{minipage}[!hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.90\textwidth, angle=0]{figs/plot0.pdf}
+      \end{minipage}
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.90\textwidth, angle=0]{figs/plot1.pdf}
+    \vspace{-0 in}
+  \end{minipage}
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.90\textwidth, angle=0]{figs/plot2.pdf}
+    \vspace{-0 in}
+  \end{minipage}
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.90\textwidth, angle=0]{figs/plot3.pdf}
+    \vspace{-0 in}
+  \end{minipage}
+% \begin{minipage}[hp]{0.45\linewidth}
+% \centering
+%   \includegraphics [width=0.70\textwidth, angle=0]{figs/plot4.pdf}
+%   \vspace{-0 in}
+% \end{minipage}
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.90\textwidth, angle=0]{figs/plot5.pdf}
+    \vspace{-0 in}
+  \end{minipage}
+  \begin{minipage}[hp]{0.45\linewidth}
+  \centering
+    \includegraphics [width=0.90\textwidth, angle=0]{figs/plot6.pdf}
+  \end{minipage}
+    \caption{Proposed MH algorithm: Steps 0-3: Starting with a trajectory and parameter $\theta$,
+      simulate an auxiliary parameter $\theta^*$, and then the thinned events
+      $U$ from a rate $\Omega(\theta) + \Omega(\theta^*) - A_{S(t)}$ Poisson
+      process. Step 4: Propose swapping $\theta$ and $\theta^*$. Step 5:
+      Run a forward pass to accept or reject this proposal, and use the accepted
+    parameter to simulate a new trajectory. Step 6: Discard the thinned events.} 
+   \label{fig:MH_improved}
+  \end{figure}
 As before, the MCMC iteration begins with the pair $(S(t), \theta)$. 
 Instead of simulating the Poisson events $U$, we first generate a new 
 parameter $\vartheta$ from $q(\vartheta|\theta)$. Treat this as an 
@@ -102,5 +147,5 @@ $
    accepting or rejecting the proposal, a new trajectory is sampled by
    completing the backward pass. Finally, the thinned events are
    discarded. See Algorithm~\ref{alg:MH_improved} and 
-   figure~\ref{fig:MH_improved} in the appendix. % for details. 
+   figure~\ref{fig:MH_improved}. % for details. 
 
