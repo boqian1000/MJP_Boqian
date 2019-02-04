@@ -7,7 +7,7 @@ Their continuous-time dynamics however raise computational challenges when, give
 over the latent MJP trajectory as well as any process parameters. 
 In contrast to {discrete-time} hidden Markov models, one cannot 
 {\em a priori} bound the number of trajectory state transitions, and the transition times themselves are continuous-valued. 
-The state-of-the-art inference method for MJPs is an auxiliary variable Gibbs sampler from~\cite{RaoTeh13}, we will refer to this as the {\algname} algorithm. 
+The state-of-the-art approach is an auxiliary variable Gibbs sampler from~\cite{RaoTeh13}, we will refer to this as the {\algname} algorithm. 
 This Markov chain Monte Carlo (MCMC) algorithm was designed to simulate paths when the MJP parameters are known. 
 Parameter inference is typically carried out by incorporating it into a Gibbs sampler that also conditionally simulates parameters given the currently sampled trajectory. 
 
@@ -33,7 +33,7 @@ first sample an initial state $s_0$ from $\pi_0$, and defining $t_0 = t_{curr} =
     The MJP remains in state $s_k$ until time $t_{k+1}$.
   \item Jump to a new state $s_{k+1} \neq s_k$ with probability equal to $A_{s_ks_{k+1}}/A_{s_k}$. Set $k=k+1$.
 \end{itemize}
-The times $T=(t_0, \cdots, t_{|T| - 1})$ and states $S=(s_0, \cdots, s_{|T| - 1 })$ define the MJP path $S(t)$.
+The times $T=(t_0, \dotsc, t_{|T| - 1})$ and states $S=(s_0, \dotsc, s_{|T| - 1 })$ define the MJP path $S(t)$ (figure~\ref{fig:abc}).
 
 \subsection{Structured rate matrices}
 While the rate matrix $A$ can have $N(N-1)$ independent elements, in typical applications, especially with large state-spaces, it is determined by a much smaller set of parameters. 
@@ -52,12 +52,12 @@ For example:
   \item[Birth-death processes] 
     This variant of the earlier MJP moves from state $i$ to $i+1$ with rate $i\alpha$, with growth-rate is proportional to population size. 
     Again, the death-rate is $\beta$, so that $A_{i,i-1}=i\beta$.
-    As before, $\theta=(\alpha,\beta)$.
+    The other off-diagonal elements are $0$, and again $\theta=(\alpha,\beta)$.
   \item[Codon substitution models] 
     These characterize transitions between codons at a DNA locus over evolutionary time. 
     There are $61$ codons, and in the simplest case, all transitions have the same rate~\citep{jukescantor69}: $A_{ij} = \alpha\ \forall i \neq j$. 
-    Thus the $61\times 61$ matrix $A$ is determined by a single parameter $\alpha$. Other models group transitions into, e.g., `synonymous' and `nonsynonymous' transitions, that continue to or do not encode the same amino acid. 
-    These have their own rates, and now $A$ is determined by 2 parameters $\alpha$ and $\beta$ depending on whether or not the old and new states are synonymous. 
+    Thus the $61\times 61$ matrix $A$ is determined by a single parameter $\alpha$. Other models group transitions as `synonymous' and `nonsynonymous', that continue to or to not encode the same amino acid. 
+    These have their own rates, and $A$ is determined by 2 parameters $\alpha$ and $\beta$ depending on whether or not the old and new states are synonymous. 
     More refined models~\citep{goldman1994codon} introduce additional parameters. 
     %however the 
     %number of parameters is still significantly smaller than the general case.

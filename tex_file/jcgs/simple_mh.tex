@@ -1,54 +1,26 @@
 %\vspace{-.1in}
 \section{\Naive\ parameter inference via Metropolis-Hastings}
-A natural approach to reduce the coupling in the Gibbs sampler is to reduce ?Bayesian fraction of missing information?. 
-For the case discrete-time HMMs, the parameter-trajectory coupling can be circumvented by marginalizing out the Markov trajectory, 
-and directly sampling from the posterior over parameters $P(\theta|X)$.
-In its simplest form, this involves a Metropolis-Hastings scheme that proposes a new parameter $\vartheta$ from some proposal distribution 
-$q(\vartheta|\theta)$, accepting or rejecting according to the usual
-Metropolis-Hastings probability.
-%by combining extant transition times $T$ with a set of 
-%thinned candidate transition times $U$, sampled from a rate-$(\Omega-A_{S(t)})$ 
-%Poisson process. 
-This suggests conditioning on $W$ to update the parameters as well
+%A natural approach to reduce the coupling in the Gibbs sampler is to reduce ?Bayesian fraction of missing information?. 
+For discrete-time HMMs, path-parameter coupling can be circumvented by marginalizing out the Markov trajectory, and directly sampling from the marginal posterior $P(\theta|X)$.
+In its simplest form, this involves a Metropolis-Hastings (MH) scheme that proposes a new parameter $\vartheta$ from some proposal distribution $q(\vartheta|\theta)$, accepting or rejecting according to the usual MH probability.
+The necessary marginal probabilities are computed using the FFBS algorithm.
+The Rao-Teh algorithm suggests a simple analog for continuous-time settings: directly update $\theta$, conditioning on the random grid $W$, but marginalizing out the states $V$.
 %, following the scheme from Algorithm~\ref{alg:disc_time_mh}.
 %The resulting scheme updates $\theta$ conditioned on the random 
 %grid, but with the trajectory integrated out 
-In particular, given $W$, discard all state information, and propose a 
-new parameter $\vartheta$ from $q(\vartheta|\theta)$. 
-%now conditioning on the set of times $W$.
-The MH-acceptance probability is $\min\left(1,
-\frac{P(X|W,\vartheta)P(W|\vartheta)p(\vartheta)q(\theta|\vartheta)}
-     {P(X|W,\theta)P(W|\theta)p(\theta)q(\vartheta|\theta)}\right)$; 
-     to calculate it,
-make a forward pass over $W$, and calculate 
-$P(X|W,\theta)$ and $P(X|W,\vartheta)$. % as in algorithm~\ref{alg:disc_time_mh}.
-After accepting or rejecting $\vartheta$, the new parameter $\ntheta$ is used in
-a backward pass that samples a new trajectory. Then discard all 
-self-transitions, resample $W$ and repeat. Algorithm~\ref{alg:MH_naive}, and 
-figure~\ref{fig:naive_mh} in the appendix sketch this out.
+In particular, given $W$, a parameter $\vartheta$ proposed from $q(\vartheta|\theta)$, and is accepted with probability 
+$\min\left(1, 
+\frac{P(X|W,\vartheta) P(W|\vartheta)p(\vartheta)q(\theta|\vartheta)} {P(X|W,\theta) P(W|\theta)p(\theta)q(\vartheta|\theta)}\right)$. 
 
-The resulting algorithm updates $\theta$ with the MJP trajectory 
-integrated out, giving better mixing.
-However $\theta$ is still updated {\em conditioned on
-$W$}, and 
-%determines not just the MJP trajectory $S(t)$.
-%, and with $S(t)$ 
-%marginalized out, the observations $X$. 
-the distribution of $W$ depends on $\theta$: 
-%These are the $p(W|\theta)$ terms
-%in the acceptance probability; under uniformization, 
-$W$ is a homogeneous
-Poisson process with rate $\Omega(\theta)$. %$ = 2 \max A(\theta)$. 
-%who probability can
-%calculated easily during the forward pass.
-The fact that the MH-acceptance probability involves a $P(X|\theta)$ term
-is inevitable, however we found that the $P(W|\theta)$
-terms significantly affects acceptance probabilities. 
-Any proposal that halves $\Omega(\theta)$ will halve the
-mean and variance of the distribution of the number of events in $W$, 
-resulting in a low acceptance probability.
-This will affect mixing.
-The next section describes an algorithm to get around this.
+$P(X|W,\theta)$ is the marginal probability of $X$ under a discrete-time HMM with transition matrix $B(\theta)$: this can be computed using the forward pass of the FFBS algorithm. 
+The term $P(W|\theta)$ is the probability of $W$ under a rate-$\Omega(\theta)$ Poisson process, 
+These, along with the corresponding terms for $\vartheta$ allow the acceptance probability to be computed.
+%make a forward pass over $W$, and calculate and $P(X|W,\vartheta)$. % as in algorithm~\ref{alg:disc_time_mh}.
+After accepting or rejecting $\vartheta$, the new parameter is used in
+a backward pass that samples a new trajectory. 
+%Then discard all self-transitions, resample $W$ and repeat. 
+Algorithm~\ref{alg:MH_naive}, and figure~\ref{fig:naive_mh} in the appendix detail this.
+
 %\vspace{-.1in}
 %\vspace{-.32in}
 \begin{algorithm}[H]
@@ -82,11 +54,12 @@ The next section describes an algorithm to get around this.
       \State With probability $\text{acc}(\theta\rightarrow\vartheta)$, set the new parameter $\theta'$ to $\vartheta$, else set it to $\theta$. Here 
       %The acceptance probability for $\vartheta$ is given by 
 %         \vspace{-.05in}
-          \begin{align*}
+          \begin{align}
+            \label{eq:ncp_acc}
             \text{acc}(\theta \rightarrow \vartheta) &=  1 \wedge \frac{P(\vartheta|W, X)}{P(\theta|W, X)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}
           =  1 \wedge \frac{P(X| W,\vartheta) P(W | \vartheta)P(\vartheta)}
             {P(X|W, \theta)P(W | \theta)P(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
-          \end{align*}
+          \end{align}
 %         \vspace{-.1in}
           Here $P(X|W,\theta) = \sum_{s \in \cS} \alpha_{|W|}^\theta(s) $ and $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, with similar expressions for $\vartheta$. 
           %$P(X|W,\vartheta) = \sum_{s \in \cS} \alpha_{|W|}^\vartheta(s) $. Use these, and the fact that $P(W|\theta)$ is Poisson-distributed to accept or reject the proposed $\vartheta$. Write the new parameter as $\theta'$.
@@ -100,3 +73,16 @@ The next section describes an algorithm to get around this.
     \State Let $T'$ be the set of times in $W$ when the Markov chain changes state. Define $S'$ as the corresponding set of state values. Return $(S', T', \theta')$.
 \end{algorithmic}
 \end{algorithm}
+The resulting MCMC algorithm updates $\theta$ with the MJP trajectory 
+integrated out, and by instantiating less `missing' information, can be expected to mix better. 
+This can be formalized by the idea of the Bayesian fraction of missing information~\citep{liu1994fraction, papaspiliopoulos2007general}. 
+Alternately, the Gibbs sampler can be viewed as operating on a centered parametrization~\citep{papaspiliopoulos2007general} or sufficient augmentation~\citep{yu2011center} of a joint distribution over parameters, Poisson events and state values, while the MH algorithm above forms a noncentered parametrization or ancillary augmentation.
+For a detailed review of the suitability of these two approaches, as well as ways to combine them together, we refer to~\citet{papaspiliopoulos2007general, yu2011center}.
+
+We however note that even with state integrated out, $\theta$ is updated {\em conditioned on $W$}, with the distribution of $W$ depending on $\theta$. 
+This manifests in the $P(W|\theta)$ and $P(W|\vartheta)$ terms in the acceptance probability in equation~\eqref{eq:ncp_acc}. 
+The fact that the MH-acceptance probability involves a $P(X|\theta)$ term is inevitable, however we found that the $P(W|\theta)$ terms significantly affects acceptance probabilities and mixing. 
+Intuitively, under uniformization, for parameter $\theta$, $W$ is a homogeneous Poisson process with rate $\Omega(\theta)$. 
+If the proposed parameter $\vartheta$ is such that $\Omega(\vartheta)$ is half $\Omega(\theta)$, then $P(W|\vartheta)$ will have half the mean and standard deviation of the distribution of the number of events in $W$ as $P(W|\theta)$, so that $\vartheta$ is unlikely to be accepted. 
+%, resulting in a low acceptance probability.  This will affect mixing.
+The next section describes our algorithm that get around this.
