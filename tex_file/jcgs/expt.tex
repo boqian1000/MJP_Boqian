@@ -1,69 +1,24 @@
 %\vspace{-.2in}
 \section{Experiments}\label{sec:expts}~
-In the following, we evaluate Python implementations of our two proposed
-algorithms, the \naive\ MH algorithm (Algorithm~\ref{alg:MH_naive}, which we
-plot in yellow) and its symmetrized improvement (Algorithm~\ref{alg:MH_improved}, 
-which we call symmetrized MH and plot in red). We compare 
-different variants of these algorithms, corresponding to different 
-uniformizing Poisson rates (i.e.\ different choices of $\kappa$, see 
-section~\ref{sec:comments}). For \naive\ MH, %~\ref{alg:MH_naive}, 
-we set $\Omega(\theta) = \kappa \max_s A_s(\theta) $ with $\kappa$  equal to 
-$1.5, 2$ and $3$, represented in our plots with circles, triangles and square
-symbols. For symmetrized MH, %algorithm~\ref{alg:MH_improved}, 
-where the uniformizing rate depends 
-on both the current and proposed parameter, we consider two settings
+In the following, we evaluate Python implementations of our two proposed algorithms, the \naive\ MH algorithm (Algorithm~\ref{alg:MH_naive}, which we plot in yellow), and our main contribution, the symmetrized Algorithm~\ref{alg:MH_improved} (which we call symmetrized MH and plot in red). 
+We compare different variants of these algorithms, corresponding to different uniformizing Poisson rates (i.e.\ different choices of $\kappa$, see section~\ref{sec:comments}). 
+For \naive\ MH, we set $\Omega(\theta) = \kappa \max_s A_s(\theta) $ with $\kappa$  equal to $1.5, 2$ and $3$, represented in our plots with circles, triangles and square symbols. 
+For symmetrized MH, where the uniformizing rate depends on both the current and proposed parameter, we consider two settings
  $\Omega(\theta, \vartheta) = \kappa (\max A(\theta) + \max A(\vartheta))$ 
  ($\kappa = 1$ and $1.5$, plotted with {triangles} and {squares}), and 
 $\Omega(\theta, \vartheta) = \kappa \max(\max A(\theta), \max A(\vartheta))$
-($\kappa=1.5$, plotted with {circles}).  We compare these
-algorithms against two baselines: Gibbs sampling (Algorithm~\ref{alg:MJP_gibbs},
-plotted in blue), and particle MCMC~\citep{Andrieu10}, plotted in black. Gibbs
-sampling involves a uniformization step to update the MJP trajectory, and for this
-we used three settings, $\kappa=1.5,2,3$, plotted with circles, {triangles}
-and {squares}.  Unless specified, our results were
-obtained from $100$ independent MCMC runs, each consisting of $10000$ iterations.
-We found particle MCMC to be more computationally intensive, and limited each 
-run to $3000$ iterations, the number of particles being $5, 10$ and $20$ 
-(plotted with circles, trianges and squares). 
+($\kappa=1.5$, plotted with {circles}).  
+We compare these algorithms against two baselines: Gibbs sampling (Algorithm~\ref{alg:MJP_gibbs}, plotted in blue), and particle MCMC~\citep{Andrieu10}, plotted in black. 
+Gibbs sampling involves a uniformization step to update the MJP trajectory, and for this we used three settings, $\kappa=1.5,2,3$, plotted with circles, {triangles} and {squares}.  
+Unless specified, our results were obtained from $100$ independent MCMC runs, each consisting of $10000$ iterations.
+We found particle MCMC to be more computationally intensive, and limited each run to $3000$ iterations, the number of particles being $5, 10$ and $20$ (plotted with circles, trianges and squares). 
 
-% We also considered exploiting gradient information of the target distribution to 
-% apply Hamiltonian Monte Carlo (HMC)~\cite{Neal2010}. In particular, the forward 
-% pass of FFBS allows us to also calculate the gradient of the log-probability with
-% respect to the MJP parameters. We can exploit this information for more directed
-% explorations of parameter space than a random-walk algorithm. Of course, this 
-% comes at a higher computational cost. We evaluate HMC with the number of leapfrog
-% steps taking values in $1, 3, 5$ or $10$, and the leapfrog stepsize taking values 
-% in $0.02, 0.05$ and $0.1$. 
+% We also considered exploiting gradient information of the target distribution to apply Hamiltonian Monte Carlo (HMC)~\cite{Neal2010}. In particular, the forward pass of FFBS allows us to also calculate the gradient of the log-probability with respect to the MJP parameters. We can exploit this information for more directed explorations of parameter space than a random-walk algorithm. Of course, this comes at a higher computational cost. We evaluate HMC with the number of leapfrog steps taking values in $1, 3, 5$ or $10$, and the leapfrog stepsize taking values in $0.02, 0.05$ and $0.1$. 
 
-For each run of each MCMC algorithm, we calculated the effective sample size 
-(ESS) of the posterior samples of the MJP parameters using the R package 
-\texttt{rcoda}~\citep{Rcoda2006}. This estimates the number of independent 
-samples returned by the MCMC algorithm, and dividing this by the runtime of a 
-simulation gives the ESS per unit time. We used this measure to compare 
-different samplers and different parameter settings.
+For each run of each MCMC algorithm, we calculated the effective sample size (ESS) of the posterior samples of the MJP parameters using the R package \texttt{rcoda}~\citep{Rcoda2006}. 
+This estimates the number of independent samples returned by the MCMC algorithm, and dividing this by the runtime of a simulation gives the ESS per unit time. 
+We used this measure to compare different samplers and different parameter settings.
 
-% \begin{algorithm}[!ht]
-%    \caption{Generic Gibbs sampling for MJPs for Gamma priors}
-%    \label{alg:Generic Gibbs}
-% \begin{algorithmic}
-%    \State {\bfseries Input:} observations $y_{[t_0, t_{k+1})}$
-%    \State Initialize, $i = 0$
-%    \\ (a) Set $\alpha(0), \beta(0)$ arbitrarily and set current trajectory $[S,T](0)$ arbitrarily.\\
-%     (b) Uniformize $[S,T](0)$, to get virtual jumps $U$.
-%    \Repeat
-%    \For{$i=1$ {\bfseries to} $N$}
-%     \State (a) Sample $U(i) \sim P( U | \beta(i - 1), \alpha(i - 1), S(i - 1), T(i - 1), y)$.\\	
-%     \State (b) Use FFBS algorithm to  sample states given all the jump times(both true jumps and virtual jumps).
-% (i.e. $V(i) \sim P(V |  \beta(i - 1), \alpha(i - 1), W(i ), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\
-%     \State (c) Propose $\beta^* \sim q(.| \beta(i -1))$.\\
-%       Set $\beta(i) = \beta^*$, with probability $P_{acc} = 1 \wedge \frac{P(\beta^* |S(i), T(i))}{P(\beta(i - 1) |S(i), T(i))} \frac{q(\beta(i - 1)|\beta^*)}{q(\beta^*|\beta(i - 1))}$;\\Otherwise set $\beta(i) = \beta(i-1)$.\\	  
-%     \State (d) Sample $\alpha(i) \sim P(. | \beta(i), S(i), T(i), y)$.\\ It is a $Gamma(\mu + N, \lambda + \sum_{0}^NF_{S_i}(\beta)(t_{i + 1} - t_i))$ distribution actually.\\
-%     \EndFor
-%     \Until{$ i = N$ }
-%  \end{algorithmic}
-%  \end{algorithm}
-
-%    \vspace{-.2in}
 \subsection{A simple synthetic MJP}
 \begin{wrapfigure}{r}{.4\textwidth}
     \vspace{-.3in}
@@ -78,20 +33,15 @@ different samplers and different parameter settings.
       \end{minipage}
 %    \vspace{-.1in}
   \end{wrapfigure}
-Consider an MJP with two parameters $\alpha$ and $\beta$, 
-transitions between states $i$ and $j$ having rate $\alpha \exp(-\beta/(i+j))$.
+Consider an MJP with two parameters $\alpha$ and $\beta$, transitions between states $i$ and $j$ having rate $\alpha \exp(-\beta/(i+j))$.
 We consider three settings: $3$ states (figure~\ref{fig:exp_model}),
 $5$ states, and $10$ states.
-We place Gamma$(\alpha_0,\alpha_1)$, and Gamma$(\beta_0, \beta_1)$ priors on 
-the parameters $\alpha$ and $\beta$, with $(\alpha_0,\alpha_1,\beta_0,\beta_1)$ 
-having values $(3,2,5,2)$ respectively. For each run, we draw random parameters 
-from the prior to construct a transition matrix $A$, and placing a uniform 
-distribution over states at time $0$, simulate an MJP trajectory.
-We simulate observations uniformly at integer values on the time interval 
-$[0, 20]$. Each observation is Gaussian distributed with mean equal to the state
-at that time, and variance equal to $1$.  For the Metropolis-Hastings proposal, 
-we used a lognormal distribution centered at the current parameter value, 
-with variance $\sigma^2$ that we vary.
+We place Gamma$(\alpha_0,\alpha_1)$, and Gamma$(\beta_0, \beta_1)$ priors on the parameters $\alpha$ and $\beta$, with $(\alpha_0,\alpha_1,\beta_0,\beta_1)$ having values $(3,2,5,2)$ respectively. 
+For each run, we draw random parameters from the prior to construct a transition matrix $A$, and placing a uniform distribution over states at time $0$, simulate an MJP trajectory.
+We simulate observations uniformly at integer values on the time interval $[0, 20]$. 
+Each observation is Gaussian distributed with mean equal to the state
+at that time, and variance equal to $1$.  
+For the Metropolis-Hastings proposal, we used a lognormal distribution centered at the current parameter value, with variance $\sigma^2$ that we vary.
 % \noindent Assume: $S = [S_0,S_1, ...,S_N] \;, T = [t_0(t_{start}), t_1,...,t_N, t_{N+1}(t_{end})]$, and y as observations.\\
 % We consider a specific structure of rate matrix $A$. $A_{ij} = \alpha f_{ij}(\beta), \; i \neq j$. $A_{ii} = -\sum_{j \neq i} A_{ij}$. $0 \leq f_{ij} \leq 1$. Denote $F_i(\beta) = \sum_{j \neq i} f_{ij}(\beta)$.\\
 % \begin{align*}
@@ -113,11 +63,8 @@ with variance $\sigma^2$ that we vary.
 % Such doubling might slow the mixing of the Markov chain. We can apply our Metropolis Hasting algorithm on this model.
 
 \noindent \textbf{Results:}
-  Figure~\ref{fig:ESS_EXP_D10} plots the ESS per unit time for the parameters 
-  $\alpha$ (left) and $\beta$ (right) for the
-  case of $3$ states (top row) and $10$ states (bottom row) as we vary the scale-parameter $\sigma^2$ of the
-  log-normal proposal distribution. We include results for $5$ states in the 
-  appendix, the conclusions are the same. 
+Figure~\ref{fig:ESS_EXP_D10} plots the ESS per unit time for the parameters $\alpha$ (left) and $\beta$ (right) for the case of $3$ states (top row) and $10$ states (bottom row) as we vary the scale-parameter $\sigma^2$ of the log-normal proposal distribution. 
+We include results for $5$ states in the appendix, the conclusions are the same. 
   %as we change the variance of the
   %proposal kernel, for different methods and different scaling parameters.
   %($\kappa =
@@ -136,26 +83,17 @@ with variance $\sigma^2$ that we vary.
 %  For particle MCMC, the dot-dashed lines correspond to 
 %  $5$ particles,  the dashed lines correspond to $10$ particles, and the solid 
 %  lines correspond to $20$ particles.
-We see that our symmetrized MH algorithm is significantly more efficient 
-than the baselines over a wide range of choices of $\sigma^2$, 
-(including the natural choice of $1$).
+We see that our symmetrized MH algorithm is significantly more efficient than the baselines over a wide range of choices of $\sigma^2$, (including the natural choice of $1$).
 Among the three setting of our algorithm, the simple additive setting
  ({triangles}) does best, though it is only slightly better than 
- the {max-of-max} setting (circles). {A reason for this improvement is 
-  that the additive setting is more stable than the max-of-max setting, when the 
-proposal variance can be large. The {additive setting with a multiplicative factor 
-of $1.5$} (squares) does worse than both {additive choice with smaller multiplicative
-factor and the max-of-max choice} but still better than the other algorithms. Among 
-the baselines, simple Gibbs sampling 
-does better than \naive\ Metropolis-Hastings, suggesting that the dependency of 
-the Poisson grid on the MJP parameters does indeed significantly slow 
-down mixing. Particle MCMC has the worst performance for this task. The
-results in figure~\ref{fig:ESS_EXP_D10} for the 10-dimensional state space
-show that for the parameter $\alpha$, the improvement that our proposed
-sampler affords is even more dramatic. For the parameter $\beta$ however,
-performance is comparable to Gibbs, %although it is not possible to
-%claim one is 
-with neither uniformly superior to the other.
+ the {max-of-max} setting (circles). 
+ {A reason for this improvement is that the additive setting is more stable than the max-of-max setting, when the proposal variance can be large. 
+   The {additive setting with a multiplicative factor of $1.5$} (squares) does worse than both {additive choice with smaller multiplicative factor and the max-of-max choice} but still better than the other algorithms. 
+   Among the baselines, simple Gibbs sampling does better than \naive\ Metropolis-Hastings, suggesting that the dependency of the Poisson grid on the MJP parameters does indeed significantly slow down mixing. 
+   Particle MCMC has the worst performance for this task. 
+   The results in figure~\ref{fig:ESS_EXP_D10} for the 10-dimensional state space show that for the parameter $\alpha$, the improvement that our proposed sampler affords is even more dramatic. 
+   For the parameter $\beta$ however, performance is comparable to Gibbs, %although it is not possible to claim one is 
+   with neither uniformly superior to the other.
   \begin{figure}[H]
 %    \vspace{-.2in}
   \centering
