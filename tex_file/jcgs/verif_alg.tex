@@ -15,12 +15,12 @@
   that is distributed according to a rate $\Omega(\theta) + \Omega(\vartheta)$
   Poisson process (Proposition 2 in~\cite{RaoTeh13}). Discarding all state 
   information results in a triplet $(W,\theta,\vartheta)$ with probability
-  proportional to $p(\theta)q(\vartheta|\theta)P(W|\theta,\vartheta)
+  proportional to $P(\theta)q(\vartheta|\theta)P(W|\theta,\vartheta)
   P(X|W,\theta,\vartheta)$.
 Next we propose swapping $\theta$ and $\vartheta$. Since this
 is a deterministic proposal, the MH-acceptance probability is given by
-$$\alpha = 1 \wedge \frac{p(\vartheta)q(\theta|\vartheta)P(W|\vartheta,\theta)
-P(X|W,\vartheta,\theta)}{p(\theta)q(\vartheta|\theta)P(W|\theta,\vartheta)
+$$\alpha = 1 \wedge \frac{P(\vartheta)q(\theta|\vartheta)P(W|\vartheta,\theta)
+P(X|W,\vartheta,\theta)}{P(\theta)q(\vartheta|\theta)P(W|\theta,\vartheta)
 P(X|W,\theta,\vartheta)}$$
 The term $P(W|\theta,\vartheta)$ is just a Poisson process with rate $\Omega(\theta)+
 \Omega(\vartheta)$, so that $P(W|\theta,\vartheta) = P(W|\theta,\vartheta)$. 
@@ -89,19 +89,13 @@ for example, setting $\Omega(\theta,\vartheta)$ to
 $\kappa \max( \max_i A_i(\theta), \max A_i(\vartheta))$ for some choice of $\kappa
 > 1$. We investigate this as well.
 
-Our proposed algorithm is related to the framework 
-from~\cite{Neal04Drag}, although we exploit the structure of the 
-Poisson and Markov jump processes to simplify matters considerably, 
-avoiding the need for any tempered transitions. Our algorithm is also related to work 
-on MCMC for doubly-intractable distributions.
-Algorithms like~\cite{Moller2006,murray2006,Andrieu09} all attempt to evaluate an intractable
-likelihood under a proposed parameter $\vartheta$ by introducing auxiliary variables, however there
-the auxiliary variable is sampled independently under the proposed parameters. For MJP, this would
-involve proposing a new parameter $\vartheta$, generating a new uniformizing grid $U^*$, and then
-accepting or rejecting. This can complicate computations (with two sets of time points), and also
-reduce acceptance rates if
- the new parameter $\vartheta$ is incompatible with the old grid $U$ or
-vice versa. While~\cite{murray2006} suggest annealing schemes to try to address this issue, we exploit
-the structure of the Poisson process and provide a cleaner solution: generate a single set of
-auxiliary variables that depends symmetrically on both the new and old parameters. It is interesting
-to see whether a similar idea can be used in other applications as well.
+The basic idea of marginalizing out state information $S$ relates the idea of the Bayesian fraction of missing information~\citep{liu1994fraction}. 
+Ideas from~\citet{papaspiliopoulos2007general,yu2011center} lead to algorithm~\ref{alg:MH_naive}, though our proposed algorithm provides further efficiency through the symmetrization idea that exploits the structure of the Poisson process. 
+Two interesting directions are to see how such symmetrization ideas apply to other problems considered in those works, as well as how ideas from those works can shed more light on, and improve our algorithm.
+Our proposed algorithm is also related to the framework from~\citet{Neal04Drag}, although we exploit the structure of the Poisson and Markov jump processes to simplify matters considerably, avoiding the need for any tempered transitions. 
+Our algorithm is also related to work on MCMC for doubly-intractable distributions.  Algorithms like~\cite{Moller2006,murray2006,Andrieu09} all attempt to evaluate an intractable likelihood under a proposed parameter $\vartheta$ by introducing auxiliary variables, however there the auxiliary variable is sampled independently under the proposed parameters. 
+For MJP, this would involve proposing a new parameter $\vartheta$, generating a new uniformizing grid $U^*$, and then accepting or rejecting. 
+This can complicate computations (with two sets of time points), and also
+reduce acceptance rates if the new parameter $\vartheta$ is incompatible with the old grid $U$ or vice versa. 
+While~\cite{murray2006} suggest annealing schemes to try to address this issue, we exploit the structure of the Poisson process and provide a cleaner solution: generate a single set of auxiliary variables that depends symmetrically on both the new and old parameters. 
+It is interesting to see whether a similar idea can be used in other applications as well.

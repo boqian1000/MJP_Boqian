@@ -1,51 +1,13 @@
 
 \section{An improved Metropolis-Hasting algorithm}
 %\vspace{-.05in}
-Our main idea is to symmetrize the probability of $W$ under the old and 
-proposed parameters, so that 
-$P(W|\theta)$ disappears from the acceptance ratio. This results
-in a significantly more efficient, and also a simpler MCMC scheme.
+Our main idea is to symmetrize the probability of $W$ under the old and proposed parameters, so that $P(W|\theta)$ disappears from the acceptance ratio. 
+Now, the probability of accepting a proposal $\vartheta$ depends only on the prior probabilities of $\theta$ and $\vartheta$, as well as how well they both explain the data.
+This is in contrast to the previous algorithm, where one must also factor in how well each explains the current value of the grid $W$.
+This results in a significantly more efficient, and also a simpler MCMC scheme.
 %This forms the main contribution of this paper.
-As before, the MCMC iteration begins with the pair $(S(t), \theta)$. 
-Instead of simulating the Poisson events $U$, we first generate a new 
-parameter $\vartheta$ from $q(\vartheta|\theta)$. Treat this as an 
-auxiliary variable, so that the augmented space now is the triplet 
-$(S(t), \theta,\vartheta)$. We pretend $S(t) \equiv (S,T)$ was sampled by  
-uniformization, where the dominating Poisson rate $\Omega$ equals 
-$(\Omega(\theta) + \Omega(\vartheta))$ instead of just $\Omega(\theta)$ 
-(recall any choice greater than $\max_s A_s$ is valid).
-Now the set of thinned events $U$ is piecewise-constant
-Poisson with intensity $\Omega(\theta) + \Omega(\vartheta) - 
-A_{S(t)}$. Following algorithm~\ref{alg:Unif_gibbs} or~\cite{RaoTeh13}, 
-the {\em a priori} probability of the reconstructed set $W = U \cup T$, 
-$P(W|\theta,\vartheta)$, is a homogeneous Poisson 
-%the union of $U$ with the actual trajectory transition times $T$, 
-process with rate $\Omega(\theta) + \Omega(\vartheta)$. Discard all 
-MJP state information, so that the MCMC state space is $(W, \theta, \vartheta)$,
-and propose swapping $\theta$ with $\vartheta$. 
-Observe from
-symmetry that the Poisson skeleton $W$ has the same probability both
-before and after this proposal, so that unlike the previous scheme,
-the ratio $P(W|\vartheta)/P(W|\theta)$ equals $1$.  This simplifies 
-computation, and significantly improves mixing.
-The acceptance probability 
-%depends only on the probability of the observations
-%under both set of parameters, %as we can use the forward-backward algorithm
-%to calculate this. Our acceptance probability 
-equals
-$ 
-  \min\left(1, \frac{P(X,\vartheta)q(\theta|\vartheta)}
-   {P(X,\theta)q(\vartheta|\theta)}\right) = 
-  \min\left(1, \frac{P(X|\vartheta)p(\vartheta)q(\theta|\vartheta)}
-   {P(X|\theta)p(\theta)q(\vartheta|\theta)}\right).
-   $
-   The terms $P(X|\vartheta)$ and  $P(X|\theta)$ can be calculated by 
-   running a forward pass of the forward-backward algorithm, and after
-   accepting or rejecting the proposal, a new trajectory is sampled by
-   completing the backward pass. Finally, the thinned events are
-   discarded. See Algorithm~\ref{alg:MH_improved} and 
-   figure~\ref{fig:MH_improved} in the appendix. % for details. 
-\begin{algorithm}[H]
+
+\begin{algorithm} %[H]
    \caption{Symmetrized MH for parameter inference for MJPs }
    \label{alg:MH_improved}
   \begin{tabular}{l l}
@@ -93,12 +55,52 @@ $
     \State Write the new state-space as $(W,\theta',\vartheta')$.
     For the new transition matrix $B(\theta',\vartheta')$,     sequentially simulate $v_i$ at time $w_i$ given state $v_{i+1}$  at time $w_{i+1}$:
     $$ v_t \sim \beta_t(\cdot),\quad \text{where } 
-    \beta_i(s) = \alpha_i(s)\cdot B^{\theta',\vartheta'}_{sv_{t+1}} \cdot \ell_i(s) \quad \forall s \in S.$$
-    Here, $\beta_{|W|}(\cdot) = \alpha_{|W|}(\cdot)$.
+    \beta_i(s) = \alpha_i(s)\cdot B^{\theta',\vartheta'}_{sv_{t+1}} \cdot \ell_i(s) \text{ \ and \ } \beta_{|W|}(\cdot) = \alpha_{|W|}(\cdot) \quad \forall s \in S.$$
+    
 %    Sample a path $\tilde{V}$, from a discret-time Markov chain with $|W| + 1$ steps, using FFBS algorithm. The transition matrix of the Markov chain is $B = (I + \frac{A(\tilde{\theta})}{\Omega})$ while the initial distribution over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
 %    $$ L_i(s) = P(Y_{[w_i, w_{i + 1})} | S(t) = s \; for\; t \in [w_i, w_{i + 1})) = \prod_{j: t_j \in [w_i, w_{i + 1})}p(y_{t_j} | S(t_j) = s).$$\\
 %%(i.e. $V(i) \sim P(V |  \theta(i), W(i - 1), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\
     \State Let $T'$ be the set of times in $W$ when the Markov chain changes state. Define $S'$ as the corresponding set of state values. Return $(S', T', \theta')$.
 \end{algorithmic}
 \end{algorithm}
+
+As before, the MCMC iteration begins with the pair $(S(t), \theta)$. 
+Instead of simulating the Poisson events $U$, we first generate a new 
+parameter $\vartheta$ from $q(\vartheta|\theta)$. Treat this as an 
+auxiliary variable, so that the augmented space now is the triplet 
+$(S(t), \theta,\vartheta)$. We pretend $S(t) \equiv (S,T)$ was sampled by  
+uniformization, where the dominating Poisson rate $\Omega$ equals 
+$(\Omega(\theta) + \Omega(\vartheta))$ instead of just $\Omega(\theta)$:
+recall any choice greater than $\max_s A_s$ is valid.
+Now the set of thinned events $U$ is piecewise-constant
+Poisson with intensity $\Omega(\theta) + \Omega(\vartheta) - 
+A_{S(t)}$. Following algorithm~\ref{alg:Unif_gibbs} or~\cite{RaoTeh13}, 
+the {\em a priori} probability of the reconstructed set $W = U \cup T$, 
+$P(W|\theta,\vartheta)$, is a homogeneous Poisson 
+%the union of $U$ with the actual trajectory transition times $T$, 
+process with rate $\Omega(\theta) + \Omega(\vartheta)$. Discard all 
+MJP state information, so that the MCMC state space is $(W, \theta, \vartheta)$,
+and propose swapping $\theta$ with $\vartheta$. 
+Observe from
+symmetry that the Poisson skeleton $W$ has the same probability both
+before and after this proposal, so that unlike the previous scheme,
+the ratio $P(W|\vartheta)/P(W|\theta)$ equals $1$.  This simplifies 
+computation, and significantly improves mixing.
+The acceptance probability 
+%depends only on the probability of the observations
+%under both set of parameters, %as we can use the forward-backward algorithm
+%to calculate this. Our acceptance probability 
+equals
+$ 
+  \min\left(1, \frac{P(X,\vartheta)q(\theta|\vartheta)}
+   {P(X,\theta)q(\vartheta|\theta)}\right) = 
+  \min\left(1, \frac{P(X|\vartheta)p(\vartheta)q(\theta|\vartheta)}
+   {P(X|\theta)p(\theta)q(\vartheta|\theta)}\right).
+   $
+   The terms $P(X|\vartheta)$ and  $P(X|\theta)$ can be calculated by 
+   running a forward pass of the forward-backward algorithm, and after
+   accepting or rejecting the proposal, a new trajectory is sampled by
+   completing the backward pass. Finally, the thinned events are
+   discarded. See Algorithm~\ref{alg:MH_improved} and 
+   figure~\ref{fig:MH_improved} in the appendix. % for details. 
 
