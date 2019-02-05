@@ -1,4 +1,5 @@
 \section{Bayesian modeling and inference for MJPs}
+\label{sec:bayes_model}
 %In practical situations, an MJP is noisily observed at
 %a finite set of times. %with the observations themselves noisy. 
 %This raises two questions: 
@@ -22,7 +23,7 @@ We assume the observation process has the following structure: for any partition
 \end{align}
 A common example where this holds is for observations $X$ at a finite set of times $T^X = \{t^X_1,\cdots, t^X_{|X|}\}$, each observation depending on the state of the MJP at that time:
 \begin{align}
-  \label{eq:lik_factor}
+  \label{eq:lik_iid}
   P(X|\{S(t),\ t \in [0,t_{end}]\}) = \prod_{i=1}^{|X|} P(x_i|S(t^X_i)).
 \end{align}
 Other examples include settings when the observations form an inhomogeneous Poisson process~\citep{FearnSher2006}, renewal process~\citep{rao2011gaussian} or even another MJP~\citep{Nodelman+al:UAI02,RaoTeh13}, modulated by $S(t)$.
