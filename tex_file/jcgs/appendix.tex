@@ -41,6 +41,19 @@ trajectory.}
   \end{figure}
 
 \subsection{Additional results}
+In the following, we evaluate Python implementations of a number of algorithms, including the \naive\ MH algorithm (Algorithm~\ref{alg:MH_naive}, which we plot in yellow), and our main contribution, the symmetrized MH algorithm (algorithm~\ref{alg:MH_improved}, plotted as dashed red lines\vinayak{Do this}). 
+We compare different variants of these algorithms, corresponding to different uniformizing Poisson rates. % (i.e.\ different choices of $\kappa$, see section~\ref{sec:comments}). 
+For \naive\ MH, we set $\Omega(\theta) = \kappa \max_s A_s(\theta) $ with $\kappa$  equal to $1.5, 2$ and $3$, represented in our plots with circles, triangles and square symbols. 
+For symmetrized MH, where the uniformizing rate depends on both the current and proposed parameter, we consider two settings:
+ $\Omega(\theta, \vartheta) = \kappa (\max A(\theta) + \max A(\vartheta))$ 
+ ($\kappa = 1$ and $1.5$, plotted with {triangles} and {squares}), and 
+$\Omega(\theta, \vartheta) = \kappa \max(\max A(\theta), \max A(\vartheta))$
+($\kappa=1.5$, plotted with {circles}).  
+We also evaluate two baselines: Gibbs sampling (Algorithm~\ref{alg:MJP_gibbs}, plotted in blue), and particle MCMC~\citep{Andrieu10}, plotted in black. 
+Gibbs sampling involves a uniformization step to update the MJP trajectory, for which we used three settings, $\kappa=1.5,2,3$, plotted with circles, {triangles} and {squares}.  
+Unless specified, our results were obtained from $100$ independent MCMC runs, each of $10000$ iterations.
+We found particle MCMC to be more computationally intensive, and limited each run to $3000$ iterations, the number of particles being $5, 10$ and $20$ (plotted with circles, trianges and squares). 
+
 \vspace{-.4in}
   \begin{figure}[H]
   \centering

@@ -447,6 +447,34 @@ of the Gibbs sampler. \\
  shifting the optimal setting of the proposal variance to smaller values.
 
   \subsection{Chi site data for Escherichia coli}~
+  We consider a dataset recording positions of a particular DNA motif 
+  on the {\em E.\ coli} genome. 
+  These motifs consist of eight base pairs GCTGGTGG, and are called Chi sites~\citep{FearnSher2006}.
+  The rates of occurence of Chi sites provide information about genome 
+  segmentation, allowing the identification of regions with high 
+  mutation or recombination rates.
+  %strands which are the inner and outer rings. The molecular mechanisms 
+  %of DNA replication differ between the two half-strands and they are 
+  %termed leading and lagging. The E. coli genome is 4639675 bases long and 
+  %each half is 2319.838 kilobases long. 
+  Following~\cite{FearnSher2006}, we use this data to infer a two-state piecewise-constant segmentation of the DNA strand. 
+  We focus on Chi sites along the inner (lagging) strand of the {\em E.\ coli} genome.  
+  We place a MJP prior over this segmentation, and indexing position along the 
+  strand with $t$, we write this as $S(t)$ (\sout{$t \in [0,20]$ after rescaling nucleotide indices} \boqian{$t \in [0,2319.838]$} ). 
+  To each state $s \in \{1,2\}$, we assign a rate $\lambda_s$, which together with $S(t)$, defines a piecewise-constant rate function $\lambda_{S(t)}$. 
+  We model the Chi-site positions as drawn from a Poisson process with rate 
+  $\lambda_{S(t)}$, resulting in a {Markov-modulated Poisson process}~\citep{scottmmpp03} (see also section~\ref{sec:bayes_model}). 
+  MJP transitions from state $1$ to state $2$ have rate $\alpha$ while transitions from state $2$ to state $1$ have rate $\beta$. 
+  We place gamma priors on the four model parameters; specifically, we use Gamma$(2,2)$, Gamma$(2,3)$, Gamma$(3,2)$, Gamma$(1,2)$ for $\alpha$, $\beta$, $\lambda_1$, $\lambda_2$ respectively.
+
+
+  We use this setup to evaluate our symmetrized MH sampler along with Gibbs sampling (other algorithms perform much worse, and we do not include them). 
+  For our MH proposal distribution, we first run {2000} iterations of Gibbs sampling to estimate the posterior covariance of the vector $\theta = (\alpha,\beta,\lambda_1,\lambda_2)$, call this $\Sigma_\theta$. 
+  Our MH proposal distribution is then $q(\nu|\theta) = N(\nu|\theta, \kappa\Sigma_\theta)$ for different settings of $\kappa$ (the typical choice is $\kappa = 1$)\boqian{, with the multiplicative factor $2$}. 
+
+  Figure~\ref{fig:TRACE_ECOLI} shows trace and autocorrelation plots for the parameter $\alpha$ produced by the Gibbs sampler (left) and our proposed sampler with $\kappa$ set to $1$.
+  We see that this is a fairly hard MCMC sampling problem, however our sampler clearly outperforms Gibbs, which mixes very poorly.
+  Both posterior distribution agreed with each other though, with a two sample-Kolmogorov Smirnov test returning a p-value of $ 0.1641$. 
   \begin{figure}[H]
 %    \vspace{-.2in}
   \centering
@@ -454,17 +482,22 @@ of the Gibbs sampler. \\
  % \centering
   \begin{minipage}[!hp]{0.99\linewidth}
     \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphatraceGBS_31_3_0_.pdf}
-    \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphatraceMH_31_3_0_.pdf}
     \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphagbsacf_31_3_0_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphatraceMH_31_3_0_.pdf}
     \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphamhacf_31_3_0_.pdf}
   \end{minipage}
 
 %  \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{The left is histogram for the posterior samples($\alpha$) for the E.\ Coli data.The red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.1641$. The middle and the right are trace plots for the posterior samples for the E.\ Coli data, the middle is for Gibbs and the right is for symmetrized MH}
+    \caption{Trace and autocorrelation plots of posterior samples for $\alpha$ for the E.\ Coli data. The left two plots are the Gibbs sampler and the right two are the symmetrized MH. }
      \label{fig:TRACE_ECOLI}
 %  \end{minipage}
   \end{figure}
+  Figure~\ref{fig:ECOLI} shows the ESS/s for different settings of $\kappa$, for parameters $(\alpha, \lambda_1)$. 
+  Both parameters have very similar results, and as suggested by the earlier figure, we see that for the typical setting of $\kappa=1$, our sampler ourperforms the Gibbs sampler. 
+  In this problem though, Gibbs sampling does outperform our method for large or small $\kappa$. 
+  This is because a) large or small $\kappa$ mean the proposal variance is too large or too small, and b) the Gibbs conditionals over the parameters are conjugate for this model. 
+  We expect the improvements our method offers to be more robust to the proposal distribution for more complex models without such conditional conjugacy.
   \begin{figure}[H]
 %    \vspace{-.2in}
   \centering
@@ -488,7 +521,7 @@ of the Gibbs sampler. \\
   \begin{minipage}[!hp]{.3\linewidth}
     \caption{ESS/sec for $(\alpha,\lambda_1)$ for the E.\ Coli data. The circles (in blue) are our 
       proposed sampler as we vary the variance of the proposal distribution. 
-      The straight line is the Gibbs sampler. }
+      The straight line is Gibbs. }
      \label{fig:ECOLI}
   \end{minipage}  
 
@@ -508,53 +541,6 @@ of the Gibbs sampler. \\
 %    \label{fig:TRACE_ECOLI_l1}
 % \end{figure}
 
-  We consider a dataset recording positions of a particular DNA motif 
-  on the {\em E.\ coli} genome. Used in~\cite{FearnSher2006}, these 
-  motifs consist of eight base pairs GCTGGTGG, and are called Chi sites.
-  The rates of occurence of Chi sites provide information about genome 
-  segmentation, allowing the identification of regions with high 
-  mutation or recombination rates.
-  %strands which are the inner and outer rings. The molecular mechanisms 
-  %of DNA replication differ between the two half-strands and they are 
-  %termed leading and lagging. The E. coli genome is 4639675 bases long and 
-  %each half is 2319.838 kilobases long. 
-  Following~\cite{FearnSher2006}, we wish to use this data to infer a 
-  two-state piecewise-constant segmentation of the DNA strand. 
-  We focus on Chi sites along the inner (lagging) strand of the 
-  {\em E.\ coli} genome.  We place a 
-  MJP prior over this segmentation, and indexing position along the 
-  strand with $t$, we write this as $S(t)$ (\sout{$t \in [0,20]$ after rescaling 
-  nucleotide indices} \boqian{$t \in [0,2319.838]$} ). To state $i \in 
-  \{1,2\}$, we assign a rate $\lambda_i$, which together with $S(t)$, 
-  defines a piecewise-constant rate function $\lambda_{S(t)}$. We model 
-  the Chi-site positions as drawn from a Poisson process with rate 
-  $\lambda_{S(t)}$, resulting in a {Markov-modulated Poisson 
-  process}~\citep{scottmmpp03}. 
-  MJP transitions from state $1$ to state $2$ have rate $\alpha$ while 
-  transitions from state $2$ to state $1$ have rate $\beta$. We place 
-  gamma priors are placed for the four model parameters; specifically, 
-  we use Gamma$(2,2)$, Gamma$(2,3)$, Gamma$(3,2)$, Gamma$(1,2)$ for 
-  $\alpha$, $\beta$, $\lambda_1$, $\lambda_2$ respectively.
-
-  We use this setup to evaluate our symmetrized MH sampler along with 
-  Gibbs sampling (other algorithms perform much worse). For our MH proposal distribution, we first 
-  run \sout{$500$} \boqian{2000} iterations of Gibbs sampling to estimate the posterior 
-  covariance of the vector $\theta = (\alpha,\beta,\lambda_1,\lambda_2)$, call this 
-  $\Sigma_\theta$. Our MH proposal distribution is then $q(\nu|\theta) = 
-  N(\nu|\theta, \kappa\Sigma_\theta)$ for different settings of 
-  $\kappa$ (the typical choice is $\kappa = 1$)\boqian{, with the multiplicative factor $2$}. Figure~\ref{fig:ECOLI} 
-  shows the results for parameters $(\alpha, \lambda_1)$, which are both 
-  very similar. 
- % we include $(\lambda_1, \lambda_2)$ in the appendix. 
-  We see that for the typical setting of $\kappa=1$, our 
-  sampler ourperforms the Gibbs sampler, though Gibbs sampling does 
-  outperform our method for large or small $\kappa$. This is because a) 
-  large or small $\kappa$ mean the proposal variance is too large or too 
-  small, and b) the Gibbs 
-  conditionals over the parameters are conjugate for this model. Again,
-  we expect the improvements our method offers to be more robust to the 
-  proposal distribution for more complex models without such conditional 
-  conjugacy.
 % \begin{figure}%[b]
 % \centering
 % \begin{minipage}[!hp]{0.99\linewidth}
