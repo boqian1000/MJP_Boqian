@@ -1,16 +1,16 @@
 %\vspace{-.2in}
 \section{Experiments}\label{sec:expts}~
-In the following, we evaluate Python implementations of our two proposed algorithms, the \naive\ MH algorithm (Algorithm~\ref{alg:MH_naive}, which we plot in yellow), and our main contribution, the symmetrized MH algorithm (algorithm~\ref{alg:MH_improved}, plotted as dashed red lines\vinayak{Do this}). 
+In the following, we evaluate Python implementations of a number of algorithms, including the \naive\ MH algorithm (Algorithm~\ref{alg:MH_naive}, which we plot in yellow), and our main contribution, the symmetrized MH algorithm (algorithm~\ref{alg:MH_improved}, plotted as dashed red lines\vinayak{Do this}). 
 We compare different variants of these algorithms, corresponding to different uniformizing Poisson rates. % (i.e.\ different choices of $\kappa$, see section~\ref{sec:comments}). 
 For \naive\ MH, we set $\Omega(\theta) = \kappa \max_s A_s(\theta) $ with $\kappa$  equal to $1.5, 2$ and $3$, represented in our plots with circles, triangles and square symbols. 
-For symmetrized MH, where the uniformizing rate depends on both the current and proposed parameter, we consider two settings
+For symmetrized MH, where the uniformizing rate depends on both the current and proposed parameter, we consider two settings:
  $\Omega(\theta, \vartheta) = \kappa (\max A(\theta) + \max A(\vartheta))$ 
  ($\kappa = 1$ and $1.5$, plotted with {triangles} and {squares}), and 
 $\Omega(\theta, \vartheta) = \kappa \max(\max A(\theta), \max A(\vartheta))$
 ($\kappa=1.5$, plotted with {circles}).  
-We compare these algorithms against two baselines: Gibbs sampling (Algorithm~\ref{alg:MJP_gibbs}, plotted in blue), and particle MCMC~\citep{Andrieu10}, plotted in black. 
-Gibbs sampling involves a uniformization step to update the MJP trajectory, and for this we used three settings, $\kappa=1.5,2,3$, plotted with circles, {triangles} and {squares}.  
-Unless specified, our results were obtained from $100$ independent MCMC runs, each consisting of $10000$ iterations.
+We also evaluate two baselines: Gibbs sampling (Algorithm~\ref{alg:MJP_gibbs}, plotted in blue), and particle MCMC~\citep{Andrieu10}, plotted in black. 
+Gibbs sampling involves a uniformization step to update the MJP trajectory, for which we used three settings, $\kappa=1.5,2,3$, plotted with circles, {triangles} and {squares}.  
+Unless specified, our results were obtained from $100$ independent MCMC runs, each of $10000$ iterations.
 We found particle MCMC to be more computationally intensive, and limited each run to $3000$ iterations, the number of particles being $5, 10$ and $20$ (plotted with circles, trianges and squares). 
 
 % We also considered exploiting gradient information of the target distribution to apply Hamiltonian Monte Carlo (HMC)~\cite{Neal2010}. In particular, the forward pass of FFBS allows us to also calculate the gradient of the log-probability with respect to the MJP parameters. We can exploit this information for more directed explorations of parameter space than a random-walk algorithm. Of course, this comes at a higher computational cost. We evaluate HMC with the number of leapfrog steps taking values in $1, 3, 5$ or $10$, and the leapfrog stepsize taking values in $0.02, 0.05$ and $0.1$. 
@@ -63,7 +63,25 @@ For the Metropolis-Hastings proposal, we used a lognormal distribution centered 
 % Such doubling might slow the mixing of the Markov chain. We can apply our Metropolis Hasting algorithm on this model.
 
 \noindent \textbf{Results:}
-Figure~\ref{fig:ESS_EXP_D10} plots the ESS per unit time for the parameters $\alpha$ (left) and $\beta$ (right) for the case of $3$ states (top row) and $10$ states (bottom row) as we vary the scale-parameter $\sigma^2$ of the log-normal proposal distribution. 
+Figure~\ref{fig:TRACE_EXP} shows the MCMC estimates of the posterior distribution over $\alpha, P(\alpha|X)$ from the Gibbs sampler as well as our symmetrized MH sampler. Visually these agree, and we quantify this by running a two sample-Kolmogorov Smirnov test: the result is a p-value of $0.5085$. The figure also shows traceplots and autocorrelation plots for $\alpha$ from the two samplers:
+ clearly our sampler mixes much more efficiently than Gibbs.
+  \begin{figure}[H]
+  \begin{minipage}[!hp]{0.25\linewidth}
+    \includegraphics [width=0.99\textwidth, angle=0]{figs/EXP_ks/exp_hist_44_05_10_.pdf}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.74\linewidth}
+    \caption{(Left) posterior over $\alpha$ produced by Gibbs (black) and symmetrized MH (red-dashed). (Below) trace plot and autocorrelation plots for Gibbs (left) and symmetrized MH (right). All plots are for dimension $10$. \ \ }
+     \label{fig:TRACE_EXP}
+  \end{minipage}
+  \centering
+  \begin{minipage}[!hp]{0.97\linewidth}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/EXP_ks/exp_traceGBS_44_05_10_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/EXP_ks/exp_gbsacf_44_05_10_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/EXP_ks/exp_traceMH_44_05_10_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/EXP_ks/exp_mhacf_44_05_10_.pdf}
+  \end{minipage}
+  \end{figure}
+To quantify this, figure~\ref{fig:ESS_EXP_D10} plots the ESS per unit time for the parameters $\alpha$ (left) and $\beta$ (right) for the case of $3$ states (top row) and $10$ states (bottom row) as we vary the scale-parameter $\sigma^2$ of the proposal distribution. 
 We include results for $5$ states in the appendix, the conclusions are the same. 
   %as we change the variance of the
   %proposal kernel, for different methods and different scaling parameters.
@@ -83,41 +101,31 @@ We include results for $5$ states in the appendix, the conclusions are the same.
 %  For particle MCMC, the dot-dashed lines correspond to 
 %  $5$ particles,  the dashed lines correspond to $10$ particles, and the solid 
 %  lines correspond to $20$ particles.
-We see that our symmetrized MH algorithm is significantly more efficient than the baselines over a wide range of choices of $\sigma^2$, (including the natural choice of $1$).
+We see that our symmetrized MH algorithm is significantly more efficient than the baselines over a wide range of $\sigma^2$ (including the natural choice of $1$).
 Among the three setting of our algorithm, the simple additive setting
  ({triangles}) does best, though it is only slightly better than 
  the {max-of-max} setting (circles). 
 A reason for this improvement is that the additive setting is more stable than the max-of-max setting, when the proposal variance can be large. 
 The {additive setting with a multiplicative factor of $1.5$} (squares) does worse than both {additive choice with smaller multiplicative factor and the max-of-max choice} but still better than the other algorithms. 
 Among the baselines, simple Gibbs sampling does better than \naive\ Metropolis-Hastings, suggesting that the dependency of the Poisson grid on the MJP parameters does indeed significantly slow down mixing. 
-Particle MCMC has the worst performance for this task. 
-The results in figure~\ref{fig:ESS_EXP_D10} for the 10-dimensional state space show that for the parameter $\alpha$, the improvement that our proposed sampler affords is even more dramatic. 
-   For the parameter $\beta$ however, performance is comparable to Gibbs, %although it is not possible to claim one is 
+Particle MCMC has the worst performance. 
+The results in figure~\ref{fig:ESS_EXP_D10} for the 10-dimensional state space show that for $\alpha$, the improvement of our proposed sampler is even more dramatic. 
+   For $\beta$ however, performance is comparable to Gibbs, %although it is not possible to claim one is 
    with neither uniformly superior to the other.
   \begin{figure}[H]
 %    \vspace{-.2in}
   \centering
-  \begin{minipage}[!hp]{0.99\linewidth}
+  \begin{minipage}[!hp]{0.69\linewidth}
   \centering
-  \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_3_alpha.pdf}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_3_beta.pdf}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/exp_3_alpha.pdf}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/exp_3_beta.pdf}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/exp_10_alpha.pdf}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/exp_10_beta.pdf}
   \end{minipage}
-  \centering
-%   \vspace{-.3in}
-  \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_10_alpha.pdf}
-    \includegraphics [width=0.45\textwidth, angle=0]{figs/exp_10_beta.pdf}
-  \end{minipage}
-  \end{minipage}
-%  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{ESS/sec for the synthetic  model, the top row being dimension 3, and the bottom,
-      dimension 10. The left column is for $\alpha$, and the 
-    right is for $\beta$. Red, yellow, blue and black curves are the symmetrized MH,
-  \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols correspond
-to different settings of the algorithms, see section~\ref{sec:expts}}
+  \begin{minipage}[!hp]{0.3\linewidth}
+    \caption{ESS/sec for the synthetic  model, the top row being dimension 3, and the bottom, dimension 10. The left and right columns are for $\alpha$ and $\beta$. Red, yellow, blue and black curves are the symmetrized MH, \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
      \label{fig:ESS_EXP_D10}
-%  \end{minipage}
+  \end{minipage}
   \end{figure}
 
 %  \begin{figure}[H]
@@ -136,26 +144,6 @@ to different settings of the algorithms, see section~\ref{sec:expts}}
 %     \label{fig:HIST_EXP}
 %  \end{minipage}
 %  \end{figure}
-
-  \begin{figure}[H]
-%    \vspace{-.2in}
-  \centering
-%  \begin{minipage}[!hp]{0.99\linewidth}
- % \centering
-  \begin{minipage}[!hp]{0.97\linewidth}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/EXP_ks/exp_hist_44_05_10_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/EXP_ks/exp_traceGBS_44_05_10_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/EXP_ks/exp_traceMH_44_05_10_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/EXP_ks/exp_gbsacf_44_05_10_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/EXP_ks/exp_mhacf_44_05_10_.pdf}
-  \end{minipage}
-
-%  \end{minipage}
-%  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{The left is histogram for the posterior samples($\alpha$) of the synthetic model, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $0.5085$. The middle and the right are trace plots for the posterior samples of the synthetic model with dimension 10, the middle is for Gibbs and the right is for symmetrized MH}
-     \label{fig:TRACE_EXP}
-%  \end{minipage}
-  \end{figure}
 
   \begin{figure}%[b]    
   \centering
@@ -179,62 +167,46 @@ to different settings of the algorithms, see section~\ref{sec:expts}}
   \end{minipage}
 %    \vspace{-0.3in}
 %    \caption{Time Interval vs. ESS / sec}
-    \caption{Time Interval vs. ESS/sec. In the left two plots, the number of 
-    observations is fixed, in the right two, this grows linearly with the
-    interval length. Red (square), yellow (triangle) and blue (circle) 
-    curves are the symmetrized MH,
-  \naive\ MH and Gibbs algorithm.}
+  \caption{Time interval vs ESS/s for the synthetic MJP. In the left two plots, the number of observations is fixed, in the right two, this grows linearly with the interval length. Squares, triangles and circles are the symmetrized MH, \naive\ MH and Gibbs algorithm.
+  \vinayak{The left 2 and right 2 look very similar}}
      \label{fig:TSS}
   \end{figure}
 %We generate different observations on different time intervals.
 %Our observation process was a Gaussian distribution with mean equal to the 
 %current state and variance equal to $1$. 
-In figure~\ref{fig:TSS}, we plot ESS per unit time as the observation 
-interval $t_{end}$ increases. We consider the three-state MJP, and as before there 
-are $19$ observations uniformly located over a time interval $(0,t_{end})$. We 
-consider four settings, with $t_{end}$ equal to $10, 20, 50, 100$. For each, we 
-compare our symmetrized MH sampler (with $\kappa$ set to $1$) with the Gibbs 
-sampler (with $\kappa$ set to $2$). While the performance of the Gibbs sampler 
-is comparable with our symmetrized algorithm for the smallest value of 
-$t_{end}$, its performance is considerably worse for longer time-intervals. 
-This is because the Gibbs sampler updates $\theta$ conditioned on the MJP
-trajectory, and longer time intervals result in stronger coupling 
-between MJP path and parameters, and thus poorer mixing. This effect 
-disappears if we integrate out the MJP trajectory. This experiment 
-demonstrates that it is not sufficient just to integrate out the state 
-values of the trajectory, we also have to get around the effect 
-of the trajectory transition times. Our symmetrized MH-algorithm allows 
-this. 
+In figure~\ref{fig:TSS}, we plot ESS per unit time as the observation interval $t_{end}$ increases. 
+We consider the three-state MJP, and as before there are $19$ observations uniformly located over a time interval $(0,t_{end})$.
+We consider four settings, with $t_{end}$ equal to $10, 20, 50, 100$. 
+For each, we compare our symmetrized MH sampler (with $\kappa$ set to $1$) with the Gibbs sampler (with $\kappa$ set to $2$). 
+While the performance of the Gibbs sampler is comparable with our symmetrized algorithm for the smallest value of $t_{end}$, its performance is considerably worse for longer time-intervals.  
+This is because the Gibbs sampler updates $\theta$ conditioned on the MJP trajectory, and longer time intervals result in stronger coupling between MJP path and parameters, and thus poorer mixing. 
+This effect disappears if we integrate out the MJP trajectory. 
+The performance of the \naive\ sampler demonstrates that it is not sufficient just to integrate out the state values of the trajectory, we also have to get around the effect of the trajectory transition times. 
+Our symmetrized MH-algorithm allows this. 
 %as a by-product, it also involves calculating a simpler 
 %MH acceptance probability.
 
 
-To the right of figure~\ref{fig:TSS}, we plot results from a similar experiment. Now,
-instead of keeping the number of measurements fixed as we increase the 
-observation interval, we keep the observation rate fixed at one observation 
-every unit interval of time, so that longer observation intervals have larger 
-number of observations. The results are similar to the previous case: Gibbs 
-sampling performs well for small observation intervals, with performance 
-degrading sharply for larger intervals. These two experiments 
-illustrate the importance of integrating out the MJP path while 
-carrying out parameter inference.
+To the right of figure~\ref{fig:TSS}, we plot results from a similar experiment. 
+Now, instead of keeping the number of measurements fixed as we increase the observation interval, we keep the observation rate fixed at one observation every unit interval of time, so that longer observation intervals have larger number of observations. 
+The results are similar to the previous case: Gibbs sampling performs well for small observation intervals, with performance degrading sharply for larger intervals. 
+These two experiments illustrate the importance of integrating out the MJP path while carrying out parameter inference.
 
 %\vspace{-.23in}
   \subsection{The Jukes and Cantor (JC69) model}~
   \begin{figure}%[H]
 %  \begin{minipage}[!hp]{0.7\linewidth}
-  \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics[width=0.40\textwidth, angle=0]{figs/jc_model.pdf}
-	\hspace{.5in}
-    \includegraphics[width=0.40\textwidth, angle=0]{figs/jc.pdf}
+  \begin{minipage}[!hp]{0.7\linewidth}
+    \includegraphics[width=0.49\textwidth, angle=0]{figs/jc_model.pdf}
+    \includegraphics[width=0.49\textwidth, angle=0]{figs/jc.pdf}
 	%\label{jc_model}
   \end{minipage}
-%  \begin{minipage}[!hp]{0.28\linewidth}
+  \begin{minipage}[!hp]{0.28\linewidth}
   \caption{(a) Jukes-Cantor (JC69) model, (b)
     ESS/sec for the JC69 Model. Red, yellow and blue curves are the 
       symmetrized MH, \naive\ MH and Gibbs algorithm. }
      \label{fig:ESS_JC}
- % \end{minipage}
+  \end{minipage}
 %\vspace{-.2in}
   \end{figure}
   The Jukes and Cantor (JC69) model~\citep{jukescantor69} is a popular model of DNA nucleotide
@@ -254,41 +226,38 @@ sampling, the conditional parameter update is conjugate, and there is no
 proposal distribution involved (hence its performance remains fixed along
 the x-axis). Particle MCMC performs worse
 than all the algorithms, and we do not include it in our plots.
-  \begin{figure}%[H]
-  \centering
-%  \begin{minipage}[!hp]{0.58\linewidth}
-  \begin{minipage}[!hp]{0.99\linewidth}
-  \centering
-    \includegraphics [width=0.40\textwidth, angle=0]{figs/ESS_vs_t_alpha_JC.pdf}
-	\hspace{.5in}
-  \centering 
-    \includegraphics [width=0.40\textwidth, angle=0]{figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
-  \end{minipage}
-%  \begin{minipage}[!hp]{0.4\linewidth}
-    \caption{Time Interval vs.\ ESS/sec for JC model. In the left plot, the number of 
-    observations is fixed, in the right, this grows linearly with the
-  interval length. Red, yellow and blue curves are the symmetrized MH,
-  \naive\ MH and Gibbs. }
-	\label{fig:jc_model_vs_t}
-%  \end{minipage}
-%  \vspace{-.4in}
-  \end{figure}
   \begin{figure}[H]
-%    \vspace{-.2in}
   \centering
 
   \begin{minipage}[!hp]{0.99\linewidth}
   	\centering
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/JC_ks/jc_hist_44_05_3_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/JC_ks/jc_traceGBS_44_05_3_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/JC_ks/jc_traceMH_44_05_3_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/JC_ks/jc_gbsacf_44_05_3_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/JC_ks/jc_mhacf_44_05_3_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/JC_ks/jc_traceGBS_44_05_3_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/JC_ks/jc_traceMH_44_05_3_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/JC_ks/jc_gbsacf_44_05_3_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/JC_ks/jc_mhacf_44_05_3_.pdf}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{The left represents the acceptance rate for $\alpha$ in the JC69 model.  Yellow and blue curves represent symmetrized MH,and \naive\ MH  algorithm. The multiplicative factor is $2$.The right is histogram for the posterior samples($\alpha$ ) of the JC69 model, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.97$. Trace plots for the posterior samples of the JC69 mode, the left is for Gibbs and the right is for symmetrized MH }
-     \label{fig:ACC_JC}
+    \caption{Trace and autocorrelation plots of $\alpha$ for the JC69 model. Left is for Gibbs and the right is for symmetrized MH }
+    \label{fig:ACC_JC_m}
 %  \end{minipage}
+  \end{figure}
+  Figure~\ref{fig:ACC_JC_m} plots diagnostics for Gibbs and the symmetrized MH sampler, again the latter outperforms the former. 
+  Both samplers agree on the posterior $P(\alpha|X)$, with a
+  two sample Kolmogorov-Smirnov test giving a p-value of $ 0.97$ (we plot the posteriors in the appendix). 
+  \begin{figure}%[H]
+  \centering
+  \begin{minipage}[!hp]{0.58\linewidth}
+  \centering
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/ESS_vs_t_alpha_JC.pdf}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.01\linewidth}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.4\linewidth}
+    \caption{Time Interval vs.\ ESS/sec for JC model. Number of observations is fixed (left), and grows linearly with interval (right). Squares, circles and triangles are the symmetrized MH, \naive\ MH and Gibbs. }
+	\label{fig:jc_model_vs_t}
+  \end{minipage}
+%  \vspace{-.4in}
   \end{figure}
 
 
@@ -305,6 +274,28 @@ degradation with interval length that is much milder than the other algorithms.
 
 %  \vspace{-.25in}
 \subsection{An immigration model with finite capacity}\label{sec:immig}~
+  \begin{figure}%[b]
+  \centering
+  \begin{minipage}[hp]{0.69\linewidth}
+%  \begin{minipage}[hp]{0.65\linewidth}
+  \centering
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/q_3_alpha.pdf}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/q_3_beta.pdf}
+    \vspace{-.1 in}
+  \centering
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/q_10_alpha.pdf}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/q_10_beta.pdf}
+    \vspace{-0.1 in}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.3\linewidth}
+    \caption{ESS/sec for the immigration model, the top row being dimension 3, and the bottom,
+      dimension 10. The left column is for $\alpha$, and the 
+    right is for $\beta$. Red, yellow, and blue curves are the symmetrized MH,
+  \naive\ MH, Gibbs sampling and particle MCMC.}
+     \label{fig:ESS_Q_D10}
+  \end{minipage}
+%  \vspace{-.4in}
+  \end{figure}
 Next, we consider an M/M/N/N queue~\citep{gross2011fundamentals}. The state space of this is stochastic 
 process is $\{0, 1, 2, 3, \cdots, N - 1\}$ with 
 elements giving the number of customers/jobs/individuals in a system/population. 
@@ -327,48 +318,7 @@ the system moves from $i$ to $i - 1$ with rate $i\beta$.
 %   \caption{queuing model}
 %   \label{q_model}
 % \end{figure}
-  \begin{figure}%[b]
-  \centering
-  \begin{minipage}[hp]{0.99\linewidth}
-%  \begin{minipage}[hp]{0.65\linewidth}
-  \centering
-    \includegraphics [width=0.41\textwidth, angle=0]{figs/q_3_alpha.pdf}
-    \includegraphics [width=0.41\textwidth, angle=0]{figs/q_3_beta.pdf}
-    \vspace{-.1 in}
-  \centering
-    \includegraphics [width=0.41\textwidth, angle=0]{figs/q_10_alpha.pdf}
-    \includegraphics [width=0.41\textwidth, angle=0]{figs/q_10_beta.pdf}
-    \vspace{-0.1 in}
-  \end{minipage}
-%  \begin{minipage}[!hp]{0.33\linewidth}
-    \caption{ESS/sec for the immigration model, the top row being dimension 3, and the bottom,
-      dimension 10. The left column is for $\alpha$, and the 
-    right is for $\beta$. Red, yellow, and blue curves are the symmetrized MH,
-  \naive\ MH, Gibbs sampling and particle MCMC.}
-     \label{fig:ESS_Q_D10}
-%  \end{minipage}
-%  \vspace{-.4in}
-  \end{figure}
 
-  \begin{figure}[H]
-%    \vspace{-.2in}
-  \centering
-%  \begin{minipage}[!hp]{0.99\linewidth}
- % \centering
-  \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/Q_ks/q_hist_20_03_3_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/Q_ks/q_traceGBS_20_03_3_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/Q_ks/q_traceMH_20_03_3_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/Q_ks/q_gbsacf_20_03_3_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/Q_ks/q_mhacf_20_03_3_.pdf}
-  \end{minipage}
-
-%  \end{minipage}
-%  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{The left is histogram for the posterior samples($\alpha$) of the immigration model with dimension 3, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.978$. The middle and the right are trace plots for the posterior samples of the immigration model with dimension 3, the middle is for Gibbs and the right is for symmetrized MH}
-     \label{fig:TRACE_Q}
-%  \end{minipage}
-  \end{figure}
 
 
 We follow the same setup as the first experiment:
@@ -448,19 +398,19 @@ steps included in the appendix.
   \begin{figure}%[b]
   \centering
 %  \begin{minipage}[!hp]{0.6\linewidth}
-  \begin{minipage}[!hp]{0.99\linewidth}
+  \begin{minipage}[!hp]{0.68\linewidth}
   \centering
-    \includegraphics [width=0.42\textwidth, angle=0]{figs/pc_3_alpha.pdf}
-    \includegraphics [width=0.42\textwidth, angle=0]{figs/pc_3_beta.pdf}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/pc_3_alpha.pdf}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/pc_3_beta.pdf}
 %    \vspace{-.81 in}
   \centering
-    \includegraphics [width=0.42\textwidth, angle=0]{figs/pc_10_alpha.pdf}
-    \includegraphics [width=0.42\textwidth, angle=0]{figs/pc_10_beta.pdf}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/pc_10_alpha.pdf}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/pc_10_beta.pdf}
     \vspace{-.3 in}
   \end{minipage}
-  \begin{minipage}[!hp]{0.04\linewidth}
+  \begin{minipage}[!hp]{0.01\linewidth}
   \end{minipage}
-%  \begin{minipage}[!hp]{0.35\linewidth}
+  \begin{minipage}[!hp]{0.3\linewidth}
 %    \vspace{-.3in}
     \caption{ESS/sec for the time-inhomogeneous immigration model, the top row 
       being dimension 3, and the bottom,
@@ -468,28 +418,8 @@ steps included in the appendix.
     right is for $\beta$. Red, yellow and blue curves are the symmetrized MH,
   \naive\ MH, and Gibbs algorithm.}
      \label{fig:ESS_pc_10}
-  %\end{minipage}
-%    \vspace{-.2in}
-  \end{figure}
-
-  \begin{figure}[H]
-%    \vspace{-.2in}
-  \centering
-%  \begin{minipage}[!hp]{0.99\linewidth}
- % \centering
-  \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/QC_ks/qc_hist_4_03_10_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/QC_ks/qc_traceGBS_4_03_10_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/QC_ks/qc_traceMH_4_03_10_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/QC_ks/qc_gbsacf_4_03_10_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/QC_ks/qc_mhacf_4_03_10_.pdf}
   \end{minipage}
-
-%  \end{minipage}
-%  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{The left is histogram for the posterior samples($\alpha$) of the time-inhomogeneous immigration model with dimension 10, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.7212$. The middle and the right are trace plots for the posterior samples of the time-inhomogeneous immigration model with dimension 10, the middle is for Gibbs and the right is for symmetrized MH}
-     \label{fig:TRACE_CQ}
-%  \end{minipage}
+%    \vspace{-.2in}
   \end{figure}
 
 
@@ -517,46 +447,16 @@ of the Gibbs sampler. \\
  shifting the optimal setting of the proposal variance to smaller values.
 
   \subsection{Chi site data for Escherichia coli}~
-  \begin{figure}%[b]
-%    \vspace{-.2in}
-  \centering
-%  \begin{minipage}[!hp]{.32\linewidth}
-%    \caption{ESS/sec for $(\alpha,\lambda_1)$ for the E.\ Coli data. The circles (in blue) are our 
-%      proposed sampler as we vary the variance of the proposal distribution. 
- %     The straight line is the Gibbs sampler. }
-  %   \label{fig:ECOLI}
-%  \end{minipage}
-  \begin{minipage}[!hp]{.01\linewidth}
-    \hspace{.1in}
-  \end{minipage}
-%  \begin{minipage}[!hp]{.65\linewidth}
-  \begin{minipage}[!hp]{.98\linewidth}
-    \includegraphics [width=0.48\textwidth, angle=0]{figs/ECOLI_alpha.pdf}
-    \includegraphics [width=0.48\textwidth, angle=0]{figs/ECOLI_l1.pdf}
-%    \vspace{-.81 in}
- %   \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_beta.pdf}
- %  \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_l2.pdf}
-%    \vspace{-.2in}
-  \end{minipage}  
-    \caption{ESS/sec for $(\alpha,\lambda_1)$ for the E.\ Coli data. The circles (in blue) are our 
-      proposed sampler as we vary the variance of the proposal distribution. 
-      The straight line is the Gibbs sampler. }
-     \label{fig:ECOLI}
-
-%   \vspace{-.3in}
-  \end{figure}
-
   \begin{figure}[H]
 %    \vspace{-.2in}
   \centering
 %  \begin{minipage}[!hp]{0.99\linewidth}
  % \centering
   \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphahist_31_3_0_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphatraceGBS_31_3_0_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphatraceMH_31_3_0_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphagbsacf_31_3_0_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphamhacf_31_3_0_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphatraceGBS_31_3_0_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphatraceMH_31_3_0_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphagbsacf_31_3_0_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphamhacf_31_3_0_.pdf}
   \end{minipage}
 
 %  \end{minipage}
@@ -565,26 +465,48 @@ of the Gibbs sampler. \\
      \label{fig:TRACE_ECOLI}
 %  \end{minipage}
   \end{figure}
-
   \begin{figure}[H]
 %    \vspace{-.2in}
   \centering
-%  \begin{minipage}[!hp]{0.99\linewidth}
- % \centering
-  \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1hist_31_3_0_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1traceGBS_31_3_0_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1traceMH_31_3_0_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1gbsacf_31_3_0_.pdf}
-    \includegraphics [width=0.19\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1mhacf_31_3_0_.pdf}
+%  \begin{minipage}[!hp]{.32\linewidth}
+%    \caption{ESS/sec for $(\alpha,\lambda_1)$ for the E.\ Coli data. The circles (in blue) are our 
+%      proposed sampler as we vary the variance of the proposal distribution. 
+ %     The straight line is the Gibbs sampler. }
+  %   \label{fig:ECOLI}
+%  \end{minipage}
+%  \begin{minipage}[!hp]{.65\linewidth}
+  \begin{minipage}[!hp]{.68\linewidth}
+    \includegraphics [width=0.48\textwidth, angle=0]{figs/ECOLI_alpha.pdf}
+    \includegraphics [width=0.48\textwidth, angle=0]{figs/ECOLI_l1.pdf}
+%    \vspace{-.81 in}
+ %   \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_beta.pdf}
+ %  \includegraphics [width=0.24\textwidth, angle=0]{figs/ECOLI_l2.pdf}
+%    \vspace{-.2in}
+  \end{minipage}  
+  \begin{minipage}[!hp]{.01\linewidth}
   \end{minipage}
+  \begin{minipage}[!hp]{.3\linewidth}
+    \caption{ESS/sec for $(\alpha,\lambda_1)$ for the E.\ Coli data. The circles (in blue) are our 
+      proposed sampler as we vary the variance of the proposal distribution. 
+      The straight line is the Gibbs sampler. }
+     \label{fig:ECOLI}
+  \end{minipage}  
 
-%  \end{minipage}
-%  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{The left is histogram for the posterior samples($\lambda_1$) for the E.\ Coli data.The red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.4658$. The middle and the right are trace plots for the posterior samples for the E.\ Coli data, the middle is for Gibbs and the right is for symmetrized MH}
-     \label{fig:TRACE_ECOLI_l1}
-%  \end{minipage}
+%   \vspace{-.3in}
   \end{figure}
+
+
+% \begin{figure}[H]
+% \centering
+% \begin{minipage}[!hp]{0.99\linewidth}
+%   \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1traceGBS_31_3_0_.pdf}
+%   \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1traceMH_31_3_0_.pdf}
+%   \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1gbsacf_31_3_0_.pdf}
+%   \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1mhacf_31_3_0_.pdf}
+% \end{minipage}
+%   \caption{The left is histogram for the posterior samples($\lambda_1$) for the E.\ Coli data.The red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.4658$. The middle and the right are trace plots for the posterior samples for the E.\ Coli data, the middle is for Gibbs and the right is for symmetrized MH}
+%    \label{fig:TRACE_ECOLI_l1}
+% \end{figure}
 
   We consider a dataset recording positions of a particular DNA motif 
   on the {\em E.\ coli} genome. Used in~\cite{FearnSher2006}, these 

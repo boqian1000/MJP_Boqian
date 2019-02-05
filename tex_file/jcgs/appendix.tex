@@ -64,9 +64,10 @@ different settings of the algorithms, see section~\ref{sec:expts}.}
   \centering
 
   \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/EXP_D3beta_k2.pdf}
+    \includegraphics [width=0.3\textwidth, angle=0]{figs/EXP_ks/exp_hist_44_05_10_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/EXP_D3beta_k2.pdf}
 	\hspace{.5in}
-    \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/EXP_D10beta_k2.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/EXP_D10beta_k2.pdf}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
     \caption{Acceptance Rate for $\beta$ in the synthetic model, the left row being dimension 3, and the right,dimension 10.  Red, yellow and blue curves are the Gibbs, symmetrized MH,
@@ -80,15 +81,55 @@ different settings of the algorithms, see section~\ref{sec:expts}.}
 
   \begin{minipage}[!hp]{0.99\linewidth}
   	\centering
-    \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/JCalpha_k2.pdf}
+    \includegraphics [width=0.3\textwidth, angle=0]{figs/JC_ks/jc_hist_44_05_3_.pdf}
+    \includegraphics [width=0.3\textwidth, angle=0]{figs/acc/JCalpha_k2.pdf}
 	\hspace{.5in}
-    \includegraphics [width=0.40\textwidth, angle=0]{figs/JC_ks/jc_hist_44_05_3_.pdf}
+    \includegraphics [width=0.3\textwidth, angle=0]{figs/JC_ks/jc_hist_44_05_3_.pdf}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
     \caption{The left represents the acceptance rate for $\alpha$ in the JC69 model.  Yellow and blue curves represent symmetrized MH,and \naive\ MH  algorithm. The multiplicative factor is $2$.The right is histogram for the posterior samples($\alpha$ ) of the JC69 model, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.97$.  }
      \label{fig:ACC_JC}
 %  \end{minipage}
   \end{figure}
+  
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+%  \begin{minipage}[!hp]{0.99\linewidth}
+ % \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/Q_ks/q_traceGBS_20_03_3_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/Q_ks/q_traceMH_20_03_3_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/Q_ks/q_gbsacf_20_03_3_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/Q_ks/q_mhacf_20_03_3_.pdf}
+  \end{minipage}
+
+%  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{The left is histogram for the posterior samples($\alpha$) of the immigration model with dimension 3, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.978$. The middle and the right are trace plots for the posterior samples of the immigration model with dimension 3, the middle is for Gibbs and the right is for symmetrized MH}
+     \label{fig:TRACE_Q}
+%  \end{minipage}
+  \end{figure}
+  
+  \begin{figure}[H]
+%    \vspace{-.2in}
+  \centering
+%  \begin{minipage}[!hp]{0.99\linewidth}
+ % \centering
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/QC_ks/qc_traceGBS_4_03_10_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/QC_ks/qc_traceMH_4_03_10_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/QC_ks/qc_gbsacf_4_03_10_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/QC_ks/qc_mhacf_4_03_10_.pdf}
+  \end{minipage}
+
+%  \end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+    \caption{The left is histogram for the posterior samples($\alpha$) of the time-inhomogeneous immigration model with dimension 10, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.7212$. The middle and the right are trace plots for the posterior samples of the time-inhomogeneous immigration model with dimension 10, the middle is for Gibbs and the right is for symmetrized MH}
+     \label{fig:TRACE_CQ}
+%  \end{minipage}
+  \end{figure}
+
 
   \begin{figure}[H]
   \begin{minipage}[hp]{0.65\linewidth}
@@ -147,14 +188,19 @@ different settings of the algorithms, see section~\ref{sec:expts}.}
 %  \end{minipage}
   \end{figure}
 
+%%%% Time-homog
+%    \includegraphics [width=0.19\textwidth, angle=0]{figs/Q_ks/q_hist_20_03_3_.pdf}
+%%%%%%%%
+
   \begin{figure}[H]
 %    \vspace{-.2in}
   \centering
 
   \begin{minipage}[!hp]{0.99\linewidth}
-    \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/CQ_D3alpha_k2.pdf}
+    \includegraphics [width=0.3\textwidth, angle=0]{figs/QC_ks/qc_hist_4_03_10_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/CQ_D3alpha_k2.pdf}
 	\hspace{.5in}
-    \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/CQ_D10alpha_k2.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/CQ_D10alpha_k2.pdf}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
     \caption{Acceptance Rate for $\alpha$ in the time-inhomogeneous immigration model, the left row being dimension 3, and the right,dimension 10.  Yellow and blue curves represent symmetrized MH,
@@ -169,7 +215,9 @@ different settings of the algorithms, see section~\ref{sec:expts}.}
 
   \begin{minipage}[!hp]{0.99\linewidth}
 	\centering
-    \includegraphics [width=0.50\textwidth, angle=0]{figs/acc/ecolialpha_k2.pdf}
+    \includegraphics [width=0.3\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphahist_31_3_0_.pdf}
+    \includegraphics [width=0.3\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1hist_31_3_0_.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/ecolialpha_k2.pdf}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
     \caption{Acceptance Rate of $\alpha$ generated by the symmetrized MH algorithm for the E.\ Coli data . The multiplicative factor is $2$. }
