@@ -60,12 +60,18 @@ Assign state-values to the elements in $\{0\} \cup W$ according to a discrete-ti
 Call these states $V$. 
 Thus $v_0 \sim \pi_0$, while $P(v_{k+1}=j|v_k=i) = B_{ij}$ for $k \in \{0,\cdots,|W|-1\}$.
 Setting $\Omega > \max_i A_i$ results in more candidate-times than actual MJP transitions; at the same time, unlike $A$, the matrix $B$ can thin these through self-transitions. 
+Thus,
+\begin{itemize}
+  \item Simulate $W$ from a Poisson process with rate $\Omega \ge \max_i A_i$.
+  \item Assign states $V$ to the times $0 \cup W$, with $v_0 \sim \pi_0$, and $P(v_{i+1}=s) = B_{v_is}$.
+\end{itemize}
 Write $U$ for the elements $0 \cup W$ with self-transitions, and $T$ for the rest.
 Define $S=\{v_i \in V \text{ s.t.\ } v_i \neq v_{i-1}\}$ as the elements in $V$ corresponding to $T$, then $(S,T)$ sampled this way for any $\Omega \ge \max_i A_i$
 %These self-transitions correct for the extra candidate transition times
 %produced by the higher rate $\Omega_i$, and~\cite{RaoTeh12} show that
 %trajectories sampled this way 
-has the same distribution as under Gillespie's algorithm~\citep{Jen1953,RaoTeh13}.
+has the same distribution as under Gillespie's algorithm~\citep{Jen1953,RaoTeh13}. 
+
 Introducing the thinned variables allowed~\cite{RaoTeh13} to develop a simple and efficient MCMC sampler. 
 We detail this in algorithm~\ref{alg:Unif_gibbs}. 
 At a high-level, each MCMC iteration samples a new grid $W$ conditioned on the path $S(t)$, and then a new path conditioned on $W$. 
