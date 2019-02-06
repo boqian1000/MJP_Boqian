@@ -45,12 +45,13 @@ Algorithm~\ref{alg:MH_naive}, and figure~\ref{fig:naive_mh} in the appendix deta
       \State 
     Set $W = T \cup U$ and discard $S$, the MJP state information.
     \State 
+    \textbf{Forward pass:}
     Set $B(\theta) = I + \frac{A(\theta)}{\Omega(\theta)}$ and
-    $\alpha^\theta_0(\cdot) = \pi_0$.
-    Sequentially update $\alpha^\theta_i(\cdot)$ at time $w_i \in W$ as: 
-    $$\alpha^{\theta}_i(s) = \sum_{s' \in \cS} \ell_i(s) \cdot \alpha^{\theta}_{i-1}(s')\cdot B_{ss'}(\theta), \quad \forall s' \in S. $$
+    $\fwd^\theta_0(\cdot) = \pi_0$.
+ %   Sequentially update $\fwd^\theta_i(\cdot)$ at time $w_i \in W$ as: 
+    $$\textbf{for } i=1\rightarrow |W|\textbf{ do:} \quad \fwd^{\theta}_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd^\theta_{i-1}(s)\cdot B_{ss'}(\theta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
       \State Propose $\vartheta \sim q(\cdot| \theta)$.
-      For all $w_i \in W$, calculate $\alpha^\vartheta_i(\cdot)$ similar to above.
+      For all $w_i \in W$, calculate $\fwd^\vartheta_i(\cdot)$ similar to above.
       \State With probability $\text{acc}(\theta\rightarrow\vartheta)$, set the new parameter $\theta'$ to $\vartheta$, else set it to $\theta$. Here 
       %The acceptance probability for $\vartheta$ is given by 
 %         \vspace{-.05in}
@@ -61,15 +62,16 @@ Algorithm~\ref{alg:MH_naive}, and figure~\ref{fig:naive_mh} in the appendix deta
             {P(X|W, \theta)P(W | \theta)P(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
           \end{align}
 %         \vspace{-.1in}
-          Here $P(X|W,\theta) = \sum_{s \in \cS} \alpha_{|W|}^\theta(s) $ and $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, with similar expressions for $\vartheta$. 
-          %$P(X|W,\vartheta) = \sum_{s \in \cS} \alpha_{|W|}^\vartheta(s) $. Use these, and the fact that $P(W|\theta)$ is Poisson-distributed to accept or reject the proposed $\vartheta$. Write the new parameter as $\theta'$.
+          Here $P(X|W,\theta) = \sum_{s \in \cS} \fwd_{|W|}^\theta(s) $ and $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, with similar expressions for $\vartheta$. 
+          %$P(X|W,\vartheta) = \sum_{s \in \cS} \fwd_{|W|}^\vartheta(s) $. Use these, and the fact that $P(W|\theta)$ is Poisson-distributed to accept or reject the proposed $\vartheta$. Write the new parameter as $\theta'$.
     %as \boqian{$(W,\theta,\vartheta)$}.
-    \State For the new parameter $\theta'$, sequentially simulate $v_i$ at time $w_i$ given $v_{i+1}$  at 
-    time $w_{i+1}$:
-    $$ v_t \sim \beta^{\theta'}_t(\cdot),\quad \text{where } 
-    \beta^{\theta'}_i(s) = \alpha^{\theta'}_i(s)\cdot B^{\theta'}_{sv_{t+1}} \cdot \ell_i(s) \quad \forall s \in S.$$
-    Here, $\beta^{\theta'}_{|W|}(\cdot) = \alpha^{\theta'}_{|W|}(\cdot)$.
-    This completes the FFBS algorithm.
+    \State %For the new parameter $\theta'$, simulate states $V$. 
+    \textbf{Backward pass:}
+    Set $v_{|W|} \sim \bck^{\theta'}_{|W|}(\cdot)$, where $\bck^{\theta'}_{|W|}(s) \propto \fwd^{\theta'}_{|W|}(s)\cdot\ell_{|W|}(s) \quad \forall s \in \cS.$ 
+    %at time $w_i$ given $v_{i+1}$  at time $w_{i+1}$:
+    $$ \textbf{for } i=(|W|-1)\rightarrow 0\textbf{ do:} \quad v_i \sim \bck^{\theta'}_i(\cdot),\ \ \text{where } 
+    \bck^{\theta'}_i(s) \propto \fwd^{\theta'}_i(s)\cdot B_{sv_{i+1}}(\theta') \cdot \ell_i(s)  \ \forall s \in \cS.$$
+   % Here, $\bck^{\theta'}_{|W|}(\cdot) = \fwd^{\theta'}_{|W|}(\cdot)$.  This completes the FFBS algorithm.
     \State Let $T'$ be the set of times in $W$ when the Markov chain changes state. Define $S'$ as the corresponding set of state values. Return $(S', T', \theta')$.
 \end{algorithmic}
 \end{algorithm}

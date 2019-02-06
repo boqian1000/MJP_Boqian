@@ -11,8 +11,8 @@ The state-of-the-art approach is an auxiliary variable Gibbs sampler from~\cite{
 This Markov chain Monte Carlo (MCMC) algorithm was designed to simulate paths when the MJP parameters are known. 
 Parameter inference is typically carried out by incorporating it into a Gibbs sampler that also conditionally simulates parameters given the currently sampled trajectory. 
 
-In many situations, the MJP trajectory and parameters exhibit strong coupling, so that alternately samples path given parameters, and parameters given path can result in poor mixing.  
-To address this issue, we propose a simple and efficient Metropolis-Hastings sampling framework. 
+In many situations, the MJP trajectory and parameters exhibit strong coupling, so that alternately sampling path given parameters, and parameters given path can result in poor mixing.  
+To address this, we propose a simple and efficient Metropolis-Hastings sampling framework. 
 %additionally, we tie up some of the loose ends in the Rao-Teh algorithm.
 In our experiments, we demonstrate superior performance over Gibbs sampling, as well as other approaches like particle Markov chain Monte Carlo~\citep{Andrieu10}. 
 We also prove that under relatively mild conditions, our sampler inherits geometric ergodicity from an `ideal' sampler that operates without any computational constraints.
@@ -22,7 +22,7 @@ A Markov jump process~\citep{Cinlar1975} is a right-continuous piecewise-constan
 We assume a finite number of states $N$, with $\cS = \{1,\ldots,N\}$. 
 Then, the MJP is parameterized by two quantities, an $N$-component probability vector $\pi_0$ and a rate-matrix $A$. 
 The former gives the distribution over states at the initial time (we assume this is $0$), while the latter is an $N \times N$-matrix governing the dynamics of the system.  
-An off-diagonal element $A_{ij}$, for $i \neq j$ gives the rate of transitioning from state $i$ to $j$. 
+An off-diagonal element $A_{ij}$ gives the rate of transitioning from state $i$ to $j$. 
 The rows of $A$ sum to $0$, so that $A_{ii}=-\sum_{j \neq i} A_{ij}  $. 
 We write $A_i$ for the negative of the $i$th diagonal element $A_{ii}$, so that $A_i = -A_{ii}$ gives the total rate at which the system leaves state $i$ for any other state.
 To simulate an MJP over an interval $[0,t_{end}]$, one follows Gillespie's algorithm~\citep{gillespie97}: 
@@ -33,7 +33,7 @@ first sample an initial state $s_0$ from $\pi_0$, and defining $t_0 = t_{curr} =
     The MJP remains in state $s_k$ until time $t_{k+1}$.
   \item Jump to a new state $s_{k+1} \neq s_k$ with probability equal to $A_{s_ks_{k+1}}/A_{s_k}$. Set $k=k+1$.
 \end{itemize}
-The times $T=(t_0, \dotsc, t_{|T| - 1})$ and states $S=(s_0, \dotsc, s_{|T| - 1 })$ define the MJP path $S(t)$ (figure~\ref{fig:abc}).
+The times $T=(t_0, \dotsc, t_{|T| - 1})$ and states $S=(s_0, \dotsc, s_{|T| - 1 })$ define the MJP path $S(t)$ (see the top-left panel in figure~\ref{fig:MH_improved} for a sample path).
 
 \subsection{Structured rate matrices}
 While the rate matrix $A$ can have $N(N-1)$ independent elements, in typical applications, especially with large state-spaces, it is determined by a much smaller set of parameters. 
@@ -56,9 +56,10 @@ For example:
   \item[Codon substitution models] 
     These characterize transitions between codons at a DNA locus over evolutionary time. 
     There are $61$ codons, and in the simplest case, all transitions have the same rate~\citep{jukescantor69}: $A_{ij} = \alpha\ \forall i \neq j$. 
-    Thus the $61\times 61$ matrix $A$ is determined by a single parameter $\alpha$. Other models group transitions as `synonymous' and `nonsynonymous', that continue to or to not encode the same amino acid. 
-    These have their own rates, and $A$ is determined by 2 parameters $\alpha$ and $\beta$ depending on whether or not the old and new states are synonymous. 
-    More refined models~\citep{goldman1994codon} introduce additional parameters. 
+    Thus the $61\times 61$ matrix $A$ is determined by a single $\alpha$. 
+    Other models group transitions as `synonymous' and `nonsynonymous', based on whether old and new codons encode the same amino acid. 
+    Synonymous and nonsynonymous transitions have their own rates, so $A$ is determined by 2 parameters $\alpha$ and $\beta$. 
+    More refined models~\citep{goldman1994codon} introduce additional structure and parameters. 
     %however the 
     %number of parameters is still significantly smaller than the general case.
 \end{description}
