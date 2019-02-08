@@ -63,6 +63,21 @@ $P(X | \theta) =  \int_W P(X | W, \theta, \theta') P(W|\theta, \theta')dW$.
 \setcounter{theorem}{3}
 
 \subsection{Remaining proofs}
+\begin{corollary}
+Given the proposal density $q(\ptheta | \theta)$, $\exists \eta_1 > 0, \theta_2 > 0$ such that for $\theta$ 
+satisfying $\| \theta \|  > \theta_2$, 
+$ \int_\Theta \Omega(\ptheta) q(\ptheta | \theta)d\ptheta \leq \eta_1 \Omega(\theta).$
+\end{corollary}
+\begin{proof}
+From assumption \ref{asmp:integ_bound},  we have $ \int_\Theta \Omega(\ptheta)^2 q(\ptheta | \theta)d\ptheta \leq \eta_0 \Omega(\theta)^2$ for $\theta$ satisfying $\| \theta \|  > \theta_2$.
+For such $\theta$, by the Cauchy-Schwarz inequality, we have
+\begin{align*}
+\left[ \int_\Theta \Omega(\ptheta) q(\ptheta | \theta) d\ptheta \right]^2 &\le \int_\Theta \Omega(\ptheta)^2 q(\ptheta | \theta) d\ptheta \cdot \int_\Theta q(\ptheta | \theta) d\ptheta \le \eta_0 \Omega(\theta)^2.
+\end{align*}
+So for $\theta$ satisfying $\| \theta \|  > \theta_2$, we have $\int_\Theta \Omega(\ptheta) q(\ptheta | \theta) d\ptheta \le \sqrt{\eta_0} \Omega(\theta).$
+%\qed
+\end{proof}
+
 \begin{proposition}
 The a posteriori probability that the embedded Markov chain makes a
 self-transition,

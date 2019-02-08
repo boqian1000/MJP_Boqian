@@ -31,7 +31,8 @@ Since we also need do account for the probabilities $P(W|\theta)$, we also have 
 \begin{align*}
   U \sim \text{PoissProc}(\Omega - A_{S(t)}) 
 \end{align*}
-    \State Set $W = T \cup U$ and discard MJP states.
+    \State Set $W = T \cup U$ and discard MJP states $S$. The MCMC state is now 
+    $(\theta,\vartheta, W)$.
  %   \State \textbf{MH proposal}: The current MCMC state-space is $(W,\theta,\vartheta)$. 
  %   Propose swapping $\theta$ and $\vartheta$, so the new state-space is $(W,\vartheta,\theta)$. 
  %    Accept with probability 

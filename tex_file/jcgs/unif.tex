@@ -37,10 +37,10 @@ With $A(\cdot)$ and $\pi_0$ assumed known, the overall Bayesian model is then
 Given $X$, one is interested in the posterior distribution over the latent quantities, $(\theta,S(t))$. 
 
 \subsection{Trajectory inference given the MJP parameters $\theta$}
-This was addressed in~\cite{RaoTeh13}  and extended to a broader class of jump processes in~\cite{RaoTeh12} (also see~\cite{FearnSher2006, Hobolth09, Elhaygibbssampling}). 
+This was addressed in~\citet{RaoTeh13}  and extended to a broader class of jump processes in~\cite{RaoTeh12}~\citep[also see][]{FearnSher2006, Hobolth09, Elhaygibbssampling}) 
 %Both center on alternate approaches to Gillespie's algorithm, 
-Both involve MJP path representations with auxiliary {\em candidate} jump times that are later {\em thinned}.  
-We focus on the simpler, more popular algorithm from~\cite{RaoTeh13}, based on the idea of {\em uniformization}~\citep{Jen1953}. 
+\citet{RaoTeh13,RaoTeh12} both involve MJP path representations with auxiliary {\em candidate} jump times that are later {\em thinned}.  
+We focus on the former, a simpler and more popular algorithm, based on the idea of {\em uniformization}~\citep{Jen1953}. 
 %We refer to this as the Rao-Teh algorithm. % and describe it next.  while in~\cite{RaoTeh12}, this was extended to a more general dependent thinning approach. 
 %We outline the latter below: it is more general, and we are not aware of any work before~\cite{RaoTeh12} that describes it.
 
@@ -58,7 +58,7 @@ $W$ defines a random grid on $[0,t_{end}]$.
 Define $B = \left(I +\frac{1}{\Omega}A\right)$; this is a stochastic matrix with positive elements, and rows adding up to $1$.
 Assign state-values to the elements in $\{0\} \cup W$ according to a discrete-time Markov chain with initial distribution $\pi_0$, and transition matrix $B$.
 Call these states $V$. 
-Thus $v_0 \sim \pi_0$, while $P(v_{k+1}=j|v_k=i) = B_{ij}$ for $k \in \{0,\cdots,|W|-1\}$.
+Thus $v_0 \sim \pi_0$, while $P(v_{k+1}=j|v_k=i) = B_{ij}$ for $k \in \{0,\cdots,|W|-1\}$, where $|\cdot|$ denotes the cardinality of a set.
 Setting $\Omega > \max_i A_i$ results in more candidate-times than actual MJP transitions; at the same time, unlike $A$, the matrix $B$ can thin these through self-transitions. 
 Thus,
 \begin{itemize}
@@ -191,7 +191,7 @@ $\theta'$. In any event, this introduces no new technical challenges.
   \end{minipage}
 %   \vspace{-0.6 in}
   \end{figure}
-  However, the Gibbs sampling approach coupling between path and parameters can result in a very sluggish exploration of parameter and path space. 
+  However, the resulting Gibbs sampler can mix very poorly because of coupling between path and parameters.
   We illustrate this in figure~\ref{fig:hist}~\citep[inspired by][]{papaspiliopoulos2007general}), which shows the posterior distribution of an MJP parameter (in dashed-blue) is less concentrated than the distribution conditioned on both observations as well the MJP trajectory (dotted-green). 
 The coupling is strengthened as the trajectory grows longer, and the Gibbs sampler can mix very poorly for situations with long observation periods, even if the observations themselves are sparse and only mildly informative about the parameters.
 

@@ -1,32 +1,31 @@
 %\vspace{-.1in}
 \section{Geometric ergodicity}
 %\vspace{-.05in}
-Finally, we derive conditions under which our symmetrized MH algorithm inherits mixing properties of an `ideal' sampler that operates without computational constraints. 
-The latter proposes a new parameter $\vartheta$ from distribution $q(\vartheta|\theta)$, and accepts with probability $\alpha_I(\theta,\vartheta; X) = 1 \wedge \frac{P(X , \vartheta)q(\theta| \vartheta)} {P(X , \theta)q(\vartheta|\theta)}$.  
-The resulting ideal (but computationally expensive) Markov chain has transition probability
+Finally, we derive conditions under which our symmetrized MH algorithm inherits mixing properties of an `ideal' sampler that can compute the marginal likelihood $P(X|\theta)$. 
+This algorithm proposes a new parameter $\vartheta$ from a distribution $q(\vartheta|\theta)$, and accepts with probability $\alpha_I(\theta,\vartheta; X) = 1 \wedge \frac{P(X , \vartheta)q(\theta| \vartheta)} {P(X , \theta)q(\vartheta|\theta)}$.  
+The resulting Markov chain has transition probability
 $P_I(\theta'|\theta) = q(\theta'|\theta)\alpha_I(\theta,\theta';X) + \left[1-\int \dif\vartheta
-q(\vartheta|\theta)\alpha_I(\theta,\vartheta;X)\right]\delta_\theta(\theta')$, the first
-term corresponding to acceptance, and the second, rejection.
+q(\vartheta|\theta)\alpha_I(\theta,\vartheta;X)\right]\delta_\theta(\theta')$, the first term corresponding to acceptance, and the second, rejection~\citep{meyn2009}.
 
-Our main result is Theorem~\ref{thm:geom_erg}, which shows that if the ideal MCMC
-sampler is geometrically ergodic, then so is our tractable auxiliary
-variable sampler (Algorithm~\ref{alg:MH_improved}). 
+Our main result is Theorem~\ref{thm:geom_erg}, which shows that if the ideal MCMC sampler is geometrically ergodic, then so is our sampler in Algorithm~\ref{alg:MH_improved}. 
+Informally, an MCMC algorithm is geometrically ergodic when the total variation distance between the distribution over states and the stationary distribution decreases geometrically with the number of iterations.
+~\citet{meyn2009} provide more details, as well as sufficient conditions that we exploit in Theorem~\ref{thm:geom_erg}.
+Geometric ergodicity is an important property an MCMC chain, guaranteeing that the central limit theorem (CLT) holds for ergodic averages calculated with MCMC samples.
 %Assumption~\ref{asmp:cond_num} is the only non-trivial
 %one we have to make, requiring that the rate-matrix $A(\theta)$ not be
 %arbitrarily ill-conditioned over all
 %settings of the parameter $\theta$. This assumption is reasonable from
 %both theoretical and practical viewpoints.
 %%\boqian{Write $X$ as the observations, which is fixed.}
-We first state all our definitions and assumptions, before diving into the 
-proofs.
+Before diving into the proofs,  we first state our assumptions, 
 %For clarity, we focus on the case where the uniformization rate 
 %is set as 
 %$\Omega(\theta, \vartheta) \doteq \Omega(\theta) + \Omega(\vartheta)$,
 %where $A$ is the rate matrix of the Markov jump process and $\Omega(\theta) \doteq k \max_s |A_{ss}(\theta)|$,
 %for some $k > 1$.
 \begin{assumption}
-The uniformization rate is set as $\Omega(\theta, \vartheta) = \Omega(\theta) + 
-\Omega(\vartheta)$, where %$A$ is the rate matrix of the Markov jump process and 
+The uniformization rate is set as $\Omega(\theta, \vartheta) = \Omega(\theta) + \Omega(\vartheta)$, where 
+%$A$ is the rate matrix of the Markov jump process and 
 $\Omega(\theta) = k_1 \max_s A_{s}(\theta) + k_0$, for some 
 $k_1 > 1, k_0 > 0$.
 \label{asmp:unif_rate}
@@ -34,16 +33,13 @@ $k_1 > 1, k_0 > 0$.
 %If $\inf_\theta \Mx{\theta} > 0$ (as is often the case),
 % we can just set $\Omega(\theta) = \Mx{\theta} + \mx{\theta}$ so that
 % $m_2 = \frac{1}{1+\mu}$.}
-\noindent Although it is possible to specify broader conditions under which our 
-result holds, for clarity we focus on this case. 
-We can drop the $k_0$ if $\inf_\theta \max_s A_s(\theta) > 0$
+\noindent Although it is possible to specify broader conditions under which our result holds, for clarity we focus on this case. 
+We can drop $k_0$ if $\inf_\theta \max_s A_s(\theta) > 0$
 %This is also how we setup our sampler in our experiments.
 
 \begin{assumption}
  % $\Omega(\theta)$ is not bounded, and 
- There exists a positive constant $\theta_0$ such 
-  that for any $\theta_x, \theta_y$ satisfying
-  $\| \theta_x \| \ge \| \theta_y \| > \theta_0$, we have $\Omega(\theta_x) \ge \Omega(\theta_y)$.  
+ There exists a positive constant $\theta_0$ such that for any $\theta_x, \theta_y$ satisfying $\| \theta_x \| \ge \| \theta_y \| > \theta_0$, we have $\Omega(\theta_x) \ge \Omega(\theta_y)$.  
 %  \begin{align*}
 %   \lim_{\|\theta\| \rightarrow +\infty} \Omega(\theta) = + \infty.
 %  \end{align*}
@@ -53,8 +49,7 @@ We can drop the $k_0$ if $\inf_\theta \max_s A_s(\theta) > 0$
 %easy. %This assumption usually holds under suitable reparametrization,
 %and is not critical: we impose 
 %When this is not so, 
-This assumption avoids book-keeping by making 
-$\Omega(\theta)$ increase monotonically with $\theta$.
+This assumption avoids book-keeping by making $\Omega(\theta)$ increase monotonically with $\theta$.
 
 \begin{definition}
 Let $\pi_\theta$ be the stationary distribution of the MJP with rate-matrix 
@@ -64,11 +59,10 @@ $\tilde{A}(\theta) = D_\theta^{-1}A(\theta)D_\theta$, and the
 (A(\theta)+\tilde{A}(\theta))/2$. 
 \label{def:mjp_symm}
 \end{definition}
-\noindent This definition is from~\cite{fill1991}, who show that the matrix 
-$R_A(\theta)$ is reversible with real eigenvalues, the smallest being $0$. 
+\noindent This definition is from~\cite{fill1991}, who shows that $R_A(\theta)$ is reversible with real eigenvalues, the smallest being $0$. 
 The larger its second smallest eigenvalue, the faster the MJP converges to its 
 stationary distribution $\pi_\theta$.
-Note that if the original MJP is reversible, then $R_A(\theta) = A(\theta)$.
+Note that if $A(\theta)$ is reversible, then $R_A(\theta) = A(\theta)$.
 
 %{
 %\begin{definition}
@@ -104,9 +98,9 @@ Note that if the original MJP is reversible, then $R_A(\theta) = A(\theta)$.
 %large $\theta$. 
 %Assumption~\ref{asmp:mono_tail} allows $\max |A_{ss}(\theta)|$ 
 %(and therefore $\Omega(\theta)$) to grow with $\|\theta\|$. Here, we 
-The assumption on $\lambda^{R_A}_2$ is the strongest we need, requiring that 
+This assumption is the strongest we need, requiring that 
 $\lambda^{R_A}_2(\theta)$ (which sets the MJP mixing rate) grows 
-at least as fast as $\max A_s(\theta)$. 
+at least as fast as $\max_s A_s(\theta)$. 
 %This controls the relative stability of different MJP states, and 
 This is satisfied when, for example, all elements of $A(\theta)$ grow 
 with $\theta$ at similar rates, controlling the relative stability of 
@@ -141,10 +135,10 @@ is the transition matrix of the embedded Markov chain from uniformization, this 
 Define the reversibilization $R_B(\theta,\theta')$ of $B(\theta,\theta')$ 
 just as we did $R_A(\theta)$ from $A(\theta)$. 
 \begin{lemma}
-  Let $\|\theta\| > \max(\theta_0, \theta_1)$ and $\theta'$ satisfy 
-$\frac{1}{K_0} \le \frac{\Omega(\theta')}{\Omega(\theta)} \le K_0 $ 
-with $K_0$ %> 1$, which 
-satisfying $(1 + \frac{1}{K_0})k_1 \ge 2$. 
+  Consider $\|\theta\| > \max(\theta_0, \theta_1)$ and $\theta'$ such that 
+$\frac{1}{K_0} \le \frac{\Omega(\theta')}{\Omega(\theta)} \le K_0 $, 
+where $K_0$ %> 1$, which 
+satisfies $(1 + \frac{1}{K_0})k_1 \ge 2$. 
 For all such $(\theta,\theta')$, the Markov chain with transition matrix 
 $B(\theta,\theta')$ converges geometrically to stationarity at a rate 
 uniformly bounded away from $0$.
@@ -162,16 +156,15 @@ eigenvalues satisfying
 %and that 
 %the eigenvalues of $A(\theta)$ and $B(\theta,\theta')$ satisfy
 $\lambda_{R_B}(\theta, \theta') = 1 - \frac{\lambda_{R_A}(\theta)}{\Omega(\theta,
-\theta')}$. In particular, the second largest eigenvalue 
-$\lambda_2^{R_B}(\theta,\theta')$ of $R_B$ and  
-second smallest eigenvalue $\lambda^{R_A}_2(\theta,\theta')$ of $R_A$ satisfy  
+\theta')}$. %In particular, 
+The second largest eigenvalue $\lambda_2^{R_B}(\theta,\theta')$ of $R_B$ and  second smallest eigenvalue $\lambda^{R_A}_2(\theta,\theta')$ of $R_A$ then satisfy  
 $\lambda^{R_B}_2(\theta,\theta') = 1 - \frac{\lambda^{R_A}_2(\theta)}{\Omega(\theta, \theta')}$.
-Then, from assumptions~\ref{asmp:unif_rate} and~\ref{asmp:cond_num}, and 
+From assumptions~\ref{asmp:unif_rate} and~\ref{asmp:cond_num}, and 
 the lemma's assumptions, 
 $1 - \lambda^{R_B}_2(\theta,\theta') = \frac{\lambda^{R_A}_2(\theta)}{\Omega(\theta, \theta')} 
 \ge \frac{\lambda^{R_A}_2(\theta)}{(K_0+1)\Omega(\theta)} 
 \ge \frac{\mu}{K_0+1} $. 
-Also, 
+Also, since $(1 + \frac{1}{K_0})k_1 \ge 2$,
 \begin{align*}
 \Omega(\theta, \theta') &= \Omega(\theta) + \Omega(\theta') \ge (1 + \frac{1}{K_0})\Omega(\theta)
  > (1 + \frac{1}{K_0})k_1\max_s A_{s}(\theta) \ge 2\max_s A_{s}(\theta). %\ge -2 A(\theta)_{s,s}.
@@ -183,18 +176,11 @@ on $1-\lambda_2^{R_B}(\theta,\theta')$ give the result.
 %\qed
 \end{proof}
 
-Our overall proof strategy is to show that for {$\| \theta \|$} and $W$ large 
-enough, the conditions of Lemma~\ref{lem:eig_lemma} hold with 
-high probability. We show that Lemma~\ref{lem:eig_lemma} then allows the 
-distribution over latent states for the continuous-time MJP and its 
-discrete-time counterpart embedded in $W$ to be brought arbitrarily 
-close to $\pi_\theta$ (and thus to each other), allowing our sampler 
-to inherit mixing properties of the ideal sampler. For the remaining 
-$\theta$ and $W$, we will exploit their boundedness to establish a 
-`small-set condition' where the MCMC algorithm forgets its state with 
-some probability. These two conditions will be sufficient for 
-geometric ergodicity. The next assumption states these small-set conditions 
-for the ideal sampler.
+Our overall proof strategy is to show that for {$\| \theta \|$} and $W$ large enough, the conditions of Lemma~\ref{lem:eig_lemma} hold with high probability. 
+Lemma~\ref{lem:eig_lemma} then will imply that the distribution over latent states for the continuous-time MJP and its discrete-time counterpart embedded in $W$ to be brought arbitrarily close to $\pi_\theta$ (and thus to each other), allowing our sampler to inherit mixing properties of the ideal sampler. 
+We will exploit the boundedness of the set of remaining $\theta$ and $W$, to establish a `small-set condition' where the MCMC algorithm forgets its state with some probability. 
+These two conditions will be sufficient for geometric ergodicity. 
+The next assumption states these small-set conditions for the ideal sampler.
 % This combined with the
 %likelihood $p(X|s, \theta)$ being bounded  gives the result.
 %\begin{definition}
@@ -208,37 +194,24 @@ for the ideal sampler.
 
 \begin{assumption}
 For the ideal sampler with transition probability $p_I(\theta'|\theta)$: \\
-i) for each $M$, for the set $\SM_M=\{\theta:\Omega(\theta)\le M \}$,
-there exists a probability measure $\phi$ and a constant
-$\kappa_1 > 0$ s.t.\ % $q(\ptheta | \theta) \alpha_I(\theta, \ptheta)
+i) for each $M$, for the set $\SM_M=\{\theta:\Omega(\theta)\le M \}$, there exists a probability measure $\phi$ and a constant $\kappa_1 > 0$ s.t.\ 
+% $q(\ptheta | \theta) \alpha_I(\theta, \ptheta)
 %$p_I(\theta'|\theta) \geq \kappa_1 \phi(\theta')$ for $\theta \in \SM_M$, \\
-$\alpha_I(\theta, \theta'; X) q(\theta' | \theta) \ge \kappa_1 \phi(\theta')$
- for $\theta \in \SM_M$. 
+$\alpha_I(\theta, \theta'; X) q(\theta' | \theta) \ge \kappa_1 \phi(\theta')$ for $\theta \in \SM_M$. 
 Thus $B_M$ is a $1$-small set. \\
 ii) for $M$ large enough, $\exists \rho < 1$ s.\ t.\
 $\int \Omega(\ptheta) p_I(\ptheta|\theta) d\ptheta
 \leq (1-\rho) \Omega(\theta)+L_I$, $\forall \theta \not\in \SM_M$.
   \label{asmp:ideal_geom}
 \end{assumption}
-\noindent %Here we specify the properties of the ideal sampler that we
-%want our proposed sampler to inherit. 
-These two conditions are standard
-small-set and drift conditions necessary for the ideal sampler to satisfy
-geometric ergodicity. The first implies that for $\theta$ in
-$\SM_M$, the ideal sampler forgets its current
-location with probability $\kappa_1$. The second condition ensures that
-for $\theta$ outside this set, the ideal sampler drifts towards
-$\SM_M$. These two conditions together imply geometric
-mixing with rate equal or faster than $\kappa_1$~\citep{meyn2009}.
-Observe that we have used $\Omega(\theta)$ as the so-called 
-Lyapunov-Foster function to define the drift condition for the ideal 
-sampler. %and whose sub-level sets form the small sets. 
-This is the most natural choice,
-though our proof can be tailored to different choices. Similarly, we
-could easily allow $\SM_M$ to be an $n$-small set for any $n\ge 1$ (so
-the ideal sampler needs $n$ steps before it can forget its current
-value in $\SM_M$); we restrict ourselves to the $1$-small case for
-clarity.
+\noindent 
+These two conditions are standard small-set and drift conditions necessary for the ideal sampler to satisfy geometric ergodicity. 
+The first implies that for $\theta$ in $\SM_M$, the ideal sampler `forgets' its current location with probability $\kappa_1$. 
+The second condition ensures that for $\theta$ outside this set, the ideal sampler drifts towards $\SM_M$. 
+These two conditions together imply geometric mixing with rate equal or faster than $\kappa_1$~\citep{meyn2009}.
+Observe that we have used $\Omega(\theta)$ as the so-called Lyapunov-Foster function to define the drift condition for the ideal sampler. 
+This is the most natural choice, though our proof can be tailored to different choices. 
+Similarly, we could easily allow $\SM_M$ to be an $n$-small set for any $n\ge 1$ (so the ideal sampler needs $n$ steps before it can forget its current value in $\SM_M$); we restrict ourselves to the $1$-small case for clarity.
 
 
 %\begin{assumption}
@@ -283,21 +256,13 @@ $ \int_\Theta \Omega(\ptheta)^2 q(\ptheta | \theta)d\ptheta \leq \eta_0 \Omega(\
 \noindent This mild requirement can be satisfied by choosing a proposal 
 distribution $q$ that does not attempt to explore large $\theta$'s too 
 aggressively.
+The next corollary follows from a simple application of the Cauchy-Schwarz inequality, see the appendix for the proof.
 \begin{corollary}
 Given the proposal density $q(\ptheta | \theta)$, $\exists \eta_1 > 0, \theta_2 > 0$ such that for $\theta$ 
 satisfying $\| \theta \|  > \theta_2$, 
 $ \int_\Theta \Omega(\ptheta) q(\ptheta | \theta)d\ptheta \leq \eta_1 \Omega(\theta).$
 \label{corol:integ_bound}
 \end{corollary}
-\begin{proof}
-From assumption \ref{asmp:integ_bound},  we have $ \int_\Theta \Omega(\ptheta)^2 q(\ptheta | \theta)d\ptheta \leq \eta_0 \Omega(\theta)^2$ for $\theta$ satisfying $\| \theta \|  > \theta_2$.
-For such $\theta$, by the Cauchy-Schwarz inequality, we have
-\begin{align*}
-\left[ \int_\Theta \Omega(\ptheta) q(\ptheta | \theta) d\ptheta \right]^2 &\le \int_\Theta \Omega(\ptheta)^2 q(\ptheta | \theta) d\ptheta \cdot \int_\Theta q(\ptheta | \theta) d\ptheta \le \eta_0 \Omega(\theta)^2.
-\end{align*}
-So for $\theta$ satisfying $\| \theta \|  > \theta_2$, we have $\int_\Theta \Omega(\ptheta) q(\ptheta | \theta) d\ptheta \le \sqrt{\eta_0} \Omega(\theta).$
-%\qed
-\end{proof}
 %\begin{assumption}
 %For any positive $\epsilon > 0$ and $K_0 > 1$, there exists $\theta_2$, such that for $\theta > \theta_2$, $P(\mid \frac{q(\theta | \theta')p(\theta')}{q(\theta | \theta')p(\theta)}\mid \leq K_0 | \theta) \geq 1 - \epsilon$, where $\theta' \sim q(\cdot | \theta)$.
 %\end{assumption}
@@ -324,7 +289,7 @@ the condition $q(\{\theta': \frac{p(\theta')q(\theta|\theta')}{p(\theta)q(\theta
 \noindent This holds, when e.g.\ $p(\theta)$ is a gamma distribution,
 and $q(\theta'|\theta)$ is Gaussian.
 %\begin{proof}
-%From the assumptoin, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$.
+%From the assumption, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$.
 %\begin{align*}
 %\log \frac{p(\theta')}{p(\theta)} &\le \log\frac{p(\theta - h)}{p(\theta)}
 %= \log p(\theta - h) - \log p(\theta)\\
@@ -354,7 +319,7 @@ $q(\{\theta':\frac{\Omega(\theta')}{\Omega(\theta)} \in
 finite variance.
 
 %\begin{proof}
-%From the assumptoin, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$.
+%From the assumption, there exists $\theta_5 > 0$ such that $p(\theta)$ is decreasing with respect to $\Vert \theta \Vert$ for $\theta \in B_{0, \theta_5}^c$. For $\theta > \max(\theta_2, \theta_5)$, $\theta' \in B_{\theta, h}$ with probability greater than $1 - \epsilon$.
 %\begin{align*}
 %\log(\frac{\Omega(\theta')}{\Omega(\theta)}) & \le \log(\frac{\Omega(\theta + h)}{\Omega(\theta)})\\
 %& = h \frac{\Omega(\chi')}{\Omega(\chi')} \le h M_2
@@ -383,8 +348,7 @@ finite variance.
 
 
 \begin{theorem}
-Under the above assumptions, our auxiliary variable MCMC sampler is
-geometrically ergodic.  \label{thm:geom_erg}
+  Under the above assumptions, our symmetrized auxiliary variable MCMC sampler in algorithm~\ref{alg:MH_improved} is geometrically ergodic.  \label{thm:geom_erg}
 \end{theorem}
 \begin{proof}
 \noindent This theorem follows from two lemmas we will prove.
@@ -399,25 +363,19 @@ If $\sup_\theta \Omega(\theta) < \infty$, we just need
 the small set $\{(W,\theta,\vartheta: |W| < M \}$ for some $M$.
 %\qed
 \end{proof}
-For easier comparison with the ideal sampler, we begin an MCMC 
-iteration from step 5 in
-Algorithm~\ref{alg:MH_improved}. Thus, our sampler operates on 
-$(\theta,\vartheta,W)$,  with $\theta$ the current 
-parameter, $\vartheta$ the auxiliary variable, and $W$ the Poisson grid. 
-An MCMC iteration updates this to $(\theta',\vartheta',W')$ by 
-(a) sampling states $V$ (or $(S,T)$)  with a backward pass, 
-(b) discarding $\vartheta$, (c) sampling $\ptheta$ from $q(\ptheta|\theta)$, 
-(d) sampling $U'$ given $(\theta,\ptheta)$ and setting $W' = T \cup U'$, (e) proposing to swap 
+For easier comparison with the ideal sampler, we begin an MCMC iteration from step 5 in Algorithm~\ref{alg:MH_improved}. 
+Thus, our sampler operates on $(\theta,\vartheta,W)$,  with $\theta$ the current parameter, $\vartheta$ the auxiliary variable, and $W$ the Poisson grid. 
+An MCMC iteration updates this by %to $(\theta',\vartheta',W')$ by 
+(a) sampling states $V$  with a backward pass, 
+(b) discarding $\vartheta$ and self-transition times, (c) sampling $\ptheta$ from $q(\ptheta|\theta)$, 
+(d) sampling $U'$ given $(\theta,\ptheta, S, T)$, setting $W' = T \cup U'$, and discarding $S$, (e) proposing to swap 
 $(\theta,\ptheta)$ and then (f) accepting or rejecting with a forward pass. 
-On acceptance, $\theta' = \ptheta$ and
-$\vartheta' = \theta$, and on rejection, $\theta'=\theta$ and 
-$\vartheta'=\ptheta$. We write $(\theta'',\vartheta'',W'')$ for the 
-MCMC state after two iterations.
-Recall that step (a) actually assigns states $V$ to $W$. $T$ are 
-the elements of $W$ where $V$ changes value, and $S$ are the 
-corresponding elements of $V$. The remaining elements $U$ are the elements 
-of $W$ corresponding to self-transitions. For reference, we repeat some of 
-our notation in the appendix.
+On acceptance, $\theta' = \ptheta$ and $\vartheta' = \theta$, and on rejection, $\theta'=\theta$ and $\vartheta'=\ptheta$, so that the MCMC state at the end of the iteration is $(\theta',\vartheta', W')$. 
+We write $(\theta'',\vartheta'',W'')$ for the MCMC state after two iterations.
+Recall that step (a) actually assigns states $V$ to $W$. 
+$T$ are the elements of $W$ where $V$ changes value, and $S$ are the corresponding elements of $V$. 
+The remaining elements $U$ are the elements of $W$ corresponding to self-transitions. 
+For reference, we repeat some of our notation in the appendix.
 % \{?
 % We establish the drift condition via the Lyapunov-Foster function
 % $\cV(W,\theta,\vartheta) = \left. \lambda_1|W| + \lambda_2 \Omega(\theta) +
@@ -436,8 +394,7 @@ our notation in the appendix.
 % exchange move we make,
 % where on acceptance $\vartheta'=\theta$, while on rejection, $\theta'=\theta$.
 
-We first bound self-transition probabilities
-of the embedded Markov chain from $0$: 
+We first bound self-transition probabilities of the embedded Markov chain from $0$: 
 %Proofs, if not included, can be found in the appendix.
 %\begin{proposition}
 %The a priori probability the embedded Markov chain makes a self-transition,
@@ -492,30 +449,29 @@ probability measure $\phi_1$ independent of the initial state.
   consists of two terms, corresponding to the proposed parameter being
   accepted and rejected. Discarding the latter, we have %the bound
 \begin{align*}
-  P(W',\theta',\vartheta'|W,\theta,\vartheta,X)&\geq
-  \delta_\theta(\vartheta') q(\theta'|\theta)
- \sum_{S,T}  P(S,T | W, \theta, \vartheta, X) 
-             P(W'| S, T, \theta, \theta')
-             \alpha(\theta, \theta', W';X)
+  P(W',\theta',\vartheta'|W,\theta,\vartheta,X)&\geq q(\theta'|\theta) \delta_\theta(\vartheta') \alpha(\theta, \theta', W';X) 
+  \sum_{S,T} \left[ P(S,T | W, \theta, \vartheta, X) P(W'| S, T, \theta, \theta') \right]. 
 \end{align*}
 %Suppose $(W, \theta, \vartheta) \in B_{h, M}$.
-Here we use the fact that given $(S,T)$,
-$P(W'|S,T,\theta,\theta',X)$ is independent of  $X$.
-We further bound the summation over $(S,T)$ by considering only the terms
-with $S$ a constant. When this constant is  state $s^*$, we write this as 
-$(S=[s^*], T= \emptyset)$. This corresponds to $|W|$ self-transitions 
-after the starting state $S_0=s^*$, so that
+This follows from steps (c) to (e) in the reordered algorithm.
+The summation is over all $(S,T)$ values produced by the backward pass (which are then discarded after sampling $W'$).
+We have used the fact that given $(S,T)$, $P(W'|S,T,\theta,\theta',X)$ is independent of  $X$.
+
+We bound the summation over $(S,T)$ by considering only terms with $S$ constant. 
+When this constant is  state $s^*$, we write this as $(S=[s^*], T= \emptyset)$. This corresponds to $|W|$ self-transitions 
+after starting state $S_0=s^*$. Then the first term in the square brackets becomes
 %\vspace{-.1in}
 \begin{align*}
   P(S=[s^*], T = \emptyset | W, \theta, &\vartheta, X) =
 P(S_0=s^*|X,W, \theta, \vartheta)\prod_{i = 0}^{|W| - 1} 
 P(V_{i + 1} = s^* | V_i = s^*,X,W,\theta,\vartheta) \\ 
 %&\prod P(X_{[w_i, w_{i + 1})} | v_i = s_0, \theta)\\
-& \geq P(S_0=s^*|X,W, \theta, \vartheta)\delta_1^{|W|} %\numberthis %\eta_1
+& \geq P(S_0=s^*|X,W, \theta, \vartheta)\delta_1^{|W|}  %\numberthis %\eta_1
+\qquad (\text{from Corollary~\ref{corol:self_tr}}).
 \end{align*}
-Here $\delta_1$ is the lower bound from Corollary~\ref{corol:self_tr}.
+%Here $\delta_1$ is the lower bound from Corollary~\ref{corol:self_tr}.
 With $S(t)$ fixed at $s^*$, $W'$ is distributed as a Poisson process with rate $\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta)$.
-Write $\PP(W'|R(t))$ for the probability of $W$ under a Poisson process with rate $R(t)$ on the interval $[0,t_{end}]$, so that $P(W' |  S=[s^*], T = \emptyset, \theta', \theta) = \PP(W'|\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta))$. Then, from the Poisson superposition theorem, we have 
+Write $\PP(W'|R(t))$ for the probability of $W'$ under a rate-$R(t)$ Poisson process on $[0,t_{end}]$, so that $P(W' |  S=[s^*], T = \emptyset, \theta', \theta) = \PP(W'|\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta))$. Then, from the Poisson superposition theorem, writing $2^{W'}$ for the power set of $W$, we have 
 \begin{align*}
   P(W' |  S=&[s^*], T = \emptyset, \theta', \theta) 
 %\PP(W'|\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta)) 
@@ -530,16 +486,17 @@ Write $\PP(W'|R(t))$ for the probability of $W$ under a Poisson process with rat
 %\numberthis %\quad (\text{since }\theta\in B_M)
 \end{align*}
 %\vspace{-.05in}
-Thus we have
-\begin{align*}
-  \sum_{S,T} P(S,T,W' | W, \theta, \vartheta, X) & 
-  \geq \sum_{{s^*}} P(S{=[s^*]}, T = \emptyset | W, \theta, \vartheta, X)
-  P(W' | S{=[s^*]}, T=\emptyset,\theta', \theta)\\
-               &\geq \delta_1^{|W|} \exp(-Mt_{end})
-\PP(W' | \Omega(\theta')) \numberthis
-\label{eq:marg}
-\end{align*}
-Finally we relate the acceptance rate to that of the ideal sampler:
+  Thus we have
+  \begin{align*}
+    \sum_{S,T} P(S,T,W' | W, \theta, \vartheta, X) & 
+    \geq \sum_{{s^*}} P(S{=[s^*]}, T = \emptyset | W, \theta, \vartheta, X)
+    P(W' | S{=[s^*]}, T=\emptyset,\theta', \theta)\\
+                 &\geq \delta_1^{|W|} \exp(-Mt_{end})
+  \PP(W' | \Omega(\theta')). \numberthis
+  \label{eq:marg}
+  \end{align*}
+Finally, we consider the third term in the square brackets. Using assumption~\ref{asmp:obs_bnd},
+%we relate the acceptance rate to that of the ideal sampler:
 \begin{align*}
 \alpha(\theta, \theta', W'; X) &
 %= 1 \wedge \frac{P(X | W', \theta', \theta)
@@ -553,9 +510,8 @@ q(\theta|\theta')p(\theta')}{P(X | \theta)q(\theta'|\theta)p(\theta)}
 \numberthis
 \label{eq:acc}
 \end{align*}
-Since by assumption $|W| \le h$, %from equations~\eqref{eq:marg} and~\eqref{eq:acc}, 
-and $q(\theta'|\theta)\alpha_I(\theta,\theta';X) \ge \kappa_1 \phi(\theta')$ 
-(from assumption \ref{asmp:ideal_geom}),
+Inside $B_{h,M}$, $|W| \le h$, %from equations~\eqref{eq:marg} and~\eqref{eq:acc}, 
+and by assumption~\ref{asmp:ideal_geom}, $q(\theta'|\theta)\alpha_I(\theta,\theta';X) \ge \kappa_1 \phi(\theta')$. Then the three inequalities above let us simplify the equation at the start of the proof:
 \begin{align*}
 P(W', \theta',\vartheta' | W, \theta, \vartheta)  
 %&\ge \frac{\lb^2 }{\ub^2}\delta_1^{h}
@@ -563,7 +519,7 @@ P(W', \theta',\vartheta' | W, \theta, \vartheta)
 % \alpha_I(\theta', \theta;X)q(\theta'|\theta)\\
   & \geq \frac{\lb^2 }{\ub^2}\delta_1^{h}
 \exp(-M t_{end})\delta_\theta(\vartheta')\kappa_1\PP(W'|\Omega(\theta') \phi(\theta') \\
-  & \assign \rho_1 \delta_\theta(\vartheta')\PP(W'| \Omega(\theta') \phi(\theta')
+  & \defeq \rho_1 \delta_\theta(\vartheta')\PP(W'| \Omega(\theta') \phi(\theta').
 \end{align*}
 {Write $F_{Poiss(a)}$ for the CDF of a rate-$a$ Poisson.
 The two-step transition satisfies}
@@ -574,14 +530,14 @@ The two-step transition satisfies}
   %    dW' d\theta' d\vartheta' \\
        \ge \int_{\SM_{h,M}} P(W'', \theta'',\vartheta'' | W', \theta', \vartheta')
        P(W', \theta',\vartheta' | W, \theta, \vartheta)
-       dW' d\theta' d\vartheta' \\
+       \dif W' \dif\theta' \dif\vartheta' \\
        &\ge \int_{\SM_{h,M}}  \rho_1 \delta_{\theta'}(\vartheta'')\PP(W'' | \Omega(\theta''))\phi(\theta'') \\
        &\qquad \qquad \rho_1 \delta_\theta(\vartheta')\PP(W'|\Omega(\theta')) \phi(\theta')
-       dW' d\theta' d\vartheta' \\
+       \dif W' \dif \theta' \dif \vartheta' \\
        &\ge \rho_1^2 \phi(\theta'')\PP(W''|\Omega(\theta''))
        \int_{\SM_{h,M}} \!\!\!\! \delta_{\theta'}(\vartheta'')
        F_{Poiss(\Omega(\theta'))}(h)\phi(\theta')
-       d\theta'  \\
+       \dif\theta'  \\
        & \ge \rho_1^2 \PP(W''|\Omega(\theta''))\phi(\theta'')\phi(\vartheta'') F_{Poiss(\Omega(\vartheta''))}(h)\delta_{\SM_{h,M}}(\vartheta'') \\
        & \ge \rho_1^2 \PP(W'' | \Omega(\theta''))\phi(\theta'')
        \phi(\vartheta'')\delta_{\SM_{h,M}}(\vartheta'')\exp(-\Omega(\vartheta''))  \numberthis
@@ -599,11 +555,8 @@ with $\phi_1(W'',\theta'',\vartheta'') \propto \PP(W'' | \Omega(\theta'')) \phi(
   \delta_{\SM_{h,M}}(\vartheta'')\exp(-\Omega(\vartheta''))  $.
 %\qed
 \end{proof}
-\noindent We have established the small set condition: for any point 
-inside $B_{h,M}$ our sampler forgets its state with nonzero 
-probability. We next establish a drift condition, showing that outside 
-this small set, the algorithm drifts back towards it 
-(Lemma~\ref{lem:drift}).
+\noindent We have established the small set condition: for a point inside $B_{h,M}$ our sampler forgets its state with nonzero probability, sampling a new state from $\phi_1(\cdot)$. 
+We next establish a drift condition, showing that outside $B_{h,M}$, the algorithm drifts back towards it (Lemma~\ref{lem:drift}).
 %Observe that if $\Omega(\theta)$ is bounded uniformly, then
 %the drift condition need not include $\theta$. To prove the drift
 %condition for the general case when $\Omega(\theta)$ is unbounded,
@@ -716,10 +669,8 @@ For large $\theta$, we prove a similar result in the continuous
 case by uniformization. For any $\theta'$,
 \begin{align*}
 P(X | \theta) %&= \int_W dW P(X , W | \theta, \theta')\\
-= \int \dif W P(X | W, \theta, \theta') P(W | \theta, \theta') %+ \int_{\mW \leq w_0}dW P(X | W, \theta, \theta') P(W | \theta, \theta').
-\quad 
-(\text{$P(W|\theta,\theta')$ is a rate-$\Omega(\theta) + 
-\Omega(\theta')$ Poisson process}).
+= \int \dif W P(X | W, \theta, \theta') \PP(W | \Omega(\theta)+\Omega(\theta')). %+ \int_{\mW \leq w_0}dW P(X | W, \theta, \theta') P(W | \theta, \theta').
+%\quad (\text{$P(W|\theta,\theta')$ is a rate-$\Omega(\theta) + \Omega(\theta')$ Poisson process}).
 \end{align*}
 %\sum_{v} P(X | V_{|W|} = v, \theta) P^{(|W|)}(V_{|W|} = v | W, \theta, \theta') P(W|\theta, \theta')
 %&= \sum_W \sum_{V_{|W|}} P(X | V_{|W|}, \theta) P^{(|W|)}(V_{|W|} | W, \theta, \theta') P(W|\theta, \theta')\\
@@ -756,21 +707,19 @@ inequality,
 %So for $\epsilon > 0$, and $K_0 > 0$, if $|W| > W_0$ and $\theta > \theta_0$ and $\Omega(\theta') \leq K_0 \Omega(\theta)$, we have
 \begin{align*}
 |P(X | \theta) - P(X | W, \theta, \theta')| &\leq |P(X | \theta) -P_{st}(X | \theta) | + | P_{st}(X | \theta) -  P(X | W, \theta, \theta')|\\
-       & \leq (\epsilon'' + \epsilon'') + \epsilon'' \assign \epsilon
+       & \leq (\epsilon'' + \epsilon'') + \epsilon'' \defeq \epsilon
 \end{align*}
+\vspace{-.2in}
 \end{proof}
-
+\noindent The previous lemma bounds the difference in probability of observations under the discrete-time and continuous-time processes for $\theta$ and $|W|$ large enough. 
+The next result uses this to bound with high probability the different in acceptance probabilities of the ideal sampler, and our proposed sampler with a grid $W$. 
+See the appendix for the proof.
 \begin{proposition}
   Let $(W, \theta, \vartheta)$ be the current state of the sampler.
 Then, for any $\epsilon$, there exists $\theta_\epsilon > 0$ as well as a set $\E_\epsilon \subseteq \{(W', \theta'): |\alpha_I(\theta,\theta';X) - \alpha(\theta,\theta';W',X)| \le \epsilon\}$, such that for $\theta$ satisfying $\| \theta \| > \theta_\epsilon$ and any $\vartheta$, we have
 $P(E_\epsilon|W,\theta,\vartheta) > 1-\epsilon$.
 \label{prop:mix0}
 \end{proposition}
-\noindent The previous lemma bounded the difference in probability of observations 
-under the discrete-time and continuous-time processes. This result 
-uses this to bound the acceptance probabilities of the ideal sampler, 
-and our proposed sampler (where acceptace probabilities are calculated 
-conditioned on the grid $W$). See the appendix for the proof.
 %   \begin{proposition}
 %     Write $P_{\theta}(W',\theta^*)$ for the conditional distribution
 %     over $(W',\theta^*)$ given the current state of the MCMC sampler and the
@@ -879,10 +828,10 @@ $ \| \theta \| > \theta_2$,
 %So for $\theta$ satisfying $ \| \theta \| > \theta_3$, we have
 \mathbb{E}[|U'| |W, \theta, \vartheta, X] &= 
 \mathbb{E}_{S,T, \ptheta}\mathbb{E}[|U'| | S, T, W, \theta, \vartheta, \ptheta, X] = \mathbb{E}_{S,T, \ptheta}\mathbb{E}[|U'| | S, T, W, \theta, \ptheta] \\
-& \leq \mathbb{E}_{S,T, \ptheta} \left[t_{end}\Omega(\theta, \ptheta)\right] = t_{end}\int \Omega(\theta, \ptheta) q(\ptheta | \theta) d\ptheta\\
+& \leq \mathbb{E}_{S,T, \ptheta} \left[t_{end}\Omega(\theta, \ptheta)\right] = t_{end}\int \Omega(\theta, \ptheta) q(\ptheta | \theta) \dif\ptheta\\
 & = t_{end} \left[ \left(  \Omega(\theta) +
-\int_\Theta \Omega(\ptheta) q(\ptheta | \theta)d\ptheta \right) \right] 
- \leq t_{end} (\eta_1 + 1) \Omega(\theta) %\right]
+\int_\Theta \Omega(\ptheta) q(\ptheta | \theta)\dif\ptheta \right) \right] 
+ \leq t_{end} (\eta_1 + 1) \Omega(\theta). %\right]
 %\assign a \Omega(\theta) + b.
 \end{align*}
 %Next, we note that $\vartheta'$ takes on value $\theta$ with
@@ -897,19 +846,19 @@ $ \| \theta \| > \theta_2$,
 To bound $\mathbb{E}\left[\Omega(\theta')  | W, \theta, \vartheta, X\right]$,
 consider the transition probability over $(W',\theta')$:
 \begin{align*}
-  P(dW', d\theta'&| W, \theta, \vartheta)
-=d\theta' dW' \left[q(\theta' | \theta)
+  P(\dif W', \dif \theta'&| W, \theta, \vartheta)
+=\dif\theta' \dif W' \left[q(\theta' | \theta)
   \sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')
 \alpha(\theta, \theta' ; W', X)\right. \\
 &\left.+ \int q(\ptheta | \theta) \sum_{S,T} P(S, T|W,\theta,\vartheta,
-    X)P(W' | S, T, \theta, \ptheta) ( 1 - {\alpha(\theta, \ptheta ; W', X)})d\ptheta
+    X)P(W' | S, T, \theta, \ptheta) ( 1 - {\alpha(\theta, \ptheta ; W', X)})\dif\ptheta
     \delta_\theta(\theta')\right].
 \end{align*}
 With $P(W' | W, \theta, \vartheta, \theta', X) =
 \sum_{S,T} P(S, T | W, \theta, \vartheta, X)P(W' | S, T, \theta, \theta')$,
 integrate out $W'$:
 \begin{align*}
-  P(d\theta'| W, \theta, \vartheta) &=d\theta' \int_{W'}dW'
+  P(\dif\theta'| W, \theta, \vartheta) &=\dif\theta' \int \dif W'
   \bigg[q(\theta' | \theta)
      P(W' | W, \theta, \vartheta, \theta', X) \alpha(\theta, \theta' ; W', X) + \\
   &\left.  \int q(\ptheta | \theta)  P(W' |  W, \theta, \vartheta, \ptheta,
@@ -920,12 +869,12 @@ X) ( 1 - \alpha(\theta, \ptheta ; W', X))d\ptheta
 %Then let  $\int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)
 %  = \int d\theta' \Omega(\theta') I_1(W, \theta', \theta, \vartheta) + \Omega(\theta) I_2(W, \theta, \vartheta) 
 %$, with
-Then let  $\int \Omega(\theta') P(d\theta'| W, \theta, \vartheta)
+Let  $\int \Omega(\theta') P(\dif\theta'| W, \theta, \vartheta)
   = I_1(W, \theta, \vartheta) + \Omega(\theta) I_2(W, \theta, \vartheta) 
 $, with
 \begin{align*}
-  &I_1(W, \theta, \vartheta) = \int d\theta' \Omega(\theta') q(\theta' | \theta)\int dW'P(W' | W, \theta, \vartheta, \theta', X)\alpha(\theta, \theta' ; W', X), \\
-&I_2(W, \theta, \vartheta) =\int d\ptheta  dW'q(\ptheta | \theta)P(W' | W, \theta, \vartheta, \ptheta, X)(1 - \alpha(\theta, \ptheta ; W', X)).
+  &I_1(W, \theta, \vartheta) = \int \dif\theta' \Omega(\theta') q(\theta' | \theta)\int \dif W'P(W' | W, \theta, \vartheta, \theta', X)\alpha(\theta, \theta' ; W', X), \\
+&I_2(W, \theta, \vartheta) =\int \dif\ptheta  dW'q(\ptheta | \theta)P(W' | W, \theta, \vartheta, \ptheta, X)(1 - \alpha(\theta, \ptheta ; W', X)).
 \end{align*}
 {Consider the second term $I_2$.
   From Proposition~\ref{prop:mix0}, for any positive $\epsilon$, there
@@ -1072,10 +1021,10 @@ the ideal sampler), we have
 %For $\theta$ satisfying $ \| \theta \| >\max(\theta_2, \theta_3, \theta_\epsilon)$, we have %\boqian{need to change afterwards}
 %\vspace{-.3in}
 \begin{align*}
-\mathbb{E}[\lambda_1 | W'| &+ \Omega(\theta')| W, \theta, \vartheta, X] \le \lambda_1(1 - \delta_1)|W| + \lambda_1 t_{end} (1 + \eta_1)\Omega(\theta)\\
-&+  (1 - \rho) \Omega(\theta) + (\sqrt{\eta_0} \sqrt{\epsilon} +  \eta_1 \epsilon + 2\epsilon) \Omega(\theta) + L_I\\
+\mathbb{E}[\lambda_1 | W'| &+ \Omega(\theta')| W, \theta, \vartheta, X] \le \lambda_1(1 - \delta_1)|W| + \lambda_1 t_{end} (1 + \eta_1)\Omega(\theta) +\\
+&  (1 - \rho) \Omega(\theta) + (\sqrt{\eta_0} \sqrt{\epsilon} +  \eta_1 \epsilon + 2\epsilon) \Omega(\theta) + L_I\\
 & = (1 - \delta_1)\lambda_1 |W| + [1 - (\rho - \lambda_1 t_{end} (1 + \eta_1) - (2 + \eta_1)\epsilon - \sqrt{\eta_0 \epsilon})]\Omega(\theta) + L_I\\
-& \assign (1 - \delta_1)\lambda_1 |W| + (1 - \delta_2)\Omega(\theta) + L_I
+& \defeq (1 - \delta_1)\lambda_1 |W| + (1 - \delta_2)\Omega(\theta) + L_I
 \end{align*}
 For $(\lambda_1,\epsilon)$ small enough, $\delta_2 \in (0,1)$, 
 %If we 
