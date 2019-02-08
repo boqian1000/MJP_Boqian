@@ -68,8 +68,7 @@ the posterior distribution.
 The uniformization scheme of~\cite{RaoTeh13} works for any underlying Poisson
 process whose rate $\Omega$ is greater than $\max_i A_i$. The strict inequality
 ensures that the conditional probability of sampling one or more thinned events 
-$U$ is positive for every trajectory $S(t)$ (recall 
-$U \sim \text{PoissonProc}(\Omega-A_{S(t)})$). Empirical results from~\cite{RaoTeh13}
+$U$ is positive for every trajectory $S(t)$ (recall $U$ is sampled from a Poisson process with rate $(\Omega-A_{S(t)})$). Empirical results from~\cite{RaoTeh13}
 suggest setting $\Omega = 2 \max_i A_i$.
 
 Implicit in our new scheme is a uniformizing Poisson process with rate

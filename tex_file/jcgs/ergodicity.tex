@@ -1,15 +1,10 @@
 %\vspace{-.1in}
 \section{Geometric ergodicity}
 %\vspace{-.05in}
-Finally, we derive conditions under which our symmetrized 
-MH algorithm
-inherits mixing properties of an `ideal' sampler that operates without
-computational constraints. The latter proposes a new parameter $\vartheta$
-from distribution $q(\vartheta|\theta)$, and accepts with probability
-$\alpha_I(\theta,\vartheta; X) = 1 \wedge \frac{P(X , \vartheta)q(\theta| \vartheta)}
-{P(X , \theta)q(\vartheta|\theta)}$.  The resulting ideal (but intractable)
-Markov chain has transition probability
-$P_I(\theta'|\theta) = q(\theta'|\theta)\alpha_I(\theta,\theta';X) + \left[1-\int d\vartheta
+Finally, we derive conditions under which our symmetrized MH algorithm inherits mixing properties of an `ideal' sampler that operates without computational constraints. 
+The latter proposes a new parameter $\vartheta$ from distribution $q(\vartheta|\theta)$, and accepts with probability $\alpha_I(\theta,\vartheta; X) = 1 \wedge \frac{P(X , \vartheta)q(\theta| \vartheta)} {P(X , \theta)q(\vartheta|\theta)}$.  
+The resulting ideal (but computationally expensive) Markov chain has transition probability
+$P_I(\theta'|\theta) = q(\theta'|\theta)\alpha_I(\theta,\theta';X) + \left[1-\int \dif\vartheta
 q(\vartheta|\theta)\alpha_I(\theta,\vartheta;X)\right]\delta_\theta(\theta')$, the first
 term corresponding to acceptance, and the second, rejection.
 
@@ -142,9 +137,8 @@ will mix well if we can control the mixing of the MJP itself.
 %MJP has mixed at the end of the interval. The earlier assumption ensures
 %this holds for all $\theta \ge \theta_0$.
 To better understand this, recall $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$
-is the transition matrix of the embedded Markov chain, and note 
-it has the same stationary distribution $\pi_\theta$ as $A(\theta)$.
-Define the reversibilization $R_B(\theta,\theta')$ from $B(\theta,\theta')$ 
+is the transition matrix of the embedded Markov chain from uniformization, this has the same stationary distribution $\pi_\theta$ as $A(\theta)$.
+Define the reversibilization $R_B(\theta,\theta')$ of $B(\theta,\theta')$ 
 just as we did $R_A(\theta)$ from $A(\theta)$. 
 \begin{lemma}
   Let $\|\theta\| > \max(\theta_0, \theta_1)$ and $\theta'$ satisfy 
@@ -520,22 +514,19 @@ P(V_{i + 1} = s^* | V_i = s^*,X,W,\theta,\vartheta) \\
 & \geq P(S_0=s^*|X,W, \theta, \vartheta)\delta_1^{|W|} %\numberthis %\eta_1
 \end{align*}
 Here $\delta_1$ is the lower bound from Corollary~\ref{corol:self_tr}.
-With $S(t)$ fixed at $s^*$, $W'$ is a Poisson process with rate
-%$r(\theta', \theta, s_0) = 
-$\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta)$.
-%$> \epsilon_1 > 0$.
-From the %fact that $\Omega(\theta',\theta) = \Omega(\theta') + \Omega(\theta)$,
-%we apply the 
-Poisson superposition theorem,
-%$\PP(r(\theta, \ptheta, s_0)) = \PP(\Omega(\ptheta)) \cup \PP(r(\theta, \ptheta, s_0) - \Omega(\ptheta))$.
+With $S(t)$ fixed at $s^*$, $W'$ is distributed as a Poisson process with rate $\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta)$.
+Write $\PP(W'|R(t))$ for the probability of $W$ under a Poisson process with rate $R(t)$ on the interval $[0,t_{end}]$, so that $P(W' |  S=[s^*], T = \emptyset, \theta', \theta) = \PP(W'|\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta))$. Then, from the Poisson superposition theorem, we have 
 \begin{align*}
-  P(W' |  S=&[s^*], T = \emptyset, \theta', \theta)  \geq P(W' \from
-\PP(\Omega(\theta')))
-P(\emptyset \from \PP(\Omega(\theta)-A_{s^*}(\theta) ))\\
-  & \geq P(W' \from \PP(\Omega(\theta'))) P(\emptyset \from \PP(\Omega(\theta) ))\\
+  P(W' |  S=&[s^*], T = \emptyset, \theta', \theta) 
+%\PP(W'|\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta)) 
+  = \sum_{Z \in 2^{W'}} \PP\left(Z|\Omega(\theta')\right)  
+  \PP\left(W'\backslash Z|\Omega(\theta) - A_{s^*}(\theta)\right) \\
+            &\geq \PP(W'|\Omega(\theta'))
+\PP(\emptyset | \Omega(\theta)-A_{s^*}(\theta) )\\
+  & \geq \PP(W' | \Omega(\theta')) \PP(\emptyset | \Omega(\theta) )\\
 %& = P(W' \from \PP(\Omega(\theta'))) \exp(-\Omega(\theta)t_{end})\\
-  & \geq P(W' \from \PP(\Omega(\theta'))) \exp(-M t_{end}) 
-\quad \text{(since for $\theta \in B_M$, $\Omega(\theta) \le M$)}.
+  & \geq \PP(W' | \Omega(\theta')) \exp(-M t_{end}),
+\quad \text{since for $\theta \in B_M$, $\Omega(\theta) \le M$}.
 %\numberthis %\quad (\text{since }\theta\in B_M)
 \end{align*}
 %\vspace{-.05in}
@@ -545,7 +536,7 @@ Thus we have
   \geq \sum_{{s^*}} P(S{=[s^*]}, T = \emptyset | W, \theta, \vartheta, X)
   P(W' | S{=[s^*]}, T=\emptyset,\theta', \theta)\\
                &\geq \delta_1^{|W|} \exp(-Mt_{end})
-P(W' \from \PP(\Omega(\theta'))) \numberthis
+\PP(W' | \Omega(\theta')) \numberthis
 \label{eq:marg}
 \end{align*}
 Finally we relate the acceptance rate to that of the ideal sampler:
@@ -571,8 +562,8 @@ P(W', \theta',\vartheta' | W, \theta, \vartheta)
 %\exp(-M t_{end})\delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta')) 
 % \alpha_I(\theta', \theta;X)q(\theta'|\theta)\\
   & \geq \frac{\lb^2 }{\ub^2}\delta_1^{h}
-\exp(-M t_{end})\delta_\theta(\vartheta')\kappa_1P(W' \from \PP(\Omega(\theta'))\phi(\theta') \\
-  & \assign \rho_1 \delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta')
+\exp(-M t_{end})\delta_\theta(\vartheta')\kappa_1\PP(W'|\Omega(\theta') \phi(\theta') \\
+  & \assign \rho_1 \delta_\theta(\vartheta')\PP(W'| \Omega(\theta') \phi(\theta')
 \end{align*}
 {Write $F_{Poiss(a)}$ for the CDF of a rate-$a$ Poisson.
 The two-step transition satisfies}
@@ -584,17 +575,15 @@ The two-step transition satisfies}
        \ge \int_{\SM_{h,M}} P(W'', \theta'',\vartheta'' | W', \theta', \vartheta')
        P(W', \theta',\vartheta' | W, \theta, \vartheta)
        dW' d\theta' d\vartheta' \\
-       &\ge \int_{\SM_{h,M}}  \rho_1 \delta_{\theta'}(\vartheta'')P(W'' \from \PP(\Omega(\theta''))\phi(\theta'') \\
-         &\qquad \qquad \rho_1 \delta_\theta(\vartheta')P(W' \from \PP(\Omega(\theta'))\phi(\theta')
+       &\ge \int_{\SM_{h,M}}  \rho_1 \delta_{\theta'}(\vartheta'')\PP(W'' | \Omega(\theta''))\phi(\theta'') \\
+       &\qquad \qquad \rho_1 \delta_\theta(\vartheta')\PP(W'|\Omega(\theta')) \phi(\theta')
        dW' d\theta' d\vartheta' \\
-       &\ge \rho_1^2 \phi(\theta'')P(W'' \from \PP(\Omega(\theta''))
+       &\ge \rho_1^2 \phi(\theta'')\PP(W''|\Omega(\theta''))
        \int_{\SM_{h,M}} \!\!\!\! \delta_{\theta'}(\vartheta'')
        F_{Poiss(\Omega(\theta'))}(h)\phi(\theta')
        d\theta'  \\
-       & \ge \rho_1^2 P(W'' \from
-       \PP(\Omega(\theta''))\phi(\theta'')\phi(\vartheta'')F_{Poiss(\Omega(\vartheta''))}(h)\delta_{\SM_{h,M}}(\vartheta'') \\
-       & \ge \rho_1^2 P(W'' \from
-       \PP(\Omega(\theta''))\phi(\theta'')
+       & \ge \rho_1^2 \PP(W''|\Omega(\theta''))\phi(\theta'')\phi(\vartheta'') F_{Poiss(\Omega(\vartheta''))}(h)\delta_{\SM_{h,M}}(\vartheta'') \\
+       & \ge \rho_1^2 \PP(W'' | \Omega(\theta''))\phi(\theta'')
        \phi(\vartheta'')\delta_{\SM_{h,M}}(\vartheta'')\exp(-\Omega(\vartheta''))  \numberthis
        \label{eq:density_lowbound}
 \end{align*}
@@ -606,8 +595,7 @@ a$,
 %\end{align*}
 %So, $\phi(\vartheta'')\delta_{\SM_{h,M}}(\vartheta'')\exp(-\Omega(\vartheta''))$ is proportional to a probability density.
 and gives our result, 
-with $\phi_1(W'',\theta'',\vartheta'') \propto P(W'' \from
-  \PP(\Omega(\theta''))\phi(\theta'') \phi(\vartheta'')
+with $\phi_1(W'',\theta'',\vartheta'') \propto \PP(W'' | \Omega(\theta'')) \phi(\theta'') \phi(\vartheta'')
   \delta_{\SM_{h,M}}(\vartheta'')\exp(-\Omega(\vartheta''))  $.
 %\qed
 \end{proof}
@@ -728,7 +716,7 @@ For large $\theta$, we prove a similar result in the continuous
 case by uniformization. For any $\theta'$,
 \begin{align*}
 P(X | \theta) %&= \int_W dW P(X , W | \theta, \theta')\\
-= \int dW P(X | W, \theta, \theta') P(W | \theta, \theta') %+ \int_{\mW \leq w_0}dW P(X | W, \theta, \theta') P(W | \theta, \theta').
+= \int \dif W P(X | W, \theta, \theta') P(W | \theta, \theta') %+ \int_{\mW \leq w_0}dW P(X | W, \theta, \theta') P(W | \theta, \theta').
 \quad 
 (\text{$P(W|\theta,\theta')$ is a rate-$\Omega(\theta) + 
 \Omega(\theta')$ Poisson process}).
