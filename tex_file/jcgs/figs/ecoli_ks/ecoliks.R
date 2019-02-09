@@ -22,15 +22,16 @@ f_a <- function(j, cur_var,  name='', save = False){
   print( ks.test(gbsdata[id2], mhdata[id2]) )
   
 
-  data <- data.frame(alpha = c(gbsdata, mhdata),method = c(rep("GBS",length(gbsdata)), rep("MH",length(gbsdata)))) 
-
-  p1 <- ggplot(data, aes(x=alpha, col = method, linetype = method))#+ coord_fixed(ratio = r1)
+  data <- data.frame(alpha = c(gbsdata, mhdata),method = c(rep("GBS",length(gbsdata)), rep("MH",length(gbsdata))), color = c(rep("tomato1",length(gbsdata)), rep("skyblue3",length(gbsdata)))) 
+  
+  p1 <- ggplot(data, aes(x=alpha, col = color, linetype = method))#+ coord_fixed(ratio = r1)
   p1 <- p1 + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))
-  p1 <- p1 + geom_line(stat= "density", alpha = .75,  size = 2)+ theme(legend.position="none")+
+  p1 <- p1 + geom_line(stat= "density", alpha = .6,  size = 2)+ theme(legend.position="none")+
     labs(x = expression(alpha), y = expression( paste("P(", alpha, "|", X, ")" )) )+theme(
       axis.text.x=element_blank(),
       axis.ticks.x=element_blank(),
       axis.text.y = element_blank(), axis.ticks.y = element_blank())
+  p1 <- p1 + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
   
   setwd("/Users/Isaac_Zhang/Research/MCMC/revision/New_figures/ecoli_ks/")
   p1
@@ -50,15 +51,16 @@ f_a <- function(j, cur_var,  name='', save = False){
   
   p2 <- ggplot(data_gbs, aes((1: length(alpha)), alpha))
   p2 <- p2 + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
-  p2 <- p2 + geom_point(alpha=0.6, col = "firebrick1") +  labs(x = "Iteration") +
+  p2 <- p2 + geom_point(alpha=0.6, col = "tomato1") +  labs(x = "Iteration") +
     labs(y = expression(alpha))+theme(
       axis.text.x=element_blank(),
       axis.ticks.x=element_blank(),
       #      axis.text.y = element_blank(),
       axis.ticks.y = element_blank()) + theme(legend.position="none")
-  p2
+  p2 <- p2 + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
   show(p2)
-  filename2GBS <- paste(name, "alphatraceGBS", as.character(j), cur_var,as.character(d), ".pdf", sep = "_")
+
+    filename2GBS <- paste(name, "alphatraceGBS", as.character(j), cur_var,as.character(d), ".pdf", sep = "_")
   if(save){
     ggsave(filename2GBS, width = 6, height = 6)
   }
@@ -77,7 +79,9 @@ f_a <- function(j, cur_var,  name='', save = False){
       axis.ticks.x=element_blank(),
       #axis.text.y = element_blank(),
       axis.ticks.y = element_blank()) + theme(legend.position="none")
-  p3
+  p3 <- p3 + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
+  
+  show(p3)
   
   show(p3)
   
@@ -95,10 +99,14 @@ f_a <- function(j, cur_var,  name='', save = False){
   
   ratio.values <- (maxx)/(maxy)
   
-  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) +
+  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) + coord_fixed(ratio = ratio.values)+
     geom_hline(aes(yintercept = 0)) +
-    geom_segment(mapping = aes(xend = lag, yend = 0)) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
-  q
+    geom_segment(mapping = aes(xend = lag, yend = 0), color = "tomato1", alpha = 0.6) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
+  q <- q + labs(y = "Autocorr", x = "Lag") #+ theme(axis.title.y = element_text(vjust = 0.9)) 
+  q <- q + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))  +theme(
+    axis.ticks.x=element_blank(),
+    axis.ticks.y = element_blank())
+  
   show(q)
   filename3 <- paste(name, "alphagbsacf", as.character(j), cur_var,as.character(d), ".pdf", sep = "_")
   if(save){
@@ -110,9 +118,13 @@ f_a <- function(j, cur_var,  name='', save = False){
   maxy = max(bacfdf$acf)
   ratio.values <- (maxx)/(maxy)
   
-  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) +
+  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) + coord_fixed(ratio = ratio.values)+
     geom_hline(aes(yintercept = 0)) +
-    geom_segment(mapping = aes(xend = lag, yend = 0)) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
+    geom_segment(mapping = aes(xend = lag, yend = 0), color = "skyblue3", alpha = 0.6) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
+  q <- q + labs(y = "Autocorr", x = "Lag") #+ theme(axis.title.y = element_text(vjust = 0.9)) 
+  q <- q + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))  +theme(
+    axis.ticks.x=element_blank(),
+    axis.ticks.y = element_blank())
   
   show(q)
   filename4 <- paste(name, "alphamhacf", as.character(j), cur_var,as.character(d) ,".pdf", sep = "_")
@@ -137,18 +149,19 @@ f_b <- function(j, cur_var,  name='', save = False){
   print( ks.test(gbsdata[id2], mhdata[id2]) )
   
   
-  data <- data.frame(alpha = c(gbsdata, mhdata),method = c(rep("GBS",length(gbsdata)), rep("MH",length(gbsdata)))) 
+  data <- data.frame(alpha = c(gbsdata, mhdata),method = c(rep("GBS",length(gbsdata)), rep("MH",length(gbsdata))), color = c(rep("tomato1",length(gbsdata)), rep("skyblue3",length(gbsdata)))) 
   
-  p1 <- ggplot(data, aes(x=alpha, col = method, linetype = method))#+ coord_fixed(ratio = r1)
+  p1 <- ggplot(data, aes(x=alpha, col = color, linetype = method))#+ coord_fixed(ratio = r1)
   p1 <- p1 + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))
-  p1 <- p1 + geom_line(stat= "density", alpha = .75,  size = 2)+ theme(legend.position="none")+
+  p1 <- p1 + geom_line(stat= "density", alpha = .6,  size = 2)+ theme(legend.position="none")+
     labs(x = expression(alpha), y = expression( paste("P(", beta, "|", X, ")" )) )+theme(
       axis.text.x=element_blank(),
       axis.ticks.x=element_blank(),
       axis.text.y = element_blank(), axis.ticks.y = element_blank())
+  p1 <- p1 + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
   
   setwd("/Users/Isaac_Zhang/Research/MCMC/revision/New_figures/ecoli_ks/")
-  p1
+
   show(p1)
   filename1 <- paste(name, "betahist", as.character(j), cur_var, as.character(d), ".pdf", sep = "_")
   if(save){
@@ -165,13 +178,13 @@ f_b <- function(j, cur_var,  name='', save = False){
   
   p2 <- ggplot(data_gbs, aes((1: length(alpha)), alpha))
   p2 <- p2 + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
-  p2 <- p2 + geom_point(alpha=0.6, col = "firebrick1") +  labs(x = "Iteration") +
+  p2 <- p2 + geom_point(alpha=0.6, col = "tomato1") +  labs(x = "Iteration") +
     labs(y = expression(beta))+theme(
       axis.text.x=element_blank(),
       axis.ticks.x=element_blank(),
       #      axis.text.y = element_blank(),
       axis.ticks.y = element_blank()) + theme(legend.position="none")
-  p2
+  p2 <- p2 + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
   show(p2)
   filename2GBS <- paste(name, "betatraceGBS", as.character(j), cur_var,as.character(d), ".pdf", sep = "_")
   if(save){
@@ -192,7 +205,7 @@ f_b <- function(j, cur_var,  name='', save = False){
       axis.ticks.x=element_blank(),
       #axis.text.y = element_blank(),
       axis.ticks.y = element_blank()) + theme(legend.position="none")
-  p3
+  p3 <- p3 + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
   
   show(p3)
   
@@ -210,11 +223,16 @@ f_b <- function(j, cur_var,  name='', save = False){
   
   ratio.values <- (maxx)/(maxy)
   
-  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) +
+  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) + coord_fixed(ratio = ratio.values)+
     geom_hline(aes(yintercept = 0)) +
-    geom_segment(mapping = aes(xend = lag, yend = 0)) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
-  q
+    geom_segment(mapping = aes(xend = lag, yend = 0), color = "tomato1", alpha = 0.6) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
+  q <- q + labs(y = "Autocorr", x = "Lag") #+ theme(axis.title.y = element_text(vjust = 0.9)) 
+  q <- q + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))  +theme(
+    axis.ticks.x=element_blank(),
+    axis.ticks.y = element_blank())
+  
   show(q)
+
   filename3 <- paste(name, "betagbsacf", as.character(j), cur_var,as.character(d), ".pdf", sep = "_")
   if(save){
     ggsave(filename3, width = 6, height = 6)
@@ -225,9 +243,13 @@ f_b <- function(j, cur_var,  name='', save = False){
   maxy = max(bacfdf$acf)
   ratio.values <- (maxx)/(maxy)
   
-  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) +
+  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) + coord_fixed(ratio = ratio.values)+
     geom_hline(aes(yintercept = 0)) +
-    geom_segment(mapping = aes(xend = lag, yend = 0)) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
+    geom_segment(mapping = aes(xend = lag, yend = 0), color = "skyblue3", alpha = 0.6) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
+  q <- q + labs(y = "Autocorr", x = "Lag") #+ theme(axis.title.y = element_text(vjust = 0.9)) 
+  q <- q + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))  +theme(
+    axis.ticks.x=element_blank(),
+    axis.ticks.y = element_blank())
   
   show(q)
   filename4 <- paste(name, "betamhacf", as.character(j), cur_var,as.character(d) ,".pdf", sep = "_")
@@ -253,15 +275,16 @@ f_l1 <- function(j, cur_var,  name='', save = False){
   print( ks.test(gbsdata[id2], mhdata[id2]) )
   
   
-  data <- data.frame(alpha = c(gbsdata, mhdata),method = c(rep("GBS",length(gbsdata)), rep("MH",length(gbsdata)))) 
+  data <- data.frame(alpha = c(gbsdata, mhdata),method = c(rep("GBS",length(gbsdata)), rep("MH",length(gbsdata))), color = c(rep("tomato1",length(gbsdata)), rep("skyblue3",length(gbsdata)))) 
   
-  p1 <- ggplot(data, aes(x=alpha, col = method, linetype = method))#+ coord_fixed(ratio = r1)
+  p1 <- ggplot(data, aes(x=alpha, col = color, linetype = method))#+ coord_fixed(ratio = r1)
   p1 <- p1 + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))
-  p1 <- p1 + geom_line(stat= "density", alpha = .75,  size = 2)+ theme(legend.position="none")+
+  p1 <- p1 + geom_line(stat= "density", alpha = .6,  size = 2)+ theme(legend.position="none")+
     labs(x = expression(alpha), y = expression( paste("P(", lambda, "1|", X, ")" )) )+theme(
       axis.text.x=element_blank(),
       axis.ticks.x=element_blank(),
       axis.text.y = element_blank(), axis.ticks.y = element_blank())
+  p1 <- p1 + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
   
   setwd("/Users/Isaac_Zhang/Research/MCMC/revision/New_figures/ecoli_ks/")
   p1
@@ -278,17 +301,18 @@ f_l1 <- function(j, cur_var,  name='', save = False){
   maxy = max(data_gbs$alpha)
   miny = min(data_gbs$alpha)
   ratio.values <- (maxx)/(maxy - miny)
-  
-  p2 <- ggplot(data_gbs, aes((1: length(alpha)), alpha))
+
+    p2 <- ggplot(data_gbs, aes((1: length(alpha)), alpha))
   p2 <- p2 + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
-  p2 <- p2 + geom_point(alpha=0.6, col = "firebrick1") +  labs(x = "Iteration") +
-    labs(y = paste(lambda, "1"))+theme(
+  p2 <- p2 + geom_point(alpha=0.6, col = "tomato1") +  labs(x = "Iteration") +
+    labs(y = expression(paste(lambda, "1")))+theme(
       axis.text.x=element_blank(),
       axis.ticks.x=element_blank(),
       #      axis.text.y = element_blank(),
       axis.ticks.y = element_blank()) + theme(legend.position="none")
-  p2
+  p2 <- p2 + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
   show(p2)
+
   filename2GBS <- paste(name, "l1traceGBS", as.character(j), cur_var,as.character(d), ".pdf", sep = "_")
   if(save){
     ggsave(filename2GBS, width = 6, height = 6)
@@ -303,15 +327,15 @@ f_l1 <- function(j, cur_var,  name='', save = False){
   p3 <- ggplot(data_mh, aes((1: length(alpha)), alpha))
   p3 <- p3 + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
   p3 <- p3 + geom_point(alpha=0.6, col = "skyblue3") +  labs(x = "Iteration") +
-    labs(y = paste(lambda, "1"))+theme(
+    labs(y = expression(paste(lambda, "1")))+theme(
       axis.text.x=element_blank(),
       axis.ticks.x=element_blank(),
       #axis.text.y = element_blank(),
       axis.ticks.y = element_blank()) + theme(legend.position="none")
-  p3
+  p3 <- p3 + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
   
   show(p3)
-  
+
   filenameMH <- paste(name, "l1traceMH", as.character(j), cur_var,as.character(d), ".pdf", sep = "_")
   if(save){
     ggsave(filenameMH, width = 6, height = 6)
@@ -326,10 +350,14 @@ f_l1 <- function(j, cur_var,  name='', save = False){
   
   ratio.values <- (maxx)/(maxy)
   
-  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) +
+  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) + coord_fixed(ratio = ratio.values)+
     geom_hline(aes(yintercept = 0)) +
-    geom_segment(mapping = aes(xend = lag, yend = 0)) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
-  q
+    geom_segment(mapping = aes(xend = lag, yend = 0), color = "tomato1", alpha = 0.6) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
+  q <- q + labs(y = "Autocorr", x = "Lag") #+ theme(axis.title.y = element_text(vjust = 0.9)) 
+  q <- q + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))  +theme(
+    axis.ticks.x=element_blank(),
+    axis.ticks.y = element_blank())
+  
   show(q)
   filename3 <- paste(name, "l1gbsacf", as.character(j), cur_var,as.character(d), ".pdf", sep = "_")
   if(save){
@@ -341,9 +369,13 @@ f_l1 <- function(j, cur_var,  name='', save = False){
   maxy = max(bacfdf$acf)
   ratio.values <- (maxx)/(maxy)
   
-  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) +
+  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) + coord_fixed(ratio = ratio.values)+
     geom_hline(aes(yintercept = 0)) +
-    geom_segment(mapping = aes(xend = lag, yend = 0)) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
+    geom_segment(mapping = aes(xend = lag, yend = 0), color = "skyblue3", alpha = 0.6) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
+  q <- q + labs(y = "Autocorr", x = "Lag") #+ theme(axis.title.y = element_text(vjust = 0.9)) 
+  q <- q + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))  +theme(
+    axis.ticks.x=element_blank(),
+    axis.ticks.y = element_blank())
   
   show(q)
   filename4 <- paste(name, "l1mhacf", as.character(j), cur_var,as.character(d) ,".pdf", sep = "_")
@@ -368,16 +400,18 @@ f_l2 <- function(j, cur_var,  name='', save = False){
   print( ks.test(gbsdata[id2], mhdata[id2]) )
   
   
-  data <- data.frame(alpha = c(gbsdata, mhdata),method = c(rep("GBS",length(gbsdata)), rep("MH",length(gbsdata)))) 
+  data <- data.frame(alpha = c(gbsdata, mhdata),method = c(rep("GBS",length(gbsdata)), rep("MH",length(gbsdata))), color = c(rep("tomato1",length(gbsdata)), rep("skyblue3",length(gbsdata)))) 
   
-  p1 <- ggplot(data, aes(x=alpha, col = method, linetype = method))#+ coord_fixed(ratio = r1)
+  p1 <- ggplot(data, aes(x=alpha, col = color, linetype = method))#+ coord_fixed(ratio = r1)
   p1 <- p1 + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))
-  p1 <- p1 + geom_line(stat= "density", alpha = .75,  size = 2)+ theme(legend.position="none")+
+  p1 <- p1 + geom_line(stat= "density", alpha = .6,  size = 2)+ theme(legend.position="none")+
     labs(x = expression(alpha), y = expression( paste("P(", lambda, "2|", X, ")" )) )+theme(
       axis.text.x=element_blank(),
       axis.ticks.x=element_blank(),
       axis.text.y = element_blank(), axis.ticks.y = element_blank())
+  p1 <- p1 + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
   
+
   setwd("/Users/Isaac_Zhang/Research/MCMC/revision/New_figures/ecoli_ks/")
   p1
   show(p1)
@@ -396,14 +430,15 @@ f_l2 <- function(j, cur_var,  name='', save = False){
   
   p2 <- ggplot(data_gbs, aes((1: length(alpha)), alpha))
   p2 <- p2 + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
-  p2 <- p2 + geom_point(alpha=0.6, col = "firebrick1") +  labs(x = "Iteration") +
-    labs(y = paste(expression(lambda), "2"))+theme(
+  p2 <- p2 + geom_point(alpha=0.6, col = "tomato1") +  labs(x = "Iteration") +
+    labs(y = expression(paste(lambda, "2")))+theme(
       axis.text.x=element_blank(),
       axis.ticks.x=element_blank(),
       #      axis.text.y = element_blank(),
       axis.ticks.y = element_blank()) + theme(legend.position="none")
-  p2
+  p2 <- p2 + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
   show(p2)
+  
   filename2GBS <- paste(name, "l2traceGBS", as.character(j), cur_var,as.character(d), ".pdf", sep = "_")
   if(save){
     ggsave(filename2GBS, width = 6, height = 6)
@@ -418,12 +453,12 @@ f_l2 <- function(j, cur_var,  name='', save = False){
   p3 <- ggplot(data_mh, aes((1: length(alpha)), alpha))
   p3 <- p3 + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
   p3 <- p3 + geom_point(alpha=0.6, col = "skyblue3") +  labs(x = "Iteration") +
-    labs(y = paste(expression(lambda), "2"))+theme(
+    labs(y = expression(paste(lambda, "2")))+theme(
       axis.text.x=element_blank(),
       axis.ticks.x=element_blank(),
       #axis.text.y = element_blank(),
       axis.ticks.y = element_blank()) + theme(legend.position="none")
-  p3
+  p3 <- p3 + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))
   
   show(p3)
   
@@ -441,10 +476,14 @@ f_l2 <- function(j, cur_var,  name='', save = False){
   
   ratio.values <- (maxx)/(maxy)
   
-  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) +
+  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) + coord_fixed(ratio = ratio.values)+
     geom_hline(aes(yintercept = 0)) +
-    geom_segment(mapping = aes(xend = lag, yend = 0)) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
-  q
+    geom_segment(mapping = aes(xend = lag, yend = 0), color = "tomato1", alpha = 0.6) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
+  q <- q + labs(y = "Autocorr", x = "Lag") #+ theme(axis.title.y = element_text(vjust = 0.9)) 
+  q <- q + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))  +theme(
+    axis.ticks.x=element_blank(),
+    axis.ticks.y = element_blank())
+  
   show(q)
   filename3 <- paste(name, "l2gbsacf", as.character(j), cur_var,as.character(d), ".pdf", sep = "_")
   if(save){
@@ -456,9 +495,13 @@ f_l2 <- function(j, cur_var,  name='', save = False){
   maxy = max(bacfdf$acf)
   ratio.values <- (maxx)/(maxy)
   
-  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) +
+  q <- ggplot(data = bacfdf, mapping = aes(x = lag, y = acf)) + coord_fixed(ratio = ratio.values)+
     geom_hline(aes(yintercept = 0)) +
-    geom_segment(mapping = aes(xend = lag, yend = 0)) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
+    geom_segment(mapping = aes(xend = lag, yend = 0), color = "skyblue3", alpha = 0.6) + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40))+ coord_fixed(ratio = ratio.values)
+  q <- q + labs(y = "Autocorr", x = "Lag") #+ theme(axis.title.y = element_text(vjust = 0.9)) 
+  q <- q + theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title.x = element_text(margin = margin(t = 20, r = 0, b = 0, l = 0)))  +theme(
+    axis.ticks.x=element_blank(),
+    axis.ticks.y = element_blank())
   
   show(q)
   filename4 <- paste(name, "l2mhacf", as.character(j), cur_var,as.character(d) ,".pdf", sep = "_")
@@ -474,10 +517,7 @@ f_l2 <- function(j, cur_var,  name='', save = False){
 
 
 f_a(31, 3, 'ecoli', TRUE)
-
 f_b(31, 3, 'ecoli', TRUE)
-
-
 f_l1(31, 3, 'ecoli', TRUE)
 f_l2(31, 3, 'ecoli', TRUE)
 

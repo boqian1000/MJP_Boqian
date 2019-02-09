@@ -2,8 +2,10 @@ library(mcmcse)
 library("rjson")
 library(ggplot2)
 
-setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_3/q_k2_dim3/")
+#setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_3/q_k2_dim3/")
+#setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_10/q_k2_dim10/")
 #setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_10_PC_new/q_k2_dim10/")
+setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_3_PC/q_k2_dim3/")
 #prior_par <- fromJSON(file="_data_EXPprior_d3")
 #iter_list <- iter_list[c(-5, -77, -55, -57, -91, -81, -40)]
 #setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/JC_MODEL/jc_k2/")
@@ -13,7 +15,10 @@ iter_list <- 1:100
 #omega = prior_par[3]
 #theta = prior_par[4]
 #exp = "EXP_D10"
-exp = "Q_D3"
+#exp = "Q_D3"
+#exp = "Q_D10"
+#exp = "QC_D10"
+exp = "QC_D3"
 acc_rate <- function(data){
   n <- length(data)
   return(1 - sum(data[1: n - 1] == data[2: n]) / n)
@@ -131,20 +136,21 @@ ratio.values <- (maxx)/(maxy)
 
 s1 = 5
 s2 =2
-p_ALPHA <- ggplot() + theme_bw()+ theme(axis.text=element_text(size=30), axis.title=element_text(size=30)) + coord_fixed(ratio = ratio.values)+
-  geom_point(data = data_alpha_MH_mean, aes(x = var, y =ess_alpha_persec) , colour = "blue", size = s1, alpha = 0.6) +
-  geom_line(data = data_alpha_MH_mean, aes(x = var, y =ess_alpha_persec) ,colour = "blue",size =s2, alpha = 0.6, linetype = "dashed" ) +
+p_ALPHA <- ggplot() + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40)) + coord_fixed(ratio = ratio.values)+ ylim(0, maxy)+
+  geom_point(data = data_alpha_MH_mean, aes(x = var, y =ess_alpha_persec) , shape = 0, colour = "skyblue3", size = s1, alpha = 0.6, stroke = 3) +
+  geom_line(data = data_alpha_MH_mean, aes(x = var, y =ess_alpha_persec) ,colour = "skyblue3",size =s2, alpha = 0.6, linetype = 'solid') +
   
-  geom_point(data = data_alpha_oMH_mean, aes(x = var, y =ess_alpha_persec) , colour = "orange", size = s1, alpha = 0.6) +
-  geom_line(data = data_alpha_oMH_mean, aes(x = var, y =ess_alpha_persec) ,colour = "orange", size = s2, alpha = 0.6) +
-  
-
-  labs(x = expression(paste(sigma^2 ," of MH proposal") )) + labs(y =  expression(paste("Acceptance rate for ",alpha))) + theme(legend.position="none")
+  geom_point(data = data_alpha_oMH_mean, aes(x = var, y =ess_alpha_persec) , shape = 2, colour = "darkorange", size = s1, alpha = 0.6, stroke = 3) +
+  geom_line(data = data_alpha_oMH_mean, aes(x = var, y =ess_alpha_persec) ,colour = "darkorange", size = s2, alpha = 0.6, linetype = 'twodash') +
+  labs(x = expression(paste(sigma^2 ," of MH proposal") )) + labs(y =  expression(paste("Acceptance rate for ",alpha))) + theme(legend.position="none")+ 
+  theme(
+    axis.ticks.x=element_blank(),
+    axis.ticks.y = element_blank())
 p_ALPHA
 
 setwd("/Users/Isaac_Zhang/Research/MCMC/revision/New_figures/acc/")
 filename <- paste(exp, "alpha_k2", ".pdf", sep = "")
-ggsave(filename)
+ggsave(filename, width = 6, height = 6, device = pdf)
 
 
 data_beta_MH_mean <- data.frame(var = var, method = factor(rep(c("MH"), each=length(summary_mh_persec_b[1,]))), 
@@ -157,22 +163,29 @@ data_beta_oMH_mean <- data.frame(var = var, method = factor(rep(c("oMH"), each=l
 
 
 maxx = max(var)
-maxy = max(max(data_beta_MH_mean[3]), max(data_beta_oMH_mean[3]))
+
+maxy = max(max(data_beta_MH_mean[3]), max(data_beta_GBS_mean[3]), max(data_beta_oMH_mean[3]))
+#maxy = 0.9
 ratio.values <- (maxx)/(maxy)
 
-p_BETA <-ggplot() + theme_bw()+ theme(axis.text=element_text(size=30), axis.title=element_text(size=30)) + coord_fixed(ratio = ratio.values)
+p_BETA <-ggplot() + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40)) + coord_fixed(ratio = ratio.values) + ylim(0, maxy)
 p_BETA <- p_BETA + 
-  geom_point(data = data_beta_MH_mean, aes(x = var, y =ess_beta_persec) , colour = "blue", alpha = 0.6, size = s1) +
-  geom_line(data = data_beta_MH_mean, aes(x = var, y =ess_beta_persec) ,colour = "blue", alpha = 0.6, size = s2, linetype = "dashed") +
-  geom_point(data = data_beta_oMH_mean, aes(x = var, y =ess_beta_persec) , colour = "orange", alpha = 0.6, size = s1) +
-  geom_line(data = data_beta_oMH_mean, aes(x = var, y =ess_beta_persec) ,colour = "orange", alpha = 0.6, size = s2) +
-
-  labs(x = expression(paste(sigma^2 ," of MH proposal") )) + labs(y =  expression(paste("Acceptance rate for ",beta))) + theme(legend.position="none")
+  geom_point(data = data_beta_MH_mean, aes(x = var, y =ess_beta_persec) , shape = 0, colour = "skyblue3", alpha = 0.6, size = s1, stroke = 3) +
+  geom_line(data = data_beta_MH_mean, aes(x = var, y =ess_beta_persec) ,colour = "skyblue3", alpha = 0.6, size = s2, linetype = 'solid') +
+  geom_point(data = data_beta_oMH_mean, aes(x = var, y =ess_beta_persec) , shape = 2, colour = "darkorange", alpha = 0.6, size = s1, stroke = 3) +
+  geom_line(data = data_beta_oMH_mean, aes(x = var, y =ess_beta_persec) ,colour = "darkorange", alpha = 0.6, size = s2, linetype = 'twodash') +
+  geom_point(data = data_beta_GBS_mean, aes(x = var, y =ess_beta_persec) , shape = 1, colour = "tomato1", alpha = 0.6, size = s1, stroke = 3) +
+  geom_line(data = data_beta_GBS_mean, aes(x = var, y =ess_beta_persec) ,colour = "tomato1", alpha = 0.6, size = s2, linetype = 'longdash') +
+  labs(x = expression(paste(sigma^2 ," of MH proposal") )) + labs(y =  expression(paste("Acceptance rate for ",beta))) + theme(legend.position="none")+ 
+  theme(
+    axis.ticks.x=element_blank(),
+    axis.ticks.y = element_blank())
 p_BETA
 
 
+
 filename <- paste(exp, "beta_k2.pdf", sep = "")
-ggsave(filename)
+ggsave(filename, width = 6, height = 6, device = pdf)
 
 
 
