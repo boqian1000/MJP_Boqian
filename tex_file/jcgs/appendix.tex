@@ -59,18 +59,52 @@ We found particle MCMC to be more computationally intensive, and limited each ru
   \centering
   \begin{minipage}[h!]{0.65\linewidth}
   \centering
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/exp_5_alpha.pdf}
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/exp_5_beta.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/exp_alpha_dim3.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim3.pdf}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.33\linewidth}
+    \caption{ESS/sec for the synthetic  model, dimension 3. (Left, right) 
+      are $(\alpha, \beta)$. Blue, yellow, red and black are the symmetrized MH,
+  \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols are
+different settings of the algorithms, see section~\ref{sec:expts}.}
+     \label{fig:ESS_EXP_D33}
+  \end{minipage}
+  \end{figure}
+
+\vspace{-.4in}
+  \begin{figure}[H]
+  \centering
+  \begin{minipage}[h!]{0.65\linewidth}
+  \centering
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/exp_alpha_dim5.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim5.pdf}
   \end{minipage}
   \begin{minipage}[!hp]{0.33\linewidth}
     \caption{ESS/sec for the synthetic  model, dimension 5. (Left, right) 
-      are $(\alpha, \beta)$. Red, yellow, blue and black are the symmetrized MH,
+      are $(\alpha, \beta)$. Blue, yellow, red and black are the symmetrized MH,
   \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols are
 different settings of the algorithms, see section~\ref{sec:expts}.}
-     \label{fig:ESS_EXP_D5}
+     \label{fig:ESS_EXP_D55}
   \end{minipage}
   \end{figure}
   %\centering
+\vspace{-.4in}
+\vspace{-.4in}
+  \begin{figure}[H]
+  \centering
+  \begin{minipage}[h!]{0.65\linewidth}
+  \centering
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/exp_alpha_dim10.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim10.pdf}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.33\linewidth}
+    \caption{ESS/sec for the synthetic  model, dimension 10. (Left, right) 
+      are $(\alpha, \beta)$. Blue, yellow, red and black are the symmetrized MH,
+  \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols are
+different settings of the algorithms, see section~\ref{sec:expts}.}
+     \label{fig:ESS_EXP_D1010}
+  \end{minipage}
+  \end{figure}
 
   \begin{figure}[H]
 %    \vspace{-.2in}
@@ -145,29 +179,90 @@ different settings of the algorithms, see section~\ref{sec:expts}.}
 
 
   \begin{figure}[H]
+  
   \begin{minipage}[hp]{0.65\linewidth}
   \centering
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/q_5_alpha.pdf}
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/q_5_beta.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/q_alpha_dim3.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim3.pdf}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.33\linewidth}
+    \caption{ESS/sec for the immigration model, with dimension 3. (Left, 
+      right) are $(\alpha, \beta)$. Blue yellow, and red curves are the symmetrized MH,
+  \naive\ MH, Gibbs sampling and particle MCMC.}
+     \label{fig:ESS_Q_D33}
+  \end{minipage}
+  \centering
+  \begin{minipage}[!hp]{0.65\linewidth}
+  \centering
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/cq_alpha_dim3.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim3.pdf}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.33\linewidth}
+    \caption{ESS/sec for the time-inhomogeneous immigration model, with 
+      dimension 3. (Left, right) are $(\alpha, \beta)$. Blue, yellow and red curves are the symmetrized MH,
+  \naive\ MH, and Gibbs algorithm.}
+     \label{fig:ESS_pc_33}
+  \end{minipage}
+
+ \begin{minipage}[hp]{0.65\linewidth}
+  \centering
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/q_alpha_dim5.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim5.pdf}
   \end{minipage}
   \begin{minipage}[!hp]{0.33\linewidth}
     \caption{ESS/sec for the immigration model, with dimension 5. (Left, 
       right) are $(\alpha, \beta)$. Red, yellow, and blue curves are the symmetrized MH,
   \naive\ MH, Gibbs sampling and particle MCMC.}
-     \label{fig:ESS_Q_D5}
+     \label{fig:ESS_Q_D55}
   \end{minipage}
   \centering
   \begin{minipage}[!hp]{0.65\linewidth}
   \centering
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/pc_5_alpha.pdf}
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/pc_5_beta.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/cq_alpha_dim5.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim5.pdf}
   \end{minipage}
   \begin{minipage}[!hp]{0.33\linewidth}
     \caption{ESS/sec for the time-inhomogeneous immigration model, with 
-      dimension 5. (Left, right) are $(\alpha, \beta)$. Red, yellow and blue curves are the symmetrized MH,
+      dimension 5. (Left, right) are $(\alpha, \beta)$. Blue, yellow and red curves are the symmetrized MH,
   \naive\ MH, and Gibbs algorithm.}
-     \label{fig:ESS_pc_5}
+     \label{fig:ESS_pc_55}
   \end{minipage}
+
+  \begin{minipage}[!hp]{0.65\linewidth}
+  \centering
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/jc_alpha.pdf}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.33\linewidth}
+    \caption{ESS/sec for the JC immigration model, with 
+      dimension 5. (Left, right) are $(\alpha, \beta)$. Blue, yellow and red curves are the symmetrized MH,
+  \naive\ MH, and Gibbs algorithm.}
+     \label{fig:ESS_pc_55}
+  \end{minipage}
+
+ \begin{minipage}[hp]{0.65\linewidth}
+  \centering
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/q_alpha_dim10.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim10.pdf}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.33\linewidth}
+    \caption{ESS/sec for the immigration model, with dimension 5. (Left, 
+      right) are $(\alpha, \beta)$. Blue, yellow, and red curves are the symmetrized MH,
+  \naive\ MH, Gibbs sampling and particle MCMC.}
+     \label{fig:ESS_Q_D1010}
+  \end{minipage}
+  \centering
+  \begin{minipage}[!hp]{0.65\linewidth}
+  \centering
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/cq_alpha_dim10.pdf}
+    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim10.pdf}
+  \end{minipage}
+  \begin{minipage}[!hp]{0.33\linewidth}
+    \caption{ESS/sec for the time-inhomogeneous immigration model, with 
+      dimension 5. (Left, right) are $(\alpha, \beta)$. Blue, yellow and red curves are the symmetrized MH,
+  \naive\ MH, and Gibbs algorithm.}
+     \label{fig:ESS_pc_1010}
+  \end{minipage}
+
 % \centering
 % \begin{minipage}[!hp]{0.64\linewidth}
 %   \hspace{.15in}
