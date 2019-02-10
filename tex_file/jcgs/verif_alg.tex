@@ -64,6 +64,31 @@ the posterior distribution.
 \end{proof}
 
 \subsection{Comments}\label{sec:comments}
+ %the set of transition times is unbounded, with individual elements
+ %unconstrained over the observation interval $[0,\cT]$.
+ %Naively calculating this marginal probability for the continuous-time
+ %case is not straightforward, as there is no finite set of candidate
+ %times to make a pass over. 
+ One approach to parameter inference by integrating out state values follow~\citep{FearnSher2006}, who makes a sequential 
+ forward pass through all {\em observations} $X$, using matrix exponentiation
+ to marginalize out all
+ continuous-time paths between successive times. As
+ shown in~\cite{RaoTeh13}, this approach is cubic rather than 
+ quadratic in the 
+ number of states, cannot exploit structure like sparsity in the 
+ transition matrix, and can depend in not trivial ways on the exact 
+ nature of the observation process.
+ Also, the number of expensive matrix exponentiations depends on
+ the number of observations rather than the number of transitions.
+ %
+ %
+ A second approach, particle MCMC~\citep{Andrieu10}, uses 
+ particle filtering to get an unbiased estimate of the marginal 
+ $P(X|\theta)$. Plugging this into the Metropolis-Hastings 
+ acceptance probability results in an MCMC sampler that targets the 
+ correct posterior, however %~\cite{Andrieu09}, 
+ the resulting scheme does not exploit the structure 
+ of the MJP, and we show that it is quite inefficient.
 
 The uniformization scheme of~\cite{RaoTeh13} works for any underlying Poisson
 process whose rate $\Omega$ is greater than $\max_i A_i$. The strict inequality
