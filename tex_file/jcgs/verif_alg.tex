@@ -1,44 +1,32 @@
 %\subsection{Correctness of the proposed algorithm }
 %\label{sec:verify2}
 \begin{proposition}
-  The sampler described in Algorithm~\ref{alg:MH_improved} has the posterior
-  distribution $P(\theta,S(t)|X)$ as its stationary distribution.
+  The sampler described in Algorithm~\ref{alg:MH_improved} has the posterior distribution $P(\theta,S(t)|X)$ as its stationary distribution.
 \end{proposition}
 \begin{proof}
-  Suppose that at the start of the algorithm, we have a pair $(\theta,S(t))$ from
-  the posterior distribution $P(\theta,S(t)|X)$. Introducing $\vartheta$
-  from $q(\vartheta|\theta)$ results in a triplet whose marginal over the first
-  two variables is still $P(\theta,S(t)|X)$.
+  An iteration of the algorithm starts with the pair $(\theta,S(t))$ from the posterior distribution $P(\theta,S(t)|X)$. The algorithm first simulates $\vartheta$ from $q(\vartheta|\theta)$. By construction, the marginal distribution over the first two variables in the triplet $(\theta, S(t), \vartheta)$ is $P(\theta,S(t)|X)$.
 
-  Sampling $U$ from a Poisson process with rate $\Omega(\theta) +
-  \Omega(\vartheta) - A_{S(t)}(\theta)$, results in a random grid $W = T \cup U$
-  that is distributed according to a rate $\Omega(\theta) + \Omega(\vartheta)$
-  Poisson process (Proposition 2 in~\cite{RaoTeh13}). Discarding all state 
-  information results in a triplet $(W,\theta,\vartheta)$ with probability
-  proportional to $P(\theta)q(\vartheta|\theta)P(W|\theta,\vartheta)
-  P(X|W,\theta,\vartheta)$.
-Next we propose swapping $\theta$ and $\vartheta$. Since this
-is a deterministic proposal, the MH-acceptance probability is given by
-$$\alpha = 1 \wedge \frac{P(\vartheta)q(\theta|\vartheta)P(W|\vartheta,\theta)
+  The algorithm next simulates $U$ from a Poisson process with rate $\Omega(\theta) + \Omega(\vartheta) - A_{S(t)}(\theta)$. Write $W = T \cup U$.
+  The random grid $W$ consists of the actual and thinned candidate transition times, and is distributed according to a rate $\Omega(\theta) + \Omega(\vartheta)$ Poisson process (Proposition 2 in~\cite{RaoTeh13}). 
+  Thus, the triplet $(W,\theta,\vartheta)$ has probability proportional to $P(\theta)q(\vartheta|\theta)P(W|\theta,\vartheta) P(X|W,\theta,\vartheta)$.
+  Next, the algorithm proposes swapping $\theta$ and $\vartheta$. 
+  This is a deterministic proposal, with MH-acceptance probability given by
+  $$\texttt{acc} = 1 \wedge \frac{P(\vartheta)q(\theta|\vartheta)P(W|\vartheta,\theta)
 P(X|W,\vartheta,\theta)}{P(\theta)q(\vartheta|\theta)P(W|\theta,\vartheta)
 P(X|W,\theta,\vartheta)}$$
-The term $P(W|\theta,\vartheta)$ is just a Poisson process with rate $\Omega(\theta)+
-\Omega(\vartheta)$, so that $P(W|\theta,\vartheta) = P(W|\theta,\vartheta)$. 
-$P(X|W,\theta,\vartheta)$ and $P(X|W,\vartheta,\theta)$ are obtained
-after a forward pass over $W$ using discrete-time transition matrices
-$B(\theta,\vartheta) = \left(I + \frac{A(\theta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$ 
-and $B(\vartheta,\theta) = \left(I + \frac{A(\vartheta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$. 
+$P(W|\theta,\vartheta)$ is just a Poisson process with rate $\Omega(\theta)+ \Omega(\vartheta)$, so that $P(W|\theta,\vartheta) = P(W|\theta,\vartheta)$, which can be ignored when calculating $\texttt{acc}$. 
+%$P(X|W,\theta,\vartheta)$ and $P(X|W,\vartheta,\theta)$ are obtained
+%after a forward pass over $W$ using discrete-time transition matrices
+%$B(\theta,\vartheta) = \left(I + \frac{A(\theta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$ 
+%and $B(\vartheta,\theta) = \left(I + \frac{A(\vartheta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$. 
 
-Calling the parameters 
-after the accept step $(\theta', \vartheta')$, we have that
-$(\theta', \vartheta',W)$ has the same distribution as
-$(\theta, \vartheta,W)$.
-Finally, following Lemma 1 in~\cite{RaoTeh13}, using the matrix 
-$B(\theta,\vartheta)$ to make a backward pass through $W$,
-and discarding the self-transitions results in a trajectory $(S'(t)$
-distributed according to $A(\theta')$. Discarding the auxiliary parameter
-$\vartheta'$ results in a pair $(\theta',S'(t))$ from
-the posterior distribution.
+Write the parameters after the accept step as $(\theta', \vartheta')$. 
+Then, the triplet $(\theta', \vartheta',W)$ has the same distribution as $(\theta, \vartheta,W)$.
+Finally, the algorithm used the matrix $B(\theta',\vartheta')$ to make a backward pass through $W$, simulating state values on $W$ from the conditional of a Markov chain with transition matrix $B(\theta',\vartheta')$ given observations $X$. 
+Dropping the self-transition times results in a triplet $(\theta', S'(t), \vartheta')$. 
+By an extension of the uniformization theorem (see Lemma 1 in~\cite{RaoTeh13} for details), the trajectory $(S'(t)$ is distributed according to the conditional of a rate-$A(\theta')$ MJP given observations $X$.
+Finally, the algorithm drops $\vartheta'$ effectively marginalizing this parameter. 
+As we saw at the start of the proof, this  results in a pair $(\theta',S'(t))$ from the posterior distribution given $X$.
 % \begin{align*}
 %  p(y, W, S, T, \theta, \theta^*) &= p(\theta) q(\theta^* | \theta) P(S,T| \theta, \theta^*) P(W| S, T, \theta, \theta^*)P(y | S, T, \theta, \theta^*)\\
 %  &=p(\theta) q(\theta^* | \theta) P(S,T| \theta) P(W| S, T, \theta, \theta^*)P(y | S, T).
@@ -87,8 +75,7 @@ the posterior distribution.
  $P(X|\theta)$. Plugging this into the Metropolis-Hastings 
  acceptance probability results in an MCMC sampler that targets the 
  correct posterior, however %~\cite{Andrieu09}, 
- the resulting scheme does not exploit the structure 
- of the MJP, and we show that it is quite inefficient.
+ the resulting scheme does not exploit the Markovian structure of the MJP, which allows an efficient forward-backward pass. Instead, it makes proposals ..., and we show that it is quite inefficient.
 
 The uniformization scheme of~\cite{RaoTeh13} works for any underlying Poisson
 process whose rate $\Omega$ is greater than $\max_i A_i$. The strict inequality

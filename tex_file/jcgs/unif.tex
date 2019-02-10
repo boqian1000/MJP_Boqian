@@ -72,8 +72,7 @@ Define $S=\{v_i \in V \text{ s.t.\ } v_i \neq v_{i-1}\}$ as the elements in $V$ 
 %trajectories sampled this way 
 has the same distribution as under Gillespie's algorithm~\citep{Jen1953,RaoTeh13}. 
 
-Introducing the thinned variables allowed~\cite{RaoTeh13} to develop a simple and efficient MCMC sampler. 
-We detail this in algorithm~\ref{alg:Unif_gibbs}. 
+Introducing the thinned variables allowed~\cite{RaoTeh13} to develop a simple and efficient MCMC sampler (algorithm~\ref{alg:Unif_gibbs}). 
 At a high-level, each MCMC iteration samples a new grid $W$ conditioned on the path $S(t)$, and then a new path conditioned on $W$. 
 \cite{RaoTeh13} show that the resulting Markov chain targets the desired posterior distribution over trajectories, and is ergodic for any $\Omega$ strictly greater than all the $A_i$'s. 
    % As mentioned earlier, \cite{RaoTeh13} suggest setting $\Omega = 2\max_i A_i$.
@@ -96,7 +95,7 @@ At a high-level, each MCMC iteration samples a new grid $W$ conditioned on the p
 \State \textbf{ Simulate a set of thinned candidate times $U$ given the MJP path $(S,T)$ }: 
 These follow a piecewise-constant inhomogeneous Poisson process with rate $\Omega-A_{S(t)}$: 
 \begin{align*}
-  U \sim \text{PoissProc}(\Omega - A_{S(t)}) 
+  U \sim \text{PoissProc}(\Omega - A_{S(t)}),\quad \text{(i.e.\ the rate is $\Omega-A_s$ when $S(t) = s$).}
 \end{align*}
 %Since the intensity is piecewise-constant, simulating this is straightforward to do. %: over a segment $(t_{i},t_{i+1})$ where $S(t)$ has value $s_i$, sample a positive integer $n$ from a Poisson distribution with mean $(\Omega-A_{s_i})$, and simulate $n$ events uniformly over $(t_i, t_{i+1})$.
 \State \textbf{
