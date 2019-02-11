@@ -30,31 +30,33 @@ Algorithm~\ref{alg:MH_naive} includes all the details of this algorithm, with fi
    \label{alg:MH_naive}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{Observations $X$}, 
-                       \text{the MJP path $S(t) = (S, T)$, the  parameters $\theta$ }and $\pi_0$.\\ 
-                     & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
-   \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (S', T')$, 
+                       \text{the MJP path $S(t) = (s_0, S, T)$, the  parameters $\theta$ }and $\pi_0$.\\ 
+      %               & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
+   \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (s'_0, S', T')$, 
                             new MJP parameters $\theta'$}.\\
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
-     \State Set $\Omega \assign \Omega(\theta) > \max_s{A_s(\theta)}$ for
+     \State Set $\Omega \defeq \Omega(\theta) > \max_s{A_s(\theta)}$ for
      some function $\Omega(\cdot)$ (e.g.\ $\Omega(\theta) = 
       2\max_s A_s(\theta))$.
-      \State \textbf{ Simulate the thinned times $U$:} from a rate-$(\Omega-A_{S(t)})$ Poisson process : 
-\begin{align*}
-  U \sim \text{PoissProc}(\Omega - A_{S(t)}) 
-\end{align*}
+      \State \textbf{ Simulate the thinned times $U$:} from a rate-$(\Omega-A_{S(t)})$ Poisson process: 
+
+  $\qquad \qquad \qquad \qquad U \sim \text{PoissProc}(\Omega - A_{S(t)}).$
+
       \State 
-    Set $W = T \cup U$ and discard $S$, the MJP state information.
+      Set $W = T \cup U$ and discard $(s_0,S)$. Define $\tilde{W} = 0 \cup W \cup t_{end}$.
     \State 
     \textbf{Forward pass:}
     Set $B(\theta) = I + \frac{A(\theta)}{\Omega(\theta)}$ and
     $\fwd^\theta_0(\cdot) = \pi_0$.
  %   Sequentially update $\fwd^\theta_i(\cdot)$ at time $w_i \in W$ as: 
-    $$\textbf{for } i=1\rightarrow |W|\textbf{ do:} \quad \fwd^{\theta}_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd^\theta_{i-1}(s)\cdot B_{ss'}(\theta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
+    $$\textbf{for } i=1\rightarrow |\tilde{W}|\textbf{ do:} \quad \fwd^{\theta}_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd^\theta_{i-1}(s)\cdot B_{ss'}(\theta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
     \State \textbf{Propose $\vartheta \sim q(\cdot| \theta)$.}
-      For all $w_i \in W$, calculate $\fwd^\vartheta_i(\cdot)$ similar to above.
-      \State \textbf{Accept/reject:} With probability $\texttt{acc}$, set the new parameter $\theta'$ to $\vartheta$, else set it to $\theta$: %Here 
+    For all elements of $\tilde{W}$, calculate $\fwd^\vartheta_i(\cdot)$ similar to above.
+      \State \textbf{Accept/reject:} 
+      Set $P(X|W,\theta) = \sum_{s \in \cS} \fwd_{|\tilde{W}|}^\theta(s),$ $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, with similar expressions for $\vartheta$. 
+      With probability $\texttt{acc}$, set $\theta'$ to $\vartheta$, else set it to $\theta$, where: %Here 
       %The acceptance probability for $\vartheta$ is given by 
 %         \vspace{-.05in}
           \begin{align}
@@ -64,7 +66,6 @@ Algorithm~\ref{alg:MH_naive} includes all the details of this algorithm, with fi
             {P(X|W, \theta)P(W | \theta)P(\theta)} \frac{q(\theta|\vartheta)}{q(\vartheta|\theta)}.
           \end{align}
 %         \vspace{-.1in}
-          Here $P(X|W,\theta) = \sum_{s \in \cS} \fwd_{|W|}^\theta(s) $ and $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, with similar expressions for $\vartheta$. 
           %$P(X|W,\vartheta) = \sum_{s \in \cS} \fwd_{|W|}^\vartheta(s) $. Use these, and the fact that $P(W|\theta)$ is Poisson-distributed to accept or reject the proposed $\vartheta$. Write the new parameter as $\theta'$.
     %as \boqian{$(W,\theta,\vartheta)$}.
     \State %For the new parameter $\theta'$, simulate states $V$. 
@@ -74,7 +75,7 @@ Algorithm~\ref{alg:MH_naive} includes all the details of this algorithm, with fi
     $$ \textbf{for } i=(|W|-1)\rightarrow 0\textbf{ do:} \quad v_i \sim \bck^{\theta'}_i(\cdot),\ \ \text{where } 
     \bck^{\theta'}_i(s) \propto \fwd^{\theta'}_i(s)\cdot B_{sv_{i+1}}(\theta') \cdot \ell_i(s)  \ \forall s \in \cS.$$
    % Here, $\bck^{\theta'}_{|W|}(\cdot) = \fwd^{\theta'}_{|W|}(\cdot)$.  This completes the FFBS algorithm.
-    \State Let $T'$ be the set of times in $W$ when the Markov chain changes state. Define $S'$ as the corresponding set of state values. Return $(S', T', \theta')$.
+    \State Set $s'_0=v_0$. Let $T'$ be the set of times in $W$ when $V$ changes state. Define $S'$ as the corresponding set of state values. Return $(s'_0, S', T', \theta')$.
 \end{algorithmic}
 \end{algorithm}
 The resulting MCMC algorithm updates $\theta$ with the MJP trajectory 

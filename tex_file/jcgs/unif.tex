@@ -10,29 +10,30 @@
 %  \vspace{-.1in}
 %\textbf{Bayesian model:}
 We first set up our Bayesian model of the data generation process. 
-We model a latent piecewise-constant path $S(t)$ as an $N$-state MJP with rate matrix $A(\theta)$ and prior $\pi_0$ over $S(0)$, the state at time $0$. 
-The parameter $\theta$ is unknown, and we place a prior $\prior(\theta)$ over this. 
+We model a latent piecewise-constant path $S(t)$ over $[0,t_{end})$ as an $N$-state MJP with rate matrix $A(\theta)$ and prior $\pi_0$ over $s_0 = S(0)$, the state at time $0$. 
+We use both $\{S(t), t \in [0,t_{end})\}$ and $(s_0,S,T)$ (see section~\ref{sec:mjp}) to refer to the MJP path.
+We place a prior $\prior(\theta)$ over the unknown $\theta$. 
 For clarity we will assume $\pi_0$ is known (or we set it to a uniform distribution over the $N$ states). 
-In settings with multiple trajectories, we would place a Dirichlet prior over $\pi_0$. 
-We have noisy measurements $X$ of $S(t)$, with likelihood $P(X|\{S(t),\ t \in [0,t_{end}]\})$.
-Again, for clarity we ignore any unknown parameters in the likelihood, otherwise we could include them in $\theta$.
-We assume the observation process has the following structure: for a dataset $X$, for any partition $W = \{w_0 = 0, w_1, \dotsc, w_{|W|}=t_{end}\}$ of the interval $[0,t_{end}]$, there exist known functions $\ell_i$ such that the likelihood factors as:
+%In settings with multiple trajectories, we would place a Dirichlet prior over $\pi_0$. 
+We have noisy measurements $X$ of $S(t)$, with likelihood $P(X|\{S(t),\ t \in [0,t_{end})\})$.
+Again, for clarity we ignore any unknown parameters in the likelihood, otherwise we can include them in $\theta$.
+We assume the observation process has the following structure: for any partition $\tilde{W} = \{\tilde{w}_0 = 0, \tilde{w}_1, \dotsc, \tilde{w}_{|\tilde{W}|}=t_{end}\}$ of the interval $[0,t_{end})$ (where $|\cdot|$ denotes the cardinality of a set), there exist known functions $\ell_i$ such that the likelihood factors as:
 \begin{align}
   \label{eq:lik_factor}
-  P(X|\{S(t),\ t \in [0,t_{end}]\}) = \prod_{i=0}^{|W|-1} \ell_i(\{S(t),\ t \in [w_{i},w_{i+1})\})
+  P(X|\{S(t),\ t \in [0,t_{end})\}) = \prod_{i=0}^{|\tilde{W}|-1} \ell_i(\{S(t),\ t \in [\tilde{w}_{i},\tilde{w}_{i+1})\})
 \end{align}
 A common example where this holds is for observations $X$ at a finite set of times $T^X = \{t^X_1,\cdots, t^X_{|X|}\}$, each observation depending on the state of the MJP at that time:
 \begin{align}
   \label{eq:lik_iid}
-  P(X|\{S(t),\ t \in [0,t_{end}]\}) = \prod_{i=1}^{|X|} P(x_i|S(t^X_i)).
+  P(X|\{S(t),\ t \in [0,t_{end})\}) = \prod_{i=1}^{|X|} P(x_i|S(t^X_i)).
 \end{align}
 Other examples include settings when the observations form an inhomogeneous Poisson process~\citep{FearnSher2006}, renewal process~\citep{rao2011gaussian} or even another MJP~\citep{Nodelman+al:UAI02,RaoTeh13}, modulated by $S(t)$.
-The first example, called a Markov modulated Poisson process (MMPP)~\citep{scottmmpp03}, associates a positive rate $\lambda_s$ with each state $s$, with $\ell_i(\{S(t),\ t \in [w_{i},w_{i+1})\})$ equal to the likelihood of the Poisson events within $[w_{i-1},w_i]$ under an inhomogeneous Poisson process with piecewise-constant rate $\lambda_{S(t)},\ t \in [w_{i},w_{i+1}]$.
+The first example, called a Markov modulated Poisson process (MMPP)~\citep{scottmmpp03}, associates a positive rate $\lambda_s$ with each state $s$, with $\ell_i(\{S(t),\ t \in [w_{i},w_{i+1})\})$ equal to the likelihood of the Poisson events within $[w_{i},w_{i+1})$ under an inhomogeneous Poisson process with piecewise-constant rate $\lambda_{S(t)},\ t \in [w_{i},w_{i+1})$.
 
 With $A(\cdot)$ and $\pi_0$ assumed known, the overall Bayesian model is then 
 \begin{align}
   \label{eq:bayes_model}
-  \theta \sim P(\theta), \quad S(t) \sim \text{MJP}(A(\pi_0, \theta)), \quad X \sim P(X|\{S(t),\ t \in [0,t_{end}]\}).
+  \theta \sim P(\theta), \quad S(t) \sim \text{MJP}(A(\pi_0, \theta)), \quad X \sim P(X|\{S(t),\ t \in [0,t_{end})\}).
 \end{align}
 Given $X$, one is interested in the posterior distribution over the latent quantities, $(\theta,S(t))$. 
 
@@ -57,16 +58,15 @@ Unlike the sequential wait-and-jump Gillespie algorithm, we first simulate a set
 $W$ defines a random grid on $[0,t_{end}]$.
 Define $B = \left(I +\frac{1}{\Omega}A\right)$; this is a stochastic matrix with positive elements, and rows adding up to $1$.
 Assign state-values to the elements in $\{0\} \cup W$ according to a discrete-time Markov chain with initial distribution $\pi_0$, and transition matrix $B$.
-Call these states $V$. 
-Thus $v_0 \sim \pi_0$, while $P(v_{k+1}=j|v_k=i) = B_{ij}$ for $k \in \{0,\cdots,|W|-1\}$, where $|\cdot|$ denotes the cardinality of a set.
+Call these states $(v_0,V)$, where $v_0 \sim \pi_0$, while $P(v_{k+1}=j|v_k=i) = B_{ij}$ for $k \in \{0,\cdots,|W|-1\}$. 
 Setting $\Omega > \max_i A_i$ results in more candidate-times than actual MJP transitions; at the same time, unlike $A$, the matrix $B$ can thin these through self-transitions. 
 Thus,
 \begin{itemize}
   \item Simulate $W$ from a Poisson process with rate $\Omega \ge \max_i A_i$.
-  \item Assign states $V$ to the times $0 \cup W$, with $v_0 \sim \pi_0$, and $P(v_{i+1}=s) = B_{v_is}$.
+  \item Assign states $(v_0,V)$ to the times $0 \cup W$, with $v_0 \sim \pi_0$, and $P(v_{i+1}=s|v_i) = B_{v_is}$.
 \end{itemize}
-Write $U$ for the elements $0 \cup W$ with self-transitions, and $T$ for the rest.
-Define $S=\{v_i \in V \text{ s.t.\ } v_i \neq v_{i-1}\}$ as the elements in $V$ corresponding to $T$, then $(S,T)$ sampled this way for any $\Omega \ge \max_i A_i$
+Write $U$ for the elements $W$ with self-transitions, and $T$ for the rest.
+Define $s_0=v_0$, and $S=\{v_i \in V \text{ s.t.\ } v_i \neq v_{i-1}\}$ as the elements in $V$ corresponding to $T$, then $(s_0,S,T)$ sampled this way for any $\Omega \ge \max_i A_i$
 %These self-transitions correct for the extra candidate transition times
 %produced by the higher rate $\Omega_i$, and~\cite{RaoTeh12} show that
 %trajectories sampled this way 
@@ -85,46 +85,46 @@ At a high-level, each MCMC iteration samples a new grid $W$ conditioned on the p
    \label{alg:Unif_gibbs}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{Prior $\pi_0$, observations $X$}, 
-                       \text{the previous path $S(t) = (S, T)$}.\\ 
+                       \text{the previous path $S(t) = (s_0, S, T)$}.\\ 
                      & \text{Parameter $\Omega > \max_i A_i$}, where
    $A$ is the MJP rate-matrix.\\
-   \textbf{Output:  }& \text{New MJP trajectory $S' (t) = (S', T')$}.\\
+   \textbf{Output:  }& \text{New MJP trajectory $S' (t) = (s'_0, S', T')$}.\\
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
-\State \textbf{ Simulate a set of thinned candidate times $U$ given the MJP path $(S,T)$ }: 
-These follow a piecewise-constant inhomogeneous Poisson process with rate $\Omega-A_{S(t)}$: 
-\begin{align*}
-  U \sim \text{PoissProc}(\Omega - A_{S(t)}),\quad \text{(i.e.\ the rate is $\Omega-A_s$ when $S(t) = s$).}
-\end{align*}
+\State \textbf{ Simulate the thinned candidate times $U$ given the MJP path $(S,T)$ } 
+from a piecewise-constant Poisson process with rate $\Omega-A_{S(t)}$: 
+
+$ \qquad \qquad  U \sim \text{PoissProc}(\Omega - A_{S(t)})  \quad \text{(i.e.\ the rate is $\Omega-A_s$ when $S(t) = s$).}$
 %Since the intensity is piecewise-constant, simulating this is straightforward to do. %: over a segment $(t_{i},t_{i+1})$ where $S(t)$ has value $s_i$, sample a positive integer $n$ from a Poisson distribution with mean $(\Omega-A_{s_i})$, and simulate $n$ events uniformly over $(t_i, t_{i+1})$.
 \State \textbf{
-  Discard the states $S$, and write %thinned and actual transition 
+  Discard the states $(s_0,S)$, and write %thinned and actual transition 
   $W = T \cup U$}.
 
-\State \textbf{ Simulate states $V$ on $W$ from a discrete-time HMM:} 
+  \State \textbf{ Simulate states $(v_0,V)$ on $0 \cup W$ from a discrete-time HMM:} 
 The HMM has initial distribution over states $\pi_0$ and transition matrix $B = \left(I+\frac{1}{\Omega}A\right)$.
- Following equation~\eqref{eq:lik_factor}, between two consecutive times $(w_i,w_{i+1})$ in $W$, state $s$ has 
-likelihood $\ell_i(s) \equiv \ell_i(\{S(t) = s,\ t \in [w_i,w_{i+1}]\})$. The simulation involves two steps: 
+Following equation~\eqref{eq:lik_factor}, between two consecutive times $(\tilde{w}_i,\tilde{w}_{i+1})$ in $\tilde{W} \defeq 0 \cup W \cup t_{end}$, state $s$ has 
+likelihood $\ell_i(s) \equiv \ell_i(\{S(t) = s,\ t \in [\tilde{w}_i,\tilde{w}_{i+1})\})$. The simulation involves two steps: 
 %Write this as $\ell_i(s)$. Then, do
 %To simulate the path, use the forward-filtering backward-sampling (FFBS) algorithm~\citep{fruhwirth1994data}: %, carter1996markov}: 
 %which involves two steps:
 \begin{description}
   \item[Forward pass:] 
     Set $\fwd_0(\cdot) = \pi_0$.
-    Sequentially update $\fwd_i(\cdot)$ at time $w_i \in W$ given $\fwd_{i-1}$: 
-    $$\textbf{for } i=1\rightarrow |W|\textbf{ do:} \quad \fwd_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd_{i-1}(s)\cdot B_{ss'}, \quad \forall s' \in \cS.\qquad\qquad\quad $$
+    Sequentially update $\fwd_i(\cdot)$ at time $\tilde{w}_i \in \tilde{W}$ given $\fwd_{i-1}$: 
+        \vspace{-.1in}
+        $$\textbf{for } i=1\rightarrow |\tilde{W}|\textbf{ do:} \quad \fwd_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd_{i-1}(s)\cdot B_{ss'}, \quad \forall s' \in \cS.\qquad\qquad\quad $$
     %and a term $\Omega_i\exp(-\Omega_i\Delta t)$,
     %the probability that the next candidate time occurs after a wait
     %$\Delta t$ under state $i$.
   \item[Backward pass:]
-    Set $v_{|W|} \sim \bck_{|W|}(\cdot)$, where $\bck_{|W|}(s) \propto \fwd_{|W|}(s)\cdot\ell_{|W|}(s) \quad \forall s \in \cS.$ 
+    Set ${v}_{|{W}|} \sim \bck_{|{W}|}(\cdot)$, where $\bck_{|{W}|}(s) \propto \fwd_{|{W}|}(s)\cdot\ell_{|{W}|}(s) \quad \forall s \in \cS.$ 
     %Sequentially simulate $v_i$ at time $w_i$ given state $v_{i+1}$  at time $w_{i+1}$:
-    $$ \textbf{for } i=(|W|-1)\rightarrow 0\textbf{ do:} \quad v_i \sim \bck_i(\cdot),\quad \text{where } 
+    $$ \textbf{for } i=(|{W}|-1)\rightarrow 0\textbf{ do:} \quad {v}_i \sim \bck_i(\cdot),\quad \text{where } 
     \bck_i(s) \propto \fwd_i(s)\cdot B_{sv_{i+1}} \cdot \ell_i(s)  \quad \forall s \in \cS.$$
-    
 \end{description}
-\State \textbf{Discard self-transitions}: Let $T'$ be the set of times in $W$ when the Markov chain changes state. Define $S'$ as the corresponding set of state values. Return $(S', T')$.
+        \vspace{-.1in}
+\State \textbf{Discard self-transitions}: Set $s'_0 = v_0$. Let $T'$ be the set of times in ${W}$ when $V$ changes state. Define $S'$ as the corresponding set of state values. Return $(s'_0, S', T')$.
 \end{algorithmic}
 \end{algorithm}
 
@@ -139,8 +139,8 @@ In particular, for an arbitrary initialization of path and  parameters, one repe
    \label{alg:MJP_gibbs}
   \begin{tabular}{l l}
    \textbf{Input:  } %& \text{A set of partial and noisy observations $X$}, \\
-                      & \text{The previous MJP path $S(t) = (S, T)$, the previous MJP parameters $\theta$}.\\ 
-   \textbf{Output:  }& \text{New MJP trajectory $S' (t) = (S', T')$ and 
+                      & \text{The previous MJP path $S(t) = (s_0, S, T)$, the previous MJP parameters $\theta$}.\\ 
+   \textbf{Output:  }& \text{New MJP trajectory $S' (t) = (s'_0, S', T')$ and 
                             parameters $\theta'$}.\\
    \hline
    \end{tabular}

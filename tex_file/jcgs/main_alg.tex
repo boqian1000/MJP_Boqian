@@ -8,14 +8,14 @@ This results in a MCMC sampler that mixes significantly more fast.
 Since we also need do account for the probabilities $P(W|\theta)$, we also have a simpler MCMC scheme.
 %This forms the main contribution of this paper.
 
-\begin{algorithm} %[H]
+\begin{algorithm}[H]
    \caption{Symmetrized MH for parameter inference for MJPs }
    \label{alg:MH_improved}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{The observations $X$,}
-                      \text{the MJP path $S(t) = (S, T)$, parameters $\theta$} and $\pi_0$.\\ 
-                     & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
-   \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (S', T')$, 
+                      \text{the MJP path $S(t) = (s_0, S, T)$, parameters $\theta$} and $\pi_0$.\\ 
+   %                & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
+   \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (s'_0, S', T')$, 
                             new MJP parameters $\theta'$}.\\
    \hline
    \end{tabular}
@@ -27,12 +27,11 @@ Since we also need do account for the probabilities $P(W|\theta)$, we also have 
       %In the case of uniformization, we
       %have a single $\Omega$ for all states, with $\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$.
       %, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
-      \State \textbf{ Simulate the thinned times $U$ } from a rate-$(\Omega-A_{S(t)})$ Poisson process : 
-\begin{align*}
-  U \sim \text{PoissProc}(\Omega - A_{S(t)}) 
-\end{align*}
-    \State Set $W = T \cup U$ and discard MJP states $S$. The MCMC state is now 
-    $(\theta,\vartheta, W)$.
+      \State \textbf{ Simulate the thinned times $U$ } from a rate-$(\Omega-A_{S(t)})$ Poisson process:
+
+  $\qquad \qquad \qquad \qquad \qquad U \sim \text{PoissProc}(\Omega - A_{S(t)})$.
+    \State Set $W = T \cup U$ and discard $(s_0,S)$. Define $\tilde{W} = 0 \cup W \cup t_{end}$.
+%    \State Set $W = T \cup U$ and discard MJP states $S$. The MCMC state is now $(\theta,\vartheta, W)$.
  %   \State \textbf{MH proposal}: The current MCMC state-space is $(W,\theta,\vartheta)$. 
  %   Propose swapping $\theta$ and $\vartheta$, so the new state-space is $(W,\vartheta,\theta)$. 
  %    Accept with probability 
@@ -42,18 +41,17 @@ Since we also need do account for the probabilities $P(W|\theta)$, we also have 
  %      $
         \State \textbf{Forward pass:} Set $B(\theta,\vartheta) = I + \frac{A(\theta)}{\Omega(\theta, \vartheta)}$ and $\fwd^{\theta, \vartheta}_0(\cdot) = \pi_0$.
     %Sequentially update $\fwd^{\theta,\vartheta}_i(\cdot)$ at $w_i \in W$ as: 
-    $$\textbf{for } i=1\rightarrow |W|\textbf{ do:} \quad \fwd^{\theta,\vartheta}_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd^{\theta,\vartheta}_{i-1}(s)\cdot B_{ss'}(\theta,\vartheta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
-    Similarly, for $B(\vartheta,\theta) = I + \frac{A(\vartheta)}{\Omega(\vartheta, \theta)}$, calculate $\fwd^{\vartheta,\theta}_i(\cdot)$ for all $w_i \in W$.
-    \State \textbf{Accept/reject}: The current MCMC state is $(W,\theta,\vartheta)$. 
-    Propose to swap $\theta$ and $\vartheta$, %so the new state-space is $(W,\vartheta,\theta)$. 
-     and accept with probability 
+        $$\textbf{for } i=1\rightarrow |\tilde{W}|\textbf{ do:} \quad \fwd^{\theta,\vartheta}_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd^{\theta,\vartheta}_{i-1}(s)\cdot B_{ss'}(\theta,\vartheta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
+        Similarly, for $B(\vartheta,\theta) = I + \frac{A(\vartheta)}{\Omega(\vartheta, \theta)}$, calculate $\fwd^{\vartheta,\theta}_i(\cdot)$ for all elements of $\tilde{W}$.
+    \State \textbf{Swap}: 
+        Set $P(X|W,\theta,\vartheta) = \sum_{s \in \cS} \fwd^{\theta,\vartheta}_{|W|}(s)$, and $P(X|W,\vartheta,\theta) = \sum_{s \in \cS} \fwd^{\vartheta,\theta}_{|W|}(s)$.
+        Swap $\theta$ and $\vartheta$ with probability 
      $
    %  \texttt{acc} =  
      1 \wedge \frac{P(X| W,\vartheta,\theta)P(\vartheta)q(\theta|\vartheta)}
         {P(X| W,\theta, \vartheta)P(\theta) q(\vartheta|\theta)}.
         $
-        Here, $P(X|W,\theta,\vartheta) = \sum_{s \in \cS} \fwd^{\theta,\vartheta}_{|W|}(s)$, and $P(X|W,\vartheta,\theta) = \sum_{s \in \cS} \fwd^{\vartheta,\theta}_{|W|}(s)$.
-    Write the new MCMC state as $(W,\theta',\vartheta')$.
+    Write the new parameters as $(\theta',\vartheta')$.
     \State \textbf{Backward pass:}
     Set $v_{|W|} \sim \bck^{\theta',\vartheta'}_{|W|}(\cdot)$, where $\bck^{\theta',\vartheta'}_{|W|}\!(s) \propto \fwd^{\theta',\vartheta'}_{|W|}\!(s)\cdot\ell_{|W|}(s) \quad \forall s \in \cS.$ 
     %For the new transition matrix $B(\theta',\vartheta')$,     
@@ -63,7 +61,7 @@ Since we also need do account for the probabilities $P(W|\theta)$, we also have 
 %    Sample a path $\tilde{V}$, from a discret-time Markov chain with $|W| + 1$ steps, using FFBS algorithm. The transition matrix of the Markov chain is $B = (I + \frac{A(\tilde{\theta})}{\Omega})$ while the initial distribution over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
 %    $$ L_i(s) = P(Y_{[w_i, w_{i + 1})} | S(t) = s \; for\; t \in [w_i, w_{i + 1})) = \prod_{j: t_j \in [w_i, w_{i + 1})}p(y_{t_j} | S(t_j) = s).$$\\
 %%(i.e. $V(i) \sim P(V |  \theta(i), W(i - 1), y).$) Then delete all the virtual jumps to get $S(i), T(i) .$\\
-    \State Let $T'$ be the set of times in $W$ when $V$ changes state. Define $S'$ as the corresponding set of state values. Return $(S', T', \theta')$.
+    \State Set $s'_0=v_0$. Let $T'$ be the set of times in $W$ when $V$ changes state. Define $S'$ as the corresponding set of state values. Return $(s'_0, S', T', \theta')$.
 \end{algorithmic}
 \end{algorithm}
 
@@ -71,23 +69,23 @@ Since we also need do account for the probabilities $P(W|\theta)$, we also have 
 \setlength{\unitlength}{0.8cm}
   \begin{figure}[h!]
   \centering
-  \begin{minipage}[!hp]{0.45\linewidth}
+  \begin{minipage}[!hp]{0.32\linewidth}
   \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/plot0.pdf}
+    \includegraphics [width=0.96\textwidth, angle=0]{figs/plot0.pdf}
       \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
+  \begin{minipage}[hp]{0.32\linewidth}
   \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/plot1.pdf}
+    \includegraphics [width=0.96\textwidth, angle=0]{figs/plot1.pdf}
     \vspace{-0 in}
   \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
+  \begin{minipage}[hp]{0.32\linewidth}
   \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/plot2.pdf}
+    \includegraphics [width=0.96\textwidth, angle=0]{figs/plot2.pdf}
     \vspace{-0 in}
   \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
+  \begin{minipage}[hp]{0.32\linewidth}
   \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/plot3.pdf}
+    \includegraphics [width=0.96\textwidth, angle=0]{figs/plot3.pdf}
     \vspace{-0 in}
   \end{minipage}
 % \begin{minipage}[hp]{0.45\linewidth}
@@ -95,14 +93,14 @@ Since we also need do account for the probabilities $P(W|\theta)$, we also have 
 %   \includegraphics [width=0.70\textwidth, angle=0]{figs/plot4.pdf}
 %   \vspace{-0 in}
 % \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
+  \begin{minipage}[hp]{0.32\linewidth}
   \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/plot5.pdf}
+    \includegraphics [width=0.96\textwidth, angle=0]{figs/plot5.pdf}
     \vspace{-0 in}
   \end{minipage}
-  \begin{minipage}[hp]{0.45\linewidth}
+  \begin{minipage}[hp]{0.32\linewidth}
   \centering
-    \includegraphics [width=0.90\textwidth, angle=0]{figs/plot6.pdf}
+    \includegraphics [width=0.96\textwidth, angle=0]{figs/plot6.pdf}
   \end{minipage}
     \caption{Proposed MH algorithm: Steps 0-3: Starting with a trajectory and parameter $\theta$, simulate an auxiliary parameter $\vartheta$, and then the thinned events
       $U$ from a rate $\Omega(\theta) + \Omega(\theta^*) - A_{S(t)}$ Poisson

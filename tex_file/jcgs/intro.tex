@@ -12,12 +12,13 @@ This Markov chain Monte Carlo (MCMC) algorithm was designed to simulate paths wh
 Parameter inference is typically carried out by incorporating it into a Gibbs sampler that also conditionally simulates parameters given the currently sampled trajectory. 
 
 In many situations, the MJP trajectory and parameters exhibit strong coupling, so that alternately sampling path given parameters, and parameters given path can result in poor mixing.  
-To address this, we propose a simple and efficient Metropolis-Hastings sampling framework. 
+To address this, we propose an efficient Metropolis-Hastings (MH) sampler (algorithm~\ref{alg:MH_improved}). 
 %additionally, we tie up some of the loose ends in the Rao-Teh algorithm.
-In our experiments, we demonstrate superior performance over Gibbs sampling, as well as other approaches like particle Markov chain Monte Carlo~\citep{Andrieu10}. 
-We also prove that under relatively mild conditions, our sampler inherits geometric ergodicity from an `ideal' sampler that operates without any computational constraints.
+In our experiments, we demonstrate superior performance over Gibbs sampling, a more obvious MH sampler, as well as particle Markov chain Monte Carlo~\citep{Andrieu10}. 
+We also prove that under relatively mild conditions, our sampler inherits geometric ergodicity from an `ideal' sampler that is computationally much more expensive.
 
 \section{Markov jump processes (MJPs)} 
+\label{sec:mjp}
 A Markov jump process~\citep{Cinlar1975} is a right-continuous piecewise-constant stochastic process $S(t)$ taking values in a state space $\cS$. % (see Figure~\ref{fig:naive_mh}, top-left).
 We assume a finite number of states $N$, with $\cS = \{1,\ldots,N\}$. 
 Then, the MJP is parameterized by two quantities, an $N$-component probability vector $\pi_0$ and a rate-matrix $A$. 
@@ -25,7 +26,7 @@ The former gives the distribution over states at the initial time (we assume thi
 An off-diagonal element $A_{ij}$ gives the rate of transitioning from state $i$ to $j$. 
 The rows of $A$ sum to $0$, so that $A_{ii}=-\sum_{j \neq i} A_{ij}  $. 
 We write $A_i$ for the negative of the $i$th diagonal element $A_{ii}$, so that $A_i = -A_{ii}$ gives the total rate at which the system leaves state $i$ for any other state.
-To simulate an MJP over an interval $[0,t_{end}]$, one follows Gillespie's algorithm~\citep{gillespie97}: 
+To simulate an MJP over an interval $[0,t_{end})$, one follows Gillespie's algorithm~\citep{gillespie97}: 
 first sample an initial state $s_0$ from $\pi_0$, and defining $t_0 = t_{curr} = 0$ and $k = 0$, repeat the following while $t_{curr} < t_{end}$:
 \begin{itemize}
   \item Sample a wait-time $\Delta t_k$ from an exponential distribution with rate $A_{s_k}$.  
@@ -33,7 +34,7 @@ first sample an initial state $s_0$ from $\pi_0$, and defining $t_0 = t_{curr} =
     The MJP remains in state $s_k$ until time $t_{k+1}$.
   \item Jump to a new state $s_{k+1} \neq s_k$ with probability equal to $A_{s_ks_{k+1}}/A_{s_k}$. Set $k=k+1$.
 \end{itemize}
-The times $T=(t_0, \dotsc, t_{|T| - 1})$ and states $S=(s_0, \dotsc, s_{|T| - 1 })$ define the MJP path $S(t)$ (see the top-left panel in figure~\ref{fig:MH_improved} for a sample path).
+The times $T=(t_1, \dotsc, t_{k - 1})$ and states $S=(s_1, \dotsc, s_{k - 1 })$, along with the initial state $s_0$, define the MJP path $S(t)$, so that $\{S(t), t \in (0,t_{end})\} \equiv (s_0, S,T)$. See the top-left panel in figure~\ref{fig:MH_improved} for a sample path.
 
 \subsection{Structured rate matrices}
 While the rate matrix $A$ can have $N(N-1)$ independent elements, in typical applications, especially with large state-spaces, it is determined by a much smaller set of parameters. 
