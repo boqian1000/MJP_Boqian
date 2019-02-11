@@ -138,7 +138,7 @@ The results in figure~\ref{fig:ESS_EXP_D10} for the 10-dimensional state space s
     \includegraphics [width=0.99\textwidth, angle=0]{figs/new_experiment_figs/exp_beta_dim10_k2.pdf}
 	\end{minipage}
 %  \begin{minipage}[!hp]{0.3\linewidth}
-    \caption{ESS/sec for the synthetic  model, the top row being dimension 3, and the bottom, dimension 10. The left and right columns are for $\alpha$ and $\beta$. \sout{Red, yellow, blue and black} \boqian{Blue, yellow, red and black} curves are the symmetrized MH, \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
+    \caption{ESS/sec for the synthetic  model, the top row being dimension 3, and the bottom, dimension 10. The left and right columns are for $\alpha$ and $\beta$. \sout{Red, yellow, blue and black} \boqian{Blue solid, yellow dashed, red long-dashed and black two-dashed} curves are the symmetrized MH, \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
      \label{fig:ESS_EXP_D10}
 %  \end{minipage}
   \end{figure}
@@ -183,7 +183,7 @@ The results in figure~\ref{fig:ESS_EXP_D10} for the 10-dimensional state space s
   \centering
     \includegraphics [width=0.99\textwidth, angle=0]{figs/ess/EXP_D10beta_k2.pdf}
 	\end{minipage}
-    \caption{ESS for the synthetic model, the top row being dimension 3, and the bottom, dimension 10. The left and right columns are for $\alpha$ and $\beta$. Blue, yellow and red curves are the symmetrized MH, \naive\ MH, and Gibbs algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
+    \caption{ESS for the synthetic model, the top row being dimension 3, and the bottom, dimension 10. The left and right columns are for $\alpha$ and $\beta$. \sout{Blue, yellow and red}\boqian{Blue solid, yellow dashed, red long-dashed} curves are the symmetrized MH, \naive\ MH, and Gibbs algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
      \label{fig:ESS_EXP_notpersec}
   \end{figure}
 
@@ -226,7 +226,7 @@ The results in figure~\ref{fig:ESS_EXP_D10} for the 10-dimensional state space s
   \end{minipage}
 %    \vspace{-0.3in}
 %    \caption{Time Interval vs. ESS / sec}
-  \caption{Time interval vs ESS/s for the synthetic MJP. In the left two plots, the number of observations is fixed, in the right two, this grows linearly with the interval length. Squares, triangles and circles are the symmetrized MH, \naive\ MH and Gibbs algorithm.
+  \caption{Time interval vs ESS/s for the synthetic MJP. In the left two plots, the number of observations is fixed, in the right two, this grows linearly with the interval length. \sout{Squares, triangles and circles} \boqian{Blue solid, yellow dashed and red long-dashed curves} are the symmetrized MH, \naive\ MH and Gibbs algorithm.
   \vinayak{The left 2 and right 2 look very similar}}
      \label{fig:TSS}
   \end{figure}
@@ -285,10 +285,10 @@ These two experiments illustrate the importance of integrating out the MJP path 
 \end{minipage}
 %  \begin{minipage}[!hp]{0.28\linewidth}
   \caption{(a) Jukes-Cantor (JC69) model, (b)
-    ESS/sec for the JC69 Model. Red, yellow and blue curves are the 
+    ESS/sec for the JC69 Model. sout{Red, yellow and blue} \boqian{Blue solid, yellow dashed and red long-dashed curves} curves are the 
       symmetrized MH, \naive\ MH and Gibbs algorithm.(c)
     ESS for the symmetrized MH for the JC69 Model.(d)
-    ESS for the JC69 Model. Red, yellow and blue curves are the 
+    ESS for the JC69 Model. \sout{Red, yellow and blue} \boqian{Blue solid, yellow dashed and red long-dashed curves} curves are the 
       symmetrized MH, \naive\ MH and Gibbs algorithm. }
      \label{fig:ESS_JC}
  % \end{minipage}
@@ -354,7 +354,7 @@ than all the algorithms, and we do not include it in our plots.
   \begin{minipage}[!hp]{0.01\linewidth}
   \end{minipage}
   \begin{minipage}[!hp]{0.4\linewidth}
-    \caption{Time Interval vs.\ ESS/sec for JC model. Number of observations is fixed (left), and grows linearly with interval (right). Squares, circles and triangles are the symmetrized MH, \naive\ MH and Gibbs. }
+    \caption{Time Interval vs.\ ESS/sec for JC model. Number of observations is fixed (left), and grows linearly with interval (right). \sout{Squares, circles and triangles}\boqian{Blue solid, yellow dashed and red long-dashed curves} are the symmetrized MH, \naive\ MH and Gibbs. }
 	\label{fig:jc_model_vs_t}
   \end{minipage}
 %  \vspace{-.4in}
@@ -412,7 +412,7 @@ degradation with interval length that is much milder than the other algorithms.
     \includegraphics [width=0.99\textwidth, angle=0]{figs/new_experiment_figs/q_beta_dim10_k2.pdf}
 	\end{minipage}
 %  \begin{minipage}[!hp]{0.3\linewidth}
-    \caption{ESS/sec for the immigration model, the left two being dimension 3, and the right two, dimension 10. The left and right columns are for $\alpha$ and $\beta$. \sout{Red, yellow, blue and black} \boqian{Blue, yellow, red and black} curves are the symmetrized MH, \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
+    \caption{ESS/sec for the immigration model, the left two being dimension 3, and the right two, dimension 10. The left and right columns are for $\alpha$ and $\beta$. \sout{Red, yellow, blue curves} \boqian{Blue solid, yellow dashed and red long-dashed curves} are the symmetrized MH, \naive\ MH, and Gibbs algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
      \label{fig:ESS_Q_D10}
 %  \end{minipage}
   \end{figure}
@@ -457,7 +457,7 @@ degradation with interval length that is much milder than the other algorithms.
   \centering
     \includegraphics [width=0.99\textwidth, angle=0]{figs/ess/Q_D10beta_k2.pdf}
 	\end{minipage}
-    \caption{ESS for the immigration model, the top row being dimension 3, and the bottom, dimension 10. The left and right columns are for $\alpha$ and $\beta$. Blue, yellow and red curves are the symmetrized MH, \naive\ MH, and Gibbs algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
+    \caption{ESS for the immigration model, the top row being dimension 3, and the bottom, dimension 10. The left and right columns are for $\alpha$ and $\beta$. \boqian{Blue solid, yellow dashed and red long-dashed curves} are the symmetrized MH, \naive\ MH, and Gibbs algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
      \label{fig:ESS_Q_notpersec}
   \end{figure}
 
@@ -626,7 +626,7 @@ steps included in the appendix.
     \includegraphics [width=0.99\textwidth, angle=0]{figs/new_experiment_figs/cq_beta_dim10_k2.pdf}
 	\end{minipage}
 %  \begin{minipage}[!hp]{0.3\linewidth}
-    \caption{ESS/sec for the time-inhomogeneous immigration model, the left two being dimension 3, and the right two, dimension 10. The left and right columns are for $\alpha$ and $\beta$. Blue, yellow, red and black curves are the symmetrized MH, \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
+    \caption{ESS/sec for the time-inhomogeneous immigration model, the left two being dimension 3, and the right two, dimension 10. The left and right columns are for $\alpha$ and $\beta$. \sout{Blue, yellow, red curves} \boqian{Blue solid, yellow dashed and red long-dashed curves} are the symmetrized MH, \naive\ MH, and Gibbs algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
      \label{fig:ESS_pc_10}
 %  \end{minipage}
   \end{figure}
@@ -672,7 +672,7 @@ steps included in the appendix.
   \centering
     \includegraphics [width=0.99\textwidth, angle=0]{figs/ess/QC_D10beta_k2.pdf}
 	\end{minipage}
-    \caption{ESS for the time-inhomogeneous immigration model, the top row being dimension 3, and the bottom, dimension 10. The left and right columns are for $\alpha$ and $\beta$. Blue, yellow and red curves are the symmetrized MH, \naive\ MH, and Gibbs algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
+    \caption{ESS for the time-inhomogeneous immigration model, the top row being dimension 3, and the bottom, dimension 10. The left and right columns are for $\alpha$ and $\beta$.\sout{ Blue, yellow and red curves} \boqian{Blue solid, yellow dashed and red long-dashed curves} are the symmetrized MH, \naive\ MH, and Gibbs algorithm. Different symbols correspond to different settings of the algorithms, see section~\ref{sec:expts}}
      \label{fig:ESS_CQ_notpersec}
   \end{figure}
 
@@ -724,7 +724,7 @@ of the Gibbs sampler. \\
 
   We use this setup to evaluate our symmetrized MH sampler along with Gibbs sampling (other algorithms perform much worse, and we do not include them). 
   For our MH proposal distribution, we first run {2000} iterations of Gibbs sampling to estimate the posterior covariance of the vector $\theta = (\alpha,\beta,\lambda_1,\lambda_2)$, call this $\Sigma_\theta$. 
-  Our MH proposal distribution is then $q(\nu|\theta) = N(\nu|\theta, \kappa\Sigma_\theta)$ for different settings of $\kappa$ (the typical choice is $\kappa = 1$)\boqian{, with the multiplicative factor $2$}. 
+  Our MH proposal distribution is then $q(\nu|\theta) = N(\nu|\theta, \kappa\Sigma_\theta)$ for different settings of $\kappa$ (the typical choice is $\kappa = 1$)\boqian{(we might want to change $\kappa$ here, because we use $\kappa$ in the beginning of the section for different meaning.)} \boqian{, where we set $\Omega(\theta, \vartheta) = \max A(\theta) + \max A(\vartheta)$}. 
 
   Figure~\ref{fig:TRACE_ECOLI} shows trace and autocorrelation plots for the parameter $\alpha$ produced by the Gibbs sampler (left) and our proposed sampler with $\kappa$ set to $1$.
   We see that this is a fairly hard MCMC sampling problem, however our sampler clearly outperforms Gibbs, which mixes very poorly.

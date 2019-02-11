@@ -1,4 +1,4 @@
-setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/data/q_10/")
+setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/data/pc_q_3/")
 library(ggplot2)
 load("rda_var")
 load("gbs_a")
@@ -74,17 +74,11 @@ p_ALPHA <- p_ALPHA +   ylim(0,maxy) + xlim(0, maxx)+scale_shape(solid = FALSE) +
   geom_point(data = mh_a, aes(x = var3, y =mh_a_k3) , colour = "skyblue3", size = s1,alpha = 0.6, shape = 2, stroke = 2) +
   geom_errorbar(data = mh_a, aes(x= var3,ymax = mh_a_k3u, ymin = mh_a_k3d), width=0.05,alpha = 0.6, colour = "skyblue3")+
   geom_line(data = mh_a, aes(x = var3, y =mh_a_k3) ,colour = "skyblue3", size = s2, alpha = trans_col) +
-  labs(x = expression(paste(sigma^2," of MH proposal") )) + labs(y =  expression(paste("ESS per unit time for ",alpha))) + theme(legend.position="none")
+  labs(x = expression(paste(sigma^2," of MH proposal") )) + labs(y =  expression(paste("ESS/unit time for ",alpha))) + theme(legend.position="none")
 
 p_ALPHA
 setwd("/Users/Isaac_Zhang/Research/MCMC/revision/New_figures/new_whole_exp_fitures/")
-#ggsave("q_alpha_dim5.pdf", height = 8, width = 8)
-#ggsave("q_alpha_dim10.pdf", height = 8, width = 8)
-#ggsave("q_alpha_dim3.pdf", height = 8, width = 8)
-
-#ggsave("cq_alpha_dim3.pdf", height = 8, width = 8)
-#ggsave("cq_alpha_dim5.pdf", height = 8, width = 8)
-ggsave("mh_q_alpha_dim10.pdf", height = 8, width = 8)
+ggsave("mh_cq_alpha_dim3.pdf", height = 6.8, width = 6.8)
 
 maxx = 1.8
 # dim3
@@ -115,16 +109,10 @@ p_BETA <- p_BETA +   ylim(0,maxy) + xlim(0, maxx)+scale_shape(solid = FALSE) +
   geom_point(data = mh_b, aes(x = var3, y =mh_b_k3) , colour = "skyblue3", size = s1,alpha = 0.6, shape = 2, stroke = 2) +
   geom_errorbar(data = mh_b, aes(x= var3,ymax = mh_b_k3u, ymin = mh_b_k3d), width=0.05,alpha = 0.6, colour = "skyblue3")+
   geom_line(data = mh_b, aes(x = var3, y =mh_b_k3) ,colour = "skyblue3", size = s2, alpha = trans_col) +
-  labs(x = expression(paste(sigma^2," of MH proposal") )) + labs(y =  expression(paste("ESS per unit time for ",beta))) + theme(legend.position="none")
+  labs(x = expression(paste(sigma^2," of MH proposal") )) + labs(y =  expression(paste("ESS/unit time for ",beta))) + theme(legend.position="none")
 p_BETA
 
-#ggsave("q_beta_dim5.pdf", height = 8, width = 8)
-#ggsave("q_beta_dim10.pdf", height = 8, width = 8)
-#ggsave("q_beta_dim3.pdf", height = 8, width = 8)
-
-#ggsave("cq_beta_dim3.pdf", height = 8, width = 8)
-#ggsave("cq_beta_dim5.pdf", height = 8, width = 8)
-ggsave("mh_q_beta_dim10.pdf", height = 8, width = 8)
+ggsave("mh_cq_beta_dim3.pdf", height = 6.8, width = 6.8)
 
 
 

@@ -41,83 +41,66 @@ trajectory.}
   \end{figure}
 
 \subsection{Additional results}
-In the following, we evaluate Python implementations of a number of algorithms, including the \naive\ MH algorithm (Algorithm~\ref{alg:MH_naive}, which we plot in yellow), and our main contribution, the symmetrized MH algorithm (algorithm~\ref{alg:MH_improved}, plotted as dashed red lines\vinayak{Do this}). 
+In the following, we evaluate Python implementations of a number of algorithms, including the \naive\ MH algorithm (Algorithm~\ref{alg:MH_naive}, which we plot \sout{in yellow} \boqian{as yellow twodashed  lines}), and our main contribution, the symmetrized MH algorithm (algorithm~\ref{alg:MH_improved}, plotted \sout{as dashed red lines}\boqian{as solid blue lines}
+\vinayak{Do this}). 
 We compare different variants of these algorithms, corresponding to different uniformizing Poisson rates. % (i.e.\ different choices of $\kappa$, see section~\ref{sec:comments}). 
-For \naive\ MH, we set $\Omega(\theta) = \kappa \max_s A_s(\theta) $ with $\kappa$  equal to $1.5, 2$ and $3$, represented in our plots with circles, triangles and square symbols. 
+For \naive\ MH, we set $\Omega(\theta) = \kappa \max_s A_s(\theta) $ with $\kappa$  equal to $1.5, 2$ and $3$, represented in our plots with circles, \sout{triangles} \boqian{square} and \sout{square} \boqian{triangles} symbols. 
 For symmetrized MH, where the uniformizing rate depends on both the current and proposed parameter, we consider two settings:
  $\Omega(\theta, \vartheta) = \kappa (\max A(\theta) + \max A(\vartheta))$ 
- ($\kappa = 1$ and $1.5$, plotted with {triangles} and {squares}), and 
+ ($\kappa = 1$ and $1.5$, plotted with \sout{triangles} \boqian{square} and \sout{square} \boqian{triangles}), and 
 $\Omega(\theta, \vartheta) = \kappa \max(\max A(\theta), \max A(\vartheta))$
 ($\kappa=1.5$, plotted with {circles}).  
-We also evaluate two baselines: Gibbs sampling (Algorithm~\ref{alg:MJP_gibbs}, plotted in blue), and particle MCMC~\citep{Andrieu10}, plotted in black. 
-Gibbs sampling involves a uniformization step to update the MJP trajectory, for which we used three settings, $\kappa=1.5,2,3$, plotted with circles, {triangles} and {squares}.  
+We also evaluate two baselines: Gibbs sampling (Algorithm~\ref{alg:MJP_gibbs}, plotted \sout{in blue} \boqian{as red long dashed lines} ), and particle MCMC~\citep{Andrieu10}, plotted \sout{in black} \boqian{as black dashed lines}. Gibbs sampling involves a uniformization step to update the MJP trajectory, for which we used three settings, $\kappa=1.5,2,3$, plotted with circles, \sout{triangles} \boqian{square} and \sout{square} \boqian{triangles}.  
 Unless specified, our results were obtained from $100$ independent MCMC runs, each of $10000$ iterations.
-We found particle MCMC to be more computationally intensive, and limited each run to $3000$ iterations, the number of particles being $5, 10$ and $20$ (plotted with circles, trianges and squares). 
+We found particle MCMC to be more computationally intensive, and limited each run to $3000$ iterations, the number of particles being $5, 10$ and $20$ (plotted with circles, \sout{triangles} \boqian{square} and \sout{square} \boqian{triangles}). 
 
-\vspace{-.4in}
   \begin{figure}[H]
   \centering
-  \begin{minipage}[h!]{0.65\linewidth}
+  \begin{minipage}[h!]{0.99\linewidth}
   \centering
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/exp_alpha_dim3.pdf}
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim3.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/exp_alpha_dim3.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim3.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/exp_alpha_dim10.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim10.pdf}
   \end{minipage}
-  \begin{minipage}[!hp]{0.33\linewidth}
-    \caption{ESS/sec for the synthetic  model, dimension 3. (Left, right) 
-      are $(\alpha, \beta)$. Blue, yellow, red and black are the symmetrized MH,
+%  \begin{minipage}[!hp]{0.33\linewidth}
+    \caption{ESS/sec for the synthetic  model, the left two being for dimension 3 and the right two for dimension 10. \boqian{((a), (b), (c), (d)) are $(\alpha, \beta, \alpha, \beta)$}. Blue, yellow, red and black are the symmetrized MH,
   \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols are
 different settings of the algorithms, see section~\ref{sec:expts}.}
      \label{fig:ESS_EXP_D33}
-  \end{minipage}
+%  \end{minipage}
   \end{figure}
 
-\vspace{-.4in}
+  %\centering
+%\vspace{-.4in}
+%\vspace{-.4in}
   \begin{figure}[H]
   \centering
-  \begin{minipage}[h!]{0.65\linewidth}
+  \begin{minipage}[h!]{0.99\linewidth}
   \centering
     \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/exp_alpha_dim5.pdf}
     \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim5.pdf}
   \end{minipage}
-  \begin{minipage}[!hp]{0.33\linewidth}
-    \caption{ESS/sec for the synthetic  model, dimension 5. (Left, right) 
-      are $(\alpha, \beta)$. Blue, yellow, red and black are the symmetrized MH,
-  \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols are
-different settings of the algorithms, see section~\ref{sec:expts}.}
-     \label{fig:ESS_EXP_D55}
-  \end{minipage}
-  \end{figure}
-  %\centering
-\vspace{-.4in}
-\vspace{-.4in}
-  \begin{figure}[H]
-  \centering
-  \begin{minipage}[h!]{0.65\linewidth}
-  \centering
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/exp_alpha_dim10.pdf}
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim10.pdf}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.33\linewidth}
+%  \begin{minipage}[!hp]{0.33\linewidth}
     \caption{ESS/sec for the synthetic  model, dimension 10. (Left, right) 
       are $(\alpha, \beta)$. Blue, yellow, red and black are the symmetrized MH,
   \naive\ MH, Gibbs and particle MCMC algorithm. Different symbols are
 different settings of the algorithms, see section~\ref{sec:expts}.}
      \label{fig:ESS_EXP_D1010}
-  \end{minipage}
+%  \end{minipage}
   \end{figure}
 
   \begin{figure}[H]
 %    \vspace{-.2in}
   \centering
-
   \begin{minipage}[!hp]{0.99\linewidth}
     \includegraphics [width=0.3\textwidth, angle=0]{figs/EXP_ks/exp_hist_44_05_10_.pdf}
-    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/EXP_D3beta_k2.pdf}
 	\hspace{.5in}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/EXP_D3beta_k2.pdf}
     \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/EXP_D10beta_k2.pdf}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{Acceptance Rate for $\beta$ in the synthetic model, the left row being dimension 3, and the right,dimension 10.  Red, yellow and blue curves are the Gibbs, symmetrized MH,
+    \caption{Acceptance Rate for $\beta$ in the synthetic model, the left row being dimension 3, and the right,dimension 10.  Red, blue and yellow curves are the Gibbs, symmetrized MH,
  and \naive\ MH  algorithm. The multiplicative factor is $2$. }
      \label{fig:ACC_EXP}
 %  \end{minipage}
@@ -128,13 +111,12 @@ different settings of the algorithms, see section~\ref{sec:expts}.}
 
   \begin{minipage}[!hp]{0.99\linewidth}
   	\centering
-    \includegraphics [width=0.3\textwidth, angle=0]{figs/JC_ks/jc_hist_44_05_3_.pdf}
     \includegraphics [width=0.3\textwidth, angle=0]{figs/acc/JCalpha_k2.pdf}
 	\hspace{.5in}
     \includegraphics [width=0.3\textwidth, angle=0]{figs/JC_ks/jc_hist_44_05_3_.pdf}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{The left represents the acceptance rate for $\alpha$ in the JC69 model.  Yellow and blue curves represent symmetrized MH,and \naive\ MH  algorithm. The multiplicative factor is $2$.The right is histogram for the posterior samples($\alpha$ ) of the JC69 model, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.97$.  }
+    \caption{The left represents the acceptance rate for $\alpha$ in the JC69 model.  Blue and yellow curves represent symmetrized MH,and \naive\ MH  algorithm. The multiplicative factor is $2$.The right is histogram for the posterior samples($\alpha$) of the JC69 model, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.97$.  }
      \label{fig:ACC_JC}
 %  \end{minipage}
   \end{figure}
@@ -180,30 +162,39 @@ different settings of the algorithms, see section~\ref{sec:expts}.}
 
   \begin{figure}[H]
   
-  \begin{minipage}[hp]{0.65\linewidth}
+  \begin{minipage}[hp]{0.99\linewidth}
   \centering
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/q_alpha_dim3.pdf}
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim3.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/q_alpha_dim3.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim3.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/q_alpha_dim10.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim10.pdf}
   \end{minipage}
-  \begin{minipage}[!hp]{0.33\linewidth}
-    \caption{ESS/sec for the immigration model, with dimension 3. (Left, 
-      right) are $(\alpha, \beta)$. Blue yellow, and red curves are the symmetrized MH,
+%  \begin{minipage}[!hp]{0.33\linewidth}
+    \caption{ESS/sec for the immigration model, with the left two for dimension 3 and the right two for dimension 10. \sout{(Left, 
+      right) are $(\alpha, \beta)$} \boqian{((a), (b), (c), (d)) are $(\alpha, \beta, \alpha, \beta)$}. Blue yellow, and red curves are the symmetrized MH,
   \naive\ MH, Gibbs sampling and particle MCMC.}
      \label{fig:ESS_Q_D33}
-  \end{minipage}
+%  \end{minipage}
+\end{figure}
+
+  \begin{figure}[H]
   \centering
-  \begin{minipage}[!hp]{0.65\linewidth}
+  \begin{minipage}[!hp]{0.99\linewidth}
   \centering
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/cq_alpha_dim3.pdf}
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim3.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/cq_alpha_dim3.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim3.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/cq_alpha_dim10.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim10.pdf}
   \end{minipage}
-  \begin{minipage}[!hp]{0.33\linewidth}
-    \caption{ESS/sec for the time-inhomogeneous immigration model, with 
-      dimension 3. (Left, right) are $(\alpha, \beta)$. Blue, yellow and red curves are the symmetrized MH,
+%  \begin{minipage}[!hp]{0.33\linewidth}
+    \caption{ESS/sec for the time-inhomogeneous immigration model, with the left two for 
+      dimension 3 and the right two for dimension 10. \sout{(Left, right) are $(\alpha, \beta)$.} \boqian{((a), (b), (c), (d)) are $(\alpha, \beta, \alpha, \beta)$} Blue, yellow and red curves are the symmetrized MH,
   \naive\ MH, and Gibbs algorithm.}
      \label{fig:ESS_pc_33}
-  \end{minipage}
+%  \end{minipage}
+\end{figure}
 
+\begin{figure}[H]
  \begin{minipage}[hp]{0.65\linewidth}
   \centering
     \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/q_alpha_dim5.pdf}
@@ -215,6 +206,8 @@ different settings of the algorithms, see section~\ref{sec:expts}.}
   \naive\ MH, Gibbs sampling and particle MCMC.}
      \label{fig:ESS_Q_D55}
   \end{minipage}
+	\end{figure}
+	\begin{figure}	
   \centering
   \begin{minipage}[!hp]{0.65\linewidth}
   \centering
@@ -239,29 +232,6 @@ different settings of the algorithms, see section~\ref{sec:expts}.}
      \label{fig:ESS_pc_55}
   \end{minipage}
 
- \begin{minipage}[hp]{0.65\linewidth}
-  \centering
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/q_alpha_dim10.pdf}
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim10.pdf}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.33\linewidth}
-    \caption{ESS/sec for the immigration model, with dimension 5. (Left, 
-      right) are $(\alpha, \beta)$. Blue, yellow, and red curves are the symmetrized MH,
-  \naive\ MH, Gibbs sampling and particle MCMC.}
-     \label{fig:ESS_Q_D1010}
-  \end{minipage}
-  \centering
-  \begin{minipage}[!hp]{0.65\linewidth}
-  \centering
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/cq_alpha_dim10.pdf}
-    \includegraphics [width=0.44\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim10.pdf}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.33\linewidth}
-    \caption{ESS/sec for the time-inhomogeneous immigration model, with 
-      dimension 5. (Left, right) are $(\alpha, \beta)$. Blue, yellow and red curves are the symmetrized MH,
-  \naive\ MH, and Gibbs algorithm.}
-     \label{fig:ESS_pc_1010}
-  \end{minipage}
 
 % \centering
 % \begin{minipage}[!hp]{0.64\linewidth}
@@ -290,7 +260,7 @@ different settings of the algorithms, see section~\ref{sec:expts}.}
     \includegraphics [width=0.40\textwidth, angle=0]{figs/acc/Q_D10alpha_k2.pdf}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{Acceptance Rate for $\alpha$ in the synthetic model, the left row being dimension 3, and the right,dimension 10.  Yellow and blue curves represent symmetrized MH,
+    \caption{Acceptance Rate for $\alpha$ in the immigration model, the left row being dimension 3, and the right,dimension 10.  \sout{Yellow} \boqian{Blue} and \sout{blue} \boqian{yellow} curves represent symmetrized MH,
  and \naive\ MH  algorithm. The multiplicative factor is $2$. }
      \label{fig:ACC_Q}
 %  \end{minipage}
@@ -306,12 +276,12 @@ different settings of the algorithms, see section~\ref{sec:expts}.}
 
   \begin{minipage}[!hp]{0.99\linewidth}
     \includegraphics [width=0.3\textwidth, angle=0]{figs/QC_ks/qc_hist_4_03_10_.pdf}
-    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/CQ_D3alpha_k2.pdf}
 	\hspace{.5in}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/CQ_D3alpha_k2.pdf}
     \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/CQ_D10alpha_k2.pdf}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{Acceptance Rate for $\alpha$ in the time-inhomogeneous immigration model, the left row being dimension 3, and the right,dimension 10.  Yellow and blue curves represent symmetrized MH,
+    \caption{Acceptance Rate for $\alpha$ in the time-inhomogeneous immigration model, the left row being dimension 3, and the right,dimension 10.  Blue and yellow curves represent symmetrized MH,
  and \naive\ MH  algorithm. The multiplicative factor is $2$. }
      \label{fig:ACC_CQ}
 %  \end{minipage}
