@@ -133,16 +133,17 @@ data_alpha_oMH_mean <- data.frame(var = var, method = factor(rep(c("oMH"), each=
 
 maxx = max(var)
 maxy = max(max(data_alpha_MH_mean[3]), max(data_alpha_oMH_mean[3]))
+#maxy = 0.6
 ratio.values <- (maxx)/(maxy)
 
 s1 = 5
 s2 =2
 p_ALPHA <- ggplot() + theme_bw()+ theme(axis.text=element_text(size=40), axis.title=element_text(size=40)) + coord_fixed(ratio = ratio.values)+ ylim(0, maxy)+
-  geom_point(data = data_alpha_MH_mean, aes(x = var, y =ess_alpha_persec) , shape = 0, colour = "skyblue3", size = s1, alpha = 0.6, stroke = 3) +
-  geom_line(data = data_alpha_MH_mean, aes(x = var, y =ess_alpha_persec) ,colour = "skyblue3",size =s2, alpha = 0.6, linetype = 'solid') +
+  geom_point(data = data_alpha_MH_mean, aes(x = var, y =ess_alpha_persec) , shape = 0, colour = "skyblue3", size = s1, alpha = 0.8, stroke = 3) +
+  geom_line(data = data_alpha_MH_mean, aes(x = var, y =ess_alpha_persec) ,colour = "skyblue3",size =s2, alpha = 0.8, linetype = 'solid') +
   
-  geom_point(data = data_alpha_oMH_mean, aes(x = var, y =ess_alpha_persec) , shape = 0, colour = "darkorange", size = s1, alpha = 0.6, stroke = 3) +
-  geom_line(data = data_alpha_oMH_mean, aes(x = var, y =ess_alpha_persec) ,colour = "darkorange", size = s2, alpha = 0.6, linetype = 'twodash') +
+  geom_point(data = data_alpha_oMH_mean, aes(x = var, y =ess_alpha_persec) , shape = 2, colour = "darkorange", size = s1, alpha = 0.8, stroke = 3) +
+  geom_line(data = data_alpha_oMH_mean, aes(x = var, y =ess_alpha_persec) ,colour = "darkorange", size = s2, alpha = 0.8, linetype = 'twodash') +
   labs(x = expression(paste(sigma^2 ," of MH proposal") )) + labs(y =  "Acceptance rate") + theme(legend.position="none")+ 
   theme(
     axis.ticks.x=element_blank(),
@@ -151,7 +152,7 @@ p_ALPHA
 
 setwd("/Users/Isaac_Zhang/Research/MCMC/revision/New_figures/acc/")
 filename <- paste(exp, "alpha_k2", ".pdf", sep = "")
-ggsave(filename, width = 6, height = 6, device = pdf)
+ggsave(filename, width = 6.8, height = 6.8)
 
 
 
