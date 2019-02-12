@@ -15,13 +15,13 @@ $$ \texttt{acc} = \min\left(1,
 %Only after accepting or rejecting do we simulate state values via a backward pass.
 Here, $P(X|W,\theta)$ is the probability of the observations $X$ given $W$ with states $V$ marginalized out. 
 Equivalently, this is the marginal probability of $X$ under a discrete-time HMM on $W$, with transition matrix $B(\theta)$, and can be computed using the forward pass of the FFBS algorithm. 
-The term $P(W|\theta)$ is the probability of $W$ under a rate-$\Omega(\theta)$ Poisson process, 
+The term $P(W|\theta)$ is the probability of $W$ under a rate-$\Omega(\theta)$ Poisson process. 
 These, along with the corresponding terms for $\vartheta$ allow the acceptance probability to be computed.
 %make a forward pass over $W$, and calculate and $P(X|W,\vartheta)$. % as in algorithm~\ref{alg:disc_time_mh}.
 Only {\em after} accepting or rejecting $\vartheta$ do we simulate new states $V'$, using the new parameter $\theta'$ in a backward pass over $W$. 
 %Then discard all self-transitions, resample $W$ and repeat. 
 The new trajectory and parameter are used to simulate a new grid $W'$, and the process is repeated.
-Algorithm~\ref{alg:MH_naive} includes all the details of this algorithm, with figure~\ref{fig:naive_mh} sketching out the main idea.
+Algorithm~\ref{alg:MH_naive} includes all the details of this algorithm, with figure~\ref{fig:naive_mh} in the appendix sketching out the main idea.
 
 %\vspace{-.1in}
 %\vspace{-.32in}
@@ -37,12 +37,12 @@ Algorithm~\ref{alg:MH_naive} includes all the details of this algorithm, with fi
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
-     \State Set $\Omega \defeq \Omega(\theta) > \max_s{A_s(\theta)}$ for
+     \State Set $\Omega(\theta) > \max_s{A_s(\theta)}$ for
      some function $\Omega(\cdot)$ (e.g.\ $\Omega(\theta) = 
       2\max_s A_s(\theta))$.
-      \State \textbf{ Simulate the thinned times $U$:} from a rate-$(\Omega-A_{S(t)})$ Poisson process: 
+      \State \textbf{ Simulate the thinned times $U$:} from a rate-$(\Omega(\theta)-A_{S(t)}(\theta))$ Poisson process: 
 
-  $\qquad \qquad \qquad \qquad U \sim \text{PoissProc}(\Omega - A_{S(t)}).$
+      $\qquad \qquad \qquad \qquad U \sim \text{PoissProc}(\Omega(\theta) - A_{S(t)}(\theta)).$
 
       \State 
       Set $W = T \cup U$ and discard $(s_0,S)$. Define $\tilde{W} = 0 \cup W \cup t_{end}$.
@@ -84,12 +84,12 @@ This can be formalized by the idea of the Bayesian fraction of missing informati
 Alternately, the Gibbs sampler of algorithm~\ref{alg:MJP_gibbs} can be viewed as operating on a centered parametrization~\citep{papaspiliopoulos2007general} or sufficient augmentation~\citep{yu2011center} of a joint distribution over parameters, Poisson events and state values. The MH algorithm reverses the order in which the path and parameter are updated, and operates on a noncentered parametrization or ancillary augmentation.
 For a detailed review of the suitability of these two approaches, as well as ways to combine them together, we refer to~\citet{papaspiliopoulos2007general, yu2011center}.
 
-We however note that even with state values $V$ marginalized out, $\theta$ is updated {\em conditioned on $W$}. 
+We note that even with state values $V$ marginalized out, $\theta$ is updated {\em conditioned on $W$}. 
 Further, the distribution of $W$ depends on $\theta$: $W$ is a realization of a rate-$\Omega(\theta)$ Poisson process, and this dependence manifests in the $P(W|\theta)$ and $P(W|\vartheta)$ terms in the acceptance probability in equation~\eqref{eq:ncp_acc}. 
-The fact that the MH-acceptance probability involves a $P(X|\theta)$ term is inevitable, however the $P(W|\theta)$ term is an artifact of the computational algorithm of Rao-Teh. 
-In our experiments, we found that this term significantly affects acceptance probabilities and mixing. 
-Intuitively, for parameter $\theta$, $|W|$, the number of events in $W$ is Poisson distributed with mean and standard deviation $\Omega(\theta)$. 
-If the proposed parameter $\vartheta$ is such that $\Omega(\vartheta)$ is half $\Omega(\theta)$, then the ratio $P(W|\vartheta)/P(W|\theta)$ will be small, so that $\vartheta$ is unlikely to be accepted. 
+The fact that the MH-acceptance involves the probability of the observations  $X$ is inevitable, however the $P(W|\theta)$ term is an artifact of the computational algorithm of Rao-Teh. 
+In our experiments, we find that this term significantly affects acceptance probabilities and mixing. 
+For parameter $\theta$, $|W|$ is Poisson distributed with mean and standard deviation $\Omega(\theta)$. 
+If the proposed $\vartheta$ is such that $\Omega(\vartheta)$ is half $\Omega(\theta)$, then the ratio $P(W|\vartheta)/P(W|\theta)$ will be small, and $\vartheta$ is unlikely to be accepted. 
 %, resulting in a low acceptance probability.  
 This will slow down mixing.
-The next section describes our algorithm that get around this.
+The next section describes our main algorithm that gets around this.

@@ -15,27 +15,27 @@ We use both $\{S(t), t \in [0,t_{end})\}$ and $(s_0,S,T)$ (see section~\ref{sec:
 We place a prior $\prior(\theta)$ over the unknown $\theta$. 
 For clarity we will assume $\pi_0$ is known (or we set it to a uniform distribution over the $N$ states). 
 %In settings with multiple trajectories, we would place a Dirichlet prior over $\pi_0$. 
-We have noisy measurements $X$ of $S(t)$, with likelihood $P(X|\{S(t),\ t \in [0,t_{end})\})$.
-Again, for clarity we ignore any unknown parameters in the likelihood, otherwise we can include them in $\theta$.
-We assume the observation process has the following structure: for any partition $\tilde{W} = \{\tilde{w}_0 = 0, \tilde{w}_1, \dotsc, \tilde{w}_{|\tilde{W}|}=t_{end}\}$ of the interval $[0,t_{end})$ (where $|\cdot|$ denotes the cardinality of a set), there exist known functions $\ell_i$ such that the likelihood factors as:
+We have noisy measurements $X$ of the latent process, with likelihood $P(X|\{S(t),\ t \in [0,t_{end})\})$.
+Again, for clarity we ignore any unknown parameters in the likelihood, else we can include them in $\theta$.
+We assume the observation process has the following structure: for $X$, and for any partition $\tilde{W} = \{\tilde{w}_0 = 0, \tilde{w}_1, \dotsc, \tilde{w}_{|\tilde{W}|}=t_{end}\}$ of the interval $[0,t_{end})$ (where $|\cdot|$ denotes cardinality), there exist known functions $\ell_i$ such that the likelihood factors as:
 \begin{align}
   \label{eq:lik_factor}
   P(X|\{S(t),\ t \in [0,t_{end})\}) = \prod_{i=0}^{|\tilde{W}|-1} \ell_i(\{S(t),\ t \in [\tilde{w}_{i},\tilde{w}_{i+1})\})
 \end{align}
-A common example where this holds is for observations $X$ at a finite set of times $T^X = \{t^X_1,\cdots, t^X_{|X|}\}$, each observation depending on the state of the MJP at that time:
+A common example is a finite set of independent observations $X = \{x_1,\dotsc,x_{|X|}\}$ at times $T^X = \{t^X_1,\dotsc, t^X_{|X|}\}$, each observation depending on the state of the MJP at that time:
 \begin{align}
   \label{eq:lik_iid}
   P(X|\{S(t),\ t \in [0,t_{end})\}) = \prod_{i=1}^{|X|} P(x_i|S(t^X_i)).
 \end{align}
-Other examples include settings when the observations form an inhomogeneous Poisson process~\citep{FearnSher2006}, renewal process~\citep{rao2011gaussian} or even another MJP~\citep{Nodelman+al:UAI02,RaoTeh13}, modulated by $S(t)$.
+Other examples include situations when the observations form an inhomogeneous Poisson process~\citep{FearnSher2006}, renewal process~\citep{rao2011gaussian} or even another MJP~\citep{Nodelman+al:UAI02,RaoTeh13}, modulated by $(s_0, S, T)$.
 The first example, called a Markov modulated Poisson process (MMPP)~\citep{scottmmpp03}, associates a positive rate $\lambda_s$ with each state $s$, with $\ell_i(\{S(t),\ t \in [w_{i},w_{i+1})\})$ equal to the likelihood of the Poisson events within $[w_{i},w_{i+1})$ under an inhomogeneous Poisson process with piecewise-constant rate $\lambda_{S(t)},\ t \in [w_{i},w_{i+1})$.
 
 With $A(\cdot)$ and $\pi_0$ assumed known, the overall Bayesian model is then 
 \begin{align}
   \label{eq:bayes_model}
-  \theta \sim P(\theta), \quad S(t) \sim \text{MJP}(A(\pi_0, \theta)), \quad X \sim P(X|\{S(t),\ t \in [0,t_{end})\}).
+  \theta \sim P(\theta), \quad S(t) \sim \text{MJP}(\pi_0, A(\theta)), \quad X \sim P(X|s_0,S,T).
 \end{align}
-Given $X$, one is interested in the posterior distribution over the latent quantities, $(\theta,S(t))$. 
+Given $X$, one is interested in the posterior distribution over the latent quantities, $(\theta,s_0, S, T)$. 
 
 \subsection{Trajectory inference given the MJP parameters $\theta$}
 This was addressed in~\citet{RaoTeh13}  and extended to a broader class of jump processes in~\cite{RaoTeh12}~\citep[also see][]{FearnSher2006, Hobolth09, Elhaygibbssampling}) 
@@ -48,32 +48,32 @@ We focus on the former, a simpler and more popular algorithm, based on the idea 
 %Recall $A_i$ gives the rate at which the MJP leaves $i$ for any other state. The parameters are set up so that self-transitions cannot occur. 
 Since $\theta$ is assumed known, we write $A(\theta)$ just as $A$. 
 Uniformization involves a parameter $\Omega \ge \max_i A_i$; \cite{RaoTeh13} suggest $\Omega = 2 \max_i A_i$. 
+Define $B = \left(I +\frac{1}{\Omega}A\right)$; this is a stochastic matrix with positive elements, and rows adding up to $1$.
 %Assuming the system is
 %in state $i$, we sample a {\em candidate} transition-time from an
 %exponential, now with rate $\Omega_i$. The system remains in state $i$
 %until this time, after which it moves to state $j \neq i$ with probability
 %$B_{ij} = A_{ij}/\Omega_i$. The system continues to remain in its current 
 %state with probability $1-A_i/\Omega_i$. 
-Unlike the sequential wait-and-jump Gillespie algorithm, we first simulate a set $W$ of candidate transition-times over $[0,t_{end}]$ from a rate-$\Omega$ Poisson process. 
-$W$ defines a random grid on $[0,t_{end}]$.
-Define $B = \left(I +\frac{1}{\Omega}A\right)$; this is a stochastic matrix with positive elements, and rows adding up to $1$.
-Assign state-values to the elements in $\{0\} \cup W$ according to a discrete-time Markov chain with initial distribution $\pi_0$, and transition matrix $B$.
-Call these states $(v_0,V)$, where $v_0 \sim \pi_0$, while $P(v_{k+1}=j|v_k=i) = B_{ij}$ for $k \in \{0,\cdots,|W|-1\}$. 
-Setting $\Omega > \max_i A_i$ results in more candidate-times than actual MJP transitions; at the same time, unlike $A$, the matrix $B$ can thin these through self-transitions. 
-Thus,
+Unlike the sequential wait-and-jump Gillespie algorithm, uniformization first simulates a random grid of candidate transition-times $W$ over $[0,t_{end})$, and then assigns these state values:
+%from a rate-$\Omega$ Poisson process.  $W$ defines a random grid on $[0,t_{end})$.
+%Assign state-values to the elements in $\{0\} \cup W$ according to a discrete-time Markov chain with initial distribution $\pi_0$, and transition matrix $B$.
+%Call these states $(v_0,V)$, where $v_0 \sim \pi_0$, while $P(v_{k+1}=j|v_k=i) = B_{ij}$ for $k \in \{0,\dotsc,|W|-1\}$. 
 \begin{itemize}
-  \item Simulate $W$ from a Poisson process with rate $\Omega \ge \max_i A_i$.
+  \item Simulate $W$ from a Poisson process with rate $\Omega \ge \max_i A_i$: 
+    $W \sim \text{PoissProc}(\Omega)$.
   \item Assign states $(v_0,V)$ to the times $0 \cup W$, with $v_0 \sim \pi_0$, and $P(v_{i+1}=s|v_i) = B_{v_is}$.
 \end{itemize}
+Setting $\Omega > \max_i A_i$ results in more candidate-times than actual MJP transitions; at the same time, unlike $A$, the matrix $B$ can thin these through self-transitions. 
 Write $U$ for the elements $W$ with self-transitions, and $T$ for the rest.
 Define $s_0=v_0$, and $S=\{v_i \in V \text{ s.t.\ } v_i \neq v_{i-1}\}$ as the elements in $V$ corresponding to $T$, then $(s_0,S,T)$ sampled this way for any $\Omega \ge \max_i A_i$
 %These self-transitions correct for the extra candidate transition times
 %produced by the higher rate $\Omega_i$, and~\cite{RaoTeh12} show that
 %trajectories sampled this way 
-has the same distribution as under Gillespie's algorithm~\citep{Jen1953,RaoTeh13}. 
+has the same distribution as under Gillespie's algorithm~\citep{Jen1953,RaoTeh13}. The third panel in figure~\ref{fig:MH_improved} shows the relevant quantities.
 
 Introducing the thinned variables allowed~\cite{RaoTeh13} to develop a simple and efficient MCMC sampler (algorithm~\ref{alg:Unif_gibbs}). 
-At a high-level, each MCMC iteration samples a new grid $W$ conditioned on the path $S(t)$, and then a new path conditioned on $W$. 
+At a high-level, each MCMC iteration samples a new grid $W$ conditioned on the path $(s_0,S,T)$, and then a new path conditioned on $W$. 
 \cite{RaoTeh13} show that the resulting Markov chain targets the desired posterior distribution over trajectories, and is ergodic for any $\Omega$ strictly greater than all the $A_i$'s. 
    % As mentioned earlier, \cite{RaoTeh13} suggest setting $\Omega = 2\max_i A_i$.
 %The latter
@@ -130,41 +130,39 @@ likelihood $\ell_i(s) \equiv \ell_i(\{S(t) = s,\ t \in [\tilde{w}_i,\tilde{w}_{i
 
 \subsection{Joint inference over MJP path $S(t)$ and parameters $\theta$}
 For fixed parameters $\theta$, the efficiency of the Rao-Teh algorithm has been established, both empirically~\citep{RaoTeh13} and theoretically~\citep{miasojedow2017}.
-In practice, the parameters are typically unknown: often, these are of primary interest when studying a dynamical system. 
-One then has to characterize the complete posterior $P(\theta, S(t)|X)$ of the Bayesian model of equation~\eqref{eq:bayes_model}. 
+In practice, the parameters are typically unknown, and often, these are of primary interest. 
+One then has to characterize the complete posterior $P(\theta, s_0, S, T|X)$ of the Bayesian model of equation~\eqref{eq:bayes_model}. 
 This is typically carried out by incorporating the previous algorithm into a Gibbs sampler. 
-In particular, for an arbitrary initialization of path and  parameters, one repeats the two steps of algorithm~\ref{alg:MJP_gibbs}:
+This proceeds by arbitrarily initializing the path and parameters, and then repeating the two steps of algorithm~\ref{alg:MJP_gibbs}:
 \begin{algorithm}[H]
-  \caption{Gibbs sampling for parameter inference for MJPs}
+  \caption{Gibbs sampling for path and parameter inference for MJPs}
    \label{alg:MJP_gibbs}
   \begin{tabular}{l l}
    \textbf{Input:  } %& \text{A set of partial and noisy observations $X$}, \\
-                      & \text{The previous MJP path $S(t) = (s_0, S, T)$, the previous MJP parameters $\theta$}.\\ 
+                      & \text{The current MJP path $S(t) = (s_0, S, T)$, the current MJP parameters $\theta$}.\\ 
    \textbf{Output:  }& \text{New MJP trajectory $S' (t) = (s'_0, S', T')$ and 
                             parameters $\theta'$}.\\
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
-  \State  Sample a trajectory from the conditional 
-  $P(S'(t)|X,S(t),\theta)$ by 
+  \State  Simulate a new trajectory from the conditional 
+  $P(s'_0, S', T'|X,S(t),\theta)$ by 
   algorithm~\ref{alg:Unif_gibbs}.
-  \State Sample a new parameter $\theta'$ from the conditional 
-  $P(\theta'|X,S'(t))$ (see equation~\eqref{eq:param_cond}).
+  \State Simulate a new parameter $\theta'$ from the conditional 
+  $P(\theta'|X,s'_0,S',T')$ (see equation~\eqref{eq:param_cond}).
    \end{algorithmic}
 \end{algorithm} 
-%\vspace{-.1in}
-The distribution $P(\theta'|X,S(t))$ depends on %a set of sufficient statistics of the MJP trajectory: 
-the amount of time $T_s$ spent in each state $s$, and the number of transitions $c_{ss'}$ between each pair of states $s,s'$: 
+\vspace{-.1in}
+The distribution $P(\theta'|X,s_0,S',T')$ depends on %a set of sufficient statistics of the MJP trajectory: 
+the amount of time $\tau_i$ spent in each state $i$, and the number of transitions $c_{ij}$ between each pair of states $i,j$: 
 \begin{align}
   \label{eq:param_cond}
-  P(\theta|X,S'(t)) \propto P(\theta) \prod_{s \in \cS} \exp(-A_s(\theta)T_s) 
-  \prod_{s' \in \cS} \left(\frac{A_{ss'}(\theta)}{A_s(\theta)}\right)^{c_{ss'}}.
+  P(\theta'|X,s'_0,S',T') \propto P(\theta') \prod_{i \in \cS} \exp(-A_i(\theta')\tau_i) 
+  \prod_{j \in \cS} \left(\frac{A_{ij}(\theta')}{A_i(\theta')}\right)^{c_{ij}}.
 \end{align}
 %Given these, sample a new $\theta$ from the conditional $p(\theta|X,S(t))$. 
-In special circumstances, $\theta$ can be directly sampled from its 
-conditional distribution, otherwise, one has to use a Markov kernel like
-Metropolis-Hastings or Hamiltonian Monte Carlo to update $\theta$ to 
-$\theta'$. In any event, this introduces no new technical challenges.
+In some circumstances, this can be directly sampled from, otherwise, one has to use a Markov kernel like Metropolis-Hastings to update $\theta$ to $\theta'$. 
+In any event, this introduces no new technical challenges.
 %from the
 %conditional $p(\theta_{new}|X,S(t),\theta_{curr})$. 
   \begin{figure}%[b]
@@ -181,18 +179,17 @@ $\theta'$. In any event, this introduces no new technical challenges.
 %   \vspace{-0 in}
 % \end{minipage}
   \begin{minipage}[hp]{0.64\linewidth}
-%   \vspace{-0.3 in}
-  \caption{Prior distribution of an MJP parameter (the wide red density), with two conditional distributions. 
-    Narrow dotted-green is the density conditioned on both the observations as well as a simulated MJP posterior. 
-    The wider dashed-blue curve is density of interest: the marginal distribution of the parameters conditioned on observations. 
+   \vspace{-0.3 in}
+  \caption{Prior density over an MJP parameter (the wide red curve), along with two conditionals: 
+    the density conditioned on observations only (the wider dashed blue curve), and the density conditioned on both the observations as well as an MJP posterior (the narrow dashed green curve). 
   Plots were produced from the experiment in section~\ref{sec:immig}.}
      \label{fig:hist}
   \end{minipage}
-%   \vspace{-0.6 in}
+   \vspace{-0.4 in}
   \end{figure}
   However, the resulting Gibbs sampler can mix very poorly because of coupling between path and parameters.
-  We illustrate this in figure~\ref{fig:hist}~\citep[inspired by][]{papaspiliopoulos2007general}), which shows the posterior distribution of an MJP parameter (in dashed-blue) is less concentrated than the distribution conditioned on both observations as well the MJP trajectory (dotted-green). 
-The coupling is strengthened as the trajectory grows longer, and the Gibbs sampler can mix very poorly for situations with long observation periods, even if the observations themselves are sparse and only mildly informative about the parameters.
+  We illustrate this in figure~\ref{fig:hist}~\citep[inspired by][]{papaspiliopoulos2007general}), which shows the posterior distribution of an MJP parameter (blue long-dashes) is less concentrated than the distribution conditioned on both observations as well as path (green short-dashes). 
+The coupling is strengthened as the trajectory grows longer, and the Gibbs sampler can mix very poorly with long observation periods, even if the observations themselves are only mildly informative about the parameters.
 
 % \subsection{A marginal sampler for MJP parameters} 
 % For the discrete-time case, this problem of parameter-trajectory

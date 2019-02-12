@@ -4,10 +4,18 @@
 Our main idea is to symmetrize the probability of $W$ under the old and proposed parameters, so that $P(W|\theta)$ disappears from the acceptance ratio. 
 Now, the probability of accepting a proposal $\vartheta$ depends only on the prior probabilities of $\theta$ and $\vartheta$, as well as how well they both explain the data.
 This is in contrast to the previous algorithm, where one must also factor in how well each explains the current value of the grid $W$.
-This results in a MCMC sampler that mixes significantly more fast. 
+This results in a MCMC sampler that mixes significantly more rapidly. 
 Since we also need do account for the probabilities $P(W|\theta)$, we also have a simpler MCMC scheme.
 %This forms the main contribution of this paper.
 
+As before, the MCMC iteration begins with $(s_0, S, T, \theta)$. 
+Instead of simulating the Poisson events $U$ like earlier algorithms, we {\em first} generate a new parameter $\vartheta$ from some distribution $q(\vartheta|\theta)$. 
+Treat this as an auxiliary variable, so that the augmented space now is $(s_0,S, T, \theta,\vartheta)$. 
+With slight abuse of notation, define a function $\Omega(\theta,\vartheta) \ge \max_s A_s(\theta)$ that is symmetric in its arguments (the number of arguments to $\Omega$ makes clear what is being referred to).
+A simple example is $\Omega(\theta,\vartheta) = \kappa \max_s A_s(\theta) + \kappa \max_s A_s(\vartheta)$, for $\kappa \ge 1$, and following our experiments, we recommend $\kappa=1$. 
+
+Next, treat the path $(s_0,S,T)$ as if sampled by  uniformization, but now with the dominating Poisson process $W$ rate equal to $\Omega(\theta,\vartheta)$  instead of $\Omega(\theta)$ as before. 
+Define the transition matrix $B(\theta,\vartheta)$ of the embedded Markov chain as $B(\theta,\vartheta) = I + \frac{1}{\Omega(\theta,\vartheta)}A(\theta)$, so that the resulting trajectory will still be a realization from a MJP with rate-matrix $A(\theta)$.
 \begin{algorithm}[H]
    \caption{Symmetrized MH for parameter inference for MJPs }
    \label{alg:MH_improved}
@@ -27,9 +35,9 @@ Since we also need do account for the probabilities $P(W|\theta)$, we also have 
       %In the case of uniformization, we
       %have a single $\Omega$ for all states, with $\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$.
       %, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
-      \State \textbf{ Simulate the thinned times $U$ } from a rate-$(\Omega-A_{S(t)})$ Poisson process:
+    \State \textbf{ Simulate the thinned times $U$ } from a rate-$(\Omega-A_{S(t)}(\theta))$ Poisson process:
 
-  $\qquad \qquad \qquad \qquad \qquad U \sim \text{PoissProc}(\Omega - A_{S(t)})$.
+    $\qquad \qquad \qquad \qquad \qquad U \sim \text{PoissProc}(\Omega - A_{S(t)}(\theta))$.
     \State Set $W = T \cup U$ and discard $(s_0,S)$. Define $\tilde{W} = 0 \cup W \cup t_{end}$.
 %    \State Set $W = T \cup U$ and discard MJP states $S$. The MCMC state is now $(\theta,\vartheta, W)$.
  %   \State \textbf{MH proposal}: The current MCMC state-space is $(W,\theta,\vartheta)$. 
@@ -65,6 +73,27 @@ Since we also need do account for the probabilities $P(W|\theta)$, we also have 
 \end{algorithmic}
 \end{algorithm}
 
+Following the Rao-Teh algorithm, the conditional distribution of the thinned events $U$ given $(s_0,S,T,\theta,\vartheta)$ is a piecewise-constant Poisson with intensity $\Omega(\theta, \vartheta) - A_{S(t)}(\theta)$. 
+Following~\citet{RaoTeh13}, this reconstructs the set $W$ with $W = U \cup T$.  
+As we saw~\citep[see also][]{RaoTeh13}, $P(W|\theta,\vartheta)$ is a homogeneous Poisson process with rate $\Omega(\theta, \vartheta)$, which, crucially, is symmetric in $\theta$ and $\vartheta$. 
+Having imputed $W$, following earlier algorithms, we discard all MJP state values, so that the MCMC state space is $(W, \theta, \vartheta)$.
+Now, we propose swapping $\theta$ with $\vartheta$. 
+From symmetry, the Poisson skeleton $W$ has the same probability both
+before and after this proposal, and unlike the previous scheme, the ratio $P(W|\vartheta)/P(W|\theta)$ equals $1$.  
+This simplifies computation, and as suggested in the previous section, can significantly improve mixing.
+The acceptance probability equals
+$ 
+  \min\left(1, \frac{P(X,\vartheta)q(\theta|\vartheta)}
+   {P(X,\theta)q(\vartheta|\theta)}\right) = 
+  \min\left(1, \frac{P(X|\vartheta)p(\vartheta)q(\theta|\vartheta)}
+   {P(X|\theta)p(\theta)q(\vartheta|\theta)}\right).
+   $
+   The terms $P(X|\vartheta)$ and  $P(X|\theta)$ can be calculated by 
+   running a forward pass of the forward-backward algorithm, and after
+   accepting or rejecting the proposal, a new trajectory is sampled by
+   completing the backward pass. Finally, the thinned events are
+   discarded. Algorithm~\ref{alg:MH_improved} and 
+   figure~\ref{fig:MH_improved} outline the details. 
 
 \setlength{\unitlength}{0.8cm}
   \begin{figure}[h!]
@@ -109,43 +138,4 @@ Since we also need do account for the probabilities $P(W|\theta)$, we also have 
     parameter to simulate a new trajectory. Step 6: Discard $\vartheta'$ and the thinned events.} 
    \label{fig:MH_improved}
   \end{figure}
-As before, the MCMC iteration begins with the pair $(S(t), \theta)$. 
-Instead of simulating the Poisson events $U$, we first generate a new 
-parameter $\vartheta$ from $q(\vartheta|\theta)$. Treat this as an 
-auxiliary variable, so that the augmented space now is the triplet 
-$(S(t), \theta,\vartheta)$. We pretend $S(t) \equiv (S,T)$ was sampled by  
-uniformization, where the dominating Poisson rate $\Omega$ equals 
-$(\Omega(\theta) + \Omega(\vartheta))$ instead of just $\Omega(\theta)$:
-recall any choice greater than $\max_s A_s$ is valid.
-Now the set of thinned events $U$ is piecewise-constant
-Poisson with intensity $\Omega(\theta) + \Omega(\vartheta) - 
-A_{S(t)}$. Following algorithm~\ref{alg:Unif_gibbs} or~\cite{RaoTeh13}, 
-the {\em a priori} probability of the reconstructed set $W = U \cup T$, 
-$P(W|\theta,\vartheta)$, is a homogeneous Poisson 
-%the union of $U$ with the actual trajectory transition times $T$, 
-process with rate $\Omega(\theta) + \Omega(\vartheta)$. Discard all 
-MJP state information, so that the MCMC state space is $(W, \theta, \vartheta)$,
-and propose swapping $\theta$ with $\vartheta$. 
-Observe from
-symmetry that the Poisson skeleton $W$ has the same probability both
-before and after this proposal, so that unlike the previous scheme,
-the ratio $P(W|\vartheta)/P(W|\theta)$ equals $1$.  This simplifies 
-computation, and significantly improves mixing.
-The acceptance probability 
-%depends only on the probability of the observations
-%under both set of parameters, %as we can use the forward-backward algorithm
-%to calculate this. Our acceptance probability 
-equals
-$ 
-  \min\left(1, \frac{P(X,\vartheta)q(\theta|\vartheta)}
-   {P(X,\theta)q(\vartheta|\theta)}\right) = 
-  \min\left(1, \frac{P(X|\vartheta)p(\vartheta)q(\theta|\vartheta)}
-   {P(X|\theta)p(\theta)q(\vartheta|\theta)}\right).
-   $
-   The terms $P(X|\vartheta)$ and  $P(X|\theta)$ can be calculated by 
-   running a forward pass of the forward-backward algorithm, and after
-   accepting or rejecting the proposal, a new trajectory is sampled by
-   completing the backward pass. Finally, the thinned events are
-   discarded. Algorithm~\ref{alg:MH_improved} and 
-   figure~\ref{fig:MH_improved} outline the details. 
 
