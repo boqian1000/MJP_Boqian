@@ -4,29 +4,34 @@
   The sampler described in Algorithm~\ref{alg:MH_improved} has the posterior distribution $P(\theta,S(t)|X)$ as its stationary distribution.
 \end{proposition}
 \begin{proof}
-  An iteration of the algorithm starts with the pair $(\theta,S(t))$ from the posterior distribution $P(\theta,S(t)|X)$. The algorithm first simulates $\vartheta$ from $q(\vartheta|\theta)$. By construction, the marginal distribution over the first two variables in the triplet $(\theta, S(t), \vartheta)$ is $P(\theta,S(t)|X)$.
+  Consider a realization $(s_0,S,T,\theta)$ from the posterior distribution $P(\theta, s_0, S, T|X)$. An iteration of the algorithm first simulates $\vartheta$ from $q(\vartheta|\theta)$. By construction, the marginal distribution over all but the last variable in the set $(\theta, s_0, S, T, \vartheta)$ is still the posterior.
 
-  The algorithm next simulates $U$ from a Poisson process with rate $\Omega(\theta) + \Omega(\vartheta) - A_{S(t)}(\theta)$. Write $W = T \cup U$.
-  The random grid $W$ consists of the actual and thinned candidate transition times, and is distributed according to a rate $\Omega(\theta) + \Omega(\vartheta)$ Poisson process (Proposition 2 in~\cite{RaoTeh13}). 
-  Thus, the triplet $(W,\theta,\vartheta)$ has probability proportional to $P(\theta)q(\vartheta|\theta)P(W|\theta,\vartheta) P(X|W,\theta,\vartheta)$.
-  Next, the algorithm proposes swapping $\theta$ and $\vartheta$. 
-  This is a deterministic proposal, with MH-acceptance probability given by
-  $$\texttt{acc} = 1 \wedge \frac{P(\vartheta)q(\theta|\vartheta)P(W|\vartheta,\theta)
-P(X|W,\vartheta,\theta)}{P(\theta)q(\vartheta|\theta)P(W|\theta,\vartheta)
-P(X|W,\theta,\vartheta)}$$
-$P(W|\theta,\vartheta)$ is just a Poisson process with rate $\Omega(\theta)+ \Omega(\vartheta)$, so that $P(W|\theta,\vartheta) = P(W|\theta,\vartheta)$, which can be ignored when calculating $\texttt{acc}$. 
+  The algorithm next simulates $U$ from a Poisson process with rate $\Omega(\theta,\vartheta) - A_{S(t)}(\theta)$. Write $W = T \cup U$.
+  The random grid $W$ consists of the actual and thinned candidate transition times, and is distributed according to a rate-$\Omega(\theta, \vartheta)$ Poisson process (Proposition 2 in~\cite{RaoTeh13}). 
+  Thus, the triplet $(W,\theta,\vartheta)$ has probability proportional to $P(\theta)q(\vartheta|\theta)\text{PoissProc}(W|\Omega(\theta,\vartheta)) P(X|W,\theta,\vartheta)$.
+  Next, the algorithm proposes swapping $\theta$ and $\vartheta$ 
+  (a deterministic proposal), and accepts with MH-acceptance probability 
+  $$\texttt{acc} = 
+  1 \wedge \frac{P(\vartheta)q(\theta|\vartheta)
+P(X|W,\vartheta,\theta)}{P(\theta)q(\vartheta|\theta)
+P(X|W,\theta,\vartheta)} =
+1 \wedge \frac{P(\vartheta)q(\theta|\vartheta)\text{PoissProc}(W|\Omega(\vartheta,\theta)) P(X|W,\vartheta,\theta)}{P(\theta)q(\vartheta|\theta)\text{PoissProc}(W|\Omega(\theta,\vartheta))
+P(X|W,\theta,\vartheta)},$$
+where we exploit the symmetry of $\Omega(\cdot,\cdot)$ in its two arguments.
+%$P(W|\theta,\vartheta)$ is just a Poisson process with rate $\Omega(\theta)+ \Omega(\vartheta)$, so that $P(W|\theta,\vartheta) = P(W|\theta,\vartheta)$, which can be ignored when calculating $\texttt{acc}$. 
 %$P(X|W,\theta,\vartheta)$ and $P(X|W,\vartheta,\theta)$ are obtained
 %after a forward pass over $W$ using discrete-time transition matrices
 %$B(\theta,\vartheta) = \left(I + \frac{A(\theta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$ 
 %and $B(\vartheta,\theta) = \left(I + \frac{A(\vartheta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$. 
 
 Write the parameters after the accept step as $(\theta', \vartheta')$. 
-Then, the triplet $(\theta', \vartheta',W)$ has the same distribution as $(\theta, \vartheta,W)$.
-Finally, the algorithm used the matrix $B(\theta',\vartheta')$ to make a backward pass through $W$, simulating state values on $W$ from the conditional of a Markov chain with transition matrix $B(\theta',\vartheta')$ given observations $X$. 
-Dropping the self-transition times results in a triplet $(\theta', S'(t), \vartheta')$. 
-By an extension of the uniformization theorem (see Lemma 1 in~\cite{RaoTeh13} for details), the trajectory $(S'(t)$ is distributed according to the conditional of a rate-$A(\theta')$ MJP given observations $X$.
-Finally, the algorithm drops $\vartheta'$ effectively marginalizing this parameter. 
-As we saw at the start of the proof, this  results in a pair $(\theta',S'(t))$ from the posterior distribution given $X$.
+After the MH step, the triplet $(\theta', \vartheta',W)$ has the same distribution as $(\theta, \vartheta,W)$.
+The algorithm used the matrix $B(\theta',\vartheta')$ to make a backward pass through $W$, simulating state values on $W$ from the conditional of a Markov chain with transition matrix $B(\theta',\vartheta')$ given observations $X$. 
+Dropping the self-transition times results in the variables $(\theta', s'_0, S', T', \vartheta')$. 
+From the uniformization result (see Lemma 1 in~\cite{RaoTeh13} for details), the trajectory $(s'_0, S', T')$ is distributed according to the conditional of a rate-$A(\theta')$ MJP given observations $X$.
+Finally, the algorithm drops $\vartheta'$, 
+%effectively marginalizing this parameter.  As we saw at the start of the proof, this  
+resulting in $(\theta',s'_0,S',T')$ from the posterior distribution given $X$.
 % \begin{align*}
 %  p(y, W, S, T, \theta, \theta^*) &= p(\theta) q(\theta^* | \theta) P(S,T| \theta, \theta^*) P(W| S, T, \theta, \theta^*)P(y | S, T, \theta, \theta^*)\\
 %  &=p(\theta) q(\theta^* | \theta) P(S,T| \theta) P(W| S, T, \theta, \theta^*)P(y | S, T).
@@ -51,59 +56,51 @@ As we saw at the start of the proof, this  results in a pair $(\theta',S'(t))$ f
 %\qed
 \end{proof}
 
-\subsection{Comments}\label{sec:comments}
+\section{Related work}\label{sec:comments}
  %the set of transition times is unbounded, with individual elements
  %unconstrained over the observation interval $[0,\cT]$.
  %Naively calculating this marginal probability for the continuous-time
  %case is not straightforward, as there is no finite set of candidate
  %times to make a pass over. 
- One approach to parameter inference by integrating out state values follow~\citep{FearnSher2006}, who makes a sequential 
- forward pass through all {\em observations} $X$, using matrix exponentiation
- to marginalize out all
- continuous-time paths between successive times. As
- shown in~\cite{RaoTeh13}, this approach is cubic rather than 
- quadratic in the 
- number of states, cannot exploit structure like sparsity in the 
- transition matrix, and can depend in not trivial ways on the exact 
- nature of the observation process.
- Also, the number of expensive matrix exponentiations depends on
- the number of observations rather than the number of transitions.
- %
- %
- A second approach, particle MCMC~\citep{Andrieu10}, uses 
+
+Our paper completes work presented in~\citet{RaoTeh13}, modifying the algorithm there to allow parameter inference.
+The Rao-Teh algorithm requires a uniformization rate $\Omega(\theta) > \max_s A_s(\theta)$, and empirical results from that paper suggest $\Omega(\theta) = 2\max_s A_s(\theta)$.
+The uniformization rate $\Omega(\theta,\vartheta)$ in our algorithm must include a proposed new parameter $\vartheta$, must be symmetric in both arguments and must be greater than both $\max_s A_s(\theta)$ and $\max_s A_s(\vartheta)$. A natural and simple option is to set $\Omega(\theta,\vartheta) = \max_s A_s(\theta) + \max_s A_s(\vartheta)$. 
+For settings where $\theta$ is known, we propose $\vartheta$ equal to $\theta$, and our uniformization rate reduces to $\Omega = 2\max A_i$. 
+Thus our framework provides a principled motivation for the particular choise of $\Omega$ in~\citet{RaoTeh13}.
+
+Of course, we can consider other choices for the uniformization rate, such as $\Omega(\theta,\vartheta) = \kappa(\max A_i(\theta) + \max A_i(\vartheta))$ for $\kappa > 1$.  These result in more thinned events, and so more computation, with the benefit of faster MCMC mixing. We study the effect of 
+$\kappa$ in our experiments, but find the smallest setting of $\kappa=1$ performs best.
+It is also possible to have non-additive settings for $\Omega(\theta,\vartheta)$, for example, $\Omega(\theta,\vartheta) = \kappa \max( \max_i A_i(\theta), \max A_i(\vartheta))$ for some choice of $\kappa > 1$. We investigate this as well.
+
+A key idea in our paper, as well as~\cite{RaoTeh13}, is to impute the random grid of candidate transition times $W$ every MCMC iteration. 
+Conditioned on $W$, the MJP trajectory follows a Markov chain with transition matrix $B$. 
+Consequently, by running the FFBS algorithm over $W$, we can marginalize out the states associated with $W$, and calculate $P(X|W,\theta)$, the marginal probability of the observations $X$ under a parameter $\theta$. 
+Another approach to parameter inference that integrates out state values follows~\citep{FearnSher2006}. 
+ This algorithm makes a sequential forward pass through all {\em observations} $X$ (rather than $W$). 
+ Unlike with $W$, one cannot a priori bound the number of transitions between two successive observations, so that~\citet{FearnSher2006} have to use a matrix exponential of $A$ (rather than $B$) to calculate transition probabilities.
+ The resulting algorithm is cubic, rather than quadratic in the number of states, and the number of expensive matrix exponentiations needed depends on the number of observations, rather than the number of transitions.
+ Further, matrix exponentiation results in a dense matrix, so that~\cite{FearnSher2006} cannot exploit sparsity in the transition matrix.
+ In our framework, the matrix $B=I+\frac{1}{\Omega}A$ inherits sparsity present in $A$.
+
+ A second approach to marginalizing out state information is particle MCMC~\citep{Andrieu10}. 
+ This algorithm, describe in section~\ref{sec:pmcmc}, uses 
  particle filtering to get an unbiased estimate of the marginal 
- $P(X|\theta)$. Plugging this into the Metropolis-Hastings 
- acceptance probability results in an MCMC sampler that targets the 
- correct posterior, however %~\cite{Andrieu09}, 
- the resulting scheme does not exploit the Markovian structure of the MJP, which allows an efficient forward-backward pass. Instead, it makes proposals ..., and we show that it is quite inefficient.
+ $P(X|\theta)$. 
+ Plugging this estimate into the Metropolis-Hastings acceptance probability results in an MCMC sampler that targets the correct posterior, however the resulting scheme does not exploit the Markovian structure of the MJP the way FFBS can. 
+ In particular, observations that are informative of the MJP state can result in marginal probability estimates that have large variance, resulting in slow mixing. 
+ By contrast, given $W$, FFBS can compute the marginal probability $P(X|W,\theta)$ {\em exactly}. 
 
-The uniformization scheme of~\cite{RaoTeh13} works for any underlying Poisson
-process whose rate $\Omega$ is greater than $\max_i A_i$. The strict inequality
-ensures that the conditional probability of sampling one or more thinned events 
-$U$ is positive for every trajectory $S(t)$ (recall $U$ is sampled from a Poisson process with rate $(\Omega-A_{S(t)})$). Empirical results from~\cite{RaoTeh13}
-suggest setting $\Omega = 2 \max_i A_i$.
-
-Implicit in our new scheme is a uniformizing Poisson process with rate
-$\Omega(\theta,\vartheta) = \Omega(\theta) + \Omega(\vartheta)$. For our 
-scheme to be valid, $\Omega(\theta,\vartheta)$ must be greater than both
-$\max_i A_i(\theta)$ and $\max_i A_i(\vartheta)$. The smallest and simplest such
-choice is $\Omega(\theta,\vartheta) = \max A_i(\theta) + \max A_i(\vartheta)$.
-For a fixed $\theta$, this reduces to $\Omega = 2\max A_i$, providing
-an principled motivation for the approach in~\cite{RaoTeh13}.
-Larger alternatives include 
-$\Omega(\theta,\vartheta) = \kappa(\max A_i(\theta) + \max A_i(\vartheta))$
-for $\kappa > 1$.  These result in more thinned events, and so more 
-computation, with the benefit of faster MCMC mixing. We study the effect of 
-$\kappa$ in our experiments.
-It is also possible to have non-additive settings for $\Omega(\theta,\vartheta)$,
-for example, setting $\Omega(\theta,\vartheta)$ to 
-$\kappa \max( \max_i A_i(\theta), \max A_i(\vartheta))$ for some choice of $\kappa
-> 1$. We investigate this as well.
-
-The basic idea of marginalizing out state information $S$ relates the idea of the Bayesian fraction of missing information~\citep{liu1994fraction}. 
-Ideas from~\citet{papaspiliopoulos2007general,yu2011center} lead to algorithm~\ref{alg:MH_naive}, though our proposed algorithm provides further efficiency through the symmetrization idea that exploits the structure of the Poisson process. 
+The basic idea of marginalizing out information to accelerate MCMC convergence rates is formalized by the idea of the Bayesian fraction of missing information~\citep{liu1994fraction}. 
+In this context, papers such as~\citet{papaspiliopoulos2007general,yu2011center} have studied MCMC sampling algorithms for hierarchical (or latent variable models). 
+Uniformization forms such a hierarchical representation for MJPs, and the \naive\ algorithm~\ref{alg:MH_naive} is a direct application of ideas presented in those papers.
+These frameworks are broad enough to also include our symmetrized MH algorithm~\ref{alg:MH_improved}, although in that light, the contribution of the paper is a novel representation that include the auxiliary parameter $\vartheta$, as well as an associated swap operator that allows efficient MCMC.
 Two interesting directions are to see how such symmetrization ideas apply to other problems considered in those works, as well as how ideas from those works can shed more light on, and improve our algorithm.
-Our proposed algorithm is also related to the framework from~\citet{Neal04Drag}, although we exploit the structure of the Poisson and Markov jump processes to simplify matters considerably, avoiding the need for any tempered transitions. 
+
+ %
+ %
+Our proposed approach constructs a distribution over the Poisson grid $W$ that is symmetric in the current and proposed parameters $\theta$ and $\vartheta$. This is related to the framework outlined in~\citet{Neal04Drag}, although we exploit the specific structure of the Poisson and Markov jump processes to simplify matters considerably, avoiding the need for any tempered transitions. 
+
 Our algorithm is also related to work on MCMC for doubly-intractable distributions.  Algorithms like~\cite{Moller2006,murray2006,Andrieu09} all attempt to evaluate an intractable likelihood under a proposed parameter $\vartheta$ by introducing auxiliary variables, however there the auxiliary variable is sampled independently under the proposed parameters. 
 For MJP, this would involve proposing a new parameter $\vartheta$, generating a new uniformizing grid $U^*$, and then accepting or rejecting. 
 This can complicate computations (with two sets of time points), and also
