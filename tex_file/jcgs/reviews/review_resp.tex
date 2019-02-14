@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+\usepackage{float}
+\usepackage{fullpage}
+\usepackage{natbib}
+\usepackage{bbm}
+
+\newtheorem{defn}{Definition} 
+\newtheorem{prop}[defn]{Proposition} 
+
+\newcommand{\rev}[2]{\textbf{Comment #1: }\emph{#2}}
+\newcommand{\resp}{\textbf{Response: }}
+
+\title{Authors response for `Efficient parameter inference for Markov jump processes'}
+\author{Boqian Zhang and Vinayak Rao }
+\date{}
+\begin{document}
+\maketitle
+
+Thank you for your thoughtful and detailed review. As we detail below, we have incorporated your suggestions into the revised manuscript, which believe is now substantially improved. At a high-level, we have 1) made the algorithms more concise, outlining the steps in detail using pseudocode. These by themselves should allow readers to implement the algorithms. 2) presented results showing good ``absolute" performance of the symmetrized MH sampler. 3) improved the figures.
+Below, we respond to your comments individually.
+
+~\\~\\
+\rev{(Page 1)}{I think the connection to the literature on non-centred parametrisations (NCPs) must be made clear in the present manuscript.}\\ 
+\resp 
+We are sincerely thankful for pointing out the references to the CP and NCP papers. We agree that these address the same general problem of parameter sampling in latent variable models. We have included a thorough discussion of the ideas there, and how our work relates to these both in the section on related work, as well as in the supplement. However, it is our understanding that you are mistaken that our algorithm is a simple instance of these. Instead, Algorithm 2 in section 4.3 of the review corresponds to the "naive" algorithm that we describe in section 4 of our paper. This by itself forms a straightforward combination of ideas from Rao and Teh, 2013 and parameter inference for HMMs, and we agree that this is a fairly straightforward instance of NCP. 
+
+~\\
+\rev{(Page 4)}{"Note that (3) defines a NCP because the parameters $\theta$ and the latent Poisson process $\tilde{x}$ are independent a-priori."}\\
+\resp{This is actually not true: the Poisson rate $\lambda$ (in our notation, we call this $\Omega$, though we will stick with your notation) must be larger that the largest rate at which events happen in the MJP. 
+This is why we include the parameter $\theta$ in the Poisson rate, writing it as $\lambda(\theta)$ (or $\Omega(\theta)$ in our notation): 
+$\lambda(\theta) = 2 * \max A_s(\theta)$.}
+
+~\\
+\rev{(Page 1)}{The proposed parameter-estimation method turns out to be a particular non- centred algorithm which is a version of the non-centred algorithms for Poisson point process models proposed in Papaspiliopoulos et al. (2007); Roberts et al.  (2004)."}\\
+\resp
+This dependence is crucial, and is why the naive algorithm (and algorithm 2 described at the end of section 4 of the review) are not adequate. 
+In particular, the Poisson process itself contains significant information about the current parameter $\theta$, so that the `obvious' MCMC algorithm is inadequate.
+
+It is for this reason that we have to introduce the symmetrized MH algorithm. 
+This realizes that the uniformization scheme works for any $\lambda(\theta) \ge \max_s A_s$, but chooses an upperbound $\lambda(\theta, \vartheta)$ that depends on both old and new parameter, and is symmetric in the new and old parameters. 
+To enable this, we reverse the `natural' order of MCMC steps outlined in the algorithm in the review, simulating the parameter $\vartheta$ first to set the uniformization rate, and \emph{then} simulating the Poisson process. 
+Now $\lambda(\theta,\vartheta)$ independent of $\theta,\vartheta$ (but is \emph{not} independent of the parameters in general).
+We thus propose swapping the two parameters, and accepting or rejecting.
+
+exploits a particular feature of our problem
+Our approach is an extended auxiliary variable representation that includes the old and the new parameters as latent variables before 
+the Poisson processes is generated. 
+It might be possible to express our final algorithm as a CP or NCP algorithm built on this representation, 
+but the real novelty of our paper is this representation that exploits structure from our particular problem.
+
+This is because NCP itself is a very broad framework. 
+Our algorithm can probably be viewed as a realization of an NCP algorithm on a latent variable representation where the latent variables include the Poisson events and the auxiliary. 
+Even in this light, our main contribution remains: a novel latent variable representation involving a proposed paramter $\vartheta$, as well as a particular Markov transition kernel that exploits the structure of the problem (simulate a Poisson and swap parameters). We believe the rewriting the paper from this viewpoint would require significant additional notation, and would only confuse readers unfamiliar with NCP.
+
+The main algorithm that we propose involves a bit more thought however. We tried to express this as a special instance of an NCP algorithm, but this was not obvious: we believe that even if this were possible, it would be not be obvious without exploiting the particular structure of the problem. We describe this below.
+
+\subsection*{Other comments}
+\rev{1}{The last paragraph of Section 5.1 sounds rather vague.} \\ 
+\resp dsfd 
+
+~\\ 
+\rev{2}{It seems a bit awkward that Section 5 contains only one subsection, Sub- section 5.1, and also a lot of text before this first subsection.}\\ 
+\resp 
+
+~\\ 
+\rev{4}{the notation S(t) for the MJP seems strange to me}
+
+~\\
+\rev{7}{P. 2, l. 37: describing the work as “elegant” is perhaps not objective enough}
+\resp{We have removed this.}
+
+~\\
+\rev{3}{make sure that references in the text such as “Figure X”, “Section X”, “Assumption X” and “Algorithm X” are consistently capitalised} \\
+\rev{5}{P. 2, l. 35: samples path -> sampling the path} ~\\
+\rev{6}{P. 2, l. 35: given path -> given the path} ~\\
+\rev{8}{P. 2, l. 54: N -states -> N states}
+~\\
+\rev{9}{P. 4, l. 50: high-level -> high level}
+~\\
+\rev{10}{P. 17, l. 17: missing space after “Figure 5”}
+~\\
+\rev{11}{P. 17, l. 44: use \texttt{dotsc} instead of \texttt{cdots} here}
+~\\
+\rev{12}{P. 18, l. 54: use \texttt{dotsc} instead of \texttt{cdots} here}
+~\\
+\rev{13}{Bibliography: there are some typos in the bibliography:}\\ 
+\resp{Thank you for pointing these out, we have fixed these}
+
+\end{document}

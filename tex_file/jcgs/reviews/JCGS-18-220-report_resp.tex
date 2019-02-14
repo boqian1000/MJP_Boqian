@@ -1,0 +1,97 @@
+\documentclass[11pt]{article}
+\usepackage{float}
+\usepackage{fullpage}
+\usepackage{natbib}
+\usepackage{bbm}
+
+\newtheorem{defn}{Definition} 
+\newtheorem{prop}[defn]{Proposition} 
+
+\newcommand{\rev}[2]{\textbf{Comment #1: }\emph{#2}}
+\newcommand{\resp}{\textbf{Response: }}
+
+\title{Authors response for `Efficient parameter inference for Markov jump processes'}
+\author{Boqian Zhang and Vinayak Rao }
+\date{}
+\begin{document}
+\maketitle
+
+Thank you very much for your valuable comments. We have revised our 
+paper to take into account your comments on clarity. In particular, 
+we have rewritten all algorithms using psuedocode. A reader will now 
+be able to implement the different methods just by following instructions 
+provided in the algorithms, including all details of the forward-backward 
+algorithm, as well as calculating marginals under the discrete-time HMM. 
+We have also clarified and elaborated the section on related work.
+Below we respond to each of your comments.
+~\\ 
+~\\
+
+\noindent \rev{1}{p 2 l 55 "taking values in a usually finite state space” . This usually could be misleading ... Maybe clarify that you are working on the assumption that the state space is finite}
+\\
+\resp We have done this.
+
+~\\
+\rev{2}{p 3 l 20: Is $s_k$ initialized?} \\
+\resp Yes, $s_0$ was simulated from the prior distribution over states: $s_0 \sim \pi_0$ (page 3 of the revised manuscript, right after the citation to Gillespie, 1977. 
+
+~\\
+\rev{3}{p 3 l 50 Please write down death rate} \\ 
+\resp  We have done this now, state $i$ has death rate $i*\beta$
+
+~\\
+\rev{4}{p 3 54 Codon example: please specify parameters, otherwise it is not clear how this may serve as an example} \\ 
+\resp We have done this. 
+
+~\\
+\rev{5}{p 16 l 1 Is $A_{S(t)}$ defined?} \\
+\resp{This just means that at time t, if the state $S(t)$ is s, then the value is $A_s$. We have clarified this in Algorithm 1.
+}
+
+~\\ 
+\rev{6}{p 33 ’ ’ equal to [. . . ] forward pass”. This bit is not clear. Probably the sentence rely quite heavily on the definition of forward and backward pass, which is never defined in this paper, and on familiarity with jargon. Also what does “a distribution over states at
+the end of time that accounts for all observations” mean?}\\ 
+\resp We have rewritting all algorithms, providing pseudocode to explain every step. We have also formally specified the Bayesian model, rewriting the likelihood function more clearly (page 4, eq (1)). We believe these issues are clear now
+
+~\\
+\rev{7}{p 7 l 41 ’ ’ One approach ... successive times”. This is also not so clear (again, depending on algorithm defined elsewhere). It would be more parsimonious to explain forward and backward pass more formally at some point.} \\ 
+\resp We have rewritten this description to be clearer. We have now moved this to the section on related work.
+
+~\\
+\rev{8}{p 7 l 51 and following: can you explain why particle MCMC does not take into account the structure of the MJP?}\\
+\resp Particle MCMC is a generic sampling algorithm, and works for any time-series model. It does not exploit the Markov property of the MJP. FFBS does this, which allows the state at early times to be sampled accounting for *all* observations. By contrast, pMCMC proposes values, which are weighted as the algorithm moves through times. If you make a bad proposal at early times, you are stuck with that. We have clarified this in the section on related work.
+
+~\\
+\rev{9}{p 11 l 9, 13 and following “result in”used repeatedly in potentially various different mean- ings. Please write formally what you mean.}
+~\\
+\rev{10}{ p 11 l 32 Is it clear why the two triplets have the same distribution? }\\ 
+\rev{11}{p 11 l 37 What do you mean by discarding? Marginalising out?} \\
+\resp We have tightened the proof of the proposition to make all these points clearer. In particular, the uniformization result (Jensen 1953), and Rao and Teh (2013) show the two triplets have the same distribution. Also, yes, by discarding we meant marginalizing out.
+
+~\\
+~\rev{12}{Section 5.1 This whole section is quite hard to follow and maybe proofreading/rewriting would not be a waste of time. } \\ 
+\resp{We have done this (please also see comments 8, 13 and 14).} 
+
+~\\
+\rev{13}{p 12 l 5 “For fixed $\theta$”. I don’t quite understand this: was not $\Omega$ defined for any fixed $\theta, \vartheta$? Or do you mean for $\vartheta=\theta$ for any fixed $\theta$? }\\
+\resp We mean the latter: if we are not interested in parameter inference, our recipe recovers Rao and Teh, 2013.
+
+~\\
+\rev{14}{p 12 l 15 “Our proposed algorithm is related to the framework from Neal (2004)”. How is it related? Is it an extension? The comparison is not too clear.}\\
+\resp TODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
+
+~\\
+\rev{15}{p 13 l 19 Is the result based on 3000 iterations then comparable with experiments based on 10000 iterations? (This is not a retorical question, I genuinely don’t know) }\\
+\resp We are not using our samples for posterior inference or prediction, just to assess Markov chain mixing. Since we correct for runtime using ESS per second, the comparison is fair. Moreover, following a suggestion from another reviewer, we have included qualitative and quantitative tests to demonstrate all samplers agree on the posterior distribution, in terms of plotted densities and two-sample Kolmogorov-Smirnov test statistics.
+
+~\\
+\rev{16}{p 14 l 19 Is the multiplicative factor κ?   
+“Setting:”is it the right word?} \\
+\resp Yes to both questions. We have made this clearer now. 
+
+~\\
+\rev{17}{Proof of proposition 4. Some parts might need rewriting more formally. For example, what do you mean by $P[W from$ PoissProc($\Lambda)]$? Does it mean the probability that W comes from a Poisson process with intensity $\Lambda$ (as opposed to some different distribution)?}
+
+\noindent \resp We have tightened our notation here. By $P[W$ from PoissProc($\Lambda)]$ we meant the probability of W under a Poisson process with intensity $\lambda$. We have rewritten this as PoissProc(W|Λ) after defining this notation.
+
+\end{document}
