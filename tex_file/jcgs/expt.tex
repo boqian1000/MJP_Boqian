@@ -71,12 +71,16 @@ For the MH proposal, we used a lognormal distribution centered at the current pa
 Figure~\ref{fig:TRACE_EXP} shows the MCMC estimates of the posterior distribution over $\alpha, P(\alpha|X)$ from the Gibbs sampler as well as our symmetrized MH sampler. 
 Visually these agree, and we quantify this by running a two sample Kolmogorov-Smirnov test using $1000$ samples from each algorithm: this returns a p-value of $0.5085$, clearly failing to reject the null hypothesis that both samples come from the same distribution. 
 The figure also shows traceplots and autocorrelation plots for $\alpha$ from the two samplers: our sampler mixes much more efficiently than Gibbs.
+
+
   \begin{figure}[H]
-  \begin{minipage}[!hp]{0.25\linewidth}
-    \includegraphics [width=0.99\textwidth, angle=0]{figs/EXP_ks/exp_hist_44_05_10_.pdf}
+  \begin{minipage}[!hp]{0.49\linewidth}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/EXP_ks/exp_hist_44_05_10_.pdf}
+    \includegraphics [width=0.49\textwidth, angle=0]{figs/acc/EXP_D10alpha_k2.pdf}
   \end{minipage}
-  \begin{minipage}[!hp]{0.74\linewidth}
-  \caption{(Left) posterior over $\alpha$ produced by Gibbs (red-dashed line) and symmetrized MH (blue-solid line). The bottom row shows trace plots and autocorrelation plots for Gibbs (left two panels) and symmetrized MH (right two panels). All plots are for $10$ states.}
+  \begin{minipage}[!hp]{0.49\linewidth}
+  \caption{(Top left) posterior over $\alpha$ produced by Gibbs (red-dashed line) and symmetrized MH (blue-solid line). (Top right) Acceptance Rate for $\alpha$ in the synthetic model. Blue and yellow curves are the Gibbs, symmetrized MH,
+ and \naive\ MH  algorithm. The bottom row shows trace plots and autocorrelation plots for Gibbs (left two panels) and symmetrized MH (right two panels). All plots are for $10$ states and the multiplicative factor $2$.}
      \label{fig:TRACE_EXP}
   \end{minipage}
   \centering
@@ -168,7 +172,7 @@ The results in figure~\ref{fig:ESS_EXP_D10} for 10 states shows the ESS is sligh
     \includegraphics [width=0.99\textwidth, angle=0]{figs/ess/EXP_D10beta_k2.pdf}
 	\end{minipage}
      %\label{fig:ESS_EXP_notpersec}
-    \caption{ESS/sec (top row) and raw ESS of different algorithms on the synthetic  model. The left two panels are $\alpha$ and $\beta$ for 3 states, the right two, for 10 states. Blue squares, yellow triangles, red circles and black diamonds are the symmetrized MH, \naive\ MH, Gibbs and particle MCMC algorithm. See figure~\ref{fig:} in the appendix for more results.}
+    \caption{ESS/sec (top row) and raw ESS per 1000 samples (bottom row) of different algorithms on the synthetic  model. The left two panels are $\alpha$ and $\beta$ for 3 states, the right two, for 10 states. Blue squares, yellow triangles, red circles and black diamonds are the symmetrized MH, \naive\ MH, Gibbs and particle MCMC algorithm. See figure~\ref{fig:} in the appendix for more results.}
      \label{fig:ESS_EXP_D10}
 %  \end{minipage}
   \end{figure}
@@ -302,7 +306,7 @@ Particle MCMC performs worse than all the algorithms, and we do not include it i
     \includegraphics[width=0.99\textwidth, angle=0]{figs/new_whole_exp_figs/mh_jc_alpha.pdf}
 \end{minipage}
 %  \begin{minipage}[!hp]{0.28\linewidth}
-  \caption{The leftmost panel is the Jukes-Cantor (JC69) model. The next two panels from left to right are ESS/sec and raw ESS for the JC69 Model. 
+  \caption{The leftmost panel is the Jukes-Cantor (JC69) model. The next two panels from left to right are ESS/sec and raw ESS per 1000 samples for the JC69 Model. 
     Blue squares, yellow triangles and red circles are the symmetrized MH, \naive\ MH and Gibbs algorithm.
     The rightmost panel looks at different settings of the symmetrized MH algorithm, with squares, circles and triangles corresponding to 
 $\Omega(\theta,\vartheta)$ set to $(\max_s A_s(\theta) + \max_s A_s(\vartheta))$, $\max(\max_s A_s(\theta), \max_s A_s(\vartheta))$ and  $1.5(\max_s A_s(\theta) + \max_s A_s(\vartheta))$.
@@ -329,7 +333,6 @@ $\Omega(\theta,\vartheta)$ set to $(\max_s A_s(\theta) + \max_s A_s(\vartheta))$
   Figure~\ref{fig:ACC_JC_m} plots diagnostics for Gibbs and the symmetrized MH sampler, again the latter outperforms the former. 
   Both samplers agree on the posterior $P(\alpha|X)$, with a
   two sample Kolmogorov-Smirnov test giving a p-value of $0.97$ (we plot the posteriors in the appendix). 
-
 %  \begin{figure}%[H]
 %  \centering
 %  \begin{minipage}[!hp]{0.58\linewidth}
@@ -346,17 +349,18 @@ $\Omega(\theta,\vartheta)$ set to $(\max_s A_s(\theta) + \max_s A_s(\vartheta))$
 %  \end{figure}
   \begin{figure}%[H]
   \centering
-  \begin{minipage}[!hp]{0.58\linewidth}
+  \begin{minipage}[!hp]{0.99\linewidth}
   \centering
-    \includegraphics [width=0.49\textwidth, angle=0]{figs/new_experiment_figs/ESS_vs_t_alpha_JC.pdf}
-    \includegraphics [width=0.49\textwidth, angle=0]{figs/new_experiment_figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_experiment_figs/ESS_vs_t_alpha_JC.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_experiment_figs/ESS_vs_t_alpha_fixobservation_JC.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/acc/JCalpha_k2.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/JC_ks/jc_hist_44_05_3_.pdf}
   \end{minipage}
-  \begin{minipage}[!hp]{0.01\linewidth}
-  \end{minipage}
-  \begin{minipage}[!hp]{0.4\linewidth}
-    \caption{ESS/sec against time interval for the JC model. The number of observations is fixed (left), and grows linearly with interval length (right). {Blue squares, yellow triangles and red circles} are the symmetrized MH, \naive\ MH and Gibbs. }
+
+%  \begin{minipage}[!hp]{0.24\linewidth}
+    \caption{ESS/sec against time interval for the JC model. The number of observations is fixed (a), and grows linearly with interval length (b). {Blue squares, yellow triangles and red circles} are the symmetrized MH, \naive\ MH and Gibbs. Acceptance rate for $\alpha$ in the JC69 model(c).  Blue and yellow curves represent symmetrized MH,and \naive\ MH  algorithm. The multiplicative factor is $2$.}
 	\label{fig:jc_model_vs_t}
-  \end{minipage}
+%  \end{minipage}
 %  \vspace{-.4in}
   \end{figure}
 
@@ -430,7 +434,7 @@ degradation with interval length that is much milder than the other algorithms.
 	\end{minipage}
      %\label{fig:ESS_Q_notpersec}
 %  \begin{minipage}[!hp]{0.3\linewidth}
-    \caption{ESS/sec (top row) and raw ESS (bottom row) for the immigration model. The left two columns are $\alpha$ and $\beta$ for 3 states, and the right two, for 10 states.
+    \caption{ESS/sec (top row) and raw ESS per 1000 samples (bottom row) for the immigration model. The left two columns are $\alpha$ and $\beta$ for 3 states, and the right two, for 10 states.
     Blue squares, yellow triangles and red triangles are the symmetrized MH, \naive\ MH, and Gibbs algorithm. }
      \label{fig:ESS_Q_D10}
 %  \end{minipage}
@@ -635,7 +639,7 @@ The performance for the Gibbs sampler is partly because for this problem, the Gi
     \includegraphics [width=0.99\textwidth, angle=0]{figs/ess/QC_D10beta_k2.pdf}
 	\end{minipage}
 %     \label{fig:ESS_CQ_notpersec}
-    \caption{ESS/sec (top row) and raw ESS (bottom row) for the time-inhomogeneous immigration model. The left columns are $\alpha$ and $\beta$ for 3 states, and the right two for 10. {Blue squares, yellow triangles and red circles} are the symmetrized MH, \naive\ MH, and Gibbs algorithm. }
+    \caption{ESS/sec (top row) and raw ESS per 1000 samples (bottom row) for the time-inhomogeneous immigration model. The left columns are $\alpha$ and $\beta$ for 3 states, and the right two for 10. {Blue squares, yellow triangles and red circles} are the symmetrized MH, \naive\ MH, and Gibbs algorithm. }
      \label{fig:ESS_pc_10}
 %  \end{minipage}
   \end{figure}

@@ -2,24 +2,24 @@ library(mcmcse)
 library("rjson")
 library(ggplot2)
 
-setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_3/q_k2_dim3/")
+#setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_3/q_k2_dim3/")
 #setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_10/q_k2_dim10/")
 #setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_10_PC_new/q_k2_dim10/")
 #setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_3_PC/q_k2_dim3/")
 #prior_par <- fromJSON(file="_data_EXPprior_d3")
 #iter_list <- iter_list[c(-5, -77, -55, -57, -91, -81, -40)]
-#setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/JC_MODEL/jc_k2/")
+setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/JC_MODEL/jc_k2/")
 iter_list <- 1:100
 #mu = prior_par[1]
 #lamb = prior_par[2]
 #omega = prior_par[3]
 #theta = prior_par[4]
 #exp = "EXP_D10"
-exp = "Q_D3"
+#exp = "Q_D3"
 #exp = "Q_D10"
 #exp = "QC_D10"
 #exp = "QC_D3"
-#exp = "JC"
+exp = "JC"
 acc_rate <- function(data){
   n <- length(data)
   return(1 - sum(data[1: n - 1] == data[2: n]) / n)
@@ -73,6 +73,8 @@ for(j in iter_list){
     
     if(file.exists(mh_file_a)){
       data <- fromJSON(file = mh_file_a)
+      print(length(data))
+      print("MH")
       ess_MH_a <- c(ess_MH_a, ess(data))
     }  
     
@@ -101,6 +103,8 @@ for(j in iter_list){
     }
     if(file.exists(omh_file_b)){
       data <- fromJSON(file = omh_file_b)
+      print(length(data))
+      print("oMH")
       ess_oMH_b <- c(ess_oMH_b, ess(data))
     }
     
@@ -108,7 +112,9 @@ for(j in iter_list){
     if(file.exists(gbs_file_a)){
       
         data <- fromJSON(file = gbs_file_a)
-    ess_GBS_a <- c(ess_GBS_a, ess(data))
+        print(length(data))
+        print("GBS")
+        ess_GBS_a <- c(ess_GBS_a, ess(data))
     }
     gbs_file_b <- paste("__",as.character(j), "_GBS_beta0", sep = '')
     if(file.exists(gbs_file_b)){
@@ -149,13 +155,13 @@ summary_gbs_persec_b <- summarize(ESS_GBS_b)
 
 
 data_alpha_MH_mean <- data.frame(var = var, method = factor(rep(c("MH"), each=length(summary_mh_persec_a[1,]))), 
-                                 ess_alpha_persec = c(summary_mh_persec_a[1,]))
+                                 ess_alpha_persec = c(summary_mh_persec_a[1,]) / 5)
 
 data_alpha_oMH_mean <- data.frame(var = var, method = factor(rep(c("oMH"), each=length(summary_omh_persec_a[1,]))),
-                                  ess_alpha_persec = c(summary_omh_persec_a[1,]))
+                                  ess_alpha_persec = c(summary_omh_persec_a[1,]) / 5)
 
 data_alpha_GBS_mean <- data.frame(var = var, method = factor(rep(c("GBS"), each=length(summary_gbs_persec_a[1,]))),
-                                  ess_alpha_persec = c(summary_gbs_persec_a[1,]))
+                                  ess_alpha_persec = c(summary_gbs_persec_a[1,]) / 5)
 
 
 maxx = max(var)
@@ -187,13 +193,13 @@ ggsave(filename, width = 6.8, height = 6.8)
 
 
 data_beta_MH_mean <- data.frame(var = var, method = factor(rep(c("MH"), each=length(summary_mh_persec_b[1,]))), 
-                                ess_beta_persec = c(summary_mh_persec_b[1,]))
+                                ess_beta_persec = c(summary_mh_persec_b[1,]) / 5)
 
 data_beta_oMH_mean <- data.frame(var = var, method = factor(rep(c("oMH"), each=length(summary_omh_persec_b[1,]))), 
-                                 ess_beta_persec = c(summary_omh_persec_b[1,]))
+                                 ess_beta_persec = c(summary_omh_persec_b[1,]) / 5)
 
 data_beta_GBS_mean <- data.frame(var = var, method = factor(rep(c("GBS"), each=length(summary_gbs_persec_b[1,]))), 
-                                 ess_beta_persec = c(summary_gbs_persec_b[1,]))
+                                 ess_beta_persec = c(summary_gbs_persec_b[1,]) / 5)
 
 
 

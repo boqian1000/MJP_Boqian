@@ -2,10 +2,10 @@ library(mcmcse)
 library("rjson")
 library(ggplot2)
 
-setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_3/q_k2_dim3/")
+#setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_3/q_k2_dim3/")
 #setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_10/q_k2_dim10/")
 #setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_10_PC_new/q_k2_dim10/")
-#setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_3_PC/q_k2_dim3/")
+setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/EXP_Q_3_PC/q_k2_dim3/")
 #prior_par <- fromJSON(file="_data_EXPprior_d3")
 #iter_list <- iter_list[c(-5, -77, -55, -57, -91, -81, -40)]
 #setwd( "/Users/Isaac_Zhang/Research/MCMC/simulation_result/JC_MODEL/jc_k2/")
@@ -15,10 +15,10 @@ iter_list <- 1:100
 #omega = prior_par[3]
 #theta = prior_par[4]
 #exp = "EXP_D10"
-exp = "Q_D3"
+#exp = "Q_D3"
 #exp = "Q_D10"
 #exp = "QC_D10"
-#exp = "QC_D3"
+exp = "QC_D3"
 #exp = "JC"
 acc_rate <- function(data){
   n <- length(data)
@@ -134,6 +134,7 @@ data_alpha_oMH_mean <- data.frame(var = var, method = factor(rep(c("oMH"), each=
 maxx = max(var)
 maxy = max(max(data_alpha_MH_mean[3]), max(data_alpha_oMH_mean[3]))
 #maxy = 0.6
+maxy = 0.65
 ratio.values <- (maxx)/(maxy)
 
 s1 = 5
