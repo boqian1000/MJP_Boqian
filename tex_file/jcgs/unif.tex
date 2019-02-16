@@ -167,25 +167,22 @@ In any event, this introduces no new technical challenges.
 %conditional $p(\theta_{new}|X,S(t),\theta_{curr})$. 
   \begin{figure}%[b]
   \centering
-  \begin{minipage}[hp]{0.35\linewidth}
+  \begin{minipage}[hp]{0.3\linewidth}
   \centering
     \vspace{-0 in}
     \includegraphics [width=0.98\textwidth, angle=0]{figs/dist_beta.pdf}
 %   \vspace{0.2 in}
   \end{minipage}
-% \begin{minipage}[!hp]{0.4\linewidth}
-% \centering
-%   \includegraphics [width=0.90\textwidth, angle=0]{figs/hist_beta.pdf}
-%   \vspace{-0 in}
-% \end{minipage}
-  \begin{minipage}[hp]{0.64\linewidth}
-   \vspace{-0.3 in}
+  \begin{minipage}[!hp]{0.3\linewidth}
+  \centering
+    \includegraphics [width=0.98\textwidth, angle=0]{figs/dist_beta_100.pdf}
+    \vspace{-0 in}
+  \end{minipage}
+  \vspace{-.3in}
   \caption{Prior density over an MJP parameter (the wide red curve), along with two conditionals: 
     the density conditioned on observations only (the wider dashed blue curve), and the density conditioned on both the observations as well as an MJP posterior (the narrow dashed green curve). 
   Plots were produced from the experiment in section~\ref{sec:immig}.}
      \label{fig:hist}
-  \end{minipage}
-   \vspace{-0.4 in}
   \end{figure}
   However, the resulting Gibbs sampler can mix very poorly because of coupling between path and parameters.
   We illustrate this in figure~\ref{fig:hist}~\citep[inspired by][]{papaspiliopoulos2007general}), which shows the posterior distribution of an MJP parameter (blue long-dashes) is less concentrated than the distribution conditioned on both observations as well as path (green short-dashes). 
