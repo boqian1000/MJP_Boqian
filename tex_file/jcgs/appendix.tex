@@ -1,3 +1,71 @@
+\subsection{Particle MCMC for MJP inference}
+\label{sec:pmcmc}
+\subsubsection{A sequential Monte Carlo algorithm for MJPs inference}
+We describe a sequential Monte Carlo algorithm for MJPs inference. Denote $S_{[t_1', t_2']}$ as the MJP trajectory form time $t_1'$ to time $t_2'$. Our target is to sample an MJP trajectory $S_{[0, T]}(S_{[t_0^X, t_{n + 1}^X]})$ given $n$ noisy observations $X_1, X_2, ... , X_n$, at time $t_1^X, t_2^X, ..., t_n^X$. A Markov jump process trajectory $S_{[0, T]}$ with rate matrix $A_\theta$ can be characterized by its initial density $S_{[0, t_1^X]} \sim \mu_\theta (\cdot)$, and transition probability density $S_{[t_i^X, t_{i + 1}^X]} | S_{[t_{i - 1}^X, t_i^X]} = s_{[t_{i - 1}^X, t_i^X] } \sim f_\theta (\cdot | s_{[t_{i - 1}^X, t_i^X]})$.  
+The observation likelihood is denoted as $g_\theta(X_i = x_i| S_{[0, T]}) = P(x_i | S^X_{t_i})$.
+Let $q_\theta^i$ be the important sampling proposal distribution. In our case, we set $q_\theta^i(\cdot| X_n, S_{[0, t^X_{n-1}]}) = f_\theta(S_{[t^X_{i-1},t_i]}| S_{[0, t^X_{i-1}]})$.% and $\mu_\theta$ as the prior Markov jump process density and 
+
+%This procedure provides us at time $T$ with an approximation of the joint posterior density $p_%\theta(dS_{[0,T]}|X_{1:n})$ given by $$\hat{p_\theta}(dS_{[0,T]}|X_{1:n}) = \sum_{k =1}^N W_n^k %\delta_{S^k[0:T]}(dS_{[0,T]})$$\\
+%In addition, the estimate of the marginal likelihood $p_\theta(y_{1:n})$ is given by 
+%$$\hat{p}_\theta(X_{1:n}) = \hat{p}_\theta(X_1) \prod_{i = 2}^n \hat{p}_\theta(X_i | X_{i -1}) $$\\
+%where$$\hat{p}_\theta(y_i | y_{i -1}) = \frac{1}{N} \sum_{k = 1}^ N w_n(S_{[0, t_i]}) $$
+%is an estimate computed at time $i$ of 
+%$$p_\theta(X_i | X_{i -1}) = \int w_n(S_{[0,t_i]}) q_\theta(S_{[t_{i-1}, t_i]}| X_i, S_{[0, t_{i-1}]}) p_%\theta(S_{[0, t_{i-1}]}|X_{1: i-1}) dS_{[0,t_i]}.$$
+
+\begin{algorithm}[H]
+  \caption{The SMC sampler for MJP trajectories}
+   \label{alg:SMC}
+  \begin{tabular}{l l}
+   \textbf{Input:  } & \text{Prior $\pi_0$, observations $X$}, 
+                       \text{Number of particles $N$}, rate-matrix $A$.\\
+                     %& MJP rate-matrix $A$\\
+   \textbf{Output:  }& \text{New MJP trajectory $S' (t) = (s'_0, S', T')$}.\\
+   \hline
+   \end{tabular}
+   \begin{algorithmic}[1]
+\State At time $i = 1$.\\
+\noindent Sample N particles $X_{[t_0^X, t_1^X]}^k$ from $\mu_\theta$, $k = 1,2,...,N$ \\
+\noindent Compute and normalize the weights.
+$$w_1(S_{[t_0^X, t_1^X]}^k) :=\frac{P_\theta(S_{[t_0^X, t_1^X]}^k, X_1)}{q_\theta(S_{[t_0^X, t_1^X]}^k|X_1)} =  \frac{\mu_\theta(S_{[t_0^X, t_1^X]}^k)g_\theta(X_1|S_{[t_0^X, t_1^X]}^k)}{q_\theta(S_{[t_0^X, t_1^X]}^k|X_1)};$$
+$$W_1(X_{[t_0^X, t_1^X]}^k) = \frac{w_1(S_{[t_0^X, t_1^X]}^k)}{\sum_{i = 1}^N w_1(S_{[t_0^X, t_1^X]}^i)}.$$
+
+\State At time $i = 2, 3, 4,..., n, n + 1$\\
+\noindent \noindent (a) Sample $J_{i-1}^k \sim Multi(.| W_{i-1})$ , $k = 1,2,...,N$;\\
+\noindent \noindent (b) Sample $S_{[t^X_{i -1},t^X_i]}^k \sim q_\theta^i(\cdot| X_i, S_{[0, t_{i-1}^X]}^{J_{i-1}^k})$, $k = 1,2,...,N$;\\
+\noindent \noindent (c) Set $S_{[t_0^X, t^X_i]}^k := \text{concatinate}(S_{[t_0^X, t^X_{i-1}]}^{J_{i-1}^k}, S_{[t_{i -1}^X,t_i^X]}^k)$.\\
+\noindent \noindent (d) Calculate the weights and normalize the weights.
+$$w_i(S_{[t_0^X, t^X_i]}^k) := \frac{P_\theta(S_{[t_0^X, t_i^X]}^k, X_{1:i})}{P_\theta(S_{[t_0^X,t_{i-1}]}^{J_{i-1}^k}, X_{1:i})q_\theta^n(S_{[t^X_{i-1}, t_i^X]}^k | X_{1:i},S_{[t_0^X, t_{i-1}^X]}^{J_{i-1}^k} )} = \frac{f_\theta(S_{[t^X_{i-1}, t_i]}^k|S_{[t_0^X, t^X_{i-1}]}^{J_{i-1}^k}) g_\theta(X_i | S_{t_i^X}^k)}{q_\theta^i(S_{[t^X_{i-1}, t_i^X]}^k|X_{1:i},S_{[t_0^X, t^X_{i-1}]}^{J_{i-1}^k})};$$
+$$W_i(X_{[t_0^X, t^X_i]}^k) = \frac{w_i(X_{[t_0^X, t_i^X]}^k)}{\sum_{l = 1}^N w_i(X_{[t_0^X, t^X_i]}^l)}.$$
+\end{algorithmic}
+\end{algorithm}
+The SMC algorithm also gives us an estimate of the marginal likelihood $P_\theta(X_{1:n})$.
+$$ \hat{P}_{\theta} = \hat{P}_{\theta}(X_1) \prod_{i = 2}^n \hat{P}_{\theta}(X_i| X_{1: i- 1});$$
+where $\hat{P}_{\theta}(X_i| X_{1: i- 1}) = \sum_{k = 1} ^ N w_i(S_{[t_0^X, t_I^X]}^k).$
+\subsubsection{Particle MCMC algorithm for MJPs inference}
+
+\begin{algorithm}[H]
+  \caption{The particle marginal MH sampler for MJP trajectories}
+   \label{alg:SMC}
+  \begin{tabular}{l l}
+   \textbf{Input:  } & \text{Prior $\pi_0$, observations $X$}, 
+                       \text{Number of particles $N$}, rate-matrix $A(\theta)$,\\
+                     & $p(\theta)$ prior of $\theta$, proposal density $q(\cdot|\cdot)$. \\
+   \textbf{Output:  }& \text{New MJP trajectory $S' (t) = (s'_0, S', T')$}.\\
+   \hline
+   \end{tabular}
+   \begin{algorithmic}[1]
+\State At time $i = 0$:\\
+\noindent Set $\theta_0$ arbitrarily;
+\noindent Run the SMC algorithm above targeting $P_{\theta_0}(S_{[0, T]} | X_{1:n})$ to sample $S_{[0, T]}(0)$ from $\hat{P}_{\theta_0}(\cdot | X_{1:n})$ and let $\hat{P}_{\theta_0}(X_{1:n})$ denote the estimate of the marginal likelihood.
+\State At time $i \geq 1:$\\
+\noindent \noindent (a) Sample $\theta^*$ from a proposal distribution $q(\cdot | \theta_{i - 1})$;
+\noindent \noindent (b) Run the SMC algorithm above targeting $P_{\theta^*}(S_{[0, T]} | X_{1:n})$ to sample $S_{[0, T]}^*$ from $\hat{P}_{\theta^*}(\cdot | X_{1:n})$ and let $\hat{P}_{\theta^*}(X_{1:n})$ denote the estimate of the marginal likelihood
+\noindent Accept $\theta^*, S_{[0, T]}^*$ with probability $$ acc = 1 \wedge \frac{\hat{P}_{\theta^*}(X_{1:n}) p(\theta^*)}{\hat{P}_{\theta_{i - 1}}(X_{1:n}) p(\theta_{i  - 1})} \frac{q(\theta_{i - 1} | \theta^*)}{q(\theta^* | \theta_{i - 1})}.$$
+
+\end{algorithmic}
+\end{algorithm}
+
+
 \subsection{Algorithm sketch}
 \setlength{\unitlength}{0.8cm}
   \begin{figure}[H]
@@ -96,30 +164,30 @@ different settings of the algorithms, see section~\ref{sec:expts}.}
   \begin{minipage}[!hp]{0.99\linewidth}
     \includegraphics [width=0.3\textwidth, angle=0]{figs/EXP_ks/exp_hist_44_05_10_.pdf}
 	\hspace{.5in}
-    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/EXP_D3beta_k2.pdf}
-    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/EXP_D10beta_k2.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/EXP_D3alpha_k2.pdf}
+    \includegraphics [width=0.30\textwidth, angle=0]{figs/acc/EXP_D10alpha_k2.pdf}
   \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{Acceptance Rate for $\beta$ in the synthetic model, the left row being dimension 3, and the right,dimension 10.  Red, blue and yellow curves are the Gibbs, symmetrized MH,
+    \caption{Acceptance Rate for $\alpha$ in the synthetic model, the left row being dimension 3, and the right,dimension 10.  Red, blue and yellow curves are the Gibbs, symmetrized MH,
  and \naive\ MH  algorithm. The multiplicative factor is $2$. }
      \label{fig:ACC_EXP}
 %  \end{minipage}
   \end{figure}
-  \begin{figure}[H]
-%    \vspace{-.2in}
-  \centering
+%  \begin{figure}[H]
 
-  \begin{minipage}[!hp]{0.99\linewidth}
-  	\centering
-    \includegraphics [width=0.3\textwidth, angle=0]{figs/acc/JCalpha_k2.pdf}
-	\hspace{.5in}
-    \includegraphics [width=0.3\textwidth, angle=0]{figs/JC_ks/jc_hist_44_05_3_.pdf}
-  \end{minipage}
+%  \centering
+
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{The left represents the acceptance rate for $\alpha$ in the JC69 model.  Blue and yellow curves represent symmetrized MH,and \naive\ MH  algorithm. The multiplicative factor is $2$.The right is histogram for the posterior samples($\alpha$) of the JC69 model, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.97$.  }
-     \label{fig:ACC_JC}
+%  	\centering
+ %   \includegraphics [width=0.3\textwidth, angle=0]{figs/acc/JCalpha_k2.pdf}
+%	\hspace{.5in}
+  %  \includegraphics [width=0.3\textwidth, angle=0]{figs/JC_ks/jc_hist_44_05_3_.pdf}
+  %\end{minipage}
+%  \begin{minipage}[!hp]{0.99\linewidth}
+   % \caption{The left represents the acceptance rate for $\alpha$ in the JC69 model.  Blue and yellow curves represent symmetrized MH,and \naive\ MH  algorithm. The multiplicative factor is $2$.The right is histogram for the posterior samples($\alpha$) of the JC69 model, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.97$.  }
+  %   \label{fig:ACC_JC}
 %  \end{minipage}
-  \end{figure}
+  %\end{figure}
   
   \begin{figure}[H]
 %    \vspace{-.2in}
