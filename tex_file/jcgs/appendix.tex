@@ -157,15 +157,16 @@ We used this to compare different samplers and different parameter settings. In 
   \begin{figure}[H]
 %    \vspace{-.2in}
   \centering
-  \begin{minipage}[!hp]{0.49\linewidth}
-    \includegraphics [width=0.49\textwidth, angle=0]{figs/acc/EXP_D3alpha_k2.pdf}
-    \includegraphics [width=0.49\textwidth, angle=0]{figs/acc/EXP_D5alpha_k2.pdf}
+  \begin{minipage}[!hp]{0.99\linewidth}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/acc/EXP_D3alpha_k2.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/acc/EXP_D5alpha_k2.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/exp_ks/exp_traceoMH_7_05_3_.pdf}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/exp_ks/exp_omhacf_7_05_3_.pdf}
   \end{minipage}
-  \begin{minipage}[!hp]{0.49\linewidth}
-    \caption{Acceptance Rate for $\alpha$ in the synthetic model, the left row being dimension 3, and the right,dimension 5. Blue square and yellow triangle curves are the symmetrized MH,
- and \naive\ MH  algorithm. The multiplicative factor is $2$. }
+%  \begin{minipage}[!hp]{0.49\linewidth}
+    \caption{Acceptance Rate for $\alpha$ in the synthetic model (Left two), the first being dimension 3, and the second,dimension 5. Blue square and yellow triangle curves are the symmetrized MH, and \naive\ MH  algorithm. The multiplicative factor is $2$. Trace and autocorrelation plots for \naive\ MH  (right two panels) for the synthetic model with $3$ states.}
      \label{fig:ACC_EXP}
-  \end{minipage}
+%  \end{minipage}
   \end{figure}
 %  \begin{figure}[H]
 
@@ -194,10 +195,11 @@ We used this to compare different samplers and different parameter settings. In 
     \includegraphics [width=0.24\textwidth, angle=0]{figs/Q_ks/q_gbsacf_20_03_3_.pdf}
     \includegraphics [width=0.24\textwidth, angle=0]{figs/Q_ks/q_mhacf_20_03_3_.pdf}
   \end{minipage}
-
+  
 %  \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{The left is histogram for the posterior samples($\alpha$) of the immigration model with dimension 3, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.978$. The middle and the right are trace plots for the posterior samples of the immigration model with dimension 3, the middle is for Gibbs and the right is for symmetrized MH}
+%    \caption{The left is histogram for the posterior samples($\alpha$) of the immigration model with dimension 3, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.978$. The middle and the right are trace plots for the posterior samples of the immigration model with dimension 3, the middle is for Gibbs and the right is for symmetrized MH}
+\caption{Trace and autocorrelation plots for Gibbs (left two panels) and symmetrized MH (right two panels). All plots are for the immigration model with $3$ states.}
      \label{fig:TRACE_Q}
 %  \end{minipage}
   \end{figure}
@@ -216,7 +218,9 @@ We used this to compare different samplers and different parameter settings. In 
 
 %  \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
-    \caption{The left is histogram for the posterior samples($\alpha$) of the time-inhomogeneous immigration model with dimension 10, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.7212$. The middle and the right are trace plots for the posterior samples of the time-inhomogeneous immigration model with dimension 10, the middle is for Gibbs and the right is for symmetrized MH}
+%    \caption{The left is histogram for the posterior samples($\alpha$) of the time-inhomogeneous immigration model with dimension 10, the red and blue curves are the Gibbs and symmetrized MH. The p value of the two sample-Kolmogorov Smirnov test is $ 0.7212$. The middle and the right are trace plots for the posterior samples of the time-inhomogeneous immigration model with dimension 10, the middle is for Gibbs and the right is for symmetrized MH}
+\caption{Trace and autocorrelation plots for Gibbs (left two panels) and symmetrized MH (right two panels). All plots are for the time-inhomogeneous immigration model with $10$ states.}
+ 
      \label{fig:TRACE_CQ}
 %  \end{minipage}
   \end{figure}
@@ -336,10 +340,11 @@ We used this to compare different samplers and different parameter settings. In 
   \centering
 
   \begin{minipage}[!hp]{0.99\linewidth}
-	\centering
+%	\centering
     \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphahist_31_3_0_.pdf}
     \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1hist_31_3_0_.pdf}
     \includegraphics [width=0.24\textwidth, angle=0]{figs/acc/ecolialpha_k2.pdf}
+
   \end{minipage}
 %  \begin{minipage}[!hp]{0.99\linewidth}
     \caption{Posterior $P(\alpha|X)$ (left) and $P(\lambda_1|X)$ (middle) from Gibbs (dashed line) and symmetrized MH (solid line) for the E.\ Coli data. Acceptance Rate of $\alpha$ generated by the symmetrized MH algorithm for the E.\ Coli data . The multiplicative factor is $2$. }
