@@ -23,24 +23,27 @@ Below, we respond to your comments individually.
 
 \noindent \rev{1}{The Bayesian model was never clearly introduced. It is worth the space and effort to put down the hierarchical model and the posterior distribution of interest before talking about “Bayesian inference for MJPs.} \\
 \resp This is a very good point, and we have done this at the start of section 3 (and before we talk about inference).
-We do this on page of the new manuscript. 
 
 ~\\
 \rev{2}{P9L47 Please further explain why it’s desirable to have $P(W|\theta)$ disappear from the acceptance probability. Is it because the ratio 
 $P(W|\theta)/P(W |\vartheta)$ is easily very different from 1 when $\theta \neq \vartheta$?} \\
-\resp Yes, $P(W|\theta)$ is a Poisson process with rate $\Omega(\theta)$, so that $P(|W||\Omega(\theta))$ is Poisson distributed with mean and standard deviation $\Omega(\theta)$. As we show this slows down mixing, even though $W$ is just an artifact of the sampling algorithm.
-We state this more clearly at the end of section 4.
+\resp Yes, $P(W|\theta)$ is a Poisson process with rate $\Omega(\theta)$, so that $P(|W||\Omega(\theta))$ is Poisson distributed with mean and standard deviation $\Omega(\theta)$. 
+As we show this slows down mixing, even though $W$ is just an artifact of the sampling algorithm.
+We state this more clearly at the end of section 4. 
+We also include figures showing how the naive MH algorithm has lower acceptance probablities for the same proposal distribution because of this term. 
 
 ~\\ 
 \rev{3}{I’d be interested to see some basic information about the “absolute” performance of the computing methods, especially that of the symmetric MH ... Methods to check the performance/mixing of the MCMC include looking at their trace plots, the autocorrelation function plots, showing the acceptance probablities of the MH algorithms. Also, with the proposed chain lengths, what are (the relative size of) the standard error of certain estimates, say, of the posterior means, or that of typical quantiles needed in reporting credible intervals? Do the approximate posterior produced by the different computing methods agree? }
 \\
 \resp We have now included traceplots and autocorrelation plots for the different experiments (in the main document or the appendix), as well as MH acceptance rates. We also show that the symmetric MH and particle MCMC samplers ``agree", by running 2-sample Kolmogorov-Smirnoff tests on the sampler outputs. The always fail to reject the null.
+In addition to showing the ESS per unit time, we also include the ESS per 1000 MCMC iterations. 
+Finally, we show acceptance probablities of naive and symmetrized MH for different settings of the proposal distribution.
 
 ~\\
 \rev{4}{The algorithms are not simple to understand for first time readers. I suggest formally contrast the steps of the Gibbs sampler (and/or the MH mentioned in P6L41), the Naive MH and the symmetric MH (and maybe the ideal MH from sec 7) in one place, so that one can clearly see their relationship.  Figures 10 and 11 in the supplement are quite helpful. I would move them to the main text to increase readability.
 BTW, it would be helpful if you clearly show that the so-called “Gibbs sampler” is truly a Gibbs sampler.}
 \\ 
-\resp We have completely rewritten all the algorithms to be more concise (with comments in the main text). We have also included pseudocode in each algorithm, and believe that these by themselves should allow readers to implement the algorithms. We have also moved figure 11 from the supplement to the main text. We have also extended the discussion on the Gibbs sampler.
+\resp We have completely rewritten all the algorithms to be more concise (with comments in the main text). We have also included pseudocode in each algorithm, and believe that these by themselves should allow readers to implement the algorithms (without having to refer to the main text). We have also moved figure 11 from the supplement to the main text, and have extended the discussion on the Gibbs sampler.
 
 ~\\
 \noindent \rev{5}{I like the last paragraph of section 5 that discusses tricks of using auxiliary variables in
@@ -77,7 +80,7 @@ Could the discussion be more detailed and informative?
 ~\\
 \noindent \rev{16}{Please comment on if the assumptions in section 7 are satisfied by the MJPs and the
 choices of algorithm tuning parameters in section 6?}\\
-\resp{TODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODO}
+\resp{We have done this. The only discrepancy between theory and practice is in our setting of the uniformization rate: the theory requires $\Omega(\theta,\vartheta) = \kappa (\max_s A_s(\theta) + \max_s A_s(\vartheta)) + \kappa_0$, for any $\kappa_0 > 0$. In our experiments, we set $\kappa_0 = 0$ and still achieve good performance (we conjecture geometric ergodicity continues to hold here). We could easily have chosen a positive $\kappa_0$, or instead, tried to close this small gap in our theory. We leave such theoretical developments for future work, but mention it in the section on geometric ergodicity.}
 
 ~\\ 
 \rev{5}{P6 Figure 1, and P6L48-55. Which case in sec 6.3 is the figure concerned with? (Note that Gibbs sampler is the best performer in the homogeneous case of section 6.3.) Actually, I think it would be interesting to see how the three distributions pictured in figure 1 vary in the different cases of section 6.3. Looking at the current figure 1, the reader can see that “... figure 1, which shows the posterior of an MJP parameter is less concentrated than the distribution conditioned on both obs and MJP...”, but the readers can not see that “The coupling is strengthened as the trajectory grows longer, and the Gibbs sampler can mix very poorly ...” 
@@ -87,22 +90,20 @@ Also, the sentence in P6L44-46 can be polished.}\\
 ~\\
 \noindent \rev{6}{P7L28, P8L29 etc. "... Although the Forward Backward algorithm is a well-known computing method for HMM, it still deserves better explanation in the current paper ...  Also, in the discussion about computing burden in P7, it helps to mention that the forward pass and the backward pass are each quadratic in the number of states of X, to contrast the method of Fearnhead and Sherlock (2006) that is cubic in the number."}
 \\ 
-\resp{We have rewritting the algorithms to include pseudocode detailing everything, including details of the forward/backward algorithm. We have also included the comment on cost that you suggested.} \\
-\resp{TODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODO}
+\resp{We have rewritting the algorithms to include pseudocode detailing everything, including all details of the forward/backward algorithm. We have discussed Fearnhead and Sherlock (2006) in more detail in the section on related work, and have also included the comment on cost that you suggested over there.} 
 
 ~\\
 \noindent \rev{7}{P7L47 Concerning a drawback of the method of Fearnhead and Sherlock (2006), the authors stated that “... this approach ... cannot exploit structure like sparsity in the transition matrix”. Please mention how is sparsity of the transition matrix exploited in the proposed algorithm.}
 \\
-\resp{We have included a discussion of this (after restructuring our paper, this appears in the "Comments section"). Essentially, we run the forward-backward algorithm using the matrix $B = I + \frac{1}{\Omega}A$. $B$ thus inherits sparsity structure in $A$. Fearnhead and Sherlock (2006) run this on the matrix exponential of $A$ which is dense.}
+\resp{We have included a discussion of this (after restructuring our paper, this appears in the ``Related work" section). Essentially, we run the forward-backward algorithm using the matrix $B = I + \frac{1}{\Omega}A$, where $\Omega$ is a scalar, and $I$ is the identity matrix. $B$ thus inherits sparsity structure in $A$. Fearnhead and Sherlock (2006) run this using the matrix exponential of $A$ which is dense.}
 
 ~\\
 \rev{9}{P8 L36 claims “The resulting algorithm updates θ with the MJP trajectory integrated out, giving more rapid mixing. However θ is still updated conditioned on W ”. I believe in this paper, “the MJP trajectory” is always used to refer to both the transition times W (or T ) and the states V (or S). In algorithm 4, only the states V are integrated out, but not W . Hence, the phrase “with the MJP trajectory integrated out” is misleading.}\\
-\resp{We have rewritten the algorithms to be clearer}
-\resp{TODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODO}
+\resp{Thank you, you are correct. We have rewritten the text and algorithms to say "with the MJP states integrated out" as you suggest.}
 
 ~\\
 \rev{10}{P9L17-L30 To my understanding, step 3 can not be executed because P (X|W, θ) is not available, but need to be calculated using step 4. Hence the current way the steps are presented is confusing.} \\
-\resp{We have rewritten the algorithms to be clearer}
+\resp{As mentioned before, we have rewritten the algorithms to be clearer.}
 
 ~\\
 \rev{11}{P10L3 L33 etc. The notation $\Omega$ sometimes refers to the Poisson rate function $\Omega$), and sometimes to the sum of two functions. This may lead to confusions.}
@@ -111,12 +112,12 @@ Also, the sentence in P6L44-46 can be polished.}\\
 
 ~\\ 
 \rev{12}{Figures are not very professional looking. The size of the main contents are generally too small relative to the axis and the labels. Also, I’m not sure about only using color to distinguish the different methods.}\\
-\resp{We have increases the size of the main content, and also made font sizes consistent across all figures. We have also decluttered the figures in the main document, so that different algorithms can be indexed by symbol. The figures will all subplots are included in the supplement.} 
+\resp{We have increases the size of the main content, and also made font sizes consistent across all figures. We have also decluttered the figures in the main document, so that different algorithms can be identified without color. The figures will all subplots are included in the supplement.} 
 
 ~\\ 
 \rev{13}{To use the symmetric MH, one has to specify $(\sigma, \kappa)$, the variance of the proposal for θ and the inflation factor for the thinning processes. Based on the examples, is it possible to provide guidelines on choosing these tuning parameters in future applications?} 
 \\ 
-\resp{We recommend setting $\kappa = 1$. The choice of $\sigma$, depends on the application: we recommend following our strategy in the last experiment: estimate the covariace of $\theta$ from the burn-in run for some setting of $\sigma$ (or from the Gibbs sampler), and set $\sigma^2$ to this  value. We mention this now.}
+\resp{We recommend setting $\kappa = 1$. The choice of $\sigma$, depends on the application: we recommend following our strategy in the last experiment: estimate the covariace of $\theta$ from the burn-in run for some setting of $\sigma$ (or from the Gibbs sampler), and set $\sigma^2$ to this  value. This is standard practice (see e.g.\ `Bayesian data analysis' by Gelman et al.), and we mention this in the revised manuscript.}
 ~\\
 
 \noindent \rev{14}{P18L40 By “state space of dimension 3”, do you mean “... of size 3”? Similar problem with the use of “dimensionality” in several places.} \\
