@@ -13,13 +13,13 @@ Specifically, given $\theta$ and the Poisson grid $W$, rather than simulating ne
 $$ \texttt{acc} = \min\left(1, 
 \frac{P(X|W,\vartheta) P(W|\vartheta)P(\vartheta)q(\theta|\vartheta)} {P(X|W,\theta) P(W|\theta)P(\theta)q(\vartheta|\theta)}\right),$$ 
 %Only after accepting or rejecting do we simulate state values via a backward pass.
-thus targeting the distribution $P(W,\theta|X)$.
+thereby targeting the distribution $P(W,\theta|X)$.
 In the equation above, $P(X|W,\theta)$ is the probability of the observations $X$ given $W$ with $(v_0,V)$ marginalized out. 
-Equivalently, this is the marginal probability of $X$ under a discrete-time HMM on $W$, with transition matrix $B(\theta)$, and can be computed using the forward pass of FFBS algorithm (steps 4 and 6 of algorithm~\ref{alg:MH_naive}). 
+Uniformization says this is the marginal probability of $X$ under a discrete-time HMM on $W$, with transition matrix $B(\theta)$. This can be computed using the forward pass of FFBS algorithm (steps 4 and 6 of algorithm~\ref{alg:MH_naive}). 
 The term $P(W|\theta)$ is the probability of $W$ under a rate-$\Omega(\theta)$ Poisson process. 
-These, along with the corresponding terms for $\vartheta$ allow the acceptance probability to be computed.
+These, and the corresponding terms for $\vartheta$ allow the acceptance probability to be computed.
 %make a forward pass over $W$, and calculate and $P(X|W,\vartheta)$. % as in algorithm~\ref{alg:disc_time_mh}.
-Only {\em after} accepting or rejecting $\vartheta$ do we simulate new states $V'$, using the new parameter $\theta'$ in a backward pass over $W$. 
+Only {\em after} accepting or rejecting $\vartheta$ do we simulate new states $(v'_0,V')$, using the new parameter $\theta'$ in a backward pass over $W$. 
 %Then discard all self-transitions, resample $W$ and repeat. 
 The new trajectory and parameter are used to simulate a new grid $W'$, and the process is repeated.
 Algorithm~\ref{alg:MH_naive} includes all the details of this algorithm, with figure~\ref{fig:naive_mh} in the appendix sketching out the main idea.
@@ -39,9 +39,9 @@ Algorithm~\ref{alg:MH_naive} includes all the details of this algorithm, with fi
    \end{tabular}
    \begin{algorithmic}[1]
      \State Set $\Omega(\theta) > \max_s{A_s(\theta)}$ for
-     some function $\Omega(\cdot)$ (e.g.\ $\Omega(\theta) = 
-      2\max_s A_s(\theta))$.
-      \State \textbf{ Simulate the thinned times $U$:} from a rate-$(\Omega(\theta)-A_{S(t)}(\theta))$ Poisson process: 
+     some function $\Omega(\cdot)$, e.g.\ $\Omega(\theta) = 
+      2\max_s A_s(\theta)$.
+      \State \textbf{Simulate the thinned times $U$} from a rate-$(\Omega(\theta)-A_{S(t)}(\theta))$ Poisson process: 
 
       $\qquad \qquad \qquad \qquad U \sim \text{PoissProc}(\Omega(\theta) - A_{S(t)}(\theta)).$
 
@@ -49,9 +49,10 @@ Algorithm~\ref{alg:MH_naive} includes all the details of this algorithm, with fi
       Set $W = T \cup U$ and discard $(s_0,S)$. Define $\tilde{W} = 0 \cup W \cup t_{end}$.
     \State 
     \textbf{Forward pass:}
-    Set $B(\theta) = I + \frac{A(\theta)}{\Omega(\theta)}$ and
+    Set $B(\theta) = I + \frac{1}{\Omega(\theta)}A(\theta)$ and
     $\fwd^\theta_0(\cdot) = \pi_0$.
  %   Sequentially update $\fwd^\theta_i(\cdot)$ at time $w_i \in W$ as: 
+\vspace{-.1in}
     $$\textbf{for } i=1\rightarrow |\tilde{W}|\textbf{ do:} \quad \fwd^{\theta}_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd^\theta_{i-1}(s)\cdot B_{ss'}(\theta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
     \State \textbf{Propose $\vartheta \sim q(\cdot| \theta)$.}
     For all elements of $\tilde{W}$, calculate $\fwd^\vartheta_i(\cdot)$ similar to above.
@@ -73,24 +74,26 @@ Algorithm~\ref{alg:MH_naive} includes all the details of this algorithm, with fi
     \textbf{Backward pass:}
     Set $v_{|W|} \sim \bck^{\theta'}_{|W|}(\cdot)$, where $\bck^{\theta'}_{|W|}(s) \propto \fwd^{\theta'}_{|W|}(s)\cdot\ell_{|W|}(s) \quad \forall s \in \cS.$ 
     %at time $w_i$ given $v_{i+1}$  at time $w_{i+1}$:
+\vspace{-.1in}
     $$ \textbf{for } i=(|W|-1)\rightarrow 0\textbf{ do:} \quad v_i \sim \bck^{\theta'}_i(\cdot),\ \ \text{where } 
     \bck^{\theta'}_i(s) \propto \fwd^{\theta'}_i(s)\cdot B_{sv_{i+1}}(\theta') \cdot \ell_i(s)  \ \forall s \in \cS.$$
    % Here, $\bck^{\theta'}_{|W|}(\cdot) = \fwd^{\theta'}_{|W|}(\cdot)$.  This completes the FFBS algorithm.
     \State Set $s'_0=v_0$. Let $T'$ be the set of times in $W$ when $V$ changes state. Define $S'$ as the corresponding set of state values. Return $(s'_0, S', T', \theta')$.
 \end{algorithmic}
 \end{algorithm}
+\vspace{-.1in}
 The resulting MCMC algorithm updates $\theta$ with the MJP trajectory 
 integrated out, and by instantiating less `missing' information, can be expected to mix better. 
 This can be quantified by the so-called Bayesian fraction of missing information~\citep{liu1994fraction, papaspiliopoulos2007general}. 
 The Gibbs sampler of algorithm~\ref{alg:MJP_gibbs} can be viewed as operating on a centered parametrization~\citep{papaspiliopoulos2007general} or sufficient augmentation~\citep{yu2011center} of a hierarchical model involving $\theta$, the Poisson events $W$, and the state values $(v_0,V)$. The MH algorithm reverses the order in which the path and parameter are updated, and is closely related to noncentered parametrizations or ancillary augmentations. 
 For a detailed review of the suitability of these two approaches, as well as ways to combine them together, we refer to~\citet{papaspiliopoulos2007general, yu2011center}.
 
-We note that even with state values $V$ marginalized out, $\theta$ is updated {\em conditioned on $W$}. 
-Further, the distribution of $W$ depends on $\theta$: $W$ is a realization of a rate-$\Omega(\theta)$ Poisson process, and this dependence manifests in the $P(W|\theta)$ and $P(W|\vartheta)$ terms in equation~\eqref{eq:ncp_acc}. 
+We note that even with the state values $(v_0,V)$ marginalized out, $\theta$ is updated {\em conditioned on $W$}. 
+The distribution of $W$ depends on $\theta$: $W$ follows a rate-$\Omega(\theta)$ Poisson process. This dependence manifests in the $P(W|\theta)$ and $P(W|\vartheta)$ terms in equation~\eqref{eq:ncp_acc}. 
 The fact that the MH-acceptance involves the probability of the observations  $X$ is inevitable, however the $P(W|\theta)$ term is an artifact of the computational algorithm of Rao-Teh. 
-In our experiments, we find that this term significantly affects acceptance probabilities and mixing. 
+In our experiments, we show that this term significantly affects acceptance probabilities and mixing. 
 For parameter $\theta$, $|W|$ is Poisson distributed with mean and variance $\Omega(\theta)$. 
 If the proposed $\vartheta$ is such that $\Omega(\vartheta)$ is half $\Omega(\theta)$, then the ratio $P(W|\vartheta)/P(W|\theta)$ will be small, and $\vartheta$ is unlikely to be accepted. 
 %, resulting in a low acceptance probability.  
-As we show in our experiments, this will slow down mixing.
+This will slow down mixing.
 The next section describes our main algorithm that gets around this.

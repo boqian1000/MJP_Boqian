@@ -17,21 +17,24 @@ P(X|W,\vartheta,\theta)}{P(\theta)q(\vartheta|\theta)
 P(X|W,\theta,\vartheta)} =
 1 \wedge \frac{P(\vartheta)q(\theta|\vartheta)\text{PoissProc}(W|\Omega(\vartheta,\theta)) P(X|W,\vartheta,\theta)}{P(\theta)q(\vartheta|\theta)\text{PoissProc}(W|\Omega(\theta,\vartheta))
 P(X|W,\theta,\vartheta)},$$
-where we exploit the symmetry of $\Omega(\cdot,\cdot)$ in its two arguments.
+where we exploit the symmetry of $\Omega(\cdot,\cdot)$.
+%in its two arguments.
 %$P(W|\theta,\vartheta)$ is just a Poisson process with rate $\Omega(\theta)+ \Omega(\vartheta)$, so that $P(W|\theta,\vartheta) = P(W|\theta,\vartheta)$, which can be ignored when calculating $\texttt{acc}$. 
 %$P(X|W,\theta,\vartheta)$ and $P(X|W,\vartheta,\theta)$ are obtained
 %after a forward pass over $W$ using discrete-time transition matrices
 %$B(\theta,\vartheta) = \left(I + \frac{A(\theta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$ 
 %and $B(\vartheta,\theta) = \left(I + \frac{A(\vartheta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$. 
+Write the new parameters as $(\theta', \vartheta')$. 
 
-Write the parameters after the accept step as $(\theta', \vartheta')$. 
-After the MH step, the triplet $(\theta', \vartheta',W)$ has the same distribution as $(\theta, \vartheta,W)$.
-The algorithm used the matrix $B(\theta',\vartheta')$ to make a backward pass through $W$, simulating state values on $W$ from the conditional of a Markov chain with transition matrix $B(\theta',\vartheta')$ given observations $X$. 
-Dropping the self-transition times results in the variables $(\theta', s'_0, S', T', \vartheta')$. 
-From the uniformization result (see Lemma 1 in~\cite{RaoTeh13} for details), the trajectory $(s'_0, S', T')$ is distributed according to the conditional of a rate-$A(\theta')$ MJP given observations $X$.
-Finally, the algorithm drops $\vartheta'$, 
+The Markov kernel has stationary distribution over $(\theta',\vartheta')$ proportional to
+$P(\theta')q(\vartheta'|\theta)$ $\text{PoissProc}(W|\Omega(\theta',\vartheta'))
+P(X|W,\theta',\vartheta')$, and the triplet $(\theta', \vartheta',W)$ has the same distribution as $(\theta, \vartheta,W)$.
+The algorithm uses $B(\theta',\vartheta')$ to make a backward pass through $W$, simulating state values on $W$ from the conditional of a Markov chain with transition matrix $B(\theta',\vartheta')$ given observations $X$. 
+Dropping the self-transition times results in $(\theta', s'_0, S', T', \vartheta')$. 
+From uniformization (see also Lemma 1 in~\cite{RaoTeh13}), the trajectory $(s'_0, S', T')$ is distributed according to the conditional of a rate-$A(\theta')$ MJP given observations $X$.
+Finally, dropping $\vartheta'$ 
 %effectively marginalizing this parameter.  As we saw at the start of the proof, this  
-resulting in $(\theta',s'_0,S',T')$ from the posterior distribution given $X$.
+results in $(\theta',s'_0,S',T')$ from the posterior given $X$.
 % \begin{align*}
 %  p(y, W, S, T, \theta, \theta^*) &= p(\theta) q(\theta^* | \theta) P(S,T| \theta, \theta^*) P(W| S, T, \theta, \theta^*)P(y | S, T, \theta, \theta^*)\\
 %  &=p(\theta) q(\theta^* | \theta) P(S,T| \theta) P(W| S, T, \theta, \theta^*)P(y | S, T).
