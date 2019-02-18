@@ -17,7 +17,7 @@ For clarity we will assume $\pi_0$ is known (or we set it to a uniform distribut
 %In settings with multiple trajectories, we would place a Dirichlet prior over $\pi_0$. 
 We have noisy measurements $X$ of the latent process, with likelihood $P(X|\{S(t),\ t \in [0,t_{end})\})$.
 Again, for clarity we ignore any unknown parameters in the likelihood, else we can include them in $\theta$.
-We assume the observation process has the following structure: for $X$, and for any partition $\tilde{W} = \{\tilde{w}_0 = 0, \tilde{w}_1, \dotsc, \tilde{w}_{|\tilde{W}|}=t_{end}\}$ of the interval $[0,t_{end})$ (where $|\cdot|$ denotes cardinality), there exist known functions $\ell_i$ such that the likelihood factors as:
+We assume the observation process has the following structure: for fixed $X$, for any partition $\tilde{W} = \{\tilde{w}_0 = 0, \tilde{w}_1, \dotsc, \tilde{w}_{|\tilde{W}|}=t_{end}\}$ of the interval $[0,t_{end})$ (where $|\cdot|$ denotes cardinality), there exist known functions $\ell_i$ such that the likelihood factors as:
 \begin{align}
   \label{eq:lik_factor}
   P(X|\{S(t),\ t \in [0,t_{end})\}) = \prod_{i=0}^{|\tilde{W}|-1} \ell_i(\{S(t),\ t \in [\tilde{w}_{i},\tilde{w}_{i+1})\})
@@ -33,7 +33,7 @@ The first example, called a Markov modulated Poisson process (MMPP)~\citep{scott
 With $A(\cdot)$ and $\pi_0$ assumed known, the overall Bayesian model is then 
 \begin{align}
   \label{eq:bayes_model}
-  \theta \sim P(\theta), \quad S(t) \sim \text{MJP}(\pi_0, A(\theta)), \quad X \sim P(X|s_0,S,T).
+  \theta \sim P(\theta), \quad (s_0, S, T) \sim \text{MJP}(\pi_0, A(\theta)), \quad X \sim P(X|s_0,S,T).
 \end{align}
 Given $X$, one is interested in the posterior distribution over the latent quantities, $(\theta,s_0, S, T)$. 
 
@@ -46,35 +46,36 @@ We focus on the former, a simpler and more popular algorithm, based on the idea 
 %We outline the latter below: it is more general, and we are not aware of any work before~\cite{RaoTeh12} that describes it.
 
 %Recall $A_i$ gives the rate at which the MJP leaves $i$ for any other state. The parameters are set up so that self-transitions cannot occur. 
-Since $\theta$ is assumed known, we write $A(\theta)$ just as $A$. 
-Uniformization involves a parameter $\Omega \ge \max_i A_i$; \cite{RaoTeh13} suggest $\Omega = 2 \max_i A_i$. 
-Define $B = \left(I +\frac{1}{\Omega}A\right)$; this is a stochastic matrix with positive elements, and rows adding up to $1$.
+%Since $\theta$ is assumed known, we write $A(\theta)$ just as $A$. 
+Uniformization involves a parameter $\Omega(\theta) \ge \max_i A_i(\theta)$; \cite{RaoTeh13} suggest $\Omega(\theta) = 2 \max_i A_i(\theta)$. 
+Define $B(\theta) = \left(I +\frac{1}{\Omega(\theta)}A(\theta)\right)$; this is a stochastic matrix with nonnegative elements, and rows adding up to $1$.
 %Assuming the system is
 %in state $i$, we sample a {\em candidate} transition-time from an
 %exponential, now with rate $\Omega_i$. The system remains in state $i$
 %until this time, after which it moves to state $j \neq i$ with probability
 %$B_{ij} = A_{ij}/\Omega_i$. The system continues to remain in its current 
 %state with probability $1-A_i/\Omega_i$. 
+%Since $\theta$ is fixed, we will drop it below.
 Unlike the sequential wait-and-jump Gillespie algorithm, uniformization first simulates a random grid of candidate transition-times $W$ over $[0,t_{end})$, and then assigns these state values:
 %from a rate-$\Omega$ Poisson process.  $W$ defines a random grid on $[0,t_{end})$.
 %Assign state-values to the elements in $\{0\} \cup W$ according to a discrete-time Markov chain with initial distribution $\pi_0$, and transition matrix $B$.
 %Call these states $(v_0,V)$, where $v_0 \sim \pi_0$, while $P(v_{k+1}=j|v_k=i) = B_{ij}$ for $k \in \{0,\dotsc,|W|-1\}$. 
 \begin{itemize}
-  \item Simulate $W$ from a Poisson process with rate $\Omega \ge \max_i A_i$: 
-    $W \sim \text{PoissProc}(\Omega)$.
-  \item Assign states $(v_0,V)$ to the times $0 \cup W$, with $v_0 \sim \pi_0$, and $P(v_{i+1}=s|v_i) = B_{v_is}$.
+  \item Simulate $W$ from a Poisson process with rate $\Omega(\theta) \ge \max_i A_i(\theta)$: 
+    $W \sim \text{PoissProc}(\Omega(\theta))$.
+  \item Assign states $(v_0,V)$ to the times $0 \cup W$, with $v_0 \sim \pi_0$, and $P(v_{i+1}=s|v_i) = B_{v_is}(\theta)$.
 \end{itemize}
-Setting $\Omega > \max_i A_i$ results in more candidate-times than actual MJP transitions; at the same time, unlike $A$, the matrix $B$ can thin these through self-transitions. 
+Setting $\Omega(\theta) > \max_i A_i(\theta)$ results in more candidate-times than actual MJP transitions; at the same time, unlike $A(\theta)$, the matrix $B(\theta)$ can thin these through self-transitions. 
 Write $U$ for the elements $W$ with self-transitions, and $T$ for the rest.
-Define $s_0=v_0$, and $S=\{v_i \in V \text{ s.t.\ } v_i \neq v_{i-1}\}$ as the elements in $V$ corresponding to $T$, then $(s_0,S,T)$ sampled this way for any $\Omega \ge \max_i A_i$
+Define $s_0=v_0$, and $S=\{v_i \in V \text{ s.t.\ } v_i \neq v_{i-1}\}$ as the elements in $V$ corresponding to $T$, then $(s_0,S,T)$ sampled this way for any $\Omega(\theta) \ge \max_i A_i(\theta)$
 %These self-transitions correct for the extra candidate transition times
 %produced by the higher rate $\Omega_i$, and~\cite{RaoTeh12} show that
 %trajectories sampled this way 
-has the same distribution as under Gillespie's algorithm~\citep{Jen1953,RaoTeh13}. The third panel in figure~\ref{fig:MH_improved} shows the relevant quantities.
+has the same distribution as under Gillespie's algorithm~\citep{Jen1953,RaoTeh13}. The third panel in figure~\ref{fig:MH_improved} shows these sets.
 
-Introducing the thinned variables allowed~\cite{RaoTeh13} to develop a simple and efficient MCMC sampler (algorithm~\ref{alg:Unif_gibbs}). 
-At a high-level, each MCMC iteration samples a new grid $W$ conditioned on the path $(s_0,S,T)$, and then a new path conditioned on $W$. 
-\cite{RaoTeh13} show that the resulting Markov chain targets the desired posterior distribution over trajectories, and is ergodic for any $\Omega$ strictly greater than all the $A_i$'s. 
+Introducing the thinned variables allowed~\cite{RaoTeh13} to develop an efficient MCMC sampler (algorithm~\ref{alg:Unif_gibbs}). 
+At a high-level, each MCMC iteration simulates a new grid $W$ conditioned on the path $(s_0,S,T)$, and then a new path conditioned on $W$. 
+\cite{RaoTeh13} show that the resulting Markov chain targets the desired posterior distribution over trajectories, and is ergodic for any $\Omega(\theta)$ strictly greater than all the $A_i(\theta)$'s. 
    % As mentioned earlier, \cite{RaoTeh13} suggest setting $\Omega = 2\max_i A_i$.
 %The latter
 %can be carried out using standard techniques from the discrete-time
@@ -86,23 +87,23 @@ At a high-level, each MCMC iteration samples a new grid $W$ conditioned on the p
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{Prior $\pi_0$, observations $X$}, 
                        \text{the previous path $S(t) = (s_0, S, T)$}.\\ 
-                     & \text{Parameter $\Omega > \max_i A_i$}, where
-   $A$ is the MJP rate-matrix.\\
+                     & \text{Parameter $\Omega(\theta) > \max_i A_i(\theta)$}, where
+                     $A(\theta)$ is the MJP rate-matrix.\\
    \textbf{Output:  }& \text{New MJP trajectory $S' (t) = (s'_0, S', T')$}.\\
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
 \State \textbf{ Simulate the thinned candidate times $U$ given the MJP path $(S,T)$ } 
-from a piecewise-constant Poisson process with rate $\Omega-A_{S(t)}$: 
+from a piecewise-constant Poisson process with rate $\Omega(\theta)-A_{S(t)}(\theta)$: 
 
-$ \qquad \qquad  U \sim \text{PoissProc}(\Omega - A_{S(t)})  \quad \text{(i.e.\ the rate is $\Omega-A_s$ when $S(t) = s$).}$
+$ \quad  U \sim \text{PoissProc}(\Omega(\theta) - A_{S(t)}(\theta))  \quad \text{(i.e.\ the rate is $\Omega(\theta)-A_s(\theta)$ when $S(t) = s$).}$
 %Since the intensity is piecewise-constant, simulating this is straightforward to do. %: over a segment $(t_{i},t_{i+1})$ where $S(t)$ has value $s_i$, sample a positive integer $n$ from a Poisson distribution with mean $(\Omega-A_{s_i})$, and simulate $n$ events uniformly over $(t_i, t_{i+1})$.
 \State \textbf{
   Discard the states $(s_0,S)$, and write %thinned and actual transition 
   $W = T \cup U$}.
 
-  \State \textbf{ Simulate states $(v_0,V)$ on $0 \cup W$ from a discrete-time HMM:} 
-The HMM has initial distribution over states $\pi_0$ and transition matrix $B = \left(I+\frac{1}{\Omega}A\right)$.
+  \State \textbf{ Simulate states $(v_0,V)$ on $0 \cup W$ from a discrete-time HMM} 
+  with initial distribution over states $\pi_0$ and transition matrix $B(\theta) = \left(I+\frac{1}{\Omega(\theta)}A(\theta)\right)$.
 Following equation~\eqref{eq:lik_factor}, between two consecutive times $(\tilde{w}_i,\tilde{w}_{i+1})$ in $\tilde{W} \defeq 0 \cup W \cup t_{end}$, state $s$ has 
 likelihood $\ell_i(s) \equiv \ell_i(\{S(t) = s,\ t \in [\tilde{w}_i,\tilde{w}_{i+1})\})$. The simulation involves two steps: 
 %Write this as $\ell_i(s)$. Then, do
@@ -113,15 +114,15 @@ likelihood $\ell_i(s) \equiv \ell_i(\{S(t) = s,\ t \in [\tilde{w}_i,\tilde{w}_{i
     Set $\fwd_0(\cdot) = \pi_0$.
     Sequentially update $\fwd_i(\cdot)$ at time $\tilde{w}_i \in \tilde{W}$ given $\fwd_{i-1}$: 
         \vspace{-.1in}
-        $$\textbf{for } i=1\rightarrow |\tilde{W}|\textbf{ do:} \quad \fwd_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd_{i-1}(s)\cdot B_{ss'}, \quad \forall s' \in \cS.\qquad\qquad\quad $$
+        $$\textbf{for } i=1\rightarrow |\tilde{W}|\textbf{ do:} \quad \fwd_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd_{i-1}(s)\cdot B_{ss'}(\theta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
     %and a term $\Omega_i\exp(-\Omega_i\Delta t)$,
     %the probability that the next candidate time occurs after a wait
     %$\Delta t$ under state $i$.
   \item[Backward pass:]
     Set ${v}_{|{W}|} \sim \bck_{|{W}|}(\cdot)$, where $\bck_{|{W}|}(s) \propto \fwd_{|{W}|}(s)\cdot\ell_{|{W}|}(s) \quad \forall s \in \cS.$ 
     %Sequentially simulate $v_i$ at time $w_i$ given state $v_{i+1}$  at time $w_{i+1}$:
-    $$ \textbf{for } i=(|{W}|-1)\rightarrow 0\textbf{ do:} \quad {v}_i \sim \bck_i(\cdot),\quad \text{where } 
-    \bck_i(s) \propto \fwd_i(s)\cdot B_{sv_{i+1}} \cdot \ell_i(s)  \quad \forall s \in \cS.$$
+    $$ \textbf{for } i=(|{W}|-1)\rightarrow 0\textbf{ do:} \quad {v}_i \sim \bck_i(\cdot),\ \  \text{where } 
+    \bck_i(s) \propto \fwd_i(s)\cdot B_{sv_{i+1}}(\theta) \cdot \ell_i(s)  \quad \forall s \in \cS.$$
 \end{description}
         \vspace{-.1in}
 \State \textbf{Discard self-transitions}: Set $s'_0 = v_0$. Let $T'$ be the set of times in ${W}$ when $V$ changes state. Define $S'$ as the corresponding set of state values. Return $(s'_0, S', T')$.
@@ -132,8 +133,9 @@ likelihood $\ell_i(s) \equiv \ell_i(\{S(t) = s,\ t \in [\tilde{w}_i,\tilde{w}_{i
 For fixed parameters $\theta$, the efficiency of the Rao-Teh algorithm has been established, both empirically~\citep{RaoTeh13} and theoretically~\citep{miasojedow2017}.
 In practice, the parameters are typically unknown, and often, these are of primary interest. 
 One then has to characterize the complete posterior $P(\theta, s_0, S, T|X)$ of the Bayesian model of equation~\eqref{eq:bayes_model}. 
-This is typically carried out by incorporating the previous algorithm into a Gibbs sampler. 
-This proceeds by arbitrarily initializing the path and parameters, and then repeating the two steps of algorithm~\ref{alg:MJP_gibbs}:
+This is typically carried out by incorporating the previous algorithm into a Gibbs sampler that targets the joint posterior $P(\theta, s_0, S, T|X)$ by conditionally simulating $(s_0, S, T)$ given $\theta$ and then $\theta$ given $(s_0, S, T)$. 
+%This proceeds by arbitrarily initializing the path and parameters, and then repeating the two steps of 
+Algorithm~\ref{alg:MJP_gibbs} outlines this:
 \begin{algorithm}[H]
   \caption{Gibbs sampling for path and parameter inference for MJPs}
    \label{alg:MJP_gibbs}
@@ -153,7 +155,7 @@ This proceeds by arbitrarily initializing the path and parameters, and then repe
    \end{algorithmic}
 \end{algorithm} 
 \vspace{-.1in}
-The distribution $P(\theta'|X,s_0,S',T')$ depends on %a set of sufficient statistics of the MJP trajectory: 
+The distribution $P(\theta'|X,s'_0,S',T')$ depends on %a set of sufficient statistics of the MJP trajectory: 
 the amount of time $\tau_i$ spent in each state $i$, and the number of transitions $c_{ij}$ between each pair of states $i,j$: 
 \begin{align}
   \label{eq:param_cond}
@@ -179,14 +181,14 @@ In any event, this introduces no new technical challenges.
     \vspace{-0 in}
   \end{minipage}
   \vspace{-.3in}
-  \caption{Prior density over an MJP parameter (the wide red curve), along with two conditionals: 
-    the density conditioned on observations only (the wider dashed blue curve), and the density conditioned on both the observations as well as an MJP posterior (the narrow dashed green curve). 
-  Plots were produced from the experiment in section~\ref{sec:immig}.}
+  \caption{Prior density over an MJP parameter (solid curve), along with two conditionals: conditioned on observations only (long-dashes), and the density conditioned on observations as well as an MJP path (short-dashes). 
+    As $t_{end}$ increases from $10$ (left) to $100$ (right) the conditionals becomes more concentrated. 
+  Plots are from section~\ref{sec:immig}.}
      \label{fig:hist}
   \end{figure}
   However, the resulting Gibbs sampler can mix very poorly because of coupling between path and parameters.
-  We illustrate this in figure~\ref{fig:hist}~\citep[inspired by][]{papaspiliopoulos2007general}), which shows the posterior distribution of an MJP parameter (blue long-dashes) is less concentrated than the distribution conditioned on both observations as well as path (green short-dashes). 
-The coupling is strengthened as the trajectory grows longer, and the Gibbs sampler can mix very poorly with long observation periods, even if the observations themselves are only mildly informative about the parameters.
+  We illustrate this in figure~\ref{fig:hist}~\citep[inspired by][]{papaspiliopoulos2007general}), which shows the posterior distribution of an MJP parameter (long-dashes) is less concentrated than the distribution conditioned on both observations as well as path (short-dashes). 
+  The coupling is strengthened as the trajectory grows longer (right panel), and the Gibbs sampler can mix very poorly with long observation periods, even if the observations themselves are only mildly informative about the parameters.
 
 % \subsection{A marginal sampler for MJP parameters} 
 % For the discrete-time case, this problem of parameter-trajectory

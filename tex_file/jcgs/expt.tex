@@ -559,43 +559,39 @@ The Gibbs sampler performs so well partly because the conditionals over $\alpha$
 %\subsection{Experiments}
 
 
-  \begin{figure}%[b]
-  \centering
-  \begin{minipage}[hp]{0.35\linewidth}
-  \centering
-    \vspace{-0 in}
-    \includegraphics [width=0.98\textwidth, angle=0]{figs/dist_beta_50.pdf}
-  \end{minipage}
-  \begin{minipage}[hp]{0.64\linewidth}
-%   \vspace{-0.3 in}
-  \caption{Prior distribution of an MJP parameter (the wide red density), with two conditional distributions. 
-    Narrow dotted-green is the density conditioned on both the observations as well as a simulated MJP posterior. 
-    The wider dashed-blue curve is density of interest: the marginal distribution of the parameters conditioned on observations. 
-	\boqian{The time interval is $[0, 50]$.}
-}
-     \label{fig:hist_50}
-  \end{minipage}
-%   \vspace{-0.6 in}
-  \end{figure}
+% \begin{figure}%[b]
+% \centering
+% \begin{minipage}[hp]{0.35\linewidth}
+% \centering
+%   \vspace{-0 in}
+%   \includegraphics [width=0.98\textwidth, angle=0]{figs/dist_beta_50.pdf}
+% \end{minipage}
+% \begin{minipage}[hp]{0.64\linewidth}
+% \caption{Prior distribution of an MJP parameter (the wide red density), with two conditional distributions. 
+%   Narrow dotted-green is the density conditioned on both the observations as well as a simulated MJP posterior. 
+%   The wider dashed-blue curve is density of interest: the marginal distribution of the parameters conditioned on observations. 
+%   \boqian{The time interval is $[0, 50]$.}
+%
+%    \label{fig:hist_50}
+% \end{minipage}
+% \end{figure}
 
-  \begin{figure}%[b]
-  \centering
-  \begin{minipage}[hp]{0.35\linewidth}
-  \centering
-    \vspace{-0 in}
-    \includegraphics [width=0.98\textwidth, angle=0]{figs/dist_beta_100.pdf}
-  \end{minipage}
-  \begin{minipage}[hp]{0.64\linewidth}
-%   \vspace{-0.3 in}
-  \caption{Prior distribution of an MJP parameter (the wide red density), with two conditional distributions. 
-    Narrow dotted-green is the density conditioned on both the observations as well as a simulated MJP posterior. 
-    The wider dashed-blue curve is density of interest: the marginal distribution of the parameters conditioned on observations. 
-	\boqian{The time interval is $[0, 100]$.}
-}
-     \label{fig:hist_50}
-  \end{minipage}
-%   \vspace{-0.6 in}
-  \end{figure}
+% \begin{figure}%[b]
+% \centering
+% \begin{minipage}[hp]{0.35\linewidth}
+% \centering
+%   \vspace{-0 in}
+%   \includegraphics [width=0.98\textwidth, angle=0]{figs/dist_beta_100.pdf}
+% \end{minipage}
+% \begin{minipage}[hp]{0.64\linewidth}
+% \caption{Prior distribution of an MJP parameter (the wide red density), with two conditional distributions. 
+%   Narrow dotted-green is the density conditioned on both the observations as well as a simulated MJP posterior. 
+%   The wider dashed-blue curve is density of interest: the marginal distribution of the parameters conditioned on observations. 
+%   \boqian{The time interval is $[0, 100]$.}
+%
+%    \label{fig:hist_50}
+% \end{minipage}
+% \end{figure}
 
 %  \begin{figure}%[b]
 %  \centering
@@ -705,7 +701,6 @@ Even such a simple change in the original model can dramatically affect the perf
 % not included it).  
  Figure~\ref{fig:ESS_pc_10} shows performance for dimension $10$, once again the symmetrized MH-algorithm performans best over a range of settings of the proposal variance. We note that increasing the
  dimensionality of the state space results in a more concentrated posterior, shifting the optimal setting of the proposal variance to smaller values.
- \vinayak{explain new figure}
 
   \subsection{Chi site data for Escherichia coli}~
   We consider a dataset recording positions of a particular DNA motif 
