@@ -1,12 +1,13 @@
-%\vspace{-.2in}
-\section{Experiments}\label{sec:expts}~
+\vspace{-.2in}
+\section{Experiments}\label{sec:expts}
+\vspace{-.1in}
 In the following, we evaluate Python implementations of a number of algorithms, focusing our contribution, the symmetrized MH algorithm (algorithm~\ref{alg:MH_improved}), and as well as the \naive\ MH algorithm (algorithm~\ref{alg:MH_naive}).
 %, which we plot \boqian{as yellow twodashed  lines}), 
 %, plotted \sout{as dashed red lines}\boqian{as solid blue lines}
 We evaluate different variants of these algorithms, corresponding to different uniformizing Poisson rates. % (i.e.\ different choices of $\kappa$, see section~\ref{sec:comments}). 
 For \naive\ MH, we set $\Omega(\theta) = \kappa \max_s A_s(\theta) $ with $\kappa$  equal to $1.5, 2$ and $3$ (here $\kappa$ must be greater than $1$), 
 %represented in our plots with circles, \sout{triangles} \boqian{square} and \sout{square} \boqian{triangles} symbols. 
-while for symmetrized MH, where the uniformizing rate depends on both the current and proposed parameters, we consider the settings:
+while for symmetrized MH, where the uniformizing rate depends on both the current and proposed parameters, we consider
  $\Omega(\theta, \vartheta) = \kappa (\max A(\theta) + \max A(\vartheta))$ 
  ($\kappa = 1$ and $1.5$), and 
  %, plotted with \sout{triangles} \boqian{square} and \sout{square} \boqian{triangles}), and 
@@ -70,7 +71,7 @@ For the MH proposal, we used a lognormal distribution centered at the current pa
 \noindent \textbf{Results:}
 Figure~\ref{fig:POST_EXP} shows the MCMC estimates of the posterior distribution over $\alpha, P(\alpha|X)$ from the Gibbs sampler as well as our symmetrized MH sampler. 
 Visually these agree, and we quantify this by running a Kolmogorov-Smirnov two-sample test using $1000$ samples from each algorithm: this returns a p-value of $0.5085$, clearly failing to reject the null hypothesis that both samples come from the same distribution. 
-The figure also shows the average acceptance probabilities for the two MH samplers: we see that for the same proposal distribution, symmetrization significantly improves acceptance probability. This clearly shows the benefit of eliminating the $P(W|\theta)$ terms from the acceptance probability (we will investigate this further). Figure~\ref{fig:TRACE_EXP} shows traceplots and autocorrelation plots for $\alpha$ from the symmetrized and Gibbs samplers. Clearly, our sampler mixes much more efficiently than Gibbs, with \naive\ MH (not included) somewhere in between.
+The figure also shows the average acceptance probabilities for the two MH samplers: we see that for the same proposal distribution, symmetrization significantly improves acceptance probability. This shows the benefit of eliminating the $P(W|\theta)$ terms from the acceptance probability (we will investigate this further). Figure~\ref{fig:TRACE_EXP} shows traceplots and autocorrelation plots for $\alpha$ from the symmetrized and Gibbs samplers. Clearly, our sampler mixes much more efficiently than Gibbs, with \naive\ MH (not included) slightly worse than both.
 
 
   \begin{figure}[H]
@@ -96,7 +97,7 @@ The figure also shows the average acceptance probabilities for the two MH sample
      \label{fig:TRACE_EXP}
   \end{figure}
   To quantify this, figure~\ref{fig:ESS_EXP_D10} plots the ESS/sec in the top row, and the raw ESS in the bottom row for $\alpha$  and $\beta$. 
-  The left two columns plot $\alpha$ and $\beta$ for MJPs with $3$ states, and the right two, with $10$ states. 
+  The left two columns consider $\alpha$ and $\beta$ for MJPs with $3$ states, and the right two, with $10$ states. 
   We include results for $5$ states in the appendix, the conclusions are the same. 
   For each plot, we vary the scale-parameter $\sigma^2$ of the log-normal proposal $q(\vartheta|\theta)$, and look at its effects on ESS/s and ESS. 
   Note that the conditional over parameters given trajectory is not conjugate, so that the Gibbs sampler is really a Metropolis-within-Gibbs (MWG) sampler with an associated proposal distribution parameterized by $\sigma^2$.
@@ -179,10 +180,10 @@ The figure also shows the average acceptance probabilities for the two MH sample
   \end{figure}
 
 Among the three setting of our algorithm, the simple additive setting
- ({squares}) does best, though only slightly better than the {max-of-max} setting (circles). 
+ ({squares}) does best, slightly better than the {max-of-max} setting (circles). 
 %A reason for this improvement is that the additive setting is more stable than the max-of-max setting, when the proposal variance can be large. 
 The {additive setting with a multiplicative factor of $1.5$} ({triangles}) does worse than both the {additive choice with $\kappa=1$ and the max-of-max choice} but still better than the other algorithms. 
-The results in figure~\ref{fig:ESS_EXP_D10} for 10 states shows the ESS is slightly lower, and thus mixing is slightly poorer for all samplers. This, coupled with greater computational cost per iteration results in a drop in ESS/s across all algorithms, compared to the case with 3 states. We still observe the same pattern of relative performance, with our sampler with $\Omega(\theta,\vartheta) = \max_s A_s(\theta) + \max_s A(\vartheta)$ performing the best. 
+The results in figure~\ref{fig:ESS_EXP_D10} for 10 states shows that ESS is slightly lower, and thus mixing is slightly poorer for all samplers. This, coupled with greater computational cost per iteration results in a drop in ESS/s across all algorithms, compared with 3 states. We still observe the same pattern of relative performance, with our sampler with $\Omega(\theta,\vartheta) = \max_s A_s(\theta) + \max_s A(\vartheta)$ the best. 
 
   \begin{figure}[H]
   \centering
@@ -257,8 +258,8 @@ We consider the 3-state MJP, and as before there are $19$ observations uniformly
 We consider four settings, with $t_{end}$ equal to $10, 20, 50, 100$. 
 For each, we compare our symmetrized MH sampler (with $\kappa$ set to $1$) with the \naive\ MH and Gibbs samplers (with $\kappa$ set to $2$). 
 While the performance of the Gibbs sampler is comparable with our symmetrized algorithm for the smallest value of $t_{end}$, its performance is considerably worse for longer time-intervals.  
-This is the limitation of Gibbs sampling that motivated this work: when updating $\theta$ conditioned on the MJP trajectory, longer time intervals result in stronger coupling between MJP path and parameters, and thus poorer mixing. 
-This effect disappears if we integrate out the MJP trajectory. 
+This is the limitation of Gibbs sampling that motivated this work: when updating $\theta$ conditioned on the MJP trajectory, longer time intervals result in stronger coupling between MJP path and parameters (figuree~\ref{fig:hist}), and thus poorer mixing. 
+%This effect disappears if we integrate out the MJP trajectory. 
 The performance of the \naive\ sampler demonstrates that it is not sufficient just to integrate out the state values of the trajectory, we also have to get around the coupling between the Poisson grid and the parameters. 
 Our symmetrized MH-algorithm allows this. 
 %as a by-product, it also involves calculating a simpler 
@@ -277,11 +278,12 @@ The results are similar to the previous case: Gibbs sampling performs well for s
   The model has a single parameter $\alpha$, representing the rate at which the system transitions between any pair of states. 
   Thus, the rate matrix $A$ is given by $A_i = -A_{i,i} = 3\alpha, A_{i, j} = \alpha,i \neq j.$
 We place a Gamma$(3,2)$ prior on the parameter $\alpha$.
-Figure~\ref{fig:ESS_JC}(right) compares different samplers: we see that the symmetrized MH samplers comprehensively outperforms all others.
+Figure~\ref{fig:ESS_JC}(b) and (c) compare different samplers: we see that the symmetrized MH samplers comprehensively outperforms all others.
 Part of the reason why the difference is so dramatic here is because now a {\em single} paramter $\alpha \defeq \theta$ defines the transition matrix, implying a stronger coupling between MJP path and parameter. 
 We point out that for Gibbs sampling, the conditional distribution over $\theta$ is conjugate to the Gamma prior. We can thus simulate directly from this distribution without any MH proposal (hence its performance remains fixed along the x-axis). 
 Despite this, its performance is worse than our symmetrized algorithm.
 Particle MCMC performs worse than all the algorithms, and we do not include it in our plots.
+Figure~\ref{fig:ESS_JC}(d) compares different settings of $\Omega(\theta,\vartheta)$ for our sampler: again, the simple additive setting $\Omega(\theta,\vartheta) = \max_s A_s(\theta) + \max_s A_s(\vartheta)$ does best.
 %  \begin{figure}%[H]
 %  \begin{minipage}[!hp]{0.7\linewidth}
 %    \includegraphics[width=0.49\textwidth, angle=0]{figs/jc_model.pdf} 
@@ -721,7 +723,8 @@ Even such a simple change in the original model can dramatically affect the perf
   We model the Chi-site positions as drawn from a Poisson process with rate 
   $\lambda_{S(t)}$, resulting in a {Markov-modulated Poisson process}~\citep{scottmmpp03} (see also section~\ref{sec:bayes_model}). 
   MJP transitions from state $1$ to state $2$ have rate $\alpha$ while transitions from state $2$ to state $1$ have rate $\beta$. 
-  We place gamma priors on the four model parameters; specifically, we use Gamma$(2,2)$, Gamma$(2,3)$, Gamma$(3,2)$, Gamma$(1,2)$ for $\alpha$, $\beta$, $\lambda_1$, $\lambda_2$ respectively.
+  We place %gamma priors on the four model parameters; specifically, we use 
+  Gamma$(2,2)$, Gamma$(2,3)$, Gamma$(3,2)$, and Gamma$(1,2)$ priors for $\alpha$, $\beta$, $\lambda_1$, $\lambda_2$ respectively.
 
 
   We use this setup to evaluate our symmetrized MH sampler along with Gibbs sampling (other algorithms perform much worse, and we do not include them). 
