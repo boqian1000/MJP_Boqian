@@ -17,10 +17,10 @@ For clarity we will assume $\pi_0$ is known (or we set it to a uniform distribut
 %In settings with multiple trajectories, we would place a Dirichlet prior over $\pi_0$. 
 We have noisy measurements $X$ of the latent process, with likelihood $P(X|\{S(t),\ t \in [0,t_{end})\})$.
 Again, for clarity we ignore any unknown parameters in the likelihood, else we can include them in $\theta$.
-We assume the observation process has the following structure: for fixed $X$, for any partition $\tilde{W} = \{\tilde{w}_0 = 0, \tilde{w}_1, \dotsc, \tilde{w}_{|\tilde{W}|}=t_{end}\}$ of the interval $[0,t_{end})$ (where $|\cdot|$ denotes cardinality), there exist known functions $\ell_i$ such that the likelihood factors as:
+We assume the observation process has the following structure: for fixed $X$, for any partition $\tilde{W} = \{\tilde{w}_1 = 0, \dotsc, \tilde{w}_{|\tilde{W}|}=t_{end}\}$ of the interval $[0,t_{end})$ (where $|\cdot|$ denotes cardinality), there exist known functions $\ell_i$ such that the likelihood factors as:
 \begin{align}
   \label{eq:lik_factor}
-  P(X|\{S(t),\ t \in [0,t_{end})\}) = \prod_{i=0}^{|\tilde{W}|-1} \ell_i(\{S(t),\ t \in [\tilde{w}_{i},\tilde{w}_{i+1})\})
+  P(X|\{S(t),\ t \in [0,t_{end})\}) = \prod_{i=1}^{|\tilde{W}|-1} \ell_i(\{S(t),\ t \in [\tilde{w}_{i},\tilde{w}_{i+1})\})
 \end{align}
 A common example is a finite set of independent observations $X = \{x_1,\dotsc,x_{|X|}\}$ at times $T^X = \{t^X_1,\dotsc, t^X_{|X|}\}$, each observation depending on the state of the MJP at that time:
 \begin{align}

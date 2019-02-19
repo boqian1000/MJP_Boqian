@@ -71,7 +71,7 @@ For the MH proposal, we used a lognormal distribution centered at the current pa
 \noindent \textbf{Results:}
 Figure~\ref{fig:POST_EXP} shows the MCMC estimates of the posterior distribution over $\alpha, P(\alpha|X)$ from the Gibbs sampler as well as our symmetrized MH sampler. 
 Visually these agree, and we quantify this by running a Kolmogorov-Smirnov two-sample test using $1000$ samples from each algorithm: this returns a p-value of $0.5085$, clearly failing to reject the null hypothesis that both samples come from the same distribution. 
-The figure also shows the average acceptance probabilities for the two MH samplers: we see that for the same proposal distribution, symmetrization significantly improves acceptance probability. This shows the benefit of eliminating the $P(W|\theta)$ terms from the acceptance probability (we will investigate this further). Figure~\ref{fig:TRACE_EXP} shows traceplots and autocorrelation plots for $\alpha$ from the symmetrized and Gibbs samplers. Clearly, our sampler mixes much more efficiently than Gibbs, with \naive\ MH (not included) slightly worse than both.
+The figure also shows the average acceptance probabilities for the two MH samplers: we see that for the same proposal distribution, symmetrization significantly improves acceptance probability. This shows the benefit of eliminating the $P(W|\theta)$ terms from the acceptance probability (we will investigate this further). Figure~\ref{fig:TRACE_EXP} shows traceplots and autocorrelation plots for $\alpha$ from the symmetrized MH and Gibbs samplers. Clearly, our sampler mixes much more efficiently than Gibbs, with \naive\ MH (included in the appendix) slightly worse than both.
 
 
   \begin{figure}[H]
@@ -467,7 +467,7 @@ degradation with interval length that is much milder than the other algorithms.
     \includegraphics [width=0.99\textwidth, angle=0]{figs/new_whole_exp_figs/mh_q_beta_dim10.pdf}
 	\end{minipage}
     \caption{ESS/sec for symmetrized MH for the immigration model for different settings of $\Omega(\theta,\vartheta)$. The left two columns are for $\alpha$ and $\beta$ with states, and the right two, with 10. 
-    Squares, circles and trianges correspond to $\Omega(\theta,\vartheta)$ set to $(\max_s A_s(\theta) + \max_s A_s(\vartheta))$, $\max(\max_s A_s(\theta), \max_s A_s(\vartheta))$ and  $1.5(\max_s A_s(\theta) + \max_s A_s(\vartheta))$.
+    Squares, circles and triangles correspond to $\Omega(\theta,\vartheta)$ set to $(\max_s A_s(\theta) + \max_s A_s(\vartheta))$, $\max(\max_s A_s(\theta), \max_s A_s(\vartheta))$ and  $1.5(\max_s A_s(\theta) + \max_s A_s(\vartheta))$.
   }
     \label{fig:mhESS_Q}
   \end{figure}

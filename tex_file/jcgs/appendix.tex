@@ -1,11 +1,14 @@
 \subsection{Particle MCMC for MJP inference}
 \label{sec:pmcmc}
 \subsubsection{A sequential Monte Carlo algorithm for MJPs inference}
-We describe a sequential Monte Carlo algorithm for MJPs inference that underlies particle MCMC. Denote by $S_{[t_1', t_2']}$ the MJP trajectory from time $t_1'$ to time $t_2'$. Our target is to sample an MJP trajectory $S_{[0, t_{end}]}$ given $n$ noisy observations $X_1, X_2, ... , X_n$, at time $t_1^X, t_2^X, ..., t_n^X$. 
+We describe a sequential Monte Carlo algorithm for MJPs inference that underlies particle MCMC. 
+Denote by $S_{[t_1', t_2']}$ the MJP trajectory from time $t_1'$ to time $t_2'$. 
+Our target is to sample an MJP trajectory $S_{[0, t_{end}]}$ given $n$ noisy observations $X =(x_1, x_2, ... , x_n)$, at time $t_1^X, t_2^X, ..., t_n^X$. 
 The initial value of the Markov jump process trajectory can be simulated from its initial distribution over states: $S(0) \sim \pi_0$. 
-$S_{[t_i^X, t_{i + 1}^X]} $, its values over any interval $[t_i^X, t_{i+1}^X]$ can be simulated by Gillespie's algorithm\boqian{, and denote the probability density as $q_{\theta}( S_{[t^X_{i},t^X_{i + 1}]}|S_{t^X_i} )$}. Write the conditional distribution over states at time $t^X_{i+1}$ given value at time $t^X_i$ as $f_\theta(S(t^X_{i+1})|S(t^X_i))$, so that
-$S(t_{i + 1}^X) \sim f_\theta (\cdot | S(t_i^X))$.  
-Denote the observation likelihood as $g_\theta(X_i = x_i| S_{[0, T]}) = P(x_i | S^X_{t_i})$.
+$S_{[t_i^X, t_{i + 1}^X]} $, its values over any interval $[t_i^X, t_{i+1}^X]$ can be simulated by Gillespie's algorithm as described in section~\ref{sec:???}. 
+%Write the conditional distribution over states at time $t^X_{i+1}$ given value at time $t^X_i$ as $f_\theta(S(t^X_{i+1})|S(t^X_i))$, so that
+%$S(t_{i + 1}^X) \sim f_\theta (\cdot | S(t_i^X))$.  
+For the $i$th observation $x_i$ at time $t^X_i$, denote the likelihood for $S(t^X_i)$ as $P(x_i | S(t^X_i))$.
 %Let $q_\theta^i$ be the important sampling proposal distribution. In our case, we set $q_\theta^i(\cdot| X_n, S_{[0, t^X_{n-1}]}) = f_\theta(S_{[t^X_{i-1},t_i]}| S_{[0, t^X_{i-1}]})$.% and $\mu_\theta$ as the prior Markov jump process density and 
 
 %$S_{[0, t_{end}]}$ with rate matrix $A(\theta)$ can be characterized by 
@@ -21,36 +24,37 @@ Denote the observation likelihood as $g_\theta(X_i = x_i| S_{[0, T]}) = P(x_i | 
   \caption{The SMC sampler for MJP trajectories}
    \label{alg:SMC}
   \begin{tabular}{l l}
-   \textbf{Input:  } & \text{Prior $\pi_0$, observations $X$}, 
+   \textbf{Input:  } & \text{Prior $\pi_0$, $n$ observations $X$}, 
                        \text{Number of particles $N$}, rate-matrix $A$.\\
                      %& MJP rate-matrix $A$\\
    \textbf{Output:  }& \text{New MJP trajectory $S' (t) = (s'_0, S', T')$}.\\
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
+\State Define $t^X_0 = 0$ and $t^X_{n+1} = t_{end}$. %Define $J^k_0$
 \State 
-Sample initial states for N particles $S^k(0)$ from $\pi_0$, $k = 1,2,...,N$ 
-\State For $i = 1, 2, ..., n$:\\
-\noindent \noindent (a) Simulate $S_{[t^X_{i -1},t^X_i]}^k|S^k_{t^X_{i-1}}$ via Gillespie's algorithm, for $k = 1,2,...,N$; \vinayak{Check below}\\
-\noindent \noindent (a) Sample $J_{i-1}^k \sim Multi(.| W_{i-1})$ , $k = 1,2,...,N$;\\
-\noindent \noindent (b) 
-Sample $S_{[t^X_{i -1},t^X_i]}^k \sim q_\theta^i(\cdot| X_i, S_{[0, t_{i-1}^X]}^{J_{i-1}^k})$, $k = 1,2,...,N$;\\
-\boqian{Simulate $S_{[t^X_{i -1},t^X_i]}^k|S^{J_{i-1}^k}_{t^X_{i-1}}$ via Gillespie's algorithm, for $k = 1,2,...,N$;}
-\noindent \noindent (c) Set $S_{[t_0^X, t^X_i]}^k := \text{concatinate}(S_{[t_0^X, t^X_{i-1}]}^{J_{i-1}^k}, S_{[t_{i -1}^X,t_i^X]}^k)$.\\
-\noindent \noindent (d) Calculate the weights and normalize the weights.
-$$w_i(S_{[t_0^X, t^X_i]}^k) := \frac{P_\theta(S_{[t_0^X, t_i^X]}^k, X_{1:i})}{P_\theta(S_{[t_0^X,t_{i-1}]}^{J_{i-1}^k}, X_{1:i})q_\theta^i(S_{[t^X_{i-1}, t_i^X]}^k | X_{1:i},S_{[t_0^X, t_{i-1}^X]}^{J_{i-1}^k} )} = \frac{f_\theta(S_{[t^X_{i-1}, t_i]}^k|S_{[t_0^X, t^X_{i-1}]}^{J_{i-1}^k}) g_\theta(X_i | S_{t_i^X}^k)}{q_\theta^i(S_{[t^X_{i-1}, t_i^X]}^k|X_{1:i},S_{[t_0^X, t^X_{i-1}]}^{J_{i-1}^k})};$$
-
-$$W_i(X_{[t_0^X, t^X_i]}^k) = \frac{w_i(X_{[t_0^X, t_i^X]}^k)}{\sum_{l = 1}^N w_i(X_{[t_0^X, t^X_i]}^l)}.$$
+Sample initial states for N particles $S^k(0)$ from $\pi_0$, $k = 1,...,N$. 
+\State For $i = 1, ..., n+1$:\\
+\noindent \noindent (a) For $k = 1,2,...,N$,\\ update particle $k$ from $[0,t^X_{i-1}]$ to $[0,t^X_i]$ by forward simulating $S_{[t^X_{i -1},t^X_i]}^k|S^k(t^X_{i-1})$ via Gillespie's algorithm. \\
+%\noindent \noindent (b) Sample $S_{[t^X_{i -1},t^X_i]}^k \sim q_\theta^i(\cdot| X_i, S_{[0, t_{i-1}^X]}^{J_{i-1}^k})$, $k = 1,2,...,N$;\\
+%\boqian{Simulate $S_{[t^X_{i -1},t^X_i]}^k|S^{J_{i-1}^k}_{t^X_{i-1}}$ via Gillespie's algorithm, for $k = 1,2,...,N$;}
+\noindent \noindent (d) Calculate the weights $w^k_i = P(x_i|S^k(t^X_i))$
+and normalize 
+$W^k_i = \frac{w^k_i}{\sum_{k = 1}^N w^k_i}.$ \\
 %
 %
-\noindent Compute and normalize the weights.
-$$w_1(S_{[t_0^X, t_1^X]}^k) :=\frac{P_\theta(S_{[t_0^X, t_1^X]}^k, X_1)}{q_\theta(S_{[t_0^X, t_1^X]}^k|X_1)} =  \frac{\mu_\theta(S_{[t_0^X, t_1^X]}^k)g_\theta(X_1|S_{[t_0^X, t_1^X]}^k)}{q_\theta(S_{[t_0^X, t_1^X]}^k|X_1)};$$
-$$W_1(X_{[t_0^X, t_1^X]}^k) = \frac{w_1(S_{[t_0^X, t_1^X]}^k)}{\sum_{i = 1}^N w_1(S_{[t_0^X, t_1^X]}^i)}.$$
+\noindent \noindent (a) Sample $J_{i}^k \sim \text{Multi}(\cdot| (W^1_{i},\dotsc,W^N_{i}))$ , $k = 1,2,...,N$;\\
+\noindent \noindent (c) Set $S_{[0, t^X_i]}^k := S_{[0,t^X_i]}^{J^k_i}$.
 \end{algorithmic}
 \end{algorithm}
-The SMC algorithm also gives us an estimate of the marginal likelihood $P_\theta(X_{1:n})$.
-$$ \hat{P}_{\theta} = \hat{P}_{\theta}(X_1) \prod_{i = 2}^n \hat{P}_{\theta}(X_i| X_{1: i- 1});$$
-where $\hat{P}_{\theta}(X_i| X_{1: i- 1}) = \sum_{k = 1} ^ N w_i(S_{[t_0^X, t_I^X]}^k).$
+
+%At time $t_{end}$ uniformly pick a particle. It
+
+The SMC algorithm gives us an estimate of the marginal likelihood $P_\theta(X_{1:n})$.
+$$ \hat{P}_{\theta} = \hat{P}_{\theta}(X_1) \prod_{i = 2}^n \hat{P}_{\theta}(X_i| X_{1: i- 1}) = ????;$$
+%where $\hat{P}_{\theta}(X_i| X_{1: i- 1}) = \sum_{k = 1} ^ N w_i(S_{[t_0^X, t_I^X]}^k).$
+
+
 \subsubsection{Particle MCMC algorithm for MJPs inference}
 
 \begin{algorithm}[H]
@@ -59,7 +63,7 @@ where $\hat{P}_{\theta}(X_i| X_{1: i- 1}) = \sum_{k = 1} ^ N w_i(S_{[t_0^X, t_I^
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{Prior $\pi_0$, observations $X$}, 
                        \text{Number of particles $N$}, rate-matrix $A(\theta)$,\\
-                     & $p(\theta)$ prior of $\theta$, proposal density $q(\cdot|\cdot)$. \\
+                     & $P(\theta)$ prior of $\theta$, proposal density $q(\cdot|\cdot)$. \\
    \textbf{Output:  }& \text{New MJP trajectory $S' (t) = (s'_0, S', T')$}.\\
    \hline
    \end{tabular}
@@ -70,7 +74,7 @@ where $\hat{P}_{\theta}(X_i| X_{1: i- 1}) = \sum_{k = 1} ^ N w_i(S_{[t_0^X, t_I^
 \State At time $i \geq 1:$\\
 \noindent \noindent (a) Sample $\theta^*$ from a proposal distribution $q(\cdot | \theta_{i - 1})$;
 \noindent \noindent (b) Run the SMC algorithm above targeting $P_{\theta^*}(S_{[0, T]} | X_{1:n})$ to sample $S_{[0, T]}^*$ from $\hat{P}_{\theta^*}(\cdot | X_{1:n})$ and let $\hat{P}_{\theta^*}(X_{1:n})$ denote the estimate of the marginal likelihood.
-\noindent Accept $\theta^*, S_{[0, T]}^*$ with probability $$ acc = 1 \wedge \frac{\hat{P}_{\theta^*}(X_{1:n}) p(\theta^*)}{\hat{P}_{\theta_{i - 1}}(X_{1:n}) p(\theta_{i  - 1})} \frac{q(\theta_{i - 1} | \theta^*)}{q(\theta^* | \theta_{i - 1})}.$$
+\noindent Accept $\theta^*, S_{[0, T]}^*$ with probability $$ \mathtt{acc} = 1 \wedge \frac{\hat{P}_{\theta^*}(X_{1:n}) p(\theta^*)}{\hat{P}_{\theta_{i - 1}}(X_{1:n}) p(\theta_{i  - 1})} \frac{q(\theta_{i - 1} | \theta^*)}{q(\theta^* | \theta_{i - 1})}.$$
 
 \end{algorithmic}
 \end{algorithm}
