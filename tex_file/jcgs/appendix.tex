@@ -34,24 +34,24 @@ For the $i$th observation $x_i$ at time $t^X_i$, denote the likelihood for $S(t^
 \State Define $t^X_0 = 0$ and $t^X_{n+1} = t_{end}$. %Define $J^k_0$
 \State 
 Sample initial states for N particles $S^k(0)$ from $\pi_0$, $k = 1,...,N$. 
-\State For $i = 1, ..., n+1$:\\
-\noindent \noindent (a) For $k = 1,2,...,N$,\\ update particle $k$ from $[0,t^X_{i-1}]$ to $[0,t^X_i]$ by forward simulating $S_{[t^X_{i -1},t^X_i]}^k|S^k(t^X_{i-1})$ via Gillespie's algorithm. \\
+\For{$i = 1, ..., n+1:$}
+%\State For $i = 1, ..., n+1$:\\
+	\State (a) For $k = 1,2,...,N$, update particle $k$ from $[0,t^X_{i-1}]$ to $[0,t^X_i]$ by forward simulating $S_{[t^X_{i -1},t^X_i]}^k|S^k(t^X_{i-1})$ via Gillespie's algorithm.
 %\noindent \noindent (b) Sample $S_{[t^X_{i -1},t^X_i]}^k \sim q_\theta^i(\cdot| X_i, S_{[0, t_{i-1}^X]}^{J_{i-1}^k})$, $k = 1,2,...,N$;\\
 %\boqian{Simulate $S_{[t^X_{i -1},t^X_i]}^k|S^{J_{i-1}^k}_{t^X_{i-1}}$ via Gillespie's algorithm, for $k = 1,2,...,N$;}
-\noindent \noindent (d) Calculate the weights $w^k_i = P(x_i|S^k(t^X_i))$
+	\State (b) Calculate the weights $w^k_i = P(x_i|S^k(t^X_i))$
 and normalize 
-$W^k_i = \frac{w^k_i}{\sum_{k = 1}^N w^k_i}.$ \\
-%
-%
-\noindent \noindent (a) Sample $J_{i}^k \sim \text{Multi}(\cdot| (W^1_{i},\dotsc,W^N_{i}))$ , $k = 1,2,...,N$;\\
-\noindent \noindent (c) Set $S_{[0, t^X_i]}^k := S_{[0,t^X_i]}^{J^k_i}$.
+$W^k_i = \frac{w^k_i}{\sum_{k = 1}^N w^k_i}.$ 
+	\State (c) Sample $J_{i}^k \sim \text{Multi}(\cdot| (W^1_{i},\dotsc,W^N_{i}))$ , $k = 1,2,...,N$.
+	\State (d) Set $S_{[0, t^X_i]}^k := S_{[0,t^X_i]}^{J^k_i}$.
+	\EndFor
 \end{algorithmic}
 \end{algorithm}
 
 %At time $t_{end}$ uniformly pick a particle. It
 
 The SMC algorithm gives us an estimate of the marginal likelihood $P_\theta(X_{1:n})$.
-$$ \hat{P}_{\theta} = \hat{P}_{\theta}(X_1) \prod_{i = 2}^n \hat{P}_{\theta}(X_i| X_{1: i- 1}) = ????;$$
+$$ \hat{P}_{\theta} = \hat{P}_{\theta}(X_1) \prod_{i = 2}^n \hat{P}_{\theta}(X_i| X_{1: i- 1}) = \prod_{i = 1}^n \left[ \sum_{k = 1}^N  \frac{1}{N} w_i^k \right].$$
 %where $\hat{P}_{\theta}(X_i| X_{1: i- 1}) = \sum_{k = 1} ^ N w_i(S_{[t_0^X, t_I^X]}^k).$
 
 
@@ -61,20 +61,20 @@ $$ \hat{P}_{\theta} = \hat{P}_{\theta}(X_1) \prod_{i = 2}^n \hat{P}_{\theta}(X_i
   \caption{The particle marginal MH sampler for MJP trajectories}
    \label{alg:SMC}
   \begin{tabular}{l l}
-   \textbf{Input:  } & \text{Prior $\pi_0$, observations $X$}, 
-                       \text{Number of particles $N$}, rate-matrix $A(\theta)$,\\
+   \textbf{Input:  } & \text{The observations $X$, the MJP path $S(t) = (s_0, S, T)$},\\
+                       &\text{number of particles $N$}, parameter $\theta$ and $\pi_0$,\\
                      & $P(\theta)$ prior of $\theta$, proposal density $q(\cdot|\cdot)$. \\
    \textbf{Output:  }& \text{New MJP trajectory $S' (t) = (s'_0, S', T')$}.\\
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
-\State At time $i = 0$:\\
-\noindent Set $\theta_0$ arbitrarily;
-\noindent Run the SMC algorithm above targeting $P_{\theta_0}(S_{[0, T]} | X_{1:n})$ to sample $S_{[0, T]}(0)$ from $\hat{P}_{\theta_0}(\cdot | X_{1:n})$ and let $\hat{P}_{\theta_0}(X_{1:n})$ denote the estimate of the marginal likelihood.
-\State At time $i \geq 1:$\\
-\noindent \noindent (a) Sample $\theta^*$ from a proposal distribution $q(\cdot | \theta_{i - 1})$;
-\noindent \noindent (b) Run the SMC algorithm above targeting $P_{\theta^*}(S_{[0, T]} | X_{1:n})$ to sample $S_{[0, T]}^*$ from $\hat{P}_{\theta^*}(\cdot | X_{1:n})$ and let $\hat{P}_{\theta^*}(X_{1:n})$ denote the estimate of the marginal likelihood.
-\noindent Accept $\theta^*, S_{[0, T]}^*$ with probability $$ \mathtt{acc} = 1 \wedge \frac{\hat{P}_{\theta^*}(X_{1:n}) p(\theta^*)}{\hat{P}_{\theta_{i - 1}}(X_{1:n}) p(\theta_{i  - 1})} \frac{q(\theta_{i - 1} | \theta^*)}{q(\theta^* | \theta_{i - 1})}.$$
+%\State At time $i = 0$:\\
+%\noindent Set $\theta_0$ arbitrarily;
+%\noindent Run the SMC algorithm above targeting $P_{\theta_0}(S_{[0, T]} | X_{1:n})$ to sample $S_{[0, T]}(0)$ from $\hat{P}_{\theta_0}(\cdot | X_{1:n})$ and let $\hat{P}_{\theta_0}(X_{1:n})$ denote the estimate of the marginal likelihood.
+%\State At time $i \geq 1:$\\
+\State Sample $\theta^* \sim q(\cdot | \theta)$.
+\State Run the SMC algorithm above targeting $P_{\theta^*}(\cdot | X_{1:n})$ to sample $S^*(t)$ from $\hat{P}_{\theta^*}(\cdot | X_{1:n})$ and let $\hat{P}_{\theta^*}$ denote the estimate of the marginal likelihood.\\
+Accept $\theta^*, S^*(t)$ with probability $$ \mathtt{acc} = 1 \wedge \frac{\hat{P}_{\theta^*} P(\theta^*)}{\hat{P}_{\theta} P(\theta)} \frac{q(\theta | \theta^*)}{q(\theta^* | \theta)}.$$
 
 \end{algorithmic}
 \end{algorithm}
