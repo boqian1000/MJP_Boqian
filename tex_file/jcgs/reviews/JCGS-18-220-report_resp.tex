@@ -77,7 +77,7 @@ We have also included a more detailed description of pMCMC in the appendix.
 
 ~\\
 \rev{14}{p 12 l 15 “Our proposed algorithm is related to the framework from Neal (2004)”. How is it related? Is it an extension? The comparison is not too clear.}\\
-\resp TODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
+\resp We have clarified this in the paper. In Neal (2004), the author seeks to simulate from an `energy' model of two variables $P(x,y) \propto \exp(-E(x,y))$. The author proposes a new parameter $x^*$, and then updates $y$ via intermediate tempered transitions to be symmetric in $x$ and $x^*$. Our approach exploits the specific structure of the Poisson and Markov jump processes to do this directly, avoiding the need for any tempered transitions. 
 
 ~\\
 \rev{15}{p 13 l 19 Is the result based on 3000 iterations then comparable with experiments based on 10000 iterations? (This is not a retorical question, I genuinely don’t know) }\\
