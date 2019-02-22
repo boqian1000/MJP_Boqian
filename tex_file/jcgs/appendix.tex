@@ -147,24 +147,28 @@ This estimates the number of independent samples returned by the MCMC algorithm,
 We used this to compare different samplers and different parameter settings. In the following we present the additional results.
 
   \begin{figure}[H]
-  \centering
+%  \centering
   \begin{minipage}[h!]{0.99\linewidth}
-  \centering
+%  \centering
     \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/exp_alpha_dim3.pdf}
-    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim3.pdf}
+	\hspace{.6in}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/exp_alpha_dim5.pdf}
+	\hspace{.6in}
     \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/exp_alpha_dim10.pdf}
-    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim10.pdf}
   \end{minipage}
 
-  \begin{minipage}[h!]{0.49\linewidth}
-  \centering
-    \includegraphics [width=0.49\textwidth, angle=0]{figs/new_whole_exp_figs/exp_alpha_dim5.pdf}
-    \includegraphics [width=0.49\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim5.pdf}
+  \begin{minipage}[h!]{0.99\linewidth}
+%  \centering
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim3.pdf}
+	\hspace{.6in}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim5.pdf}
+	\hspace{.6in}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/exp_beta_dim10.pdf}
   \end{minipage}
-  \begin{minipage}[!hp]{0.49\linewidth}
-    \caption{ESS/sec for the synthetic model, The top left two panels are $\alpha$ and $\beta$ for 3 states, the bottom two, for 5 states, and the right two, for 10 states. Blue, yellow, red and black are the symmetrized MH, \naive\ MH, Gibbs and particle MCMC algorithm.  Squares, circles and trianges correspond to $\Omega(\theta,\vartheta)$ set to $(\max_s A_s(\theta) + \max_s A_s(\vartheta))$, $\max(\max_s A_s(\theta), \max_s A_s(\vartheta))$ and  $1.5(\max_s A_s(\theta) + \max_s A_s(\vartheta))$. And for PMCMC, they correspond to 10 particles, 5 particles and 15 particles.}
+%  \begin{minipage}[!hp]{0.49\linewidth}
+    \caption{ESS/sec for the synthetic model, the top three are for $\alpha$ for 3 states, 5 states, and 10 states. The bottom three are for $\beta$ for 3 states, 5 states, and 10 states. Blue, yellow, red and black are the symmetrized MH, \naive\ MH, Gibbs and particle MCMC algorithm.  Squares, circles and trianges correspond to $\Omega(\theta,\vartheta)$ set to $(\max_s A_s(\theta) + \max_s A_s(\vartheta))$, $\max(\max_s A_s(\theta), \max_s A_s(\vartheta))$ and  $1.5(\max_s A_s(\theta) + \max_s A_s(\vartheta))$. And for PMCMC, they correspond to 10 particles, 5 particles and 15 particles.}
      \label{fig:ESS_EXP}
-  \end{minipage}
+ % \end{minipage}
   \end{figure}
 
 
@@ -243,44 +247,52 @@ We used this to compare different samplers and different parameter settings. In 
   \begin{figure}[H]
   \centering
   \begin{minipage}[h!]{0.99\linewidth}
-  \centering
+%  \centering
     \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/q_alpha_dim3.pdf}
-    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim3.pdf}
+	\hspace{.6in}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/q_alpha_dim5.pdf}
+	\hspace{.6in}
     \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/q_alpha_dim10.pdf}
-    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim10.pdf}
   \end{minipage}
 
-  \begin{minipage}[h!]{0.49\linewidth}
-  \centering
-    \includegraphics [width=0.49\textwidth, angle=0]{figs/new_whole_exp_figs/q_alpha_dim5.pdf}
-    \includegraphics [width=0.49\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim5.pdf}
+  \begin{minipage}[h!]{0.99\linewidth}
+%  \centering
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim3.pdf}
+	\hspace{.6in}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim5.pdf}
+	\hspace{.6in}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/q_beta_dim10.pdf}
   \end{minipage}
-  \begin{minipage}[!hp]{0.49\linewidth}
-    \caption{ESS/sec for the immigration model, The top left two panels are $\alpha$ and $\beta$ for 3 states, the bottom two, for 5 states, and the right two, for 10 states. Blue, yellow, and red are the symmetrized MH, \naive\ MH, Gibbs algorithm. Squares, circles and trianges correspond to $\Omega(\theta,\vartheta)$ set to $(\max_s A_s(\theta) + \max_s A_s(\vartheta))$, $\max(\max_s A_s(\theta), \max_s A_s(\vartheta))$ and  $1.5(\max_s A_s(\theta) + \max_s A_s(\vartheta))$.}
+%  \begin{minipage}[!hp]{0.49\linewidth}
+    \caption{ESS/sec for the immigration model, the top three are for $\alpha$ for 3 states, 5 states, and 10 states. The bottom three are for $\beta$ for 3 states, 5 states, and 10 states. Blue, yellow, and red are the symmetrized MH, \naive\ MH, Gibbs algorithm. Squares, circles and trianges correspond to $\Omega(\theta,\vartheta)$ set to $(\max_s A_s(\theta) + \max_s A_s(\vartheta))$, $\max(\max_s A_s(\theta), \max_s A_s(\vartheta))$ and  $1.5(\max_s A_s(\theta) + \max_s A_s(\vartheta))$.}
      \label{fig:ESS_Q}
-  \end{minipage}
+%  \end{minipage}
   \end{figure}
 
 
   \begin{figure}[H]
   \centering
   \begin{minipage}[h!]{0.99\linewidth}
-  \centering
+%  \centering
     \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/cq_alpha_dim3.pdf}
-    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim3.pdf}
+	\hspace{.6in}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/cq_alpha_dim5.pdf}
+	\hspace{.6in}
     \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/cq_alpha_dim10.pdf}
-    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim10.pdf}
   \end{minipage}
 
-  \begin{minipage}[h!]{0.49\linewidth}
-  \centering
-    \includegraphics [width=0.49\textwidth, angle=0]{figs/new_whole_exp_figs/cq_alpha_dim5.pdf}
-    \includegraphics [width=0.49\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim5.pdf}
+  \begin{minipage}[h!]{0.99\linewidth}
+ % \centering
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim3.pdf}
+	\hspace{.6in}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim5.pdf}
+	\hspace{.6in}
+    \includegraphics [width=0.24\textwidth, angle=0]{figs/new_whole_exp_figs/cq_beta_dim10.pdf}
   \end{minipage}
-  \begin{minipage}[!hp]{0.49\linewidth}
-    \caption{ESS/sec for the time-inhomogeneous immigration model, The top left two panels are $\alpha$ and $\beta$ for 3 states, the bottom two, for 5 states, and the right two, for 10 states. Blue, yellow, and red are the symmetrized MH, \naive\ MH, Gibbs algorithm. Squares, circles and trianges correspond to $\Omega(\theta,\vartheta)$ set to $(\max_s A_s(\theta) + \max_s A_s(\vartheta))$, $\max(\max_s A_s(\theta), \max_s A_s(\vartheta))$ and  $1.5(\max_s A_s(\theta) + \max_s A_s(\vartheta))$.}
+%  \begin{minipage}[!hp]{0.49\linewidth}
+    \caption{ESS/sec for the time-inhomogeneous immigration model, the top three are for $\alpha$ for 3 states, 5 states, and 10 states. The bottom three are for $\beta$ for 3 states, 5 states, and 10 states. Blue, yellow, and red are the symmetrized MH, \naive\ MH, Gibbs algorithm. Squares, circles and trianges correspond to $\Omega(\theta,\vartheta)$ set to $(\max_s A_s(\theta) + \max_s A_s(\vartheta))$, $\max(\max_s A_s(\theta), \max_s A_s(\vartheta))$ and  $1.5(\max_s A_s(\theta) + \max_s A_s(\vartheta))$.}
      \label{fig:ESS_CQ}
-  \end{minipage}
+%  \end{minipage}
   \end{figure}
 
 
@@ -356,7 +368,9 @@ We used this to compare different samplers and different parameter settings. In 
   \begin{minipage}[!hp]{0.99\linewidth}
 %	\centering
     \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_alphahist_31_3_0_.pdf}
+	\hspace{.6in}
     \includegraphics [width=0.24\textwidth, angle=0]{figs/ecoli_ks/ecoli_l1hist_31_3_0_.pdf}
+	\hspace{.6in}
     \includegraphics [width=0.24\textwidth, angle=0]{figs/acc/ecolialpha_k2.pdf}
 
   \end{minipage}
