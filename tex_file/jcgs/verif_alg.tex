@@ -88,7 +88,7 @@ Another approach to parameter inference that integrates out state values follows
  In our framework, $B=I+\frac{1}{\Omega}A$ inherits sparsity present in $A$.
 
  A second approach to marginalizing out state information is particle MCMC~\citep{Andrieu10}. 
- This algorithm, describe in section~\ref{sec:pmcmc} in the supplementary material, uses particle filtering to get an unbiased estimate of $P(X|\theta)$. 
+ This algorithm, describe in section~\ref{sec:pmcmc} in the appendix, uses particle filtering to get an unbiased estimate of $P(X|\theta)$. 
  Plugging this estimate into the MH acceptance probability results in an MCMC sampler that targets the correct posterior, however the resulting scheme does not exploit the Markovian structure of the MJP the way FFBS can. 
  In particular, observations that are informative of the MJP state can result in marginal probability estimates that have large variance, resulting in slow mixing. 
  By contrast, given $W$, FFBS can compute the marginal probability $P(X|W,\theta)$ {\em exactly}. 
