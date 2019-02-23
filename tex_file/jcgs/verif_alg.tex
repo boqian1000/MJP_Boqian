@@ -26,9 +26,9 @@ where we exploit the symmetry of $\Omega(\cdot,\cdot)$.
 %and $B(\vartheta,\theta) = \left(I + \frac{A(\vartheta)}{\Omega(\theta)+\Omega(\vartheta)}\right)$. 
 Write the new parameters as $(\theta', \vartheta')$. 
 
-The Markov kernel has stationary distribution over $(\theta',\vartheta')$ proportional to
+This MH step has stationary distribution over $(\theta',\vartheta')$ proportional to
 $P(\theta')q(\vartheta'|\theta)$ $\text{PoissProc}(W|\Omega(\theta',\vartheta'))
-P(X|W,\theta',\vartheta')$, and the triplet $(\theta', \vartheta',W)$ has the same distribution as $(\theta, \vartheta,W)$.
+P(X|W,\theta',\vartheta')$, so that the triplet $(\theta', \vartheta',W)$ has the same distribution as $(\theta, \vartheta,W)$.
 The algorithm uses $B(\theta',\vartheta')$ to make a backward pass through $W$, simulating state values on $W$ from the conditional of a Markov chain with transition matrix $B(\theta',\vartheta')$ given observations $X$. 
 Dropping the self-transition times results in $(\theta', s'_0, S', T', \vartheta')$. 
 From uniformization (see also Lemma 1 in~\cite{RaoTeh13}), the trajectory $(s'_0, S', T')$ is distributed according to the conditional of a rate-$A(\theta')$ MJP given observations $X$.
@@ -70,7 +70,7 @@ Our paper modifies the algorithm from~\citet{RaoTeh13} to include parameter infe
 That algorithm requires a uniformization rate $\Omega(\theta) > \max_s A_s(\theta)$, and empirical results from that paper suggest $\Omega(\theta) = 2\max_s A_s(\theta)$.
 The uniformization rate $\Omega(\theta,\vartheta)$ in our algorithm includes a proposed new parameter $\vartheta$, must be symmetric in both arguments and must be greater than both $\max_s A_s(\theta)$ and $\max_s A_s(\vartheta)$. 
 A natural and simple setting is $\Omega(\theta,\vartheta) = \max_s A_s(\theta) + \max_s A_s(\vartheta)$. 
-When $\theta$ is known, our algorithm has $\vartheta$ equal to $\theta$ (i.e.\ the proposed $\vartheta$ equals $\theta$), and our uniformization rate reduces to $2\max A_i$. 
+When $\theta$ is known, our algorithm has $\vartheta$ equal to $\theta$ (i.e.\ the `proposed' $\vartheta$ equals $\theta$), and our uniformization rate reduces to $2\max A_i$. 
 This provides a principled motivation for the particular choice of $\Omega$ in~\citet{RaoTeh13}.
 
 Of course, we can consider other choices for the uniformization rate, such as $\Omega(\theta,\vartheta) = \kappa(\max A_i(\theta) + \max A_i(\vartheta))$ for $\kappa > 1$.  These result in more thinned events, and so more computation, with the benefit of faster MCMC mixing. We study the effect of 
@@ -82,31 +82,31 @@ Conditioned on $W$, the MJP trajectory follows a Markov chain with transition ma
 By running the FFBS algorithm over $W$, we can marginalize out the states associated with $W$, and calculate the marginal $P(X|W,\theta)$. 
 Another approach to parameter inference that integrates out state values follows~\citet{FearnSher2006}. 
  This algorithm makes a sequential forward pass through all {\em observations} $X$ (rather than $W$). 
- Unlike with $W$, one cannot a priori bound the number of transitions between two successive observations, so that~\citet{FearnSher2006} have to use a matrix exponential of $A$ (rather than $B$) to calculate transition probabilities.
+ Unlike with $W$, one cannot a priori bound the number of transitions between two successive observations, so that~\citet{FearnSher2006} have to use matrix exponentials of $A$ (rather than $B$) to calculate transition probabilities.
  The resulting algorithm is cubic, rather than quadratic in the number of states, and the number of expensive matrix exponentiations needed scales with the number of observations, rather than the number of transitions.
  Further, matrix exponentiation results in a dense matrix, so that~\cite{FearnSher2006} cannot exploit sparsity in the transition matrix.
- In our framework, $B=I+\frac{1}{\Omega}A$ inherits sparsity present in $A$.
+ In our framework, $B=I+\frac{1}{\Omega}A$ inherits sparsity present in $A$. Thus if $A$ is tri-diagonal, our algorithm is {\em linear} in the number of states.
 
  A second approach to marginalizing out state information is particle MCMC~\citep{Andrieu10}. 
- This algorithm, describe in section~\ref{sec:pmcmc} in the appendix, uses particle filtering to get an unbiased estimate of $P(X|\theta)$. 
+ This algorithm, described in section~\ref{sec:pmcmc} in the appendix, uses particle filtering to get an unbiased estimate of $P(X|\theta)$. 
  Plugging this estimate into the MH acceptance probability results in an MCMC sampler that targets the correct posterior, however the resulting scheme does not exploit the Markovian structure of the MJP the way FFBS can. 
  In particular, observations that are informative of the MJP state can result in marginal probability estimates that have large variance, resulting in slow mixing. 
  By contrast, given $W$, FFBS can compute the marginal probability $P(X|W,\theta)$ {\em exactly}. 
 
 The basic idea of marginalizing out information to accelerate MCMC convergence rates is formalized by the idea of the Bayesian fraction of missing information~\citep{liu1994fraction}. 
-In this context, papers such as~\citet{papaspiliopoulos2007general,yu2011center} have studied MCMC algorithms for hierarchical (or latent variable) models. 
-Uniformization forms such a hierarchical representation for MJPs: first sample $\theta$, then sample the latent variable $W$, and use this to sample MJP state values. 
+In this context, papers such as~\citet{papaspiliopoulos2007general,yu2011center} have studied MCMC algorithms for hierarchical latent variable models. 
+Uniformization forms such a hierarchical representation for MJPs: first sample $\theta$, then sample the latent $W$, and use this to sample MJP state values. 
 The \naive\ algorithm~\ref{alg:MH_naive} is a direct application of ideas presented in those papers.
 These frameworks are broad enough to accommodate our symmetrized MH algorithm~\ref{alg:MH_improved} as well. 
-This recasts our contribution as a rewriting of uniformization that now includes the auxiliary parameter $\vartheta$. Our swap operator then forms a particular Markov kernel that exploits this reparametrization. 
+This recasts our contribution as a rewriting of uniformization that now includes the auxiliary parameter $\vartheta$. Our swap operator forms a particular Markov kernel that exploits this reparametrization for fast mixing. 
 Two interesting directions are to see how such symmetrization ideas apply to other problems considered in those works, and how ideas from those works can shed more light on, and improve our algorithm.
 
  %
  %
-Our approach of first simulating $\vartheta$, and then simulating $W$ from a Poisson process whose rate is symmetric in $\theta$ and $\vartheta$ is related to a framework outlined in~\citet{Neal04Drag}. In that work, to simulate from an `energy' model of two variables $P(x,y) \propto \exp(-E(x,y))$, the author proposes a new parameter $x^*$, and then updates $y$ via intermediate transitions to be symmetric in $x$ and $x^*$. Our approach exploits the specific structure of the Poisson and Markov jump processes to do this directly, avoiding the need for any tempered transitions. 
+Our approach of first simulating $\vartheta$, and then simulating $W$ from a Poisson process whose rate is symmetric in $\theta$ and $\vartheta$ is related to~\citet{Neal04Drag}. In that work, to simulate from an `energy' model $P(x,y) \propto \exp(-E(x,y))$, the author proposes a new parameter $x^*$, and then updates $y$ via intermediate transitions to be symmetric in $x$ and $x^*$, before proposing to swap $x$ and $x^*$. Our approach exploits the specific structure of the Poisson and Markov jump processes to do this directly, avoiding the need for any tempered transitions. 
 
 Our algorithm is also related to work on MCMC for doubly-intractable distributions.  Algorithms like~\cite{Moller2006,murray2006,Andrieu09} all attempt to evaluate an intractable likelihood under a proposed parameter $\vartheta$ by introducing auxiliary variables, typically sampled independently under the proposed parameters. 
 For MJPs, this would involve proposing $\vartheta$, generating a new grid $W^*$, and then using $P(X|W,\theta)$ and $P(X|W^*,\vartheta)$ in the MH acceptance step. 
-This can complicate computations (with two sets of grids), and introduce additional variance thereby reducing acceptance rates. %if the new parameter $\vartheta$ is incompatible with the old grid $U$ or vice versa. 
+This is more involved (with two sets of grids), and introduces additional variance that reduces acceptance rates. %if the new parameter $\vartheta$ is incompatible with the old grid $U$ or vice versa. 
 While~\cite{murray2006} suggest annealing schemes to try to address this issue, we exploit the structure of the Poisson process and provide a cleaner solution: generate a single set of auxiliary variables that depends symmetrically on both the new and old parameters. 
 %It is interesting to see whether a similar idea can be used in other applications as well.
