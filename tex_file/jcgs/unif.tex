@@ -23,6 +23,7 @@ We assume the observation process has the following structure: for fixed $X$, fo
   P(X|\{S(t),\ t \in [0,t_{end})\}) = \prod_{i=1}^{|\tilde{W}|-1} \ell_i(\{S(t),\ t \in [\tilde{w}_{i},\tilde{w}_{i+1})\})
 \end{align}
 A common example is a finite set of independent observations $X = \{x_1,\dotsc,x_{|X|}\}$ at times $T^X = \{t^X_1,\dotsc, t^X_{|X|}\}$, each observation depending on the state of the MJP at that time:
+\vspace{-.1in}
 \begin{align}
   \label{eq:lik_iid}
   P(X|\{S(t),\ t \in [0,t_{end})\}) = \prod_{i=1}^{|X|} P(x_i|S(t^X_i)).
@@ -31,12 +32,14 @@ Other examples include situations when the observations form an inhomogeneous Po
 The first example, called a Markov modulated Poisson process (MMPP)~\citep{scottmmpp03}, associates a positive rate $\lambda_s$ with each state $s$, with $\ell_i(\{S(t),\ t \in [w_{i},w_{i+1})\})$ equal to the likelihood of the Poisson events within $[w_{i},w_{i+1})$ under an inhomogeneous Poisson process with piecewise-constant rate $\lambda_{S(t)},\ t \in [w_{i},w_{i+1})$.
 
 With $A(\cdot)$ and $\pi_0$ assumed known, the overall Bayesian model is then 
+\vspace{-.1in}
 \begin{align}
   \label{eq:bayes_model}
   \theta \sim P(\theta), \quad (s_0, S, T) \sim \text{MJP}(\pi_0, A(\theta)), \quad X \sim P(X|s_0,S,T).
 \end{align}
 Given $X$, one is interested in the posterior distribution over the latent quantities, $(\theta,s_0, S, T)$. 
 
+\vspace{-.1in}
 \subsection{Trajectory inference given the MJP parameters $\theta$}
 This was addressed in~\citet{RaoTeh13}  and extended to a broader class of jump processes in~\cite{RaoTeh12}~\citep[also see][]{FearnSher2006, Hobolth09, Elhaygibbssampling}) 
 %Both center on alternate approaches to Gillespie's algorithm, 

@@ -37,6 +37,7 @@ first sample an initial state $s_0$ from $\pi_0$, and defining $t_0 = t_{curr} =
 The times $T=(t_1, \dotsc, t_{k - 1})$ and states $S=(s_1, \dotsc, s_{k - 1 })$, along with the initial state $s_0$, define the MJP path, so that $\{S(t), t \in [0,t_{end})\} \equiv (s_0, S,T)$. 
 See the top-left panel in figure~\ref{fig:MH_improved} for a sample path.
 
+\vspace{-.15in}
 \subsection{Structured rate matrices}
 While the rate matrix $A$ can have $N(N-1)$ independent elements, in typical applications, especially with large state-spaces, it is determined by a much smaller set of parameters. 
 We will write these as $\theta$, with $A$ a deterministic function of these parameters: $A \equiv A(\theta)$. 
@@ -59,9 +60,9 @@ For example:
     These characterize transitions between codons at a DNA locus over evolutionary time. 
     There are $61$ codons, and in the simplest case, all transitions have the same rate~\citep{jukescantor69}: $A_{ij} = \alpha\ \forall i \neq j$. 
     Thus the $61\times 61$ matrix $A$ is determined by a single $\alpha$. 
-    Other models group transitions as `synonymous' and `nonsynonymous', based on whether old and new codons encode the same amino acid. 
+    Other models~\citep{goldman1994codon} group transitions as `synonymous' and `nonsynonymous', based on whether old and new codons encode the same amino acid. 
     Synonymous and nonsynonymous transitions have their own rates, so $A$ is determined by 2 parameters $\alpha$ and $\beta$. 
-    More refined models~\citep{goldman1994codon} introduce additional structure and parameters. 
+  %  More refined models~\citep{goldman1994codon} introduce additional structure and parameters. 
     %however the 
     %number of parameters is still significantly smaller than the general case.
 \end{description}
