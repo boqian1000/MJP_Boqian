@@ -5,7 +5,7 @@ We describe a sequential Monte Carlo algorithm for MJPs inference that underlies
 Denote by $S_{[t_1', t_2']}$ the MJP trajectory from time $t_1'$ to time $t_2'$. 
 Our target is to sample an MJP trajectory $S_{[0, t_{end}]}$ given $n$ noisy observations $X =(x_1, x_2, ... , x_n)$, at time $t_1^X, t_2^X, ..., t_n^X$. 
 The initial value of the Markov jump process trajectory can be simulated from its initial distribution over states: $S(0) \sim \pi_0$. 
-$S_{[t_i^X, t_{i + 1}^X]} $, its values over any interval $[t_i^X, t_{i+1}^X]$ can be simulated by Gillespie's algorithm as described in section~\ref{sec:???}. 
+$S_{[t_i^X, t_{i + 1}^X]} $, its values over any interval $[t_i^X, t_{i+1}^X]$ can be simulated by Gillespie's algorithm as described in section~\ref{sec:intro} 
 %Write the conditional distribution over states at time $t^X_{i+1}$ given value at time $t^X_i$ as $f_\theta(S(t^X_{i+1})|S(t^X_i))$, so that
 %$S(t_{i + 1}^X) \sim f_\theta (\cdot | S(t_i^X))$.  
 For the $i$th observation $x_i$ at time $t^X_i$, denote the likelihood for $S(t^X_i)$ as $P(x_i | S(t^X_i))$.
