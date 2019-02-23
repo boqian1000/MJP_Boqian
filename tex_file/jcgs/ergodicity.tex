@@ -1,8 +1,8 @@
 %\vspace{-.1in}
 \section{Geometric ergodicity}
 %\vspace{-.05in}
-Finally, we derive conditions under which our symmetrized MH algorithm inherits mixing properties of an `ideal' sampler that can compute the marginal likelihood $P(X|\theta)$. 
-This algorithm proposes a new parameter $\vartheta$ from a distribution $q(\vartheta|\theta)$, and accepts with probability $\alpha_I(\theta,\vartheta; X) = 1 \wedge \frac{P(X , \vartheta)q(\theta| \vartheta)} {P(X , \theta)q(\vartheta|\theta)}$.  
+We derive conditions under which our symmetrized MH algorithm inherits mixing properties of an `ideal' sampler that can compute the marginal likelihood $P(X|\theta)$, with the MJP path integrated out. 
+This algorithm proposes a new parameter $\vartheta$ from $q(\vartheta|\theta)$, and accepts with probability $\alpha_I(\theta,\vartheta; X) = 1 \wedge \frac{P(X , \vartheta)q(\theta| \vartheta)} {P(X , \theta)q(\vartheta|\theta)}$.  
 The resulting Markov chain has transition probability
 $P_I(\theta'|\theta) = q(\theta'|\theta)\alpha_I(\theta,\theta';X) + \left[1-\int \dif\vartheta
 q(\vartheta|\theta)\alpha_I(\theta,\vartheta;X)\right]\delta_\theta(\theta')$, the first term corresponding to acceptance, and the second, rejection~\citep{meyn2009}.
@@ -10,7 +10,7 @@ q(\vartheta|\theta)\alpha_I(\theta,\vartheta;X)\right]\delta_\theta(\theta')$, t
 Our main result is Theorem~\ref{thm:geom_erg}, which shows that if the ideal MCMC sampler is geometrically ergodic, then so is our sampler in Algorithm~\ref{alg:MH_improved}. 
 Informally, an MCMC algorithm is geometrically ergodic when the total variation distance between the distribution over states and the stationary distribution decreases geometrically with the number of iterations.
 ~\citet{meyn2009} provide more details, as well as sufficient conditions that we exploit in Theorem~\ref{thm:geom_erg}.
-Geometric ergodicity is an important property an MCMC chain, guaranteeing that the central limit theorem (CLT) holds for ergodic averages calculated with MCMC samples.
+Geometric ergodicity is an important property of an MCMC chain, guaranteeing that the central limit theorem (CLT) holds for ergodic averages calculated with MCMC samples.
 %Assumption~\ref{asmp:cond_num} is the only non-trivial
 %one we have to make, requiring that the rate-matrix $A(\theta)$ not be
 %arbitrarily ill-conditioned over all
@@ -34,7 +34,8 @@ $k_1 > 1, k_0 > 0$.
 % we can just set $\Omega(\theta) = \Mx{\theta} + \mx{\theta}$ so that
 % $m_2 = \frac{1}{1+\mu}$.}
 \noindent Although it is possible to specify broader conditions under which our result holds, for clarity we focus on this case. 
-We can drop $k_0$ if $\inf_\theta \max_s A_s(\theta) > 0$
+In our experiments, one of our settings had $k_1=1$. We believe our result holds for this case too, but do not prove it.
+We can drop $k_0$ if $\inf_\theta \max_s A_s(\theta) > 0$.
 %This is also how we setup our sampler in our experiments.
 
 \begin{assumption}
@@ -49,7 +50,7 @@ We can drop $k_0$ if $\inf_\theta \max_s A_s(\theta) > 0$
 %easy. %This assumption usually holds under suitable reparametrization,
 %and is not critical: we impose 
 %When this is not so, 
-This assumption avoids book-keeping by making $\Omega(\theta)$ increase monotonically with $\theta$.
+We make this assumption to avoid book-keeping, so $\Omega(\theta)$ increases monotonically with $\theta$.
 
 \begin{definition}
 Let $\pi_\theta$ be the stationary distribution of the MJP with rate-matrix 
@@ -102,14 +103,15 @@ This assumption is the strongest we need, requiring that
 $\lambda^{R_A}_2(\theta)$ (which sets the MJP mixing rate) grows 
 at least as fast as $\max_s A_s(\theta)$. 
 %This controls the relative stability of different MJP states, and 
-This is satisfied when, for example, all elements of $A(\theta)$ grow 
+This is satisfied when $\theta$ is bounded, or when, as in our experiments, all elements of $A(\theta)$ grow 
 with $\theta$ at similar rates, controlling the relative stability of 
 the least and most stable states.
 %rules 
 %out any state $s'$ such that 
 %$\frac{|A_{s's'}(\theta)}{\max_s A_{ss}(\theta)}| \rightarrow 0$ as $\theta$ increases.
-While not trivial, this is a reasonable assumption: the MCMC chain over MJP paths 
+While not trivial, this is reasonable: the MCMC chain over MJP paths 
 will mix well if we can control the mixing of the MJP itself.
+A less restrictive assumption would also account for the tail behavior of the prior over $\theta$, though we do not do this.
 %it holds for the examples we considered. %One open question is whether this assumption is necessary.
 %We suspect that assumption~\ref{asmp:ideal_geom}, which requires 
 %the ideal sampler to be geometrically ergodic, implies this condition,
@@ -130,8 +132,8 @@ will mix well if we can control the mixing of the MJP itself.
 %for any interval $\Delta$, we can always find a $\theta_0$ such that the
 %MJP has mixed at the end of the interval. The earlier assumption ensures
 %this holds for all $\theta \ge \theta_0$.
-To better understand this, recall $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$
-is the transition matrix of the embedded Markov chain from uniformization, this has the same stationary distribution $\pi_\theta$ as $A(\theta)$.
+To better understand this assumption, recall $B(\theta, \theta') = I+\frac{A(\theta)}{\Omega(\theta, \theta')}$
+is the transition matrix of the embedded Markov chain from uniformization, which has the same stationary distribution $\pi_\theta$ as $A(\theta)$.
 Define the reversibilization $R_B(\theta,\theta')$ of $B(\theta,\theta')$ 
 just as we did $R_A(\theta)$ from $A(\theta)$. 
 \begin{lemma}
@@ -165,6 +167,7 @@ $1 - \lambda^{R_B}_2(\theta,\theta') = \frac{\lambda^{R_A}_2(\theta)}{\Omega(\th
 \ge \frac{\lambda^{R_A}_2(\theta)}{(K_0+1)\Omega(\theta)} 
 \ge \frac{\mu}{K_0+1} $. 
 Also, since $(1 + \frac{1}{K_0})k_1 \ge 2$,
+\vspace{-.1in}
 \begin{align*}
 \Omega(\theta, \theta') &= \Omega(\theta) + \Omega(\theta') \ge (1 + \frac{1}{K_0})\Omega(\theta)
  > (1 + \frac{1}{K_0})k_1\max_s A_{s}(\theta) \ge 2\max_s A_{s}(\theta). %\ge -2 A(\theta)_{s,s}.
@@ -176,9 +179,9 @@ on $1-\lambda_2^{R_B}(\theta,\theta')$ give the result.
 %\qed
 \end{proof}
 
-Our overall proof strategy is to show that for {$\| \theta \|$} and $W$ large enough, the conditions of Lemma~\ref{lem:eig_lemma} hold with high probability. 
-Lemma~\ref{lem:eig_lemma} then will imply that the distribution over latent states for the continuous-time MJP and its discrete-time counterpart embedded in $W$ to be brought arbitrarily close to $\pi_\theta$ (and thus to each other), allowing our sampler to inherit mixing properties of the ideal sampler. 
-We will exploit the boundedness of the set of remaining $\theta$ and $W$, to establish a `small-set condition' where the MCMC algorithm forgets its state with some probability. 
+Our overall proof strategy is to show that on a set with {$\| \theta \|$} and $|W|$ large enough, the conditions of Lemma~\ref{lem:eig_lemma} hold with high probability. 
+Lemma~\ref{lem:eig_lemma} then will imply that the distribution over states for the continuous-time MJP and its discrete-time counterpart embedded in $W$ will be brought arbitrarily close to $\pi_\theta$ (and thus to each other), allowing our sampler to inherit mixing properties of the ideal sampler. 
+We will exploit the boundedness of the complement of this set to establish a `small-set condition' where the MCMC algorithm forgets its state with some probability. 
 These two conditions will be sufficient for geometric ergodicity. 
 The next assumption states these small-set conditions for the ideal sampler.
 % This combined with the
@@ -278,7 +281,7 @@ $ \int_\Theta \Omega(\ptheta) q(\ptheta | \theta)d\ptheta \leq \eta_1 \Omega(\th
 %There exists $M_1 > 0$ and $\theta_3 > 0$ such that $\frac{-p'(\theta)}{p(\theta)} \le M_1$ for $\theta \in B_{0, \theta_3}^c$.
 %\end{assumption}
 
-We need two further assumptions on the proposal distribution $q(\theta'|\theta)$.
+\noindent We need two further assumptions on $q(\theta'|\theta)$. There are satisfied in our experiments.
 \begin{assumption}
 For any $\epsilon>0$,  there exist finite $M_\epsilon$, $\theta_{3,\epsilon}$
 such that for $\theta$ satisfying $\| \theta \|  > \theta_{3,\epsilon}$,
@@ -471,7 +474,7 @@ P(V_{i + 1} = s^* | V_i = s^*,X,W,\theta,\vartheta) \\
 \end{align*}
 %Here $\delta_1$ is the lower bound from Corollary~\ref{corol:self_tr}.
 With $S(t)$ fixed at $s^*$, $W'$ is distributed as a Poisson process with rate $\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta)$.
-Write $\PP(W'|R(t))$ for the probability of $W'$ under a rate-$R(t)$ Poisson process on $[0,t_{end}]$, so that $P(W' |  S=[s^*], T = \emptyset, \theta', \theta) = \PP(W'|\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta))$. Then, from the Poisson superposition theorem, writing $2^{W'}$ for the power set of $W$, we have 
+Write $\PP(W'|R(t))$ for the probability of $W'$ under a rate-$R(t)$ Poisson process on $[0,t_{end}]$, so that $P(W' |  S=[s^*], T = \emptyset, \theta', \theta) = \PP(W'|\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta))$. Then, from the Poisson superposition theorem, writing $2^{W'}$ for the power set of $W'$, we have 
 \begin{align*}
   P(W' |  S=&[s^*], T = \emptyset, \theta', \theta) 
 %\PP(W'|\Omega(\theta') + \Omega(\theta) - A_{s^*}(\theta)) 
@@ -495,7 +498,8 @@ Write $\PP(W'|R(t))$ for the probability of $W'$ under a rate-$R(t)$ Poisson pro
   \PP(W' | \Omega(\theta')). \numberthis
   \label{eq:marg}
   \end{align*}
-Finally, we consider the third term in the square brackets. Using assumption~\ref{asmp:obs_bnd},
+Next, %we consider the third term in the square brackets. U
+using assumption~\ref{asmp:obs_bnd},
 %we relate the acceptance rate to that of the ideal sampler:
 \begin{align*}
 \alpha(\theta, \theta', W'; X) &
@@ -707,7 +711,7 @@ inequality,
 %So for $\epsilon > 0$, and $K_0 > 0$, if $|W| > W_0$ and $\theta > \theta_0$ and $\Omega(\theta') \leq K_0 \Omega(\theta)$, we have
 \begin{align*}
 |P(X | \theta) - P(X | W, \theta, \theta')| &\leq |P(X | \theta) -P_{st}(X | \theta) | + | P_{st}(X | \theta) -  P(X | W, \theta, \theta')|\\
-       & \leq (\epsilon'' + \epsilon'') + \epsilon'' \defeq \epsilon
+       & \leq (\epsilon'' + \epsilon'') + \epsilon'' \defeq \epsilon.
 \end{align*}
 \vspace{-.2in}
 \end{proof}
