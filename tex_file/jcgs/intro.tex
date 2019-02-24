@@ -14,7 +14,7 @@ Parameter inference is typically carried out by incorporating it into a Gibbs sa
 In many situations, the MJP trajectory and parameters exhibit strong coupling, so that alternately sampling path given parameters, and parameters given path can result in poor mixing.  
 To address this, we propose an efficient Metropolis-Hastings (MH) sampler (algorithm~\ref{alg:MH_improved}). 
 %additionally, we tie up some of the loose ends in the Rao-Teh algorithm.
-In our experiments, we demonstrate superior performance over Gibbs sampling, a more \naive\ MH sampler, as well as particle Markov chain Monte Carlo~\citep{Andrieu10}. 
+In our experiments, we demonstrate superior performance over Gibbs sampling, a more \naive\ MH sampler (algorithm~\ref{alg:MH_naive}), as well as particle Markov chain Monte Carlo~\citep{Andrieu10}. 
 We also prove that under relatively mild conditions, our sampler inherits geometric ergodicity from an `ideal' sampler that is computationally much more expensive.
 
 \section{Markov jump processes (MJPs)} 
@@ -29,7 +29,7 @@ We write $A_i$ for the negative of the $i$th diagonal element $A_{ii}$, so that 
 To simulate an MJP over an interval $[0,t_{end})$, one follows Gillespie's algorithm~\citep{gillespie97}: 
 first sample an initial state $s_0$ from $\pi_0$, and defining $t_0 = t_{curr} = 0$ and $k = 0$, repeat the following while $t_{curr} < t_{end}$:
 \begin{itemize}
-  \item Sample a wait-time $\Delta t_k$ from an exponential distribution with rate $A_{s_k}$.  
+  \item Simulate a wait-time $\Delta t_k$ from an exponential distribution with rate $A_{s_k}$.  
     Set $t_{k+1} = t_{curr} = t_{k} + \Delta t_k$. 
     The MJP remains in state $s_k$ until time $t_{k+1}$.
   \item Jump to a new state $s_{k+1} \neq s_k$ with probability equal to $A_{s_ks_{k+1}}/A_{s_k}$. Set $k=k+1$.
@@ -41,27 +41,27 @@ See the top-left panel in figure~\ref{fig:MH_improved} for a sample path.
 \subsection{Structured rate matrices}
 While the rate matrix $A$ can have $N(N-1)$ independent elements, in typical applications, especially with large state-spaces, it is determined by a much smaller set of parameters. 
 We will write these as $\theta$, with $A$ a deterministic function of these parameters: $A \equiv A(\theta)$. 
-The parameters $\theta$ are often more interpretable than the elements of $A$,and correspond directly to physical, biological or environmental parameters of interest. 
+The parameters $\theta$ are often more interpretable than the elements of $A$, and correspond directly to physical, biological or environmental parameters of interest. 
 For example:
 \begin{description}
   \item[Immigration-death processes] 
     Here, $\theta = (\alpha,\beta)$, with $\alpha$ the arrival-rate and $\beta$ the death-rate. 
     The state represents the size of a population or queue. 
     New individuals enter with rate $\alpha$, so off-diagonal elements $A_{i,i+1}$ equal $\alpha$.
-    Each individual dies at a rate $\beta$, so that $A_{i,i-1}=i\beta$.
+    Each individual dies at a rate $\beta$, so that $A_{i,i-1}=i\beta$ for each $i$.
     All other transitions have rate $0$. 
    % so that $\theta = (\alpha,\beta)$,
    % and $A(\theta)$ is tri-diagonal.
   \item[Birth-death processes] 
     This variant of the earlier MJP moves from state $i$ to $i+1$ with rate $i\alpha$, with growth-rate is proportional to population size. 
-    Again, the death-rate is $\beta$, so that $A_{i,i-1}=i\beta$.
-    The other off-diagonal elements are $0$, and again $\theta=(\alpha,\beta)$.
+    The death-rate is $\beta$, so that $A_{i,i-1}=i\beta$ for each $i$.
+    Other off-diagonal elements are $0$, and again $\theta=(\alpha,\beta)$.
   \item[Codon substitution models] 
     These characterize transitions between codons at a DNA locus over evolutionary time. 
     There are $61$ codons, and in the simplest case, all transitions have the same rate~\citep{jukescantor69}: $A_{ij} = \alpha\ \forall i \neq j$. 
     Thus the $61\times 61$ matrix $A$ is determined by a single $\alpha$. 
     Other models~\citep{goldman1994codon} group transitions as `synonymous' and `nonsynonymous', based on whether old and new codons encode the same amino acid. 
-    Synonymous and nonsynonymous transitions have their own rates, so $A$ is determined by 2 parameters $\alpha$ and $\beta$. 
+    Synonymous and nonsynonymous transitions have their own rates, so $A$ is now determined by 2 parameters $\alpha$ and $\beta$. 
   %  More refined models~\citep{goldman1994codon} introduce additional structure and parameters. 
     %however the 
     %number of parameters is still significantly smaller than the general case.

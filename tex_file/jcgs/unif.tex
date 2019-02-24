@@ -13,7 +13,7 @@ We first set up our Bayesian model of the data generation process.
 We model a latent piecewise-constant path $S(t)$ over $[0,t_{end})$ as an $N$-state MJP with rate matrix $A(\theta)$ and prior $\pi_0$ over $s_0 = S(0)$, the state at time $0$. 
 We use both $\{S(t), t \in [0,t_{end})\}$ and $(s_0,S,T)$ (see section~\ref{sec:mjp}) to refer to the MJP path.
 We place a prior $\prior(\theta)$ over the unknown $\theta$. 
-For clarity we will assume $\pi_0$ is known (or we set it to a uniform distribution over the $N$ states). 
+For simplicity, we assume $\pi_0$ is known (or we set it to a uniform distribution over the $N$ states). 
 %In settings with multiple trajectories, we would place a Dirichlet prior over $\pi_0$. 
 We have noisy measurements $X$ of the latent process, with likelihood $P(X|\{S(t),\ t \in [0,t_{end})\})$.
 Again, for clarity we ignore any unknown parameters in the likelihood, else we can include them in $\theta$.
@@ -68,7 +68,7 @@ Unlike the sequential wait-and-jump Gillespie algorithm, uniformization first si
     $W \sim \text{PoissProc}(\Omega(\theta))$.
   \item Assign states $(v_0,V)$ to the times $0 \cup W$, with $v_0 \sim \pi_0$, and $P(v_{i+1}=s|v_i) = B_{v_is}(\theta)$.
 \end{itemize}
-Setting $\Omega(\theta) > \max_i A_i(\theta)$ results in more candidate-times than actual MJP transitions; at the same time, unlike $A(\theta)$, the matrix $B(\theta)$ can thin these through self-transitions. 
+Setting $\Omega(\theta) > \max_i A_i(\theta)$ results in more candidate-times than actual MJP transitions, at the same time, unlike $A(\theta)$, the matrix $B(\theta)$ can thin these through self-transitions. 
 Write $U$ for the elements $W$ with self-transitions, and $T$ for the rest.
 Define $s_0=v_0$, and $S=\{v_i \in V \text{ s.t.\ } v_i \neq v_{i-1}\}$ as the elements in $V$ corresponding to $T$, then $(s_0,S,T)$ sampled this way for any $\Omega(\theta) \ge \max_i A_i(\theta)$
 %These self-transitions correct for the extra candidate transition times
@@ -99,7 +99,7 @@ At a high-level, each MCMC iteration simulates a new grid $W$ conditioned on the
 \State \textbf{ Simulate the thinned candidate times $U$ given the MJP path $(S,T)$ } 
 from a piecewise-constant Poisson process with rate $\Omega(\theta)-A_{S(t)}(\theta)$: 
 
-$ \quad  U \sim \text{PoissProc}(\Omega(\theta) - A_{S(t)}(\theta))  \quad \text{(i.e.\ the rate is $\Omega(\theta)-A_s(\theta)$ when $S(t) = s$).}$
+$ U \sim \text{PoissProc}(\Omega(\theta) - A_{S(t)}(\theta))  \quad \text{(the rate at time $t$ is $\Omega(\theta)-A_s(\theta)$ if $S(t) = s$).}$
 %Since the intensity is piecewise-constant, simulating this is straightforward to do. %: over a segment $(t_{i},t_{i+1})$ where $S(t)$ has value $s_i$, sample a positive integer $n$ from a Poisson distribution with mean $(\Omega-A_{s_i})$, and simulate $n$ events uniformly over $(t_i, t_{i+1})$.
 \State \textbf{
   Discard the states $(s_0,S)$, and write %thinned and actual transition 
@@ -136,9 +136,9 @@ likelihood $\ell_i(s) \equiv \ell_i(\{S(t) = s,\ t \in [\tilde{w}_i,\tilde{w}_{i
 For fixed parameters $\theta$, the efficiency of the Rao-Teh algorithm has been established, both empirically~\citep{RaoTeh13} and theoretically~\citep{miasojedow2017}.
 In practice, the parameters are typically unknown, and often, these are of primary interest. 
 One then has to characterize the complete posterior $P(\theta, s_0, S, T|X)$ of the Bayesian model of equation~\eqref{eq:bayes_model}. 
-This is typically carried out by incorporating the previous algorithm into a Gibbs sampler that targets the joint posterior $P(\theta, s_0, S, T|X)$ by conditionally simulating $(s_0, S, T)$ given $\theta$ and then $\theta$ given $(s_0, S, T)$. 
+This is typically carried out by incorporating the previous algorithm into a Gibbs sampler that targets the joint $P(\theta, s_0, S, T|X)$ by conditionally simulating $(s_0, S, T)$ given $\theta$ and then $\theta$ given $(s_0, S, T)$. 
 %This proceeds by arbitrarily initializing the path and parameters, and then repeating the two steps of 
-Algorithm~\ref{alg:MJP_gibbs} outlines this:
+Algorithm~\ref{alg:MJP_gibbs}~\citep[see also][]{RaoTeh13} outlines this:
 \begin{algorithm}[H]
   \caption{Gibbs sampling for path and parameter inference for MJPs}
    \label{alg:MJP_gibbs}
@@ -185,13 +185,13 @@ In any event, this introduces no new technical challenges.
   \end{minipage}
   \vspace{-.3in}
   \caption{Prior density over an MJP parameter (solid curve), along with two conditionals: given observations only (long-dashes), and given observations and MJP path (short-dashes). 
-    As $t_{end}$ increases from $10$ (left) to $100$ (right), the conditionals become more concentrated, implying strong path-parameter coupling. 
-  The plots are from section~\ref{sec:immig}.}
+    As $t_{end}$ increases from $10$ (left) to $100$ (right), the conditionals become more concentrated, implying stronger path-parameter coupling. 
+  The plots are from section~\ref{sec:immig} with 3 states.}
      \label{fig:hist}
   \end{figure}
   However, the resulting Gibbs sampler can mix very poorly because of coupling between path and parameters.
   We illustrate this in figure~\ref{fig:hist}~\citep[inspired by][]{papaspiliopoulos2007general}), which shows the posterior distribution of an MJP parameter (long-dashes) is less concentrated than the distribution conditioned on both observations as well as path (short-dashes). 
-  The coupling is strengthened as the trajectory grows longer (right panel), and the Gibbs sampler can mix very poorly with long observation periods, even if the observations themselves are only mildly informative about the parameters.
+  The coupling is strengthened as the trajectory grows longer (right panel), and the Gibbs sampler can mix very poorly with long observation periods, even if the observations themselves are only mildly informative about the parameters. Before we describe our actual algorithm, we outline a \naive\ attempt around this coupling.
 
 % \subsection{A marginal sampler for MJP parameters} 
 % For the discrete-time case, this problem of parameter-trajectory

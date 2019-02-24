@@ -13,9 +13,9 @@ Specifically, given $\theta$ and the Poisson grid $W$, rather than simulating ne
 $$ \texttt{acc} = \min\left(1, 
 \frac{P(X|W,\vartheta) P(W|\vartheta)P(\vartheta)q(\theta|\vartheta)} {P(X|W,\theta) P(W|\theta)P(\theta)q(\vartheta|\theta)}\right),$$ 
 %Only after accepting or rejecting do we simulate state values via a backward pass.
-thereby targeting the distribution $P(W,\theta|X)$.
+thereby targeting the distribution $P(\theta|W,X)$.
 In the equation above, $P(X|W,\theta)$ is the probability of the observations $X$ given $W$ with $(v_0,V)$ marginalized out. 
-Uniformization says this is the marginal probability of $X$ under a discrete-time HMM on $W$, with transition matrix $B(\theta)$. This can be computed using the forward pass of FFBS algorithm (steps 4 and 6 of algorithm~\ref{alg:MH_naive}). 
+Uniformization says this is the marginal probability of $X$ under a discrete-time HMM on $W$, with transition matrix $B(\theta)$. This can be computed using the forward pass of FFBS algorithm (steps 4 and 6 of algorithm~\ref{alg:MH_naive} below). 
 The term $P(W|\theta)$ is the probability of $W$ under a rate-$\Omega(\theta)$ Poisson process. 
 These, and the corresponding terms for $\vartheta$ allow the acceptance probability to be computed.
 %make a forward pass over $W$, and calculate and $P(X|W,\vartheta)$. % as in algorithm~\ref{alg:disc_time_mh}.
@@ -57,7 +57,7 @@ Algorithm~\ref{alg:MH_naive} includes all the details of this algorithm, with fi
     \State \textbf{Propose $\vartheta \sim q(\cdot| \theta)$.}
     For all elements of $\tilde{W}$, calculate $\fwd^\vartheta_i(\cdot)$ similar to above.
       \State \textbf{Accept/reject:} 
-      Set $P(X|W,\theta) = \sum_{s \in \cS} \fwd_{|\tilde{W}|}^\theta(s),$ $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, with similar expressions for $\vartheta$. 
+      Set $P(X|W,\theta) = \sum_{s \in \cS} \fwd_{|\tilde{W}|}^\theta(s),$ $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, and similar for $\vartheta$. 
       With probability $\texttt{acc}$, set $\theta'$ to $\vartheta$, else set it to $\theta$, where: %Here 
       %The acceptance probability for $\vartheta$ is given by 
 %         \vspace{-.05in}
