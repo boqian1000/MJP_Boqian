@@ -10,7 +10,7 @@
 \newcommand{\rev}[1]{\textbf{Comment: }\emph{#1}}
 \newcommand{\resp}{\textbf{Response: }}
 
-\title{Response to the editor's decision letter for `Efficient parameter inference for Markov jump processes'}
+\title{Cover letter for resubmission of `Efficient parameter inference for Markov jump processes'}
 \author{}
 \date{}
 \begin{document}
@@ -21,8 +21,14 @@
 Please find attached a revised resubmission of our manuscript ``{\em Efficient parameter inference for Markov jump processes}". 
 We are grateful for the comments and suggestions provided in the reviews, which we believe have helped significantly improve the manuscript.
 We have also included three response files, responding on a point-by-point basis to all the concerns raised by each reviewer. At a high-level, we have rewritten our algorithms to include all details, included discussion about non-centered parametrizations, included more experimental results, and plotted results to be readable in greyscale. 
-Below, we address comments raised in your decision email.
 
+Below, we address comments raised in your decision email. Please let us know if there is anything else that needs to be done.
+
+~\\Regards,\\
+Boqian Zhang and Vinayak Rao
+
+~\\
+~\\
 ~\\
 \rev{a discussion of how your method compares to other non centered parameterization algorithms should be an important component of your response.} \\ 
 \resp{We are sincerely thankful to the reviewer for directing us to this literature. 
@@ -31,18 +37,19 @@ We have included a thorough discussion of how our work relates to these in the s
 
 However, we believe that the reviewer is mistaken that our algorithm is a simple instance of these. 
 Instead, Algorithm 2 in section 4.3 of their review (which claims to show our algorithm is an NCP algorithm) actually corresponds to our ``naive" algorithm from section 4 of our paper. 
-We agree that this by itself forms a straightforward combination of ideas from Rao and Teh, 2013 and parameter inference for HMMs. However, this was not our methodological contribution, and was not the focus of either our experimantal evaluation, or our theory on geometric ergodicity. Both of these focused on our main contribution, the symmetrized MH sampler. 
+We agree that this by itself forms a straightforward combination of ideas from Rao and Teh, 2013 and parameter inference for HMMs. However, this was not our main methodological contribution, and was not the focus of either our experimental evaluation, or our theory on geometric ergodicity. Both of these focused on our main contribution, the symmetrized MH sampler. 
 ~\\
 
 The reviewer's confusion can be traced to the following line on page 4 of the review: `{\em Note that (3) defines a NCP because the parameters $\theta$ and the latent Poisson process are independent a-priori.}'. 
 This is false: the Poisson rate $\Omega$ does depend on the parameters $\theta$. In particular, $\Omega = \kappa \max_s A_s(\theta)$ for some $\kappa > 1$ for uniformization (which effectively thins the Poisson events) to be valid. 
 
+We raised the problems this issue causes at the end of section 4 and start of section 5 in the original submission (we have extended this in the resubmission):
+this is the $P(W|\theta)$ we mention ($W$ is the Poisson process). 
 As we demonstrate in our experiments, this dependence strongly affects MH acceptance probabilities, and slows down MCMC mixing. 
-This is the $P(W|\theta)$ we mention at the end of section 4 ($W$ is the Poisson process). 
 
 Our symmetrized algorithm gets around this by setting the Poisson rate to depend on both the new and old parameters $\theta$ and $\vartheta$: $\Omega(\theta,\vartheta)$, for some symmetric function $\Omega$. This function still depends on the parameters, and so is still not an NCP algorithm. Our resulting algorithm requires us to reorder steps from the naive sampler: first simulate a candidate parameter $\vartheta$, use both current and candidate parameter to simulate a new Poisson grid, and then exploit symmetry to propose swapping the two.
 
-None of these details are present in Algorithm 2 in the review, and we strongly disagree that this modification is obvious or trivial. 
+None of these details are present in Algorithm 2 in the review, and we disagree that this modification is obvious or trivial. 
 %(one of the other reviewers described it as `neat').
 
 We have included a detailed response to the reviewer about this point.
@@ -53,11 +60,12 @@ We have included a detailed response to the reviewer about this point.
 \rev{I would also suggest paying special attention to the referees' comments about how the description of the method could be improved to reach a broader audience.}  \\ 
 \resp{We agree with the reviewers that it is important to make our paper self-contained. We have rewritten the algorithms to be more concise, moving descriptions in the main text. Further, we have included pseudo-code outlining the details of each step of the algorithm, including details of the forward-backward algorithm. It should now be possible for someone to use these to implement the algorithms without understanding details from the main text, or without having to look up the references.
 
-  Following a reviewers suggestion, we have also clearly specified our Bayesian model. We have also included a graphical representation of our main algorithm in the main text, and pseudo-code for particle MCMC in the supplementary material.
+  Following a reviewer's suggestion, we have also clearly specified our Bayesian model. We have also included a graphical representation of our main algorithm in the main text, and pseudo-code for particle MCMC in the supplementary material.
 
 ~\\
 \rev{I appreciate that you've included code with your submission and would suggest that you consider providing an annotated example or, ideally, a self-contained package with annotated example that you could include in your revision. }\\
-\resp{We have included such a file with our code (GIVE FILE NAME). Since our code was implemented in Python, we do not have an R package, but this is something I hope to have ready in the near future through a student project.
+\resp{We have included a wrapper file with our code (\texttt{wrapper\_ecoli.py}) as well as a {\texttt{readme.txt}} file: one can recreate our experiments on the {\em E. coli} data just by running this with Python2. Since our code was implemented in Python, we do not have an R package. 
+ % but this is something I hope to upload to {\texttt{CRAN}} in the near future through a student project.
 
 ~\\
 \rev{Regarding color images: I encourage you to provide figures that can be printed in gray-scale but can be viewed electronically in color. 

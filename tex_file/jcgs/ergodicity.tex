@@ -259,7 +259,7 @@ $ \int_\Theta \Omega(\ptheta)^2 q(\ptheta | \theta)d\ptheta \leq \eta_0 \Omega(\
 \noindent This mild requirement can be satisfied by choosing a proposal 
 distribution $q$ that does not attempt to explore large $\theta$'s too 
 aggressively.
-The next corollary follows from a simple application of the Cauchy-Schwarz inequality, see the appendix for the proof.
+The next corollary follows from a simple application of the Cauchy-Schwarz inequality, see the supplement for the proof.
 \begin{corollary}
 Given the proposal density $q(\ptheta | \theta)$, $\exists \eta_1 > 0, \theta_2 > 0$ such that for $\theta$ 
 satisfying $\| \theta \|  > \theta_2$, 
@@ -378,7 +378,7 @@ We write $(\theta'',\vartheta'',W'')$ for the MCMC state after two iterations.
 Recall that step (a) actually assigns states $V$ to $W$. 
 $T$ are the elements of $W$ where $V$ changes value, and $S$ are the corresponding elements of $V$. 
 The remaining elements $U$ are the elements of $W$ corresponding to self-transitions. 
-For reference, we repeat some of our notation in the appendix.
+For reference, we repeat some of our notation in the supplementary material.
 % \{?
 % We establish the drift condition via the Lyapunov-Foster function
 % $\cV(W,\theta,\vartheta) = \left. \lambda_1|W| + \lambda_2 \Omega(\theta) +
@@ -424,7 +424,7 @@ for %$i = 0, 1, 2, ..., |W|$ and
 any $\theta,\vartheta, W$.
 \label{prop:self_tr}
 \end{proposition}
-\noindent The proof (in the appendix) exploits the bounded likelihood from 
+\noindent The proof (in the supplement) exploits the bounded likelihood from 
 assumption~\ref{asmp:obs_bnd}. A simple by-product of the proof is
 the following corollary:
 \begin{corollary}
@@ -637,7 +637,7 @@ close to $\pi_\theta$.
 %the following. Assume the state space has $N$ elements.
 Write $W_X$ for the indices of the grid $W$ containing observations, 
 and $V_X$ for the Markov chain state at these times (illustrated 
-in Section~\ref{sec:notation} in the appendix).
+in Section~\ref{sec:notation} in the supplementary material).
 Let $P_B(V_X | W, \theta, \theta')$ be the probability distribution over
 $V_X$ under the Markov chain with transition matrix $B$ given 
 $W$ and $P_{st}(V_X|\theta)$ be the probability of $V_X$ sampled
@@ -717,7 +717,7 @@ inequality,
 \end{proof}
 \noindent The previous lemma bounds the difference in probability of observations under the discrete-time and continuous-time processes for $\theta$ and $|W|$ large enough. 
 The next result uses this to bound with high probability the different in acceptance probabilities of the ideal sampler, and our proposed sampler with a grid $W$. 
-See the appendix for the proof.
+See the supplement for the proof.
 \begin{proposition}
   Let $(W, \theta, \vartheta)$ be the current state of the sampler.
 Then, for any $\epsilon$, there exists $\theta_\epsilon > 0$ as well as a set $\E_\epsilon \subseteq \{(W', \theta'): |\alpha_I(\theta,\theta';X) - \alpha(\theta,\theta';W',X)| \le \epsilon\}$, such that for $\theta$ satisfying $\| \theta \| > \theta_\epsilon$ and any $\vartheta$, we have

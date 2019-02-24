@@ -27,7 +27,7 @@ Below, we respond to your comments individually.
 ~\\
 \rev{2}{P9L47 Please further explain why it’s desirable to have $P(W|\theta)$ disappear from the acceptance probability. Is it because the ratio 
 $P(W|\theta)/P(W |\vartheta)$ is easily very different from 1 when $\theta \neq \vartheta$?} \\
-\resp Yes, $P(W|\theta)$ is a Poisson process with rate $\Omega(\theta)$, so that $P(|W||\Omega(\theta))$ is Poisson distributed with mean and standard deviation $\Omega(\theta)$. 
+\resp Yes, $P(W|\theta)$ is a Poisson process with rate $\Omega(\theta)$, so that $P(|W||\Omega(\theta))$ is Poisson distributed with mean and variance $\Omega(\theta)$. 
 As we showed, this slows down mixing, even though $W$ is just an artifact of the sampling algorithm.
 We state this more clearly at the end of section 4. 
 We also include figures showing how the naive MH algorithm has lower acceptance probablities for the same proposal distribution because of this term. 
@@ -35,7 +35,7 @@ We also include figures showing how the naive MH algorithm has lower acceptance 
 ~\\ 
 \rev{3}{I’d be interested to see some basic information about the “absolute” performance of the computing methods, especially that of the symmetric MH ... Methods to check the performance/mixing of the MCMC include looking at their trace plots, the autocorrelation function plots, showing the acceptance probablities of the MH algorithms. Also, with the proposed chain lengths, what are (the relative size of) the standard error of certain estimates, say, of the posterior means, or that of typical quantiles needed in reporting credible intervals? Do the approximate posterior produced by the different computing methods agree? }
 \\
-\resp We have now included traceplots and autocorrelation plots for the different experiments (in the main document or the appendix). We also show that the symmetric MH and Gibbs samplers ``agree", by visualising the posterior distributions, as well running 2-sample Kolmogorov-Smirnov tests on the sampler outputs. These always fail to reject the null hypothesis that both sets of samples come from the same distribution..
+\resp We have now included traceplots and autocorrelation plots for the different experiments (in the main document and the supplementary material). We also show that the symmetric MH and Gibbs samplers ``agree", by visualising the posterior distributions, as well running 2-sample Kolmogorov-Smirnov tests on the sampler outputs. These always fail to reject the null hypothesis that both sets of samples come from the same distribution..
 In addition to showing the ESS per unit time, we also include the ESS per 1000 MCMC iterations. 
 Finally, we show acceptance probablities of naive and symmetrized MH for different settings of the proposal distribution. We see that the latter is always higher than the former, for the same proposal distribution parameters.
 
