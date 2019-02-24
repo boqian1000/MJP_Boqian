@@ -50,9 +50,9 @@ Algorithm~\ref{alg:MH_naive} includes all the details of this algorithm, with fi
     \State 
     \textbf{Forward pass:}
     Set $B(\theta) = I + \frac{1}{\Omega(\theta)}A(\theta)$ and
-    $\fwd^\theta_0(\cdot) = \pi_0$.
+    $\fwd^\theta_0(\cdot) = \pi_0$. Recall $\ell_i(\cdot)$ from equation~\eqref{eq:lik_factor}.
  %   Sequentially update $\fwd^\theta_i(\cdot)$ at time $w_i \in W$ as: 
-\vspace{-.1in}
+\vspace{-.25in}
     $$\textbf{for } i=1\rightarrow |\tilde{W}|\textbf{ do:} \quad \fwd^{\theta}_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd^\theta_{i-1}(s)\cdot B_{ss'}(\theta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
     \State \textbf{Propose $\vartheta \sim q(\cdot| \theta)$.}
     For all elements of $\tilde{W}$, calculate $\fwd^\vartheta_i(\cdot)$ similar to above.
@@ -91,8 +91,8 @@ For a detailed review of the suitability of these two approaches, as well as way
 We note that even with the state values $(v_0,V)$ marginalized out, $\theta$ is updated {\em conditioned on $W$}. 
 The distribution of $W$ depends on $\theta$: $W$ follows a rate-$\Omega(\theta)$ Poisson process. This dependence manifests in the $P(W|\theta)$ and $P(W|\vartheta)$ terms in equation~\eqref{eq:ncp_acc}. 
 The fact that the MH-acceptance involves the probability of the observations  $X$ is inevitable, however the $P(W|\theta)$ term is an artifact of the computational algorithm of Rao-Teh. 
-In our experiments, we show that this term significantly affects acceptance probabilities and mixing. 
-For parameter $\theta$, $|W|$ is Poisson distributed with mean and variance $\Omega(\theta)$. 
+In our experiments, we show that this term significantly hurts acceptance probabilities and mixing. 
+For a given $\theta$, $|W|$ is Poisson distributed with mean and variance $\Omega(\theta)$. 
 If the proposed $\vartheta$ is such that $\Omega(\vartheta)$ is half $\Omega(\theta)$, then the ratio $P(W|\vartheta)/P(W|\theta)$ will be small, and $\vartheta$ is unlikely to be accepted. 
 %, resulting in a low acceptance probability.  
 This will slow down mixing.

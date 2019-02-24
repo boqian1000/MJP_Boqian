@@ -1,7 +1,7 @@
 
 \section{An improved Metropolis-Hasting algorithm}
 %\vspace{-.05in}
-Our main idea is to symmetrize the probability of $W$ under the old and proposed parameters, so that $P(W|\theta)$ disappears from the acceptance ratio. 
+Our proposed algorithm symmetrizes the probability of $W$ under the old and new parameters, so that $P(W|\theta)$ disappears from the acceptance ratio. 
 Now, the probability of accepting a proposal $\vartheta$ will depend only on the prior probabilities of $\theta$ and $\vartheta$, as well as how well they both explain the data given $W$.
 This is in contrast to the previous algorithm, where one must also factor in how well each parameter explains the current value of the grid $W$.
 This results in a MCMC sampler that mixes significantly more rapidly. 
@@ -61,6 +61,7 @@ $
       %, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
     \State \textbf{Simulate the thinned times $U$} from a rate-$(\Omega-A_{S(t)}(\theta))$ Poisson process:
 
+    \vspace{-.05in}
     $\qquad \qquad \qquad \qquad \qquad U \sim \text{PoissProc}(\Omega - A_{S(t)}(\theta))$.
     \State Set $W = T \cup U$ and discard $(s_0,S)$. Define $\tilde{W} = 0 \cup W \cup t_{end}$.
 %    \State Set $W = T \cup U$ and discard MJP states $S$. The MCMC state is now $(\theta,\vartheta, W)$.
@@ -71,11 +72,11 @@ $
  %      =  1 \wedge \frac{P(X| W,\vartheta,\theta)P(\vartheta)q(\theta|\vartheta)}
  %      {P(X| W,\theta, \vartheta)P(\theta) q(\vartheta|\theta)}.
  %      $
-        \State \textbf{Forward pass:} Set $B(\theta,\vartheta) = I + \frac{A(\theta)}{\Omega(\theta, \vartheta)}$ and $\fwd^{\theta, \vartheta}_0(\cdot) = \pi_0$.
+    \State \textbf{Forward pass:} Set $B(\theta,\vartheta) = I + \frac{A(\theta)}{\Omega(\theta, \vartheta)}$ and $\fwd^{\theta, \vartheta}_0(\cdot) = \pi_0$. Recall $\ell_i(\cdot)$ from equation~\eqref{eq:lik_factor}.
     %Sequentially update $\fwd^{\theta,\vartheta}_i(\cdot)$ at $w_i \in W$ as: 
-    \vspace{-.1in}
+    \vspace{-.25in}
         $$\textbf{for } i=1\rightarrow |\tilde{W}|\textbf{ do:} \quad \fwd^{\theta,\vartheta}_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd^{\theta,\vartheta}_{i-1}(s)\cdot B_{ss'}(\theta,\vartheta), \quad \forall s' \in \cS.\qquad\qquad\quad
-    \vspace{-.2in}
+    \vspace{-.1in}
         $$
         Similarly, for $B(\vartheta,\theta) = I + \frac{A(\vartheta)}{\Omega(\vartheta, \theta)}$, calculate $\fwd^{\vartheta,\theta}_i(\cdot)$ for all elements of $\tilde{W}$.
     \State \textbf{Swap}: 
