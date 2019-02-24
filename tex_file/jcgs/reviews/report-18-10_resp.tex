@@ -10,13 +10,13 @@
 \newcommand{\rev}[2]{\textbf{Comment #1: }\emph{#2}}
 \newcommand{\resp}{\textbf{Response: }}
 
-\title{Authors response for `Efficient parameter inference for Markov jump processes'}
-\author{Boqian Zhang and Vinayak Rao }
+\title{Response to review {\texttt{report-18-10.pdf}} for `Efficient parameter inference for Markov jump processes'}
+\author{}
 \date{}
 \begin{document}
 \maketitle
 
-Thank you for your thoughtful and detailed review. As we detail below, we have incorporated your suggestions into the revised manuscript, which believe is now substantially improved. At a high-level, we have 1) made the algorithms more concise, outlining the steps in detail using pseudocode. These by themselves should allow readers to implement the algorithms. 2) presented results showing good ``absolute" performance of the symmetrized MH sampler. 3) improved the figures.
+Thank you for your thoughtful and detailed review. As we detail below, we have incorporated your suggestions into the revised manuscript, which believe is now substantially improved. At a high-level, we have 1) made the algorithms more concise and self-contained, outlining the steps in detail using pseudocode. These by themselves should allow readers to implement the algorithms. 2) presented results showing good ``absolute" performance of the symmetrized MH sampler. 3) improved the figures.
 Below, we respond to your comments individually.
 
 ~\\~\\
@@ -28,22 +28,22 @@ Below, we respond to your comments individually.
 \rev{2}{P9L47 Please further explain why it’s desirable to have $P(W|\theta)$ disappear from the acceptance probability. Is it because the ratio 
 $P(W|\theta)/P(W |\vartheta)$ is easily very different from 1 when $\theta \neq \vartheta$?} \\
 \resp Yes, $P(W|\theta)$ is a Poisson process with rate $\Omega(\theta)$, so that $P(|W||\Omega(\theta))$ is Poisson distributed with mean and standard deviation $\Omega(\theta)$. 
-As we show this slows down mixing, even though $W$ is just an artifact of the sampling algorithm.
+As we showed, this slows down mixing, even though $W$ is just an artifact of the sampling algorithm.
 We state this more clearly at the end of section 4. 
 We also include figures showing how the naive MH algorithm has lower acceptance probablities for the same proposal distribution because of this term. 
 
 ~\\ 
 \rev{3}{I’d be interested to see some basic information about the “absolute” performance of the computing methods, especially that of the symmetric MH ... Methods to check the performance/mixing of the MCMC include looking at their trace plots, the autocorrelation function plots, showing the acceptance probablities of the MH algorithms. Also, with the proposed chain lengths, what are (the relative size of) the standard error of certain estimates, say, of the posterior means, or that of typical quantiles needed in reporting credible intervals? Do the approximate posterior produced by the different computing methods agree? }
 \\
-\resp We have now included traceplots and autocorrelation plots for the different experiments (in the main document or the appendix), as well as MH acceptance rates. We also show that the symmetric MH and particle MCMC samplers ``agree", by running 2-sample Kolmogorov-Smirnoff tests on the sampler outputs. The always fail to reject the null.
+\resp We have now included traceplots and autocorrelation plots for the different experiments (in the main document or the appendix). We also show that the symmetric MH and Gibbs samplers ``agree", by visualising the posterior distributions, as well running 2-sample Kolmogorov-Smirnov tests on the sampler outputs. These always fail to reject the null hypothesis that both sets of samples come from the same distribution..
 In addition to showing the ESS per unit time, we also include the ESS per 1000 MCMC iterations. 
-Finally, we show acceptance probablities of naive and symmetrized MH for different settings of the proposal distribution.
+Finally, we show acceptance probablities of naive and symmetrized MH for different settings of the proposal distribution. We see that the latter is always higher than the former, for the same proposal distribution parameters.
 
 ~\\
 \rev{4}{The algorithms are not simple to understand for first time readers. I suggest formally contrast the steps of the Gibbs sampler (and/or the MH mentioned in P6L41), the Naive MH and the symmetric MH (and maybe the ideal MH from sec 7) in one place, so that one can clearly see their relationship.  Figures 10 and 11 in the supplement are quite helpful. I would move them to the main text to increase readability.
 BTW, it would be helpful if you clearly show that the so-called “Gibbs sampler” is truly a Gibbs sampler.}
 \\ 
-\resp We have completely rewritten all the algorithms to be more concise (with comments in the main text). We have also included pseudocode in each algorithm, and believe that these by themselves should allow readers to implement the algorithms (without having to refer to the main text). We have also moved figure 11 from the supplement to the main text, and have extended the discussion on the Gibbs sampler.
+\resp We have completely rewritten all the algorithms to be more concise (with comments in the main text). We have also included pseudocode in each algorithm, and believe that these by themselves should allow readers to implement the algorithms (without having to refer to the main text or the references). We have also moved figure 11 from the supplement to the main text, and have extended the discussion on the Gibbs sampler.
 
 ~\\
 \noindent \rev{5}{I like the last paragraph of section 5 that discusses tricks of using auxiliary variables in
@@ -80,39 +80,39 @@ Could the discussion be more detailed and informative?
 ~\\
 \noindent \rev{16}{Please comment on if the assumptions in section 7 are satisfied by the MJPs and the
 choices of algorithm tuning parameters in section 6?}\\
-\resp{We have done this. The only discrepancy between theory and practice is in our setting of the uniformization rate: the theory requires $\Omega(\theta,\vartheta) = \kappa (\max_s A_s(\theta) + \max_s A_s(\vartheta)) + \kappa_0$, for any $\kappa_0 > 0$. In our experiments, we set $\kappa_0 = 0$ and still achieve good performance (we conjecture geometric ergodicity continues to hold here). We could easily have chosen a positive $\kappa_0$, or instead, tried to close this small gap in our theory. We leave such theoretical developments for future work, but mention it in the section on geometric ergodicity.}
+\resp{We have done this. The only discrepancy between theory and practice is in our setting of the uniformization rate: the theory requires $\Omega(\theta,\vartheta) = k_1 (\max_s A_s(\theta) + \max_s A_s(\vartheta)) + k_0$, for any $k_1 > 1$. In our experiments, we set $k_1 = 1$ and still achieve good performance (we conjecture geometric ergodicity continues to hold here). We could have tried to close this small gap in our theory, however we leave such theoretical developments for future work. We mention this in the section on geometric ergodicity as well as in the conclusion.}
 
 ~\\ 
 \rev{5}{P6 Figure 1, and P6L48-55. Which case in sec 6.3 is the figure concerned with? (Note that Gibbs sampler is the best performer in the homogeneous case of section 6.3.) Actually, I think it would be interesting to see how the three distributions pictured in figure 1 vary in the different cases of section 6.3. Looking at the current figure 1, the reader can see that “... figure 1, which shows the posterior of an MJP parameter is less concentrated than the distribution conditioned on both obs and MJP...”, but the readers can not see that “The coupling is strengthened as the trajectory grows longer, and the Gibbs sampler can mix very poorly ...” 
 Also, the sentence in P6L44-46 can be polished.}\\
-\resp{TODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODO}
+\resp{ In figure 1 in the revised manuscript, we now show that the conditional over the parameter is more concentrated as the interval length increases from 10 to 100. This figure is concerned with the case of 3 states, with the number of observations fixed. We have also rewritten the sentence to be clearer.}
 
 ~\\
 \noindent \rev{6}{P7L28, P8L29 etc. "... Although the Forward Backward algorithm is a well-known computing method for HMM, it still deserves better explanation in the current paper ...  Also, in the discussion about computing burden in P7, it helps to mention that the forward pass and the backward pass are each quadratic in the number of states of X, to contrast the method of Fearnhead and Sherlock (2006) that is cubic in the number."}
 \\ 
-\resp{We have rewritting the algorithms to include pseudocode detailing everything, including all details of the forward/backward algorithm. We have discussed Fearnhead and Sherlock (2006) in more detail in the section on related work, and have also included the comment on cost that you suggested over there.} 
+\resp{We have rewritting the algorithms to include pseudocode detailing everything, including all details of the forward-backward algorithm. Our manuscript is now entirely self-contained. We have discussed Fearnhead and Sherlock (2006) in more detail in the section on related work, and have also included the comment on cost that you suggested over there.} 
 
 ~\\
 \noindent \rev{7}{P7L47 Concerning a drawback of the method of Fearnhead and Sherlock (2006), the authors stated that “... this approach ... cannot exploit structure like sparsity in the transition matrix”. Please mention how is sparsity of the transition matrix exploited in the proposed algorithm.}
 \\
-\resp{We have included a discussion of this (after restructuring our paper, this appears in the ``Related work" section). Essentially, we run the forward-backward algorithm using the matrix $B = I + \frac{1}{\Omega}A$, where $\Omega$ is a scalar, and $I$ is the identity matrix. $B$ thus inherits sparsity structure in $A$. Fearnhead and Sherlock (2006) run this using the matrix exponential of $A$ which is dense.}
+\resp{We have included a discussion of this (after restructuring our paper, this appears in the ``Related work" section). Briefly, we run the forward-backward algorithm using the matrix $B = I + \frac{1}{\Omega}A$, where $\Omega$ is a scalar, and $I$ is the identity matrix. $B$ thus inherits sparsity structure in $A$. Fearnhead and Sherlock (2006) run this using the matrix exponential of $A$ which is dense.}
 
 ~\\
 \rev{9}{P8 L36 claims “The resulting algorithm updates θ with the MJP trajectory integrated out, giving more rapid mixing. However θ is still updated conditioned on W ”. I believe in this paper, “the MJP trajectory” is always used to refer to both the transition times W (or T ) and the states V (or S). In algorithm 4, only the states V are integrated out, but not W . Hence, the phrase “with the MJP trajectory integrated out” is misleading.}\\
 \resp{Thank you, you are correct. We have rewritten the text and algorithms to say "with the MJP states integrated out" as you suggest.}
 
 ~\\
-\rev{10}{P9L17-L30 To my understanding, step 3 can not be executed because P (X|W, θ) is not available, but need to be calculated using step 4. Hence the current way the steps are presented is confusing.} \\
+\rev{10}{P9L17-L30 To my understanding, step 3 can not be executed because $P (X|W, \theta)$ is not available, but need to be calculated using step 4. Hence the current way the steps are presented is confusing.} \\
 \resp{As mentioned before, we have rewritten the algorithms to be clearer.}
 
 ~\\
-\rev{11}{P10L3 L33 etc. The notation $\Omega$ sometimes refers to the Poisson rate function $\Omega$), and sometimes to the sum of two functions. This may lead to confusions.}
+\rev{11}{P10L3 L33 etc. The notation $\Omega$ sometimes refers to the Poisson rate function $\Omega$, and sometimes to the sum of two functions. This may lead to confusions.}
 ~\\ 
-\resp{In both cases, $\Omega$ refers to the rate of the uniformizing Poisson process. We make this clearer in the paper}. 
+\resp{In both cases, $\Omega$ refers to the rate of the uniformizing Poisson process. We make this clearer in the paper: its actualy meaning is determined by the number of arguments}. 
 
 ~\\ 
 \rev{12}{Figures are not very professional looking. The size of the main contents are generally too small relative to the axis and the labels. Also, I’m not sure about only using color to distinguish the different methods.}\\
-\resp{We have increases the size of the main content, and also made font sizes consistent across all figures. We have also decluttered the figures in the main document, so that different algorithms can be identified without color. The figures will all subplots are included in the supplement.} 
+\resp{We have increased the size of the main content, and also made font sizes consistent across all figures. We have also decluttered the figures in the main document, so that different algorithms can be identified without color. The figures will all subplots are included in the supplementary material.} 
 
 ~\\ 
 \rev{13}{To use the symmetric MH, one has to specify $(\sigma, \kappa)$, the variance of the proposal for θ and the inflation factor for the thinning processes. Based on the examples, is it possible to provide guidelines on choosing these tuning parameters in future applications?} 
