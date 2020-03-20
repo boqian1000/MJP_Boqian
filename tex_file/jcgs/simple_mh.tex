@@ -2,9 +2,9 @@
 \section{\Naive\ parameter inference via Metropolis-Hastings}
 %A natural approach to reduce the coupling in the Gibbs sampler is to reduce ?Bayesian fraction of missing information?. 
 For discrete-time HMMs, path-parameter coupling can be circumvented by marginalizing out the Markov trajectory, and directly sampling from the marginal posterior $P(\theta|X)$.
-In its simplest form, this involves a Metropolis-Hastings (MH) scheme that proposes a new parameter $\vartheta$ from some proposal distribution $q(\vartheta|\theta)$, accepting or rejecting according to the usual MH probability.
-The marginal probabilities over $X$ given parameters are computed using the FFBS algorithm.
-The Rao-Teh algorithm, which recasts posterior simulation for continuous-time models as discrete-time simulation on a random grid, then provides a simple mechanism to incorporate such an MH-scheme into continuous-time settings: directly update $\theta$, conditioning on the random grid $W$, but marginalizing out the states $(v_0, V)$.
+In its simplest form, this involves a Metropolis-Hastings (MH) scheme that proposes a new parameter $\vartheta$ from a proposal distribution $q(\vartheta|\theta)$, accepting or rejecting according to the usual MH probability.
+The marginal probabilities over $X$ given parameters are computed using the forward-filtering backward-sampling (FFBS) algorithm~\citep{fruhwirth1994data,carter1996markov, RaoTeh13}.
+The Rao-Teh algorithm, which recasts posterior simulation for continuous-time models as discrete-time simulation on a random grid, then provides a simple way to incorporate such an MH-scheme into continuous-time settings: directly update $\theta$, conditioning on the random grid $W$, but marginalizing out $(v_0, V)$.
 %, following the scheme from Algorithm~\ref{alg:disc_time_mh}.
 %The resulting scheme updates $\theta$ conditioned on the random 
 %grid, but with the trajectory integrated out 
@@ -31,9 +31,9 @@ Algorithm~\ref{alg:MH_naive} includes all details of this algorithm (see also fi
    \label{alg:MH_naive}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{Observations $X$}, 
-                       \text{the MJP path $S(t) = (s_0, S, T)$, the  parameters $\theta$ }and $\pi_0$.\\ 
+                       \text{the MJP path $(s_0, S, T)$, the  parameters $\theta$ }and $\pi_0$.\\ 
       %               & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
-   \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (s'_0, S', T')$, 
+   \textbf{Output:  }& \text{A new MJP trajectory $(s'_0, S', T')$, 
                             new MJP parameters $\theta'$}.\\
    \hline
    \end{tabular}
@@ -41,9 +41,9 @@ Algorithm~\ref{alg:MH_naive} includes all details of this algorithm (see also fi
      \State Set $\Omega(\theta) > \max_s{A_s(\theta)}$ for
      some function $\Omega(\cdot)$, e.g.\ $\Omega(\theta) = 
       2\max_s A_s(\theta)$.
-      \State \textbf{Simulate the thinned times $U$} from a rate-$(\Omega(\theta)-A_{S(t)}(\theta))$ Poisson process: 
+      \State \textbf{Simulate the thinned times $U$} from a rate-$(\Omega(\theta)-A_{S(\cdot)}(\theta))$ Poisson process: 
 
-      $\qquad \qquad \qquad \qquad U \sim \text{PoissProc}(\Omega(\theta) - A_{S(t)}(\theta)).$
+      $\qquad \qquad \qquad \qquad U \sim \text{PoissProc}(\Omega(\theta) - A_{S(t)}(\theta)), \quad t\in[0,t_{end})$.
 
       \State 
       Set $W = T \cup U$ and discard $(s_0,S)$. Define $\tilde{W} = 0 \cup W \cup t_{end}$.
@@ -72,7 +72,7 @@ Algorithm~\ref{alg:MH_naive} includes all details of this algorithm (see also fi
     %as \boqian{$(W,\theta,\vartheta)$}.
     \State %For the new parameter $\theta'$, simulate states $V$. 
     \textbf{Backward pass:}
-    Set $v_{|W|} \sim \bck^{\theta'}_{|W|}(\cdot)$, where $\bck^{\theta'}_{|W|}(s) \propto \fwd^{\theta'}_{|W|}(s)\cdot\ell_{|W|}(s) \quad \forall s \in \cS.$ 
+    Simulate $v_{|W|} \sim \bck^{\theta'}_{|W|}(\cdot)$, where $\bck^{\theta'}_{|W|}(s) \propto \fwd^{\theta'}_{|W|}(s)\cdot\ell_{|W|}(s) \quad \forall s \in \cS.$ 
     %at time $w_i$ given $v_{i+1}$  at time $w_{i+1}$:
 \vspace{-.1in}
     $$ \textbf{for } i=(|W|-1)\rightarrow 0\textbf{ do:} \quad v_i \sim \bck^{\theta'}_i(\cdot),\ \ \text{where } 
