@@ -1,7 +1,7 @@
 \vspace{-.2in}
 \section{Experiments}\label{sec:expts}
 \vspace{-.1in}
-In the following, we evaluate Python implementations of a number of algorithms, focusing our contribution, the symmetrized MH algorithm (algorithm~\ref{alg:MH_improved}), and as well as the \naive\ MH algorithm (algorithm~\ref{alg:MH_naive}).
+In the following, we evaluate Python implementations of a number of algorithms, focusing on our contribution, the symmetrized MH algorithm (algorithm~\ref{alg:MH_improved}), and as well as the \naive\ MH algorithm (algorithm~\ref{alg:MH_naive}).
 %, which we plot \boqian{as yellow twodashed  lines}), 
 %, plotted \sout{as dashed red lines}\boqian{as solid blue lines}
 We evaluate different variants of these algorithms, corresponding to different uniformizing Poisson rates. % (i.e.\ different choices of $\kappa$, see section~\ref{sec:comments}). 
@@ -72,7 +72,7 @@ For the MH proposal, we used a lognormal distribution centered at the current pa
 Figure~\ref{fig:POST_EXP} shows the MCMC estimates of the posterior distribution over $\alpha, P(\alpha|X)$ from the Gibbs sampler as well as our symmetrized MH sampler. 
 Visually these agree, and we quantify this by running a Kolmogorov-Smirnov two-sample test using $1000$ samples from each algorithm: this returns a p-value of $0.5085$, clearly failing to reject the null hypothesis that both samples come from the same distribution. 
 The same is true for $\beta$, though we do not include it here.
-The figure also shows the average acceptance probabilities for the two MH samplers: we see that for the same proposal distribution, symmetrization significantly improves acceptance probability. This shows the benefit of eliminating the $P(W|\theta)$ terms from the acceptance probability (we will investigate this further). Figure~\ref{fig:TRACE_EXP} shows traceplots and autocorrelation plots for $\alpha$ from the symmetrized MH and Gibbs samplers. Clearly, our sampler mixes much more efficiently than Gibbs, with \naive\ MH (included in the supplementary material) slightly worse than both.
+The figure also shows the average acceptance probabilities for the two MH samplers: we see that for the same proposal distribution, symmetrization significantly improves acceptance probability. This shows the benefit of eliminating the $P(W|\theta)$ terms from the acceptance probability (we will investigate this further). Figure~\ref{fig:TRACE_EXP} shows traceplots and autocorrelation plots for $\alpha$ from the symmetrized MH and Gibbs samplers. Clearly, our sampler mixes much more efficiently than Gibbs, with \naive\ MH (included in the supplementary material) worse than both.
 
 
   \begin{figure}[H]
@@ -785,7 +785,7 @@ where we set $\Omega(\theta, \vartheta) = \max_s A_s(\theta) + \max_s A_s(\varth
 
   Figure~\ref{fig:TRACE_ECOLI} shows trace and autocorrelation plots for the parameter $\alpha$ produced by the Gibbs sampler (left) and our proposed sampler with $\kappa$ set to $1$.
   We see that this is a fairly hard MCMC sampling problem, however our sampler clearly outperforms Gibbs, which mixes very poorly.
-  Both posterior distribution agreed with each other though, with a two sample-Kolmogorov Smirnov test returning a p-value of $ 0.1641$. 
+  Both posterior distributions agreed with each other though, with a two sample-Kolmogorov Smirnov test returning a p-value of $ 0.1641$. 
   
   Figure~\ref{fig:ECOLI} shows the ESS/s for different $\kappa$, for parameters $(\alpha, \lambda_1)$. 
   Both have similar results, and as suggested by the earlier figure, we see that for the typical setting of $\kappa=1$, our sampler ourperforms Gibbs. 
