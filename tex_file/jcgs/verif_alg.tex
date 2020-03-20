@@ -1,12 +1,12 @@
 %\subsection{Correctness of the proposed algorithm }
 %\label{sec:verify2}
 \begin{proposition}
-  The sampler described in Algorithm~\ref{alg:MH_improved} has the posterior distribution $P(\theta,S(t)|X)$ as its stationary distribution.
+  The sampler described in Algorithm~\ref{alg:MH_improved} has the posterior distribution $P(\theta,s_0,S,T|X)$ as its stationary distribution.
 \end{proposition}
 \begin{proof}
   Consider a realization $(\theta,s_0,S,T)$ from the posterior distribution $P(\theta, s_0, S, T|X)$. An iteration of the algorithm first simulates $\vartheta$ from $q(\vartheta|\theta)$. By construction, the marginal distribution over all but the last variable in the set $(\theta, s_0, S, T, \vartheta)$ is still the posterior.
 
-  The algorithm next simulates $U$ from a Poisson process with rate $\Omega(\theta,\vartheta) - A_{S(t)}(\theta)$. Write $W = T \cup U$.
+  The algorithm next simulates $U$ from a Poisson process with rate $\Omega(\theta,\vartheta) - A_{S(\cdot)}(\theta)$. Write $W = T \cup U$.
   The random grid $W$ consists of the actual and thinned candidate transition times, and is distributed according to a rate-$\Omega(\theta, \vartheta)$ Poisson process (Proposition 2 in~\cite{RaoTeh13}). 
   Thus, the triplet $(W,\theta,\vartheta)$ has probability proportional to $P(\theta)q(\vartheta|\theta)\text{PoissProc}(W|\Omega(\theta,\vartheta)) P(X|W,\theta,\vartheta)$.
   Next, the algorithm proposes swapping $\theta$ and $\vartheta$ with $W$ fixed (a deterministic proposal), and accepts with MH-acceptance probability 

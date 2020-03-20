@@ -1,11 +1,10 @@
-
 \section{An improved Metropolis-Hasting algorithm}
 %\vspace{-.05in}
-Our proposed algorithm symmetrizes the probability of $W$ under the old and new parameters, so that $P(W|\theta)$ disappears from the acceptance ratio. 
+The algorithm we propose symmetrizes the probability of $W$ under the old and new parameters, so that $P(W|\theta)$ disappears from the acceptance ratio. 
 Now, the probability of accepting a proposal $\vartheta$ will depend only on the prior probabilities of $\theta$ and $\vartheta$, as well as how well they both explain the data given $W$.
 This is in contrast to the previous algorithm, where one must also factor in how well each parameter explains the current value of the grid $W$.
 This results in a MCMC sampler that mixes significantly more rapidly. 
-Since we also need do account for the probabilities $P(W|\theta)$, we also have a simpler MCMC scheme.
+Since we also need not account for the probabilities $P(W|\theta)$, we also have a simpler MCMC scheme.
 %This forms the main contribution of this paper.
 
 As before, the MCMC iteration begins with $(s_0, S, T, \theta)$. 
@@ -16,16 +15,16 @@ Two examples are $\Omega(\theta,\vartheta) = \kappa \max_s A_s(\theta) + \kappa 
 $\Omega(\theta,\vartheta) = \kappa \max\left(\max_s A_s(\theta), \max_s A_s(\vartheta)\right)$, for $\kappa > 1$.
 
 
-We will treat the path $(s_0,S,T)$ as simulated by  uniformization, but now with the dominating Poisson rate equal to $\Omega(\theta,\vartheta)$  instead of $\Omega(\theta)$ as before. 
+We will treat the path $(s_0,S,T)$ as simulated by  uniformization, but now with the dominating Poisson rate equal to $\Omega(\theta,\vartheta)$  instead of $\Omega(\theta)$. 
 The transition matrix $B(\theta,\vartheta)$ of the embedded Markov chain is $B(\theta,\vartheta) = I + \frac{1}{\Omega(\theta,\vartheta)}A(\theta)$, so that the resulting trajectory $(s_0,S,T)$ will still be a realization from a MJP with rate-matrix $A(\theta)$.
 
-Following the Rao-Teh algorithm, the conditional distribution of the thinned events $U$ given $(s_0,S,T,\theta,\vartheta)$ is a piecewise-constant Poisson with rate $\Omega(\theta, \vartheta) - A_{S(t)}(\theta)$. 
+Following the Rao-Teh algorithm, the conditional distribution of the thinned events $U$ given $(s_0,S,T,\theta,\vartheta)$ is a piecewise-constant Poisson with rate $\Omega(\theta, \vartheta) - A_{S(t)}(\theta), t \in [0,t_{end})$. 
 This reconstructs the set $W = U \cup T$,  and as we saw~\citep[see also][]{RaoTeh13}, $P(W|\theta,\vartheta)$ is a homogeneous Poisson process with rate $\Omega(\theta, \vartheta)$. 
 %which, crucially, is symmetric in $\theta$ and $\vartheta$. 
 Having imputed $W$, discard the state values, so that the MCMC state space is $(W, \theta, \vartheta)$.
 Now, propose swapping $\theta$ with $\vartheta$. 
 From the symmetry of $\Omega(\cdot,\cdot)$, the Poisson grid $W$ has the same probability both
-before and after this proposal, and unlike the previous scheme, the ratio $P(W|\vartheta)/P(W|\theta)$ equals $1$.  
+before and after this proposal, so unlike the previous scheme, the ratio $P(W|\vartheta)/P(W|\theta)$ equals $1$.  
 This simplifies computation, and as suggested in the previous section, can significantly improve mixing.
 An acceptance probability of
 $ 
@@ -45,9 +44,9 @@ $
    \label{alg:MH_improved}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{The observations $X$,}
-                      \text{the MJP path $S(t) = (s_0, S, T)$, parameters $\theta$} and $\pi_0$.\\ 
+                      \text{the MJP path $(s_0, S, T)$, parameters $\theta$} and $\pi_0$.\\ 
    %                & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
-   \textbf{Output:  }& \text{A new MJP trajectory $S'(t) = (s'_0, S', T')$, 
+   \textbf{Output:  }& \text{A new MJP trajectory $(s'_0, S', T')$, 
                             new MJP parameters $\theta'$}.\\
    \hline
    \end{tabular}
@@ -59,10 +58,10 @@ $
       %In the case of uniformization, we
       %have a single $\Omega$ for all states, with $\Omega = \max_i A_i(\theta) + \max_i A_i(\theta^*)$.
       %, with $h(\theta) > max_s{|A_s(\theta)|}$, $h(\theta^*) > max_s{|A_s(\theta^*)|}$ using some deterministic function $h$.
-    \State \textbf{Simulate the thinned times $U$} from a rate-$(\Omega-A_{S(t)}(\theta))$ Poisson process:
+    \State \textbf{Simulate the thinned times $U$} from a rate-$(\Omega-A_{S(\cdot)}(\theta))$ Poisson process:
 
     \vspace{-.05in}
-    $\qquad \qquad \qquad \qquad \qquad U \sim \text{PoissProc}(\Omega - A_{S(t)}(\theta))$.
+    $\qquad \qquad \qquad \qquad U \sim \text{PoissProc}(\Omega - A_{S(t)}(\theta)), \quad t \in [0,t_{end})$.
     \State Set $W = T \cup U$ and discard $(s_0,S)$. Define $\tilde{W} = 0 \cup W \cup t_{end}$.
 %    \State Set $W = T \cup U$ and discard MJP states $S$. The MCMC state is now $(\theta,\vartheta, W)$.
  %   \State \textbf{MH proposal}: The current MCMC state-space is $(W,\theta,\vartheta)$. 
@@ -89,7 +88,7 @@ $
         $
     Write the new parameters as $(\theta',\vartheta')$.
     \State \textbf{Backward pass:}
-    Set $v_{|W|} \sim \bck^{\theta',\vartheta'}_{|W|}(\cdot)$, where $\bck^{\theta',\vartheta'}_{|W|}\!(s) \propto \fwd^{\theta',\vartheta'}_{|W|}\!(s)\cdot\ell_{|W|}(s) \quad \forall s \in \cS.$ 
+    Simulate $v_{|W|} \sim \bck^{\theta',\vartheta'}_{|W|}(\cdot)$, where $\bck^{\theta',\vartheta'}_{|W|}\!(s) \propto \fwd^{\theta',\vartheta'}_{|W|}\!(s)\cdot\ell_{|W|}(s) \quad \forall s \in \cS.$ 
     \vspace{-.1in}
     %For the new transition matrix $B(\theta',\vartheta')$,     
     $$\hspace{-.15in} \textbf{for } i=(|W|-1)\rightarrow 0\textbf{ do:} \ v_i \sim \bck^{\theta',\vartheta'}_i\!(\cdot), \text{where } 
