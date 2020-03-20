@@ -85,9 +85,9 @@ Algorithm~\ref{alg:MH_naive} includes all details of this algorithm (see also fi
 The resulting MCMC algorithm updates $\theta$ with the MJP trajectory 
 integrated out, and by instantiating less `missing' information, can be expected to mix better. 
 This can be quantified by the so-called Bayesian fraction of missing information~\citep{liu1994fraction, papaspiliopoulos2007general}. 
-The Gibbs sampler of algorithm~\ref{alg:MJP_gibbs} can be viewed as operating on a centered parametrization~\citep{papaspiliopoulos2007general} or sufficient augmentation~\citep{yu2011center} of a hierarchical model involving $\theta$, the Poisson events $W$, and the state values $(v_0,V)$. The MH algorithm reverses the order in which the path and parameter are updated, and is closely related to noncentered parametrizations or ancillary augmentations. 
-For a detailed review of the suitability of these two approaches, as well as ways to combine them together, we refer to~\citet{papaspiliopoulos2007general, yu2011center}.
-
+%The Gibbs sampler of algorithm~\ref{alg:MJP_gibbs} can be viewed as operating on a centered parametrization~\citep{papaspiliopoulos2007general} or sufficient augmentation~\citep{yu2011center} of a hierarchical model involving $\theta$, the Poisson events $W$, and the state values $(v_0,V)$. The MH algorithm reverses the order in which the path and parameter are updated, and is closely related to noncentered parametrizations or ancillary augmentations. 
+%For a detailed review of the suitability of these two approaches, as well as ways to combine them together, we refer to~\citet{papaspiliopoulos2007general, yu2011center}.
+%
 We note that even with the state values $(v_0,V)$ marginalized out, $\theta$ is updated {\em conditioned on $W$}. 
 The distribution of $W$ depends on $\theta$: $W$ follows a rate-$\Omega(\theta)$ Poisson process. This dependence manifests in the $P(W|\theta)$ and $P(W|\vartheta)$ terms in equation~\eqref{eq:ncp_acc}. 
 The fact that the MH-acceptance involves the probability of the observations  $X$ is inevitable, however the $P(W|\theta)$ term is an artifact of the computational algorithm of Rao-Teh. 
