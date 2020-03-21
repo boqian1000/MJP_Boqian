@@ -191,7 +191,7 @@ In any event, this introduces no new technical challenges.
      \label{fig:hist}
   \end{figure}
   However, the resulting Gibbs sampler can mix very poorly because of coupling between path and parameters.
-  We illustrate this in figure~\ref{fig:hist}~\citep[inspired by][]{papaspiliopoulos2007general}), which shows the posterior distribution of an MJP parameter (long-dashes) is less concentrated than the distribution conditioned on both observations as well as path (short-dashes). 
+  We illustrate this in figure~\ref{fig:hist}~\citep[inspired by][]{papaspiliopoulos2007general}, which shows the posterior distribution of an MJP parameter (long-dashes) is less concentrated than the distribution conditioned on both observations as well as path (short-dashes). 
   The coupling is strengthened as the trajectory grows longer (right panel), and the Gibbs sampler can mix very poorly with long observation periods, even if the observations themselves are only mildly informative about the parameters. Before we describe our actual algorithm, we outline a \naive\ attempt around this coupling.
 
 % \subsection{A marginal sampler for MJP parameters} 
