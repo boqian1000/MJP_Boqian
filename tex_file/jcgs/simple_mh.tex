@@ -53,12 +53,14 @@ Algorithm~\ref{alg:MH_naive} includes all details of this algorithm (see also fi
     $\fwd^\theta_0(\cdot) = \pi_0$. Recall $\ell_i(\cdot)$ from equation~\eqref{eq:lik_factor}.
  %   Sequentially update $\fwd^\theta_i(\cdot)$ at time $w_i \in W$ as: 
 \vspace{-.25in}
-    $$\textbf{for } i=1\rightarrow |\tilde{W}|\textbf{ do:} \quad \fwd^{\theta}_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd^\theta_{i-1}(s)\cdot B_{ss'}(\theta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
+$$\textbf{for } i=1\rightarrow (|\tilde{W}|-1)\textbf{ do:} \quad \fwd^{\theta}_i(s') = \sum_{s \in \cS} \fwd^\theta_{i-1}(s)\cdot \ell_{i}(s) \cdot B_{ss'}(\theta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
     \State \textbf{Propose $\vartheta \sim q(\cdot| \theta)$.}
-    For all elements of $\tilde{W}$, calculate $\fwd^\vartheta_i(\cdot)$ similar to above.
-      \State \textbf{Accept:} 
-      Set $P(X|W,\theta) = \sum_{s \in \cS} \fwd_{|\tilde{W}|}^\theta(s)\cdot\ell_{|W|}(s),$ $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, and similar for $\vartheta$. 
-      With probability $\texttt{acc}$, set $\theta'$ to $\vartheta$, else set it to $\theta$, where: %Here 
+    For elements of $\tilde{W}$, calculate $\fwd^\vartheta_i(\cdot)$ similar to above.
+      \State \textbf{Accept/Reject:} 
+      For $\theta$ (and similarly for $\vartheta$), set  
+      $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, 
+      $P(X|W,\theta) = \sum_{s \in \cS} \fwd_{|\tilde{W}|-1}^\theta(s)\cdot\ell_{|\tilde{W}|-1}(s)$.
+      With probability $\texttt{acc}$, set $\theta' = \vartheta$, else $\theta'=\theta$; %Here 
       %The acceptance probability for $\vartheta$ is given by 
 %         \vspace{-.05in}
           \begin{align}
@@ -72,11 +74,12 @@ Algorithm~\ref{alg:MH_naive} includes all details of this algorithm (see also fi
     %as \boqian{$(W,\theta,\vartheta)$}.
     \State %For the new parameter $\theta'$, simulate states $V$. 
     \textbf{Backward pass:}
-    Simulate $v_{|W|} \sim \bck^{\theta'}_{|W|}(\cdot)$, where $\bck^{\theta'}_{|W|}(s) \propto \fwd^{\theta'}_{|W|}(s)\cdot\ell_{|W|}(s) \quad \forall s \in \cS.$ 
+    Simulate $v_{|W|} \sim \bck^{\theta'}_{|W|}(\cdot)$, where $\bck^{\theta'}_{|W|}(s) \propto \fwd^{\theta'}_{|W|}(s)\cdot\ell_{|W|+1}(s) \quad \forall s \in \cS.$ 
     %at time $w_i$ given $v_{i+1}$  at time $w_{i+1}$:
-\vspace{-.1in}
+%\vspace{-.1in}
+\vspace{-.25in}
     $$ \textbf{for } i=(|W|-1)\rightarrow 0\textbf{ do:} \quad v_i \sim \bck^{\theta'}_i(\cdot),\ \ \text{where } 
-    \bck^{\theta'}_i(s) \propto \fwd^{\theta'}_i(s)\cdot B_{sv_{i+1}}(\theta') \cdot \ell_i(s)  \ \forall s \in \cS.$$
+    \bck^{\theta'}_i(s) \propto \fwd^{\theta'}_i(s)\cdot B_{sv_{i+1}}(\theta') \cdot \ell_{i+1}(s)  \ \forall s \in \cS.$$
    % Here, $\bck^{\theta'}_{|W|}(\cdot) = \fwd^{\theta'}_{|W|}(\cdot)$.  This completes the FFBS algorithm.
     \State Set $s'_0=v_0$. Let $T'$ be the set of times in $W$ when $V$ changes state. Define $S'$ as the corresponding set of state values. Return $(s'_0, S', T', \theta')$.
 \end{algorithmic}
