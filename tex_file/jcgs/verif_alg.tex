@@ -101,14 +101,14 @@ In this context, papers such as~\citet{papaspiliopoulos2007general,yu2011center}
 %Viewed in this light, our contribution is a rewriting of uniformization that includes the auxiliary parameter $\vartheta$. Our swap operator forms a particular Markov kernel that exploits this reparametrization for fast mixing. 
 %Two interesting directions are to see how such symmetrization ideas apply to other problems considered in those works, and how ideas from those works can shed more light on, and improve our algorithm.
 The Gibbs sampler of algorithm~\ref{alg:MJP_gibbs} can be viewed as operating on a centered parametrization~\citep{papaspiliopoulos2007general} or sufficient augmentation~\citep{yu2011center} of a hierarchical model involving the parameter $\theta$, the latent variables $(v_0, V, W)$ and the observations $X$. 
-These papers then suggest noncentered parametrizations or ancillary augmentations, which in our context correspond simulating $\theta$, $W$, and an {\em independent} set of $|W|+1$ i.i.d.\ uniform random variables $Q$. 
+These papers then suggest noncentered parametrizations or ancillary augmentations, which in our context correspond to simulating $\theta$, $W$, and an {\em independent} set of $(|W|+1)$ i.i.d.\ uniform random variables $Q$. 
 Through a sequence of inverse-cdf transforms, the state values $(v_0,V)$ are then written as a deterministic function of $Q$ and $\theta$: $(v_0,V) = f_\theta(Q)$, after which the observations $X$ are produced. 
 Now, proposing a new parameter $\vartheta$ automatically proposes a new set of state variables $(v_0',V') = f_\vartheta(Q)$, so that problem of path-parameter coupling is avoided.
 A similar idea could also be used to avoid couplng between $\theta$ and the Poisson process $W$.
 However now, updating $Q$ given $\theta$ and $(v_0, V, W)$ raises significant challenges to mixing.
 By contrast, our approach marginalizes out the variables $(v_0,V)$ (or $Q$), and will mix significantly faster.
 Nevertheless, results from the literature on NCPs can suggest further improvements to our approach, and give guidance about conditions under which 
-approaches like ours outperform standard centered parametrisation like algorithm~\ref{alg:MJP_gibbs}, or when a mixture of centered and non-centered
+approaches like ours outperform centered parametrisation like algorithm~\ref{alg:MJP_gibbs}, or when a mixture of centered and non-centered
 updates could be sensible~\citep{yu2011center}.
 %Poisson events $W$, and the state values $(v_0,V)$. The MH algorithm reverses the order in which the path and parameter are updated, and is closely related to 
 %For a detailed review of the suitability of these two approaches, as well as ways to combine them together, we refer to~\citet{papaspiliopoulos2007general, yu2011center}.

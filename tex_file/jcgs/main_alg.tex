@@ -4,7 +4,7 @@ The algorithm we propose symmetrizes the probability of $W$ under the old and ne
 Now, the probability of accepting a proposal $\vartheta$ will depend only on the prior probabilities of $\theta$ and $\vartheta$, as well as how well they both explain the data given $W$.
 This is in contrast to the previous algorithm, where one must also factor in how well each parameter explains the current value of the grid $W$.
 This results in a MCMC sampler that mixes significantly more rapidly. 
-Since we also need not account for the probabilities $P(W|\theta)$, we also have a simpler MCMC scheme.
+Since we need not account for the probabilities $P(W|\theta)$, we also have a simpler MCMC scheme.
 %This forms the main contribution of this paper.
 
 As before, the MCMC iteration begins with $(s_0, S, T, \theta)$. 
@@ -44,7 +44,7 @@ $
    \label{alg:MH_improved}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{The observations $X$,}
-                      \text{the MJP path $(s_0, S, T)$, parameters $\theta$} and $\pi_0$.\\ 
+                      \text{the MJP path $(s_0, S, T)$, MJP parameters $\theta$} and $\pi_0$.\\ 
    %                & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
    \textbf{Output:  }& \text{A new MJP trajectory $(s'_0, S', T')$, 
                             new MJP parameters $\theta'$}.\\
@@ -74,25 +74,25 @@ $
     \State \textbf{Forward pass:} Set $B(\theta,\vartheta) = I + \frac{A(\theta)}{\Omega(\theta, \vartheta)}$ and $\fwd^{\theta, \vartheta}_0(\cdot) = \pi_0$. Recall $\ell_i(\cdot)$ from equation~\eqref{eq:lik_factor}.
     %Sequentially update $\fwd^{\theta,\vartheta}_i(\cdot)$ at $w_i \in W$ as: 
     \vspace{-.25in}
-        $$\textbf{for } i=1\rightarrow |\tilde{W}|\textbf{ do:} \quad \fwd^{\theta,\vartheta}_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd^{\theta,\vartheta}_{i-1}(s)\cdot B_{ss'}(\theta,\vartheta), \quad \forall s' \in \cS.\qquad\qquad\quad
+        $$\textbf{for } i=1\rightarrow |{W}|\textbf{ do:} \quad \fwd^{\theta,\vartheta}_i(s') = \sum_{s \in \cS} \fwd^{\theta,\vartheta}_{i-1}(s)\cdot \ell_{i}(s) \cdot B_{ss'}(\theta,\vartheta), \quad \forall s' \in \cS.\qquad\qquad\quad
     \vspace{-.1in}
         $$
         Similarly, for $B(\vartheta,\theta) = I + \frac{A(\vartheta)}{\Omega(\vartheta, \theta)}$, calculate $\fwd^{\vartheta,\theta}_i(\cdot)$ for all elements of $\tilde{W}$.
-    \State \textbf{Swap}: 
-        Set $P(X|W,\theta,\vartheta) = \sum_{s \in \cS} \fwd^{\theta,\vartheta}_{|W|}(s)$, and $P(X|W,\vartheta,\theta) = \sum_{s \in \cS} \fwd^{\vartheta,\theta}_{|W|}(s)$.
-        Swap $\theta$ and $\vartheta$ with probability 
+    \State \textbf{Swap} 
+    $(\theta, \vartheta)$ with probability
      $
    %  \texttt{acc} =  
      1 \wedge \frac{P(X| W,\vartheta,\theta)P(\vartheta)q(\theta|\vartheta)}
         {P(X| W,\theta, \vartheta)P(\theta) q(\vartheta|\theta)}.
         $
     Write the new parameters as $(\theta',\vartheta')$.
+        Here $P(X|W,\theta,\vartheta) = \sum_{s \in \cS} \fwd^{\theta,\vartheta}_{|W|}(s)\ell_{|W|+1}(s)$, $P(X|W,\vartheta,\theta) = \sum_{s \in \cS} \fwd^{\vartheta,\theta}_{|W|}(s)\ell_{|W|+1}(s)$.
     \State \textbf{Backward pass:}
-    Simulate $v_{|W|} \sim \bck^{\theta',\vartheta'}_{|W|}(\cdot)$, where $\bck^{\theta',\vartheta'}_{|W|}\!(s) \propto \fwd^{\theta',\vartheta'}_{|W|}\!(s)\cdot\ell_{|W|}(s) \quad \forall s \in \cS.$ 
-    \vspace{-.1in}
+    Simulate $v_{|W|} \sim \bck^{\theta',\vartheta'}_{|W|}(\cdot)$, where $\bck^{\theta',\vartheta'}_{|W|}\!(s) \propto \fwd^{\theta',\vartheta'}_{|W|}\!(s)\cdot\ell_{|W|+1}(s) \ \  \forall s \in \cS.$ 
+    \vspace{-.25in}
     %For the new transition matrix $B(\theta',\vartheta')$,     
     $$\hspace{-.15in} \textbf{for } i=(|W|-1)\rightarrow 0\textbf{ do:} \ v_i \sim \bck^{\theta',\vartheta'}_i\!(\cdot), \text{where } 
-    \bck^{\theta',\vartheta'}_i\!(s) \propto \fwd^{\theta',\vartheta'}_i\!(s)\cdot B_{sv_{i+1}}(\theta',\vartheta') \cdot \ell_i(s)  \ \forall s \in \cS.$$
+    \bck^{\theta',\vartheta'}_i\!(s) \propto \fwd^{\theta',\vartheta'}_i\!(s)\cdot B_{sv_{i+1}}(\theta',\vartheta') \cdot \ell_{i+1}(s)  \ \forall s \in \cS.$$
     
 %    Sample a path $\tilde{V}$, from a discret-time Markov chain with $|W| + 1$ steps, using FFBS algorithm. The transition matrix of the Markov chain is $B = (I + \frac{A(\tilde{\theta})}{\Omega})$ while the initial distribution over states is $\pi_0$. The likelihood of state $s$ at step $i$ is 
 %    $$ L_i(s) = P(Y_{[w_i, w_{i + 1})} | S(t) = s \; for\; t \in [w_i, w_{i + 1})) = \prod_{j: t_j \in [w_i, w_{i + 1})}p(y_{t_j} | S(t_j) = s).$$\\
