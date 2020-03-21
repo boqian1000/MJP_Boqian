@@ -401,6 +401,17 @@ FUNCTION {format.in.ed.booktitle}
   if$
 }
 
+FUNCTION {format.in.ed.proc}
+{ booktitle empty$
+    { "" }
+    { editor empty$
+	{ "{\em in} " booktitle emphasize * }
+	{ "{\em in} " format.editors.reverse * ", " * booktitle emphasize * }
+      if$
+    }
+  if$
+}
+
 FUNCTION {empty.misc.check}
 { author empty$ title empty$ howpublished empty$
   month empty$ year empty$ note empty$
@@ -804,7 +815,7 @@ FUNCTION {incollection}
   if$
   author "author" item.check
   crossref missing$
-    { format.in.ed.booktitle "booktitle" output.check
+    { format.in.ed.proc "booktitle" output.check
       format.edition output
       format.bvolume output
       format.number.series output
@@ -827,11 +838,11 @@ FUNCTION {inproceedings}
   " \harvardyearleft " list.year * "\harvardyearright " * output.nonnull
   title.field field.used =
     { skip$ }
-    { format.title "title" output.check }
+    { format.title quote "title" output.check }
   if$
   author "author" item.check
   crossref missing$
-    { format.in.ed.booktitle "booktitle" output.check
+    { format.in.ed.proc "booktitle" output.check
       format.bvolume output
       format.number.series output
       address empty$
@@ -972,7 +983,7 @@ FUNCTION {techreport}
   author "author" item.check
   title.field field.used =
     { skip$ }
-    { format.title "title" output.check }
+    { format.title quote "title" output.check }
   if$
   format.tr.number output.nonnull
   institution "institution" output.check
