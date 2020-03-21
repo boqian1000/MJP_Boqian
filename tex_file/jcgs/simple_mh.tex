@@ -31,10 +31,10 @@ Algorithm~\ref{alg:MH_naive} includes all details of this algorithm (see also fi
    \label{alg:MH_naive}
   \begin{tabular}{l l}
    \textbf{Input:  } & \text{Observations $X$}, 
-                       \text{the MJP path $(s_0, S, T)$, the  parameters $\theta$ }and $\pi_0$.\\ 
+                       \text{the MJP path $(s_0, S, T)$, the  MJP parameters $\theta$ }and $\pi_0$.\\ 
       %               & \text{A  Metropolis-Hasting proposal $q(\cdot | \theta)$}.\\
    \textbf{Output:  }& \text{A new MJP trajectory $(s'_0, S', T')$, 
-                            new MJP parameters $\theta'$}.\\
+                            new MJP parameter $\theta'$}.\\
    \hline
    \end{tabular}
    \begin{algorithmic}[1]
@@ -56,8 +56,8 @@ Algorithm~\ref{alg:MH_naive} includes all details of this algorithm (see also fi
     $$\textbf{for } i=1\rightarrow |\tilde{W}|\textbf{ do:} \quad \fwd^{\theta}_i(s') = \sum_{s \in \cS} \ell_{i-1}(s) \cdot \fwd^\theta_{i-1}(s)\cdot B_{ss'}(\theta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
     \State \textbf{Propose $\vartheta \sim q(\cdot| \theta)$.}
     For all elements of $\tilde{W}$, calculate $\fwd^\vartheta_i(\cdot)$ similar to above.
-      \State \textbf{Accept/reject:} 
-      Set $P(X|W,\theta) = \sum_{s \in \cS} \fwd_{|\tilde{W}|}^\theta(s),$ $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, and similar for $\vartheta$. 
+      \State \textbf{Accept:} 
+      Set $P(X|W,\theta) = \sum_{s \in \cS} \fwd_{|\tilde{W}|}^\theta(s)\cdot\ell_{|W|}(s),$ $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, and similar for $\vartheta$. 
       With probability $\texttt{acc}$, set $\theta'$ to $\vartheta$, else set it to $\theta$, where: %Here 
       %The acceptance probability for $\vartheta$ is given by 
 %         \vspace{-.05in}
