@@ -55,7 +55,7 @@ Algorithm~\ref{alg:MH_naive} includes all details of this algorithm (see also fi
 \vspace{-.25in}
 $$\textbf{for } i=1\rightarrow |{W}|\textbf{ do:} \quad \fwd^{\theta}_i(s') = \sum_{s \in \cS} \fwd^\theta_{i-1}(s)\cdot \ell_{i}(s) \cdot B_{ss'}(\theta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
     \State \textbf{Propose $\vartheta \sim q(\cdot| \theta)$.}
-    For elements of $\tilde{W}$, calculate $\fwd^\vartheta_i(\cdot)$ similar to above.
+    For elements of ${W}$, calculate $\fwd^\vartheta_i(\cdot)$ similar to above.
       \State \textbf{Accept/Reject:} 
       For $\theta$ (and similarly for $\vartheta$), set  
       $P(W|\theta) = \Omega(\theta)^{|W|}\exp(-\Omega(\theta)t_{end})$, 

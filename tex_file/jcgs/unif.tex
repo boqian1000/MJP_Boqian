@@ -27,7 +27,7 @@ A common example is a finite set of independent observations $X = \{x_1,\dotsc,x
   \label{eq:lik_iid}
   P(X|\{S(t),\ t \in [0,t_{end})\}) = \prod_{i=1}^{|X|} P(x_i|S(t^X_i)).
 \end{align}
-Other examples form an inhomogeneous Poisson process~\citep{FearnSher2006}, renewal process~\citep{rao2011gaussian} or even another MJP~\citep{Nodelman+al:UAI02,RaoTeh13}, modulated by $(s_0, S, T)$.
+Other examples are an inhomogeneous Poisson process~\citep{FearnSher2006}, renewal process~\citep{rao2011gaussian} or even another MJP~\citep{Nodelman+al:UAI02,RaoTeh13}, modulated by $(s_0, S, T)$.
 The first example, called a Markov modulated Poisson process (MMPP)~\citep{scottmmpp03}, associates a positive rate $\lambda_s$ with each state $s$, with $\ell_i(\{S(t),\ t \in [w_{i},w_{i+1})\})$ equal to the likelihood of the Poisson events within $[w_{i},w_{i+1})$ under an inhomogeneous Poisson process with piecewise-constant rate $\{\lambda_{S(t)},\ t \in [w_{i},w_{i+1})\}$.
 
 With $A(\cdot)$ and $\pi_0$ assumed known, the overall Bayesian model is then 
@@ -115,9 +115,9 @@ likelihood $\ell_i(s) \equiv \ell_i(\{S(t) = s,\ t \in [\tilde{w}_i,\tilde{w}_{i
 \begin{description}
   \item[Forward pass:] 
     Set $\fwd_0(\cdot) = \pi_0$.
-    Sequentially update $\fwd_i(\cdot)$ at time $\tilde{w}_i \in \tilde{W}$ given $\fwd_{i-1}$: 
+    Sequentially update $\fwd_i(\cdot)$ at time ${w}_i \in {W}$ given $\fwd_{i-1}$: 
         \vspace{-.1in}
-        $$\textbf{for } i=1\rightarrow (|\tilde{W}|-1)\textbf{ do:} \quad \fwd_i(s') = \sum_{s \in \cS} \fwd_{i-1}(s)\cdot \ell_{i}(s) \cdot B_{ss'}(\theta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
+        $$\textbf{for } i=1\rightarrow |{W}|\textbf{ do:} \quad \fwd_i(s') = \sum_{s \in \cS} \fwd_{i-1}(s)\cdot \ell_{i}(s) \cdot B_{ss'}(\theta), \quad \forall s' \in \cS.\qquad\qquad\quad $$
     %and a term $\Omega_i\exp(-\Omega_i\Delta t)$,
     %the probability that the next candidate time occurs after a wait
     %$\Delta t$ under state $i$.
