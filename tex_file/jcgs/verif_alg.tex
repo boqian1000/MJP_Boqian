@@ -93,7 +93,7 @@ Another approach to parameter inference that integrates out state values follows
  In particular, observations that are informative of the MJP state can result in marginal probability estimates that have large variance, resulting in slow mixing. 
  By contrast, given $W$, FFBS can compute the marginal probability $P(X|W,\theta)$ {\em exactly}. 
 
-The basic idea of marginalizing out information to accelerate MCMC convergence rates is formalized by the idea of the Bayesian fraction of missing information~\citep{liu1994fraction}. 
+The basic idea of marginalizing out information to accelerate MCMC convergence is formalized by the idea of the Bayesian fraction of missing information~\citep{liu1994fraction}. 
 In this context, papers such as~\citet{papaspiliopoulos2007general,yu2011center} have studied MCMC algorithms for hierarchical latent variable models. 
 %Uniformization forms such a representation for MJPs: first sample $\theta$, then sample the latent $W$, and use this to sample MJP state values. 
 %The \naive\ algorithm~\ref{alg:MH_naive} is a direct application of ideas presented in those papers.
@@ -108,8 +108,8 @@ A similar idea could also be used to avoid couplng between $\theta$ and the Pois
 However now, updating $Q$ given $\theta$ and $(v_0, V, W)$ raises significant challenges to mixing.
 By contrast, our approach marginalizes out the variables $(v_0,V)$ (or $Q$), and will mix significantly faster.
 Nevertheless, results from the literature on NCPs can suggest further improvements to our approach, and give guidance about conditions under which 
-approaches like ours outperform centered parametrisation like algorithm~\ref{alg:MJP_gibbs}, or when a mixture of centered and non-centered
-updates could be sensible~\citep{yu2011center}.
+approaches like ours outperform centered parametrisations like algorithm~\ref{alg:MJP_gibbs}, or when a mixture of centered and non-centered
+updates could be useful~\citep{yu2011center}.
 %Poisson events $W$, and the state values $(v_0,V)$. The MH algorithm reverses the order in which the path and parameter are updated, and is closely related to 
 %For a detailed review of the suitability of these two approaches, as well as ways to combine them together, we refer to~\citet{papaspiliopoulos2007general, yu2011center}.
 
