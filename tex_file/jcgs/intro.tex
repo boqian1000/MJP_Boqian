@@ -19,7 +19,7 @@ We also prove that under relatively mild conditions, our sampler inherits geomet
 
 \section{Markov jump processes (MJPs)} 
 \label{sec:mjp}
-A Markov jump process~\citep{Cinlar1975} is a right-continuous piecewise-constant stochastic process $S(t)$ taking values in a state space $\cS$. % (see Figure~\ref{fig:naive_mh}, top-left).
+A Markov jump process~\citep{Cinlar1975} is a right-continuous piecewise-constant stochastic process taking values in a state space $\cS$. % (see Figure~\ref{fig:naive_mh}, top-left).
 We assume a finite number of states $N$, with $\cS = \{1,\ldots,N\}$. 
 Then, the MJP is parameterized by two quantities, an $N$-component probability vector $\pi_0$ and a rate-matrix $A$. 
 The former gives the distribution over states at the initial time (we assume this is $0$), while the latter is an $N \times N$-matrix governing the dynamics of the system.  
@@ -34,7 +34,9 @@ first sample an initial state $s_0$ from $\pi_0$, and defining $t_0 = t_{curr} =
     The MJP remains in state $s_k$ until time $t_{k+1}$.
   \item Jump to a new state $s_{k+1} \neq s_k$ with probability equal to $A_{s_ks_{k+1}}/A_{s_k}$. Set $k=k+1$.
 \end{itemize}
-The times $T=(t_1, \dotsc, t_{k - 1})$ and states $S=(s_1, \dotsc, s_{k - 1 })$, along with the initial state $s_0$, define the MJP path, so that $\{S(t), t \in [0,t_{end})\} \equiv (s_0, S,T)$. 
+The times $T=(t_1, \dotsc, t_{k - 1})$ and states $S=(s_1, \dotsc, s_{k - 1 })$, along with the initial state $s_0$, define the MJP path. 
+%so that $\{S(t), t \in [0,t_{end})\} \equiv (s_0, S,T)$. 
+We use both $\{S(t), t \in [0,t_{end})\}$ and $(s_0,S,T)$ (and sometimes just $S(\cdot)$) to refer to the MJP path.
 See the top-left panel in figure~\ref{fig:MH_improved} for a sample path.
 
 \vspace{-.15in}

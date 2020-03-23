@@ -11,7 +11,6 @@
 %\textbf{Bayesian model:}
 We first set up our Bayesian model of the data generation process. 
 We model a latent piecewise-constant path $S(\cdot)$ over $[0,t_{end})$ as an $N$-state MJP with rate matrix $A(\theta)$ and prior $\pi_0$ over $s_0 = S(0)$, the state at time $0$. 
-We use both $\{S(t), t \in [0,t_{end})\}$ and $(s_0,S,T)$ (see section~\ref{sec:mjp}) to refer to the MJP path.
 We place a prior $\prior(\theta)$ over the unknown $\theta$. 
 For simplicity, we assume $\pi_0$ is known (or we set it to a uniform distribution over the $N$ states). 
 %In settings with multiple trajectories, we would place a Dirichlet prior over $\pi_0$. 
