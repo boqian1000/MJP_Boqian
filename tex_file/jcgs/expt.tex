@@ -468,7 +468,7 @@ degradation with interval length that is much milder than the other algorithms.
   \centering
     \includegraphics [width=0.99\textwidth, angle=0]{figs/new_whole_exp_figs/mh_q_beta_dim10.pdf}
 	\end{minipage}
-    \caption{ESS/sec for symmetrized MH for the immigration model for different settings of $\Omega(\theta,\vartheta)$. The left two columns are for $\alpha$ and $\beta$ with states, and the right two, with 10. 
+    \caption{ESS/sec for symmetrized MH for the immigration model for different settings of $\Omega(\theta,\vartheta)$. The left two columns are for $\alpha$ and $\beta$ with 3 states, and the right two, with 10. 
     Squares, circles and triangles correspond to $\Omega(\theta,\vartheta)$ set to $(\max_s A_s(\theta) + \max_s A_s(\vartheta))$, $\max(\max_s A_s(\theta), \max_s A_s(\vartheta))$ and  $1.5(\max_s A_s(\theta) + \max_s A_s(\vartheta))$.
   }
     \label{fig:mhESS_Q}
@@ -540,7 +540,7 @@ The Gibbs sampler performs so well partly because the conditionals over $\alpha$
 %t_{N+1}(t_{end})]$, and y as observations.\\
 %Now, let's consider a immigration model as follows. State space is 
 % $\{0, 1, 2, ..., N - 1\}$, representing the total population. 
-% We already know the conditional density(given $\alpha,\; \beta$) of a MJP trajectory $(s_0, S, T)$ in time interval $[t_{start}, t_{end}]$, with $S=(s_1, s_2,..., s_k)$, $T=(t_1, t_2,..., t_k)$. 
+% We already know the conditional density(given $\alpha,\; \beta$) of an MJP trajectory $(s_0, S, T)$ in time interval $[t_{start}, t_{end}]$, with $S=(s_1, s_2,..., s_k)$, $T=(t_1, t_2,..., t_k)$. 
 % $$f(s_0,S,T| \alpha, \beta) = \prod_{i=0}^{k-1} A_{s_i, s_{i+1}}(t_i) \exp(\sum_{i=0}^{k} A_{s_i}(t_i)(t_{i+1} - t_{i})), $$
 % where $t_0 = t_{start}$, $t_{k+1} = t_{end}.$\\
 % Let's denote some notations here.\\
@@ -719,14 +719,14 @@ The left two columns show these for this model with capacity $3$, and the right 
   %each half is 2319.838 kilobases long. 
   Following~\cite{FearnSher2006}, we use this dataset to infer a two-state piecewise-constant segmentation of the DNA strand. 
   We focus on Chi sites along the inner (lagging) strand of the {\em E.\ coli} genome.  
-  We place a MJP prior over this segmentation, and indexing position along the 
-  strand with $t$, we write this as $S(t), t \in [0,2319.838]$. 
-  To each state $s \in \{1,2\}$, we assign a rate $\lambda_s$, which together with $S(t)$, defines a piecewise-constant rate function $\lambda_{S(t)}$. 
+  We place an MJP prior over this segmentation, and indexing position along the 
+  strand with $t$, we write this as $\{S(t), t \in [0,2319.838]\}$. 
+  To each state $s \in \{1,2\}$, we assign a rate $\lambda_s$, which together with $S(\cdot)$, defines a piecewise-constant rate function $\lambda_{S(\cdot)}$. 
   We model the Chi-site positions as drawn from a Poisson process with rate 
-  $\lambda_{S(t)}$, resulting in a {Markov-modulated Poisson process}~\citep{scottmmpp03} (see also section~\ref{sec:bayes_model}). 
+  $\{\lambda_{S(t)}, t \in [0,2319.838]\}$, resulting in a {Markov-modulated Poisson process}~\citep{scottmmpp03} (see also section~\ref{sec:bayes_model}). 
   MJP transitions from state $1$ to state $2$ have rate $\alpha$ while transitions from state $2$ to state $1$ have rate $\beta$. 
   We place %gamma priors on the four model parameters; specifically, we use 
-  Gamma$(2,2)$, Gamma$(2,3)$, Gamma$(3,2)$, and Gamma$(1,2)$ priors for $\alpha$, $\beta$, $\lambda_1$, $\lambda_2$ respectively.
+  Gamma$(2,2)$, Gamma$(2,3)$, Gamma$(3,2)$, Gamma$(1,2)$ priors on $\alpha$, $\beta$, $\lambda_1$, $\lambda_2$.
 
 
   We use this setup to evaluate our symmetrized MH sampler along with Gibbs sampling (other algorithms perform much worse, and we do not include them). 
